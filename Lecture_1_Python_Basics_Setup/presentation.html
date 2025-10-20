@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 1: Python Basics & Setup</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">20</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 1</h1>
+            <div class="subtitle">Python Basics & Setup</div>
+            <p style="font-size: 1.3em; color: #888;">Welcome to Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>Installing Python & Setting Up Your IDE</li>
+                <li>Variables and Data Types</li>
+                <li>Basic Operators (Arithmetic, Comparison, Logical)</li>
+                <li>Print Statements and Output Formatting</li>
+                <li>Comments and Code Structure</li>
+                <li>Python Coding Best Practices</li>
+            </ul>
+            <div class="info-box">
+                <strong>📚 Learning Approach:</strong> We'll combine theory with hands-on examples and exercises!
+            </div>
+        </div>
+
+        <!-- Slide 3: Installation - Python -->
+        <div class="slide">
+            <h2>Installing Python</h2>
+            <h3>Step 1: Download Python</h3>
+            <ul>
+                <li>Visit <span class="highlight">python.org</span></li>
+                <li>Download Python <strong>3.11 or later</strong></li>
+                <li><span class="emoji">⚠️</span> Important: Check "Add Python to PATH" during installation</li>
+            </ul>
+
+            <h3>Step 2: Verify Installation</h3>
+            <div class="code-block">
+<span class="comment"># Open terminal/command prompt and run:</span>
+python --version
+
+<span class="comment"># Or on Mac/Linux:</span>
+python3 --version
+
+<span class="comment"># Expected output: Python 3.11.x or later</span>
+            </div>
+        </div>
+
+        <!-- Slide 4: IDE Setup -->
+        <div class="slide">
+            <h2>Choosing Your IDE</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>VS Code (Recommended)</h3>
+                    <p><strong>✓ Free & Lightweight</strong></p>
+                    <p><strong>✓ Great Extensions</strong></p>
+                    <p><strong>✓ Beginner Friendly</strong></p>
+                    <div class="code-block" style="font-size: 0.9em;">
+1. Download from code.visualstudio.com
+2. Install Python extension
+3. Open a .py file
+4. Start coding!
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>PyCharm</h3>
+                    <p><strong>✓ Python-Specific</strong></p>
+                    <p><strong>✓ Powerful Features</strong></p>
+                    <p><strong>✓ Community Edition Free</strong></p>
+                    <div class="code-block" style="font-size: 0.9em;">
+1. Download from jetbrains.com
+2. Choose Community Edition
+3. Python support built-in
+4. Create new project!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Variables Intro -->
+        <div class="slide">
+            <h2>Variables - Storing Data</h2>
+            <p>Variables are <span class="highlight">containers</span> that store data values.</p>
+
+            <h3>Creating Variables</h3>
+            <div class="code-block">
+<span class="comment"># No type declaration needed in Python!</span>
+name = <span class="string">"Alice"</span>
+age = <span class="number">25</span>
+height = <span class="number">5.6</span>
+is_student = <span class="keyword">True</span>
+
+<span class="function">print</span>(name)      <span class="comment"># Output: Alice</span>
+<span class="function">print</span>(age)       <span class="comment"># Output: 25</span>
+<span class="function">print</span>(height)    <span class="comment"># Output: 5.6</span>
+<span class="function">print</span>(is_student) <span class="comment"># Output: True</span>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Pro Tip:</strong> Python automatically determines the data type based on the value you assign!
+            </div>
+        </div>
+
+        <!-- Slide 6: Data Types -->
+        <div class="slide">
+            <h2>Data Types</h2>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>String (str)</strong></td>
+                    <td>Text data</td>
+                    <td><code>"Hello"</code>, <code>'Python'</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Integer (int)</strong></td>
+                    <td>Whole numbers</td>
+                    <td><code>42</code>, <code>-10</code>, <code>0</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Float</strong></td>
+                    <td>Decimal numbers</td>
+                    <td><code>3.14</code>, <code>-0.5</code>, <code>2.0</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Boolean (bool)</strong></td>
+                    <td>True or False</td>
+                    <td><code>True</code>, <code>False</code></td>
+                </tr>
+            </table>
+
+            <h3>Checking Data Types</h3>
+            <div class="code-block">
+name = <span class="string">"Alice"</span>
+<span class="function">print</span>(<span class="function">type</span>(name))  <span class="comment"># Output: &lt;class 'str'&gt;</span>
+
+age = <span class="number">25</span>
+<span class="function">print</span>(<span class="function">type</span>(age))   <span class="comment"># Output: &lt;class 'int'&gt;</span>
+            </div>
+        </div>
+
+        <!-- Slide 7: Strings -->
+        <div class="slide">
+            <h2>Working with Strings</h2>
+
+            <h3>String Creation</h3>
+            <div class="code-block">
+<span class="comment"># Single or double quotes</span>
+first_name = <span class="string">"John"</span>
+last_name = <span class="string">'Doe'</span>
+
+<span class="comment"># Multi-line strings with triple quotes</span>
+message = <span class="string">"""Hello,
+Welcome to Python!
+Let's learn together."""</span>
+            </div>
+
+            <h3>String Concatenation & Formatting</h3>
+            <div class="code-block">
+<span class="comment"># Concatenation with +</span>
+greeting = <span class="string">"Hello, "</span> + first_name + <span class="string">"!"</span>
+
+<span class="comment"># F-strings (modern and recommended)</span>
+message = <span class="keyword">f</span><span class="string">"My name is {first_name} {last_name}"</span>
+<span class="function">print</span>(message)  <span class="comment"># Output: My name is John Doe</span>
+            </div>
+        </div>
+
+        <!-- Slide 8: Arithmetic Operators -->
+        <div class="slide">
+            <h2>Arithmetic Operators</h2>
+            <table>
+                <tr>
+                    <th>Operator</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td><code>+</code></td>
+                    <td>Addition</td>
+                    <td><code>10 + 5</code></td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td><code>-</code></td>
+                    <td>Subtraction</td>
+                    <td><code>10 - 5</code></td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td><code>*</code></td>
+                    <td>Multiplication</td>
+                    <td><code>10 * 5</code></td>
+                    <td>50</td>
+                </tr>
+                <tr>
+                    <td><code>/</code></td>
+                    <td>Division</td>
+                    <td><code>10 / 5</code></td>
+                    <td>2.0</td>
+                </tr>
+                <tr>
+                    <td><code>//</code></td>
+                    <td>Floor Division</td>
+                    <td><code>17 // 5</code></td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td><code>%</code></td>
+                    <td>Modulus (Remainder)</td>
+                    <td><code>17 % 5</code></td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td><code>**</code></td>
+                    <td>Exponentiation</td>
+                    <td><code>2 ** 3</code></td>
+                    <td>8</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 9: Comparison Operators -->
+        <div class="slide">
+            <h2>Comparison Operators</h2>
+            <p>Compare values and return <code>True</code> or <code>False</code></p>
+
+            <div class="code-block">
+a = <span class="number">10</span>
+b = <span class="number">20</span>
+
+<span class="function">print</span>(a == b)   <span class="comment"># Equal to: False</span>
+<span class="function">print</span>(a != b)   <span class="comment"># Not equal to: True</span>
+<span class="function">print</span>(a > b)    <span class="comment"># Greater than: False</span>
+<span class="function">print</span>(a < b)    <span class="comment"># Less than: True</span>
+<span class="function">print</span>(a >= <span class="number">10</span>)  <span class="comment"># Greater than or equal: True</span>
+<span class="function">print</span>(a <= <span class="number">5</span>)   <span class="comment"># Less than or equal: False</span>
+            </div>
+
+            <div class="info-box">
+                <strong>📝 Note:</strong> Use <code>==</code> for comparison, not <code>=</code> (which is for assignment)
+            </div>
+        </div>
+
+        <!-- Slide 10: Logical Operators -->
+        <div class="slide">
+            <h2>Logical Operators</h2>
+            <p>Combine multiple conditions</p>
+
+            <h3>AND - Both conditions must be True</h3>
+            <div class="code-block">
+age = <span class="number">25</span>
+has_license = <span class="keyword">True</span>
+can_drive = age >= <span class="number">18</span> <span class="keyword">and</span> has_license
+<span class="function">print</span>(can_drive)  <span class="comment"># True</span>
+            </div>
+
+            <h3>OR - At least one condition must be True</h3>
+            <div class="code-block">
+is_weekend = <span class="keyword">True</span>
+is_holiday = <span class="keyword">False</span>
+can_relax = is_weekend <span class="keyword">or</span> is_holiday
+<span class="function">print</span>(can_relax)  <span class="comment"># True</span>
+            </div>
+
+            <h3>NOT - Inverts the boolean value</h3>
+            <div class="code-block">
+is_raining = <span class="keyword">False</span>
+is_sunny = <span class="keyword">not</span> is_raining
+<span class="function">print</span>(is_sunny)  <span class="comment"># True</span>
+            </div>
+        </div>
+
+        <!-- Slide 11: Print Statements -->
+        <div class="slide">
+            <h2>Print Statements</h2>
+
+            <h3>Basic Printing</h3>
+            <div class="code-block">
+<span class="function">print</span>(<span class="string">"Hello, World!"</span>)
+<span class="function">print</span>(<span class="string">"Python"</span>, <span class="string">"is"</span>, <span class="string">"awesome"</span>)  <span class="comment"># Separated by spaces</span>
+            </div>
+
+            <h3>F-String Formatting (Recommended)</h3>
+            <div class="code-block">
+name = <span class="string">"Alice"</span>
+age = <span class="number">25</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"My name is {name} and I am {age} years old."</span>)
+
+<span class="comment"># With calculations inside</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Next year I'll be {age + 1} years old."</span>)
+            </div>
+
+            <h3>Formatting Numbers</h3>
+            <div class="code-block">
+pi = <span class="number">3.14159265</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Pi: {pi:.2f}"</span>)  <span class="comment"># Output: Pi: 3.14</span>
+
+price = <span class="number">1234.5</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Price: ${price:,.2f}"</span>)  <span class="comment"># Output: Price: $1,234.50</span>
+            </div>
+        </div>
+
+        <!-- Slide 12: Comments -->
+        <div class="slide">
+            <h2>Comments - Documenting Your Code</h2>
+
+            <h3>Single-Line Comments</h3>
+            <div class="code-block">
+<span class="comment"># This is a single-line comment</span>
+<span class="comment"># Python ignores everything after #</span>
+
+age = <span class="number">25</span>  <span class="comment"># Comments can be at the end of a line</span>
+            </div>
+
+            <h3>Multi-Line Comments (Docstrings)</h3>
+            <div class="code-block">
+<span class="string">"""
+This is a multi-line comment.
+It can span multiple lines.
+Often used for documentation.
+"""</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Best Practice:</strong> Explain WHY, not WHAT
+                <div class="code-block" style="margin-top: 10px; font-size: 0.9em;">
+<span class="comment"># Bad: Set x to 10 (obvious)</span>
+x = <span class="number">10</span>
+
+<span class="comment"># Good: Max retries to prevent infinite loops</span>
+max_retries = <span class="number">3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Variable Naming -->
+        <div class="slide">
+            <h2>Variable Naming Conventions</h2>
+
+            <div class="two-column">
+                <div class="column" style="border-left-color: #28a745;">
+                    <h3 style="color: #28a745;">✓ Good Names</h3>
+                    <div class="code-block" style="font-size: 1em;">
+<span class="comment"># Use lowercase with underscores</span>
+user_name = <span class="string">"Alice"</span>
+total_price = <span class="number">99.99</span>
+is_active = <span class="keyword">True</span>
+
+<span class="comment"># Be descriptive</span>
+student_count = <span class="number">30</span>
+max_temperature = <span class="number">100</span>
+
+<span class="comment"># Constants in UPPERCASE</span>
+MAX_RETRIES = <span class="number">3</span>
+PI = <span class="number">3.14159</span>
+                    </div>
+                </div>
+                <div class="column" style="border-left-color: #dc3545;">
+                    <h3 style="color: #dc3545;">✗ Bad Names</h3>
+                    <div class="code-block" style="font-size: 1em;">
+<span class="comment"># Don't start with numbers</span>
+1st_name = <span class="string">"Alice"</span>  <span class="comment"># ❌ Error!</span>
+
+<span class="comment"># Don't use spaces</span>
+user name = <span class="string">"Alice"</span>  <span class="comment"># ❌ Error!</span>
+
+<span class="comment"># Avoid single letters</span>
+x = <span class="string">"Alice"</span>  <span class="comment"># ❌ Not descriptive</span>
+tp = <span class="number">99.99</span>   <span class="comment"># ❌ Unclear</span>
+
+<span class="comment"># Don't use Python keywords</span>
+<span class="keyword">for</span> = <span class="number">5</span>     <span class="comment"># ❌ Reserved word!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Code Structure -->
+        <div class="slide">
+            <h2>Code Structure Best Practices</h2>
+
+            <h3>Proper Spacing</h3>
+            <div class="code-block">
+<span class="comment"># Good: Space around operators</span>
+total = price + tax
+average = (a + b + c) / <span class="number">3</span>
+
+<span class="comment"># Bad: No spaces (harder to read)</span>
+total=price+tax
+average=(a+b+c)/<span class="number">3</span>
+            </div>
+
+            <h3>Organize Your Code</h3>
+            <div class="code-block">
+<span class="comment"># Section 1: Constants</span>
+TAX_RATE = <span class="number">0.08</span>
+SHIPPING_COST = <span class="number">5.99</span>
+
+<span class="comment"># Section 2: Variables</span>
+product_name = <span class="string">"Laptop"</span>
+base_price = <span class="number">999.99</span>
+
+<span class="comment"># Section 3: Calculations</span>
+tax = base_price * TAX_RATE
+total = base_price + tax + SHIPPING_COST
+
+<span class="comment"># Section 4: Output</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Total: ${total:.2f}"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 15: Practical Example -->
+        <div class="slide">
+            <h2>Practical Example: Shopping Cart</h2>
+            <div class="code-block">
+<span class="comment"># Shopping Cart Calculator</span>
+
+<span class="comment"># Product information</span>
+item1_name = <span class="string">"Laptop"</span>
+item1_price = <span class="number">899.99</span>
+item1_quantity = <span class="number">1</span>
+
+item2_name = <span class="string">"Mouse"</span>
+item2_price = <span class="number">25.50</span>
+item2_quantity = <span class="number">2</span>
+
+<span class="comment"># Calculate totals</span>
+item1_total = item1_price * item1_quantity
+item2_total = item2_price * item2_quantity
+subtotal = item1_total + item2_total
+
+<span class="comment"># Apply tax and calculate final total</span>
+TAX_RATE = <span class="number">0.08</span>
+tax_amount = subtotal * TAX_RATE
+final_total = subtotal + tax_amount
+
+<span class="comment"># Display receipt</span>
+<span class="function">print</span>(<span class="string">"="</span> * <span class="number">40</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"{item1_name}: ${item1_price} x {item1_quantity} = ${item1_total:.2f}"</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"{item2_name}: ${item2_price} x {item2_quantity} = ${item2_total:.2f}"</span>)
+<span class="function">print</span>(<span class="string">"-"</span> * <span class="number">40</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Subtotal: ${subtotal:.2f}"</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Tax (8%): ${tax_amount:.2f}"</span>)
+<span class="function">print</span>(<span class="string">"="</span> * <span class="number">40</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"TOTAL: ${final_total:.2f}"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 16: Type Conversion -->
+        <div class="slide">
+            <h2>Type Conversion</h2>
+            <p>Convert between different data types</p>
+
+            <div class="code-block">
+<span class="comment"># String to Integer</span>
+age_string = <span class="string">"25"</span>
+age_number = <span class="function">int</span>(age_string)
+<span class="function">print</span>(age_number + <span class="number">5</span>)  <span class="comment"># Output: 30</span>
+
+<span class="comment"># String to Float</span>
+price_string = <span class="string">"29.99"</span>
+price_number = <span class="function">float</span>(price_string)
+<span class="function">print</span>(price_number * <span class="number">2</span>)  <span class="comment"># Output: 59.98</span>
+
+<span class="comment"># Number to String</span>
+count = <span class="number">100</span>
+count_string = <span class="function">str</span>(count)
+message = <span class="string">"Count: "</span> + count_string  <span class="comment"># Concatenation works!</span>
+
+<span class="comment"># Integer to Float</span>
+whole = <span class="number">5</span>
+decimal = <span class="function">float</span>(whole)  <span class="comment"># Output: 5.0</span>
+            </div>
+        </div>
+
+        <!-- Slide 17: Common Mistakes -->
+        <div class="slide">
+            <h2>Common Beginner Mistakes</h2>
+
+            <div class="warning-box">
+                <h3>1. Confusing = and ==</h3>
+                <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Assignment (=)</span>
+x = <span class="number">10</span>  <span class="comment"># Sets x to 10</span>
+
+<span class="comment"># Comparison (==)</span>
+x == <span class="number">10</span>  <span class="comment"># Checks if x equals 10</span>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>2. Concatenating Different Types</h3>
+                <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># ❌ Error: Can't concatenate string and number</span>
+age = <span class="number">25</span>
+message = <span class="string">"Age: "</span> + age  <span class="comment"># TypeError!</span>
+
+<span class="comment"># ✓ Solution 1: Convert to string</span>
+message = <span class="string">"Age: "</span> + <span class="function">str</span>(age)
+
+<span class="comment"># ✓ Solution 2: Use f-string</span>
+message = <span class="keyword">f</span><span class="string">"Age: {age}"</span>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>3. Forgetting Quotes Around Strings</h3>
+                <div class="code-block" style="margin-top: 10px;">
+name = Alice  <span class="comment"># ❌ Error: Alice is not defined</span>
+name = <span class="string">"Alice"</span>  <span class="comment"># ✓ Correct</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Practice Exercises -->
+        <div class="slide">
+            <h2>Practice Exercises</h2>
+            <p>Time to apply what you've learned!</p>
+
+            <h3>📁 Exercise Files</h3>
+            <ul>
+                <li><strong>exercise_01_variables.py</strong>
+                    <ul>
+                        <li>Create variables for personal information</li>
+                        <li>Practice type conversion</li>
+                        <li>Work with booleans</li>
+                    </ul>
+                </li>
+                <li><strong>exercise_02_calculations.py</strong>
+                    <ul>
+                        <li>Restaurant bill calculator</li>
+                        <li>Temperature conversion</li>
+                        <li>Circle calculations</li>
+                        <li>Logical operators</li>
+                    </ul>
+                </li>
+                <li><strong>exercise_03_personal_info.py</strong>
+                    <ul>
+                        <li>Create a personal information card</li>
+                        <li>Practice formatting output</li>
+                        <li>Build a professional profile</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="success-box">
+                <strong>💪 Challenge:</strong> Complete all exercises before checking the solutions!
+            </div>
+        </div>
+
+        <!-- Slide 19: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>🎯 Core Concepts</h3>
+                    <ul>
+                        <li>Variables store data</li>
+                        <li>4 main data types: str, int, float, bool</li>
+                        <li>Operators perform calculations</li>
+                        <li>F-strings for formatting</li>
+                        <li>Comments explain code</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>✅ Best Practices</h3>
+                    <ul>
+                        <li>Use descriptive variable names</li>
+                        <li>Follow snake_case convention</li>
+                        <li>Add spaces around operators</li>
+                        <li>Comment WHY, not WHAT</li>
+                        <li>Organize code in sections</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h3>📚 Next Steps</h3>
+                <ol>
+                    <li>Complete all practice exercises</li>
+                    <li>Experiment with your own code</li>
+                    <li>Review the example files</li>
+                    <li>Move on to Lecture 2 when ready!</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 20: Resources -->
+        <div class="slide">
+            <h2>Resources & Next Steps</h2>
+
+            <h3>📁 Course Files</h3>
+            <ul>
+                <li><code>README.md</code> - Comprehensive lecture guide</li>
+                <li><code>QUICK_START.md</code> - Quick reference guide</li>
+                <li><code>examples/</code> - 4 detailed code examples</li>
+                <li><code>exercises/</code> - 3 practice exercises + solutions</li>
+            </ul>
+
+            <h3>🔗 Helpful Links</h3>
+            <ul>
+                <li><strong>Python Official Docs:</strong> python.org/doc</li>
+                <li><strong>Python Style Guide (PEP 8):</strong> pep8.org</li>
+                <li><strong>VS Code Python:</strong> code.visualstudio.com/docs/python</li>
+            </ul>
+
+            <h3>💡 Tips for Success</h3>
+            <ul class="checklist">
+                <li>Practice coding every day, even if just 15 minutes</li>
+                <li>Make mistakes - they're learning opportunities!</li>
+                <li>Experiment with the code - change values and see what happens</li>
+                <li>Ask questions and research when stuck</li>
+            </ul>
+
+            <div class="title-slide" style="margin-top: 50px;">
+                <h1 style="font-size: 2.5em;">Thank You! 🎉</h1>
+                <p style="font-size: 1.3em;">Happy Coding!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <!-- Global presentation script shared across all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
