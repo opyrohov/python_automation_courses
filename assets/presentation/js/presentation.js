@@ -58,6 +58,11 @@ function showSlide(n) {
     // Scroll to top of slide
     slides[currentSlide].scrollTop = 0;
 
+    // Update scroll indicator for the new slide
+    setTimeout(() => {
+        updateAllScrollIndicators();
+    }, 50);
+
     // Clear transitioning flag after animation completes (300ms transition)
     setTimeout(() => {
         isTransitioning = false;
@@ -150,8 +155,77 @@ function handleSwipe() {
     }
 }
 
+/**
+ * Add scroll indicators to all slides
+ */
+function addScrollIndicators() {
+    slides.forEach(slide => {
+        const indicator = document.createElement('div');
+        indicator.className = 'scroll-indicator';
+
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            indicator.appendChild(dot);
+        }
+
+        slide.appendChild(indicator);
+    });
+}
+
+/**
+ * Update scroll indicator visibility for a specific slide
+ * @param {HTMLElement} slide - The slide element to check
+ */
+function updateScrollIndicator(slide) {
+    const indicator = slide.querySelector('.scroll-indicator');
+    if (!indicator) return;
+
+    // Check if content is scrollable
+    const isScrollable = slide.scrollHeight > slide.clientHeight;
+
+    // Check if scrolled to bottom (with 5px tolerance)
+    const isAtBottom = slide.scrollTop + slide.clientHeight >= slide.scrollHeight - 5;
+
+    // Show indicator if scrollable and not at bottom
+    if (isScrollable && !isAtBottom) {
+        indicator.classList.add('visible');
+    } else {
+        indicator.classList.remove('visible');
+    }
+}
+
+/**
+ * Update all scroll indicators
+ */
+function updateAllScrollIndicators() {
+    const activeSlide = document.querySelector('.slide.active');
+    if (activeSlide) {
+        updateScrollIndicator(activeSlide);
+    }
+}
+
+// Add scroll event listeners to all slides
+function initScrollIndicators() {
+    slides.forEach(slide => {
+        slide.addEventListener('scroll', () => {
+            if (slide.classList.contains('active')) {
+                updateScrollIndicator(slide);
+            }
+        });
+    });
+}
+
 // Initialize presentation
+addScrollIndicators();
+initScrollIndicators();
 showSlide(0);
+
+// Update indicator after a short delay to ensure layout is complete
+setTimeout(updateAllScrollIndicators, 100);
+
+// Update indicators on window resize
+window.addEventListener('resize', updateAllScrollIndicators);
 
 // Log presentation info to console
 console.log(`Presentation loaded: ${totalSlides} slides`);

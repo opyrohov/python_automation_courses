@@ -80,6 +80,16 @@ The master JavaScript file providing:
 - Button state management (disable at ends)
 - Scroll to top on slide change
 
+**Smart Scroll Indicators** (New!)
+- `addScrollIndicators()` - Dynamically creates scroll hint dots for all slides
+- `updateScrollIndicator(slide)` - Smart visibility based on scrollable content
+- `updateAllScrollIndicators()` - Updates active slide indicator
+- `initScrollIndicators()` - Sets up scroll event listeners
+- **Auto-detection:** Only shows when content is scrollable
+- **Auto-hiding:** Disappears when scrolled to bottom
+- **Animated dots:** 3 bouncing dots with staggered animation
+- **Responsive:** Updates on scroll, slide change, and resize
+
 ## 🔗 Usage in Lectures
 
 Each lecture's `presentation.html` should include:
