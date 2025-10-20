@@ -10,7 +10,7 @@
 <body>
     <div class="presentation">
         <div class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">20</span>
+            <span id="currentSlide">1</span> / <span id="totalSlides">31</span>
         </div>
 
         <!-- Slide 1: Title -->
@@ -38,7 +38,37 @@
             </div>
         </div>
 
-        <!-- Slide 3: Installation - Python -->
+        <!-- Slide 3: Why Python for Automation? -->
+        <div class="slide">
+            <h2>Why Python for Automation?</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Perfect for Automation</h3>
+                    <ul>
+                        <li><strong>Simple Syntax</strong> - Easy to read and write</li>
+                        <li><strong>Cross-Platform</strong> - Works on Windows, Mac, Linux</li>
+                        <li><strong>Rich Libraries</strong> - Pre-built tools for everything</li>
+                        <li><strong>Fast Development</strong> - Write less, do more</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Real-World Uses</h3>
+                    <ul>
+                        <li><strong>File Management</strong> - Rename, organize, batch process</li>
+                        <li><strong>Web Scraping</strong> - Extract data from websites</li>
+                        <li><strong>Testing</strong> - Automated software testing</li>
+                        <li><strong>Data Processing</strong> - Excel, CSV, databases</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Did You Know?</strong> Python is used by Google, NASA, Netflix, Instagram, and thousands of companies for automation tasks!
+            </div>
+        </div>
+
+        <!-- Slide 4: Installation - Python -->
         <div class="slide">
             <h2>Installing Python</h2>
             <h3>Step 1: Download Python</h3>
@@ -60,7 +90,7 @@ python3 --version
             </div>
         </div>
 
-        <!-- Slide 4: IDE Setup -->
+        <!-- Slide 5: IDE Setup -->
         <div class="slide">
             <h2>Choosing Your IDE</h2>
             <div class="two-column">
@@ -80,10 +110,10 @@ python3 --version
                     <h3>PyCharm</h3>
                     <p><strong>✓ Python-Specific</strong></p>
                     <p><strong>✓ Powerful Features</strong></p>
-                    <p><strong>✓ Community Edition Free</strong></p>
+                    <p><strong>✓ Community & Professional Editions</strong></p>
                     <div class="code-block" style="font-size: 0.9em;">
-1. Download from jetbrains.com
-2. Choose Community Edition
+1. Visit jetbrains.com/pycharm
+2. Download installer (any edition)
 3. Python support built-in
 4. Create new project!
                     </div>
@@ -91,7 +121,53 @@ python3 --version
             </div>
         </div>
 
-        <!-- Slide 5: Variables Intro -->
+        <!-- Slide 6: How Python Works -->
+        <div class="slide">
+            <h2>How Python Works</h2>
+
+            <h3>Two Ways to Run Python</h3>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Interactive Mode (REPL)</h3>
+                    <p><strong>Read-Eval-Print Loop</strong></p>
+                    <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Type in terminal:</span>
+python
+
+<span class="comment"># Then you can type commands:</span>
+>>> <span class="number">2</span> + <span class="number">2</span>
+<span class="number">4</span>
+>>> name = <span class="string">"Alice"</span>
+>>> <span class="function">print</span>(name)
+Alice
+>>> <span class="function">exit</span>()
+                    </div>
+                    <p style="font-size: 0.95em;">✓ Great for testing quick code</p>
+                </div>
+                <div class="column">
+                    <h3>Script Mode (.py files)</h3>
+                    <p><strong>Write & Save Programs</strong></p>
+                    <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Create file: hello.py</span>
+name = <span class="string">"Alice"</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Hello, {name}!"</span>)
+
+<span class="comment"># Run in terminal:</span>
+python hello.py
+
+<span class="comment"># Output:</span>
+Hello, Alice!
+                    </div>
+                    <p style="font-size: 0.95em;">✓ For real programs and automation</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>📚 How It Works:</strong> Python is an <strong>interpreted language</strong> - your code is read and executed line-by-line, unlike compiled languages like C++ or Java.
+            </div>
+        </div>
+
+        <!-- Slide 7: Variables Intro -->
         <div class="slide">
             <h2>Variables - Storing Data</h2>
             <p>Variables are <span class="highlight">containers</span> that store data values.</p>
@@ -156,7 +232,7 @@ age = <span class="number">25</span>
             </div>
         </div>
 
-        <!-- Slide 7: Strings -->
+        <!-- Slide 9: Strings -->
         <div class="slide">
             <h2>Working with Strings</h2>
 
@@ -183,7 +259,111 @@ message = <span class="keyword">f</span><span class="string">"My name is {first_
             </div>
         </div>
 
-        <!-- Slide 8: Arithmetic Operators -->
+        <!-- Slide 10: String Methods & Operations -->
+        <div class="slide">
+            <h2>String Indexing, Slicing & Methods</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Indexing & Slicing</h3>
+                    <div class="code-block" style="font-size: 0.85em;">
+text = <span class="string">"Python"</span>
+
+<span class="comment"># Indexing (0-based)</span>
+<span class="function">print</span>(text[<span class="number">0</span>])    <span class="comment"># 'P'</span>
+<span class="function">print</span>(text[<span class="number">-1</span>])   <span class="comment"># 'n' (last)</span>
+
+<span class="comment"># Slicing [start:end]</span>
+<span class="function">print</span>(text[<span class="number">0</span>:<span class="number">3</span>])  <span class="comment"># 'Pyt'</span>
+<span class="function">print</span>(text[<span class="number">2</span>:])   <span class="comment"># 'thon'</span>
+<span class="function">print</span>(text[:<span class="number">4</span>])   <span class="comment"># 'Pyth'</span>
+
+<span class="comment"># Length</span>
+<span class="function">print</span>(<span class="function">len</span>(text))  <span class="comment"># 6</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Useful String Methods</h3>
+                    <div class="code-block" style="font-size: 0.85em;">
+name = <span class="string">"  alice smith  "</span>
+
+<span class="comment"># Case conversion</span>
+<span class="function">print</span>(name.<span class="function">upper</span>())     <span class="comment"># '  ALICE SMITH  '</span>
+<span class="function">print</span>(name.<span class="function">lower</span>())     <span class="comment"># '  alice smith  '</span>
+<span class="function">print</span>(name.<span class="function">title</span>())     <span class="comment"># '  Alice Smith  '</span>
+
+<span class="comment"># Whitespace removal</span>
+<span class="function">print</span>(name.<span class="function">strip</span>())     <span class="comment"># 'alice smith'</span>
+
+<span class="comment"># Replace & Split</span>
+<span class="function">print</span>(name.<span class="function">replace</span>(<span class="string">"alice"</span>, <span class="string">"bob"</span>))
+<span class="function">print</span>(name.<span class="function">split</span>())     <span class="comment"># ['alice', 'smith']</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Important:</strong> Strings are <strong>immutable</strong> - methods return new strings, they don't modify the original!
+            </div>
+        </div>
+
+        <!-- Slide 11: Escape Characters -->
+        <div class="slide">
+            <h2>Escape Characters</h2>
+            <p>Special characters that start with backslash <code>\</code></p>
+
+            <table>
+                <tr>
+                    <th>Escape Sequence</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>\n</code></td>
+                    <td>New line</td>
+                    <td><code>"Line 1\nLine 2"</code></td>
+                </tr>
+                <tr>
+                    <td><code>\t</code></td>
+                    <td>Tab (indent)</td>
+                    <td><code>"Name:\tJohn"</code></td>
+                </tr>
+                <tr>
+                    <td><code>\\</code></td>
+                    <td>Backslash</td>
+                    <td><code>"C:\\Users\\files"</code></td>
+                </tr>
+                <tr>
+                    <td><code>\"</code></td>
+                    <td>Double quote</td>
+                    <td><code>"She said \"Hi\""</code></td>
+                </tr>
+                <tr>
+                    <td><code>\'</code></td>
+                    <td>Single quote</td>
+                    <td><code>'It\'s working'</code></td>
+                </tr>
+            </table>
+
+            <h3>Examples</h3>
+            <div class="code-block">
+<span class="comment"># Multi-line with \n</span>
+<span class="function">print</span>(<span class="string">"First Line\nSecond Line\nThird Line"</span>)
+
+<span class="comment"># Tabs for formatting</span>
+<span class="function">print</span>(<span class="string">"Name:\tAlice\nAge:\t25\nCity:\tNew York"</span>)
+
+<span class="comment"># File paths (Windows)</span>
+path = <span class="string">"C:\\Users\\Documents\\file.txt"</span>
+<span class="function">print</span>(path)
+
+<span class="comment"># Raw strings (ignore escape characters)</span>
+raw_path = <span class="string">r"C:\Users\Documents\file.txt"</span>
+<span class="function">print</span>(raw_path)
+            </div>
+        </div>
+
+        <!-- Slide 12: Arithmetic Operators -->
         <div class="slide">
             <h2>Arithmetic Operators</h2>
             <table>
@@ -238,7 +418,64 @@ message = <span class="keyword">f</span><span class="string">"My name is {first_
             </table>
         </div>
 
-        <!-- Slide 9: Comparison Operators -->
+        <!-- Slide 13: Operator Precedence -->
+        <div class="slide">
+            <h2>Operator Precedence (Order of Operations)</h2>
+            <p>Python follows <strong>PEMDAS</strong> rules (same as mathematics)</p>
+
+            <table>
+                <tr>
+                    <th>Priority</th>
+                    <th>Operators</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>1 (Highest)</td>
+                    <td><code>()</code></td>
+                    <td>Parentheses</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><code>**</code></td>
+                    <td>Exponentiation</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><code>*</code>, <code>/</code>, <code>//</code>, <code>%</code></td>
+                    <td>Multiplication, Division</td>
+                </tr>
+                <tr>
+                    <td>4 (Lowest)</td>
+                    <td><code>+</code>, <code>-</code></td>
+                    <td>Addition, Subtraction</td>
+                </tr>
+            </table>
+
+            <h3>Examples</h3>
+            <div class="code-block">
+<span class="comment"># Without parentheses (multiplication first)</span>
+result = <span class="number">5</span> + <span class="number">3</span> * <span class="number">2</span>
+<span class="function">print</span>(result)  <span class="comment"># Output: 11 (not 16!)</span>
+
+<span class="comment"># With parentheses (addition first)</span>
+result = (<span class="number">5</span> + <span class="number">3</span>) * <span class="number">2</span>
+<span class="function">print</span>(result)  <span class="comment"># Output: 16</span>
+
+<span class="comment"># Complex example</span>
+result = <span class="number">10</span> + <span class="number">2</span> ** <span class="number">3</span> * <span class="number">2</span>
+<span class="function">print</span>(result)  <span class="comment"># Output: 26 (2**3=8, 8*2=16, 10+16=26)</span>
+
+<span class="comment"># Always use parentheses for clarity!</span>
+result = <span class="number">10</span> + ((<span class="number">2</span> ** <span class="number">3</span>) * <span class="number">2</span>)
+<span class="function">print</span>(result)  <span class="comment"># Output: 26 (much clearer!)</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>💡 Best Practice:</strong> When in doubt, use parentheses <code>()</code> to make your intentions clear!
+            </div>
+        </div>
+
+        <!-- Slide 14: Comparison Operators -->
         <div class="slide">
             <h2>Comparison Operators</h2>
             <p>Compare values and return <code>True</code> or <code>False</code></p>
@@ -289,7 +526,157 @@ is_sunny = <span class="keyword">not</span> is_raining
             </div>
         </div>
 
-        <!-- Slide 11: Print Statements -->
+        <!-- Slide 16: Boolean Truthiness -->
+        <div class="slide">
+            <h2>Boolean Context (Truthiness)</h2>
+            <p>In Python, values can be evaluated as <code>True</code> or <code>False</code> in boolean contexts</p>
+
+            <div class="two-column">
+                <div class="column" style="border-left-color: #dc3545;">
+                    <h3 style="color: #dc3545;">❌ Falsy Values</h3>
+                    <div class="code-block" style="font-size: 0.9em;">
+<span class="comment"># These evaluate to False:</span>
+<span class="function">bool</span>(<span class="number">0</span>)           <span class="comment"># False</span>
+<span class="function">bool</span>(<span class="number">0.0</span>)         <span class="comment"># False</span>
+<span class="function">bool</span>(<span class="string">""</span>)          <span class="comment"># False (empty string)</span>
+<span class="function">bool</span>([])          <span class="comment"># False (empty list)</span>
+<span class="function">bool</span>({})          <span class="comment"># False (empty dict)</span>
+<span class="function">bool</span>(<span class="keyword">None</span>)        <span class="comment"># False</span>
+<span class="function">bool</span>(<span class="keyword">False</span>)      <span class="comment"># False</span>
+                    </div>
+                </div>
+                <div class="column" style="border-left-color: #28a745;">
+                    <h3 style="color: #28a745;">✓ Truthy Values</h3>
+                    <div class="code-block" style="font-size: 0.9em;">
+<span class="comment"># These evaluate to True:</span>
+<span class="function">bool</span>(<span class="number">1</span>)           <span class="comment"># True</span>
+<span class="function">bool</span>(<span class="number">-1</span>)          <span class="comment"># True (any non-zero)</span>
+<span class="function">bool</span>(<span class="string">"text"</span>)       <span class="comment"># True (any text)</span>
+<span class="function">bool</span>([<span class="number">1</span>, <span class="number">2</span>])      <span class="comment"># True (non-empty list)</span>
+<span class="function">bool</span>({<span class="string">"key"</span>: <span class="number">1</span>})  <span class="comment"># True (non-empty dict)</span>
+<span class="function">bool</span>(<span class="keyword">True</span>)       <span class="comment"># True</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Practical Usage</h3>
+            <div class="code-block">
+<span class="comment"># Check if a string has content</span>
+name = <span class="string">""</span>
+<span class="keyword">if</span> name:
+    <span class="function">print</span>(<span class="string">"Name provided"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Name is empty"</span>)  <span class="comment"># This will execute</span>
+
+<span class="comment"># Check if a list has items</span>
+items = []
+<span class="keyword">if</span> items:
+    <span class="function">print</span>(<span class="string">"Has items"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"No items"</span>)  <span class="comment"># This will execute</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Pro Tip:</strong> Use truthiness to write cleaner, more Pythonic code! Instead of <code>if len(name) > 0:</code>, simply use <code>if name:</code>
+            </div>
+        </div>
+
+        <!-- Slide 17: User Input -->
+        <div class="slide">
+            <h2>Getting User Input</h2>
+            <p>The <code>input()</code> function lets you get data from users</p>
+
+            <h3>Basic Input</h3>
+            <div class="code-block">
+<span class="comment"># Get text input</span>
+name = <span class="function">input</span>(<span class="string">"Enter your name: "</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Hello, {name}!"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># Enter your name: Alice</span>
+<span class="comment"># Hello, Alice!</span>
+            </div>
+
+            <h3>⚠️ Important: input() Always Returns a String!</h3>
+            <div class="code-block">
+<span class="comment"># Wrong - trying to do math with strings</span>
+age = <span class="function">input</span>(<span class="string">"Enter your age: "</span>)
+next_year = age + <span class="number">1</span>  <span class="comment"># ❌ TypeError!</span>
+
+<span class="comment"># Correct - convert to integer first</span>
+age = <span class="function">input</span>(<span class="string">"Enter your age: "</span>)
+age = <span class="function">int</span>(age)  <span class="comment"># Convert to number</span>
+next_year = age + <span class="number">1</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Next year you'll be {next_year}"</span>)
+
+<span class="comment"># Even better - convert on same line</span>
+age = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter your age: "</span>))
+            </div>
+
+            <div class="warning-box">
+                <strong>💡 Remember:</strong> Always convert <code>input()</code> to the right type: <code>int()</code> for whole numbers, <code>float()</code> for decimals!
+            </div>
+        </div>
+
+        <!-- Slide 18: Variable Reassignment -->
+        <div class="slide">
+            <h2>Variable Reassignment & Augmented Operators</h2>
+
+            <h3>Variables Can Change</h3>
+            <div class="code-block">
+<span class="comment"># Initial assignment</span>
+count = <span class="number">10</span>
+<span class="function">print</span>(count)  <span class="comment"># 10</span>
+
+<span class="comment"># Reassign to new value</span>
+count = <span class="number">20</span>
+<span class="function">print</span>(count)  <span class="comment"># 20</span>
+
+<span class="comment"># Use current value to calculate new value</span>
+count = count + <span class="number">5</span>
+<span class="function">print</span>(count)  <span class="comment"># 25</span>
+            </div>
+
+            <h3>Augmented Assignment Operators (Shortcuts)</h3>
+            <table style="font-size: 0.9em;">
+                <tr>
+                    <th>Long Form</th>
+                    <th>Short Form</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>x = x + 5</code></td>
+                    <td><code>x += 5</code></td>
+                    <td>Add and assign</td>
+                </tr>
+                <tr>
+                    <td><code>x = x - 3</code></td>
+                    <td><code>x -= 3</code></td>
+                    <td>Subtract and assign</td>
+                </tr>
+                <tr>
+                    <td><code>x = x * 2</code></td>
+                    <td><code>x *= 2</code></td>
+                    <td>Multiply and assign</td>
+                </tr>
+                <tr>
+                    <td><code>x = x / 4</code></td>
+                    <td><code>x /= 4</code></td>
+                    <td>Divide and assign</td>
+                </tr>
+            </table>
+
+            <h3>Example</h3>
+            <div class="code-block">
+score = <span class="number">100</span>
+score += <span class="number">50</span>   <span class="comment"># score is now 150</span>
+score *= <span class="number">2</span>    <span class="comment"># score is now 300</span>
+score -= <span class="number">25</span>   <span class="comment"># score is now 275</span>
+<span class="function">print</span>(score)  <span class="comment"># 275</span>
+            </div>
+        </div>
+
+        <!-- Slide 19: Print Statements -->
         <div class="slide">
             <h2>Print Statements</h2>
 
@@ -492,7 +879,66 @@ decimal = <span class="function">float</span>(whole)  <span class="comment"># Ou
             </div>
         </div>
 
-        <!-- Slide 17: Common Mistakes -->
+        <!-- Slide 25: Understanding Error Messages -->
+        <div class="slide">
+            <h2>Understanding Error Messages</h2>
+            <p>Learning to read errors is a crucial skill! Python tells you exactly what went wrong.</p>
+
+            <h3>Common Error Types</h3>
+            <table style="font-size: 0.85em;">
+                <tr>
+                    <th>Error Type</th>
+                    <th>Meaning</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><code>SyntaxError</code></td>
+                    <td>Code structure is wrong</td>
+                    <td><code>print("Hello"</code> (missing closing parenthesis)</td>
+                </tr>
+                <tr>
+                    <td><code>NameError</code></td>
+                    <td>Variable doesn't exist</td>
+                    <td><code>print(x)</code> when x was never defined</td>
+                </tr>
+                <tr>
+                    <td><code>TypeError</code></td>
+                    <td>Wrong data type used</td>
+                    <td><code>"5" + 3</code> (can't add string and number)</td>
+                </tr>
+                <tr>
+                    <td><code>ValueError</code></td>
+                    <td>Invalid value for type</td>
+                    <td><code>int("hello")</code> (can't convert text to number)</td>
+                </tr>
+                <tr>
+                    <td><code>IndentationError</code></td>
+                    <td>Incorrect spacing/tabs</td>
+                    <td>Inconsistent indentation in code blocks</td>
+                </tr>
+            </table>
+
+            <h3>Reading Error Messages</h3>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Error example:</span>
+Traceback (most recent call last):
+  File "script.py", line 5, in &lt;module&gt;
+    result = <span class="number">10</span> + <span class="string">"5"</span>
+TypeError: unsupported operand type(s) <span class="keyword">for</span> +: <span class="string">'int'</span> <span class="keyword">and</span> <span class="string">'str'</span>
+
+<span class="comment"># What it tells you:</span>
+<span class="comment"># 1. File: script.py</span>
+<span class="comment"># 2. Line number: 5</span>
+<span class="comment"># 3. Problem: Can't use + with int and str</span>
+<span class="comment"># 4. Solution: Convert string to int first!</span>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Pro Tip:</strong> Always read the error message from bottom to top! The last line tells you what went wrong, and the lines above show you where.
+            </div>
+        </div>
+
+        <!-- Slide 26: Common Mistakes -->
         <div class="slide">
             <h2>Common Beginner Mistakes</h2>
 
@@ -531,7 +977,98 @@ name = <span class="string">"Alice"</span>  <span class="comment"># ✓ Correct<
             </div>
         </div>
 
-        <!-- Slide 18: Practice Exercises -->
+        <!-- Slide 27: Automation Examples -->
+        <div class="slide">
+            <h2>Python Automation in Action</h2>
+            <p>Let's see how the basics you learned enable real automation tasks!</p>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>File Automation</h3>
+                    <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># Rename multiple files at once</span>
+<span class="keyword">import</span> os
+
+folder = <span class="string">"documents"</span>
+counter = <span class="number">1</span>
+
+<span class="keyword">for</span> file <span class="keyword">in</span> os.<span class="function">listdir</span>(folder):
+    new_name = <span class="keyword">f</span><span class="string">"report_{counter}.pdf"</span>
+    <span class="comment"># Rename file</span>
+    counter += <span class="number">1</span>
+                    </div>
+                    <p style="font-size: 0.9em;">✓ Uses: variables, loops, f-strings, operators</p>
+                </div>
+                <div class="column">
+                    <h3>Data Processing</h3>
+                    <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># Calculate employee bonuses</span>
+name = <span class="function">input</span>(<span class="string">"Employee name: "</span>)
+salary = <span class="function">float</span>(<span class="function">input</span>(<span class="string">"Salary: "</span>))
+years = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Years: "</span>))
+
+<span class="keyword">if</span> years >= <span class="number">5</span>:
+    bonus = salary * <span class="number">0.15</span>
+<span class="keyword">else</span>:
+    bonus = salary * <span class="number">0.10</span>
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"{name}'s bonus: ${bonus:,.2f}"</span>)
+                    </div>
+                    <p style="font-size: 0.9em;">✓ Uses: input(), type conversion, if statements, formatting</p>
+                </div>
+            </div>
+
+            <div class="two-column" style="margin-top: 15px;">
+                <div class="column">
+                    <h3>Log File Analysis</h3>
+                    <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># Count errors in log file</span>
+error_count = <span class="number">0</span>
+warning_count = <span class="number">0</span>
+
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"app.log"</span>) <span class="keyword">as</span> file:
+    <span class="keyword">for</span> line <span class="keyword">in</span> file:
+        <span class="keyword">if</span> <span class="string">"ERROR"</span> <span class="keyword">in</span> line:
+            error_count += <span class="number">1</span>
+        <span class="keyword">elif</span> <span class="string">"WARNING"</span> <span class="keyword">in</span> line:
+            warning_count += <span class="number">1</span>
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Errors: {error_count}"</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Warnings: {warning_count}"</span>)
+                    </div>
+                    <p style="font-size: 0.9em;">✓ Uses: variables, strings, operators, conditionals</p>
+                </div>
+                <div class="column">
+                    <h3>Simple Report Generator</h3>
+                    <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># Generate daily sales report</span>
+date = <span class="string">"2025-01-20"</span>
+sales = <span class="number">15750.50</span>
+transactions = <span class="number">342</span>
+avg_sale = sales / transactions
+
+report = <span class="keyword">f</span><span class="string">"""
+Daily Sales Report
+{"=" * 40}
+Date: {date}
+Total Sales: ${sales:,.2f}
+Transactions: {transactions}
+Average: ${avg_sale:.2f}
+{"=" * 40}
+"""</span>
+
+<span class="function">print</span>(report)
+                    </div>
+                    <p style="font-size: 0.9em;">✓ Uses: strings, numbers, operators, formatting</p>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 15px;">
+                <strong>🎯 Key Insight:</strong> Every complex automation starts with these basics: variables, operators, input/output, and string formatting!
+            </div>
+        </div>
+
+        <!-- Slide 28: Practice Exercises -->
         <div class="slide">
             <h2>Practice Exercises</h2>
             <p>Time to apply what you've learned!</p>

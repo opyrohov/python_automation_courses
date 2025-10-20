@@ -64,7 +64,7 @@ print(f"Students: {student_count}")
 print(f"Year: {year}")
 print(f"Temperature: {temperature}")
 print()
-
+"""
 # Floats (decimal numbers)
 price = 19.99
 pi = 3.14159
@@ -132,7 +132,7 @@ print()
 # ============================================
 # VARIABLE NAMING RULES
 # ============================================
-"""
+""""""
 Good variable names:
 - Use lowercase with underscores: user_name, first_name
 - Be descriptive: total_price instead of tp
@@ -143,7 +143,7 @@ Bad variable names:
 - Don't use spaces: first name ❌
 - Don't use Python keywords: for, if, class ❌
 - Avoid single letters (except in loops): x, y ❌
-"""
+""""""
 
 # Good examples
 user_name = "Alice"
@@ -152,3 +152,4 @@ is_active = True
 _internal_value = 42
 
 print("Well-named variables created successfully!")
+"""

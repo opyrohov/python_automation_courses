@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tree -L 3 -I \".git|.idea|__pycache__|venv\" --dirsfirst)"
+      "Bash(tree -L 3 -I \".git|.idea|__pycache__|venv\" --dirsfirst)",
+      "Bash(git mv CLAUDE.md docs/CLAUDE.md)",
+      "Bash(git mv assets/presentation/CHANGELOG.md docs/PRESENTATION_CHANGELOG.md)"
     ],
     "deny": [],
     "ask": []
