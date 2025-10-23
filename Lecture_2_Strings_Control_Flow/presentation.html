@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 2: Strings & Control Flow</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 2</h1>
+            <div class="subtitle">Strings & Control Flow</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>String Manipulation & Formatting</li>
+                <li>Control Flow with if/elif/else</li>
+                <li>Comparison Operators</li>
+                <li>Logical Operators (and, or, not)</li>
+                <li>Applying These to Playwright Automation</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Master the tools to make your code dynamic and responsive to different conditions!
+            </div>
+        </div>
+
+        <!-- Slide 3: Why Strings Matter for Automation -->
+        <div class="slide">
+            <h2>Why Strings Matter for Automation</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Common Use Cases</h3>
+                    <ul>
+                        <li><strong>Text Verification</strong> - Check page content</li>
+                        <li><strong>Form Inputs</strong> - Fill and validate fields</li>
+                        <li><strong>URL Manipulation</strong> - Build and parse URLs</li>
+                        <li><strong>Data Extraction</strong> - Parse text from pages</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Real Examples</h3>
+                    <ul>
+                        <li>Extract email from "Welcome, user@example.com!"</li>
+                        <li>Verify page title contains "Dashboard"</li>
+                        <li>Format test data for inputs</li>
+                        <li>Parse error messages</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 In Automation:</strong> 80% of your test logic involves working with strings!
+            </div>
+        </div>
+
+        <!-- Slide 4: String Methods - Case -->
+        <div class="slide">
+            <h2>String Methods: Case Manipulation</h2>
+
+            <div class="code-block">
+<span class="comment"># Case conversion methods</span>
+text = <span class="string">"Welcome to Python Automation"</span>
+
+<span class="function">print</span>(text.<span class="function">upper</span>())      <span class="comment"># "WELCOME TO PYTHON AUTOMATION"</span>
+<span class="function">print</span>(text.<span class="function">lower</span>())      <span class="comment"># "welcome to python automation"</span>
+<span class="function">print</span>(text.<span class="function">title</span>())      <span class="comment"># "Welcome To Python Automation"</span>
+<span class="function">print</span>(text.<span class="function">swapcase</span>())   <span class="comment"># "wELCOME TO pYTHON aUTOMATION"</span>
+
+<span class="comment"># Automation example: Case-insensitive comparison</span>
+page_title = <span class="string">"Login Page"</span>
+expected = <span class="string">"login page"</span>
+
+<span class="keyword">if</span> page_title.<span class="function">lower</span>() == expected.<span class="function">lower</span>():
+    <span class="function">print</span>(<span class="string">"✓ Title matches!"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Pro Tip:</strong> Always use <code>.lower()</code> for case-insensitive comparisons in tests!
+            </div>
+        </div>
+
+        <!-- Slide 5: String Methods - Whitespace -->
+        <div class="slide">
+            <h2>String Methods: Whitespace Handling</h2>
+
+            <div class="code-block">
+<span class="comment"># Removing whitespace</span>
+messy_text = <span class="string">"   extra spaces   "</span>
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Original: '{messy_text}'"</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Strip: '{messy_text.<span class="function">strip</span>()}'"</span>)    <span class="comment"># 'extra spaces'</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"LStrip: '{messy_text.<span class="function">lstrip</span>()}'"</span>)  <span class="comment"># 'extra spaces   '</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"RStrip: '{messy_text.<span class="function">rstrip</span>()}'"</span>)  <span class="comment"># '   extra spaces'</span>
+
+<span class="comment"># Automation example: Clean user input</span>
+email = <span class="function">input</span>(<span class="string">"Enter email: "</span>)
+email = email.<span class="function">strip</span>().<span class="function">lower</span>()  <span class="comment"># Remove spaces + lowercase</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Cleaned email: {email}"</span>)
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Common Issue:</strong> Web scraping often gives extra whitespace. Always use <code>.strip()</code> to clean text!
+            </div>
+        </div>
+
+        <!-- Slide 6: String Methods - Replace & Split -->
+        <div class="slide">
+            <h2>String Methods: Replace & Split</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Replace</h3>
+                    <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Replace text</span>
+url = <span class="string">"https://example.com/old-page"</span>
+new_url = url.<span class="function">replace</span>(<span class="string">"old-page"</span>, <span class="string">"new-page"</span>)
+<span class="function">print</span>(new_url)
+
+<span class="comment"># Multiple replacements</span>
+text = <span class="string">"Python is great. Python rocks."</span>
+text = text.<span class="function">replace</span>(<span class="string">"Python"</span>, <span class="string">"JavaScript"</span>)
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Split & Join</h3>
+                    <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Split into list</span>
+csv = <span class="string">"John,Doe,30,Engineer"</span>
+fields = csv.<span class="function">split</span>(<span class="string">","</span>)
+<span class="function">print</span>(fields)  <span class="comment"># ['John', 'Doe', '30', 'Engineer']</span>
+
+<span class="comment"># Join list to string</span>
+words = [<span class="string">"Python"</span>, <span class="string">"is"</span>, <span class="string">"awesome"</span>]
+sentence = <span class="string">" "</span>.<span class="function">join</span>(words)
+<span class="function">print</span>(sentence)  <span class="comment"># "Python is awesome"</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>🎯 Automation Use:</strong> Parse CSV data, split URLs, build dynamic selectors!
+            </div>
+        </div>
+
+        <!-- Slide 7: String Slicing -->
+        <div class="slide">
+            <h2>String Slicing - Accessing Parts</h2>
+
+            <div class="code-block">
+text = <span class="string">"Python Programming"</span>
+
+<span class="comment"># Individual characters (0-indexed)</span>
+<span class="function">print</span>(text[<span class="number">0</span>])     <span class="comment"># 'P' - first character</span>
+<span class="function">print</span>(text[<span class="number">-1</span>])    <span class="comment"># 'g' - last character</span>
+
+<span class="comment"># Slicing [start:end]</span>
+<span class="function">print</span>(text[<span class="number">0</span>:<span class="number">6</span>])   <span class="comment"># 'Python'</span>
+<span class="function">print</span>(text[<span class="number">7</span>:])    <span class="comment"># 'Programming'</span>
+<span class="function">print</span>(text[:<span class="number">6</span>])    <span class="comment"># 'Python'</span>
+<span class="function">print</span>(text[<span class="number">-11</span>:])  <span class="comment"># 'Programming'</span>
+
+<span class="comment"># Step slicing [start:end:step]</span>
+<span class="function">print</span>(text[::<span class="number">2</span>])   <span class="comment"># 'Pto rgamn' - every 2nd char</span>
+<span class="function">print</span>(text[::<span class="number">-1</span>])  <span class="comment"># 'gnimmargorP nohtyP' - reverse!</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Automation example: Extract product ID from URL</span>
+url = <span class="string">"https://store.com/product-12345"</span>
+product_id = url.<span class="function">split</span>(<span class="string">"-"</span>)[<span class="number">-1</span>]  <span class="comment"># '12345'</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Product ID: {product_id}"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 8: String Searching -->
+        <div class="slide">
+            <h2>String Searching & Validation</h2>
+
+            <div class="code-block" style="font-size: 0.8em;">
+text = <span class="string">"Welcome to login"</span>
+
+<span class="comment"># Check substring</span>
+<span class="function">print</span>(<span class="string">"login"</span> <span class="keyword">in</span> text)  <span class="comment"># True</span>
+
+<span class="comment"># Find position</span>
+<span class="function">print</span>(text.<span class="function">find</span>(<span class="string">"login"</span>))  <span class="comment"># 11</span>
+
+<span class="comment"># Count</span>
+<span class="function">print</span>(text.<span class="function">count</span>(<span class="string">"o"</span>))  <span class="comment"># 3</span>
+
+<span class="comment"># Start / End</span>
+url = <span class="string">"user@test.com"</span>
+<span class="function">print</span>(url.<span class="function">startswith</span>(<span class="string">"user"</span>))  <span class="comment"># True</span>
+<span class="function">print</span>(url.<span class="function">endswith</span>(<span class="string">".com"</span>))  <span class="comment"># True</span>
+            </div>
+
+            <div class="info-box">
+                <strong>🔍 Automation Tip:</strong> Use <code>in</code> to verify expected text appears on a page!
+            </div>
+        </div>
+
+        <!-- Slide 9: F-Strings Advanced -->
+        <div class="slide">
+            <h2>F-Strings: Modern String Formatting</h2>
+
+            <div class="code-block" style="font-size: 0.82em;">
+<span class="comment"># Basic f-strings</span>
+name = <span class="string">"Alice"</span>
+age = <span class="number">25</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"{name}, age {age}"</span>)
+
+<span class="comment"># Expressions</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Next: {age + 1}"</span>)
+
+<span class="comment"># Format numbers</span>
+price = <span class="number">1234.5</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"${price:.2f}"</span>)    <span class="comment"># $1234.50</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"${price:,.2f}"</span>)   <span class="comment"># $1,234.50</span>
+
+<span class="comment"># Call methods</span>
+text = <span class="string">"hello"</span>
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"{text.upper()}"</span>)  <span class="comment"># HELLO</span>
+
+<span class="comment"># Multi-line</span>
+report = <span class="keyword">f</span><span class="string">"""Report
+Status: {'PASS' if age >= 18 else 'FAIL'}
+Score: {age * 2}"""</span>
+<span class="function">print</span>(report)
+            </div>
+        </div>
+
+        <!-- Slide 10: Control Flow - Why It Matters -->
+        <div class="slide">
+            <h2>Control Flow - Making Decisions</h2>
+
+            <p><strong>Control flow</strong> lets your program make decisions and execute different code based on conditions.</p>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Without Control Flow</h3>
+                    <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Always does the same thing</span>
+page_title = <span class="string">"Dashboard"</span>
+<span class="function">print</span>(<span class="string">"Clicking dashboard link"</span>)
+<span class="function">print</span>(<span class="string">"Loading data"</span>)
+                    </div>
+                    <p style="font-size: 0.9em; color: #dc3545;">❌ Not flexible</p>
+                </div>
+                <div class="column">
+                    <h3>With Control Flow</h3>
+                    <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Responds to conditions</span>
+<span class="keyword">if</span> <span class="string">"Dashboard"</span> <span class="keyword">in</span> page_title:
+    <span class="function">print</span>(<span class="string">"On dashboard - loading data"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Not on dashboard - navigating"</span>)
+                    </div>
+                    <p style="font-size: 0.9em; color: #28a745;">✓ Dynamic & smart</p>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>🎯 In Automation:</strong> Control flow makes tests intelligent - they adapt to different page states!
+            </div>
+        </div>
+
+        <!-- Slide 11: If Statements -->
+        <div class="slide">
+            <h2>if Statements - Basic Decisions</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic if statement</span>
+age = <span class="number">20</span>
+
+<span class="keyword">if</span> age >= <span class="number">18</span>:
+    <span class="function">print</span>(<span class="string">"You are an adult"</span>)
+    <span class="function">print</span>(<span class="string">"You can vote"</span>)
+
+<span class="function">print</span>(<span class="string">"Program continues"</span>)  <span class="comment"># Always executes</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Indentation is CRUCIAL!</strong>
+                <div class="code-block" style="margin-top: 10px; font-size: 0.85em;">
+<span class="comment"># Correct - indented block</span>
+<span class="keyword">if</span> age >= <span class="number">18</span>:
+    <span class="function">print</span>(<span class="string">"Adult"</span>)  <span class="comment"># ✓ Inside if block</span>
+
+<span class="comment"># Wrong - no indentation</span>
+<span class="keyword">if</span> age >= <span class="number">18</span>:
+<span class="function">print</span>(<span class="string">"Adult"</span>)      <span class="comment"># ❌ IndentationError!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: If-Else Statements -->
+        <div class="slide">
+            <h2>if-else Statements</h2>
+
+            <div class="code-block">
+<span class="comment"># If-else: Two paths</span>
+temperature = <span class="number">25</span>
+
+<span class="keyword">if</span> temperature > <span class="number">30</span>:
+    <span class="function">print</span>(<span class="string">"It's hot outside!"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"The weather is pleasant"</span>)
+
+<span class="comment"># Automation example: Check login status</span>
+is_logged_in = <span class="keyword">True</span>
+
+<span class="keyword">if</span> is_logged_in:
+    <span class="function">print</span>(<span class="string">"Proceeding to dashboard"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Redirecting to login page"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Use Case:</strong> Handle two possible outcomes - success or failure, visible or hidden, etc.
+            </div>
+        </div>
+
+        <!-- Slide 13: If-Elif-Else Statements -->
+        <div class="slide">
+            <h2>if-elif-else: Multiple Conditions</h2>
+
+            <div class="code-block">
+score = <span class="number">85</span>
+
+<span class="keyword">if</span> score >= <span class="number">90</span>:
+    <span class="function">print</span>(<span class="string">"Grade: A - Excellent!"</span>)
+<span class="keyword">elif</span> score >= <span class="number">80</span>:
+    <span class="function">print</span>(<span class="string">"Grade: B - Good job!"</span>)
+<span class="keyword">elif</span> score >= <span class="number">70</span>:
+    <span class="function">print</span>(<span class="string">"Grade: C - Satisfactory"</span>)
+<span class="keyword">elif</span> score >= <span class="number">60</span>:
+    <span class="function">print</span>(<span class="string">"Grade: D - Needs improvement"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Grade: F - Failed"</span>)
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Automation: Handle different HTTP status codes</span>
+status_code = <span class="number">200</span>
+
+<span class="keyword">if</span> status_code == <span class="number">200</span>:
+    <span class="function">print</span>(<span class="string">"✓ Success"</span>)
+<span class="keyword">elif</span> status_code == <span class="number">404</span>:
+    <span class="function">print</span>(<span class="string">"✗ Page not found"</span>)
+<span class="keyword">elif</span> status_code == <span class="number">500</span>:
+    <span class="function">print</span>(<span class="string">"✗ Server error"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Status: {status_code}"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 14: Comparison Operators -->
+        <div class="slide">
+            <h2>Comparison Operators</h2>
+
+            <table>
+                <tr>
+                    <th>Operator</th>
+                    <th>Meaning</th>
+                    <th>Example</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td><code>==</code></td>
+                    <td>Equal to</td>
+                    <td><code>5 == 5</code></td>
+                    <td>True</td>
+                </tr>
+                <tr>
+                    <td><code>!=</code></td>
+                    <td>Not equal to</td>
+                    <td><code>5 != 3</code></td>
+                    <td>True</td>
+                </tr>
+                <tr>
+                    <td><code>></code></td>
+                    <td>Greater than</td>
+                    <td><code>5 > 3</code></td>
+                    <td>True</td>
+                </tr>
+                <tr>
+                    <td><code><</code></td>
+                    <td>Less than</td>
+                    <td><code>5 < 3</code></td>
+                    <td>False</td>
+                </tr>
+                <tr>
+                    <td><code>>=</code></td>
+                    <td>Greater than or equal</td>
+                    <td><code>5 >= 5</code></td>
+                    <td>True</td>
+                </tr>
+                <tr>
+                    <td><code><=</code></td>
+                    <td>Less than or equal</td>
+                    <td><code>5 <= 3</code></td>
+                    <td>False</td>
+                </tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>⚠️ Common Mistake:</strong> Use <code>==</code> for comparison, not <code>=</code> (which is assignment)!
+            </div>
+        </div>
+
+        <!-- Slide 15: Logical Operators - AND -->
+        <div class="slide">
+            <h2>Logical Operators: AND</h2>
+
+            <p><code>and</code> - Both conditions must be True</p>
+
+            <div class="code-block">
+age = <span class="number">25</span>
+has_license = <span class="keyword">True</span>
+
+<span class="keyword">if</span> age >= <span class="number">18</span> <span class="keyword">and</span> has_license:
+    <span class="function">print</span>(<span class="string">"You can drive!"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"You cannot drive"</span>)
+            </div>
+
+            <h3>Truth Table for AND</h3>
+            <table style="font-size: 0.9em;">
+                <tr>
+                    <th>Condition 1</th>
+                    <th>Condition 2</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td>True</td>
+                    <td>True</td>
+                    <td style="color: #28a745;"><strong>True</strong></td>
+                </tr>
+                <tr>
+                    <td>True</td>
+                    <td>False</td>
+                    <td style="color: #dc3545;">False</td>
+                </tr>
+                <tr>
+                    <td>False</td>
+                    <td>True</td>
+                    <td style="color: #dc3545;">False</td>
+                </tr>
+                <tr>
+                    <td>False</td>
+                    <td>False</td>
+                    <td style="color: #dc3545;">False</td>
+                </tr>
+            </table>
+
+            <div class="code-block">
+<span class="comment"># Automation: Check element is visible AND enabled</span>
+is_visible = <span class="keyword">True</span>
+is_enabled = <span class="keyword">True</span>
+
+<span class="keyword">if</span> is_visible <span class="keyword">and</span> is_enabled:
+    <span class="function">print</span>(<span class="string">"Element is clickable"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 16: Logical Operators - OR -->
+        <div class="slide">
+            <h2>Logical Operators: OR</h2>
+
+            <p><code>or</code> - At least one condition must be True</p>
+
+            <div class="code-block">
+day = <span class="string">"Saturday"</span>
+
+<span class="keyword">if</span> day == <span class="string">"Saturday"</span> <span class="keyword">or</span> day == <span class="string">"Sunday"</span>:
+    <span class="function">print</span>(<span class="string">"It's the weekend!"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"It's a weekday"</span>)
+            </div>
+
+            <h3>Truth Table for OR</h3>
+            <table style="font-size: 0.9em;">
+                <tr>
+                    <th>Condition 1</th>
+                    <th>Condition 2</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td>True</td>
+                    <td>True</td>
+                    <td style="color: #28a745;"><strong>True</strong></td>
+                </tr>
+                <tr>
+                    <td>True</td>
+                    <td>False</td>
+                    <td style="color: #28a745;"><strong>True</strong></td>
+                </tr>
+                <tr>
+                    <td>False</td>
+                    <td>True</td>
+                    <td style="color: #28a745;"><strong>True</strong></td>
+                </tr>
+                <tr>
+                    <td>False</td>
+                    <td>False</td>
+                    <td style="color: #dc3545;">False</td>
+                </tr>
+            </table>
+
+            <div class="code-block">
+<span class="comment"># Automation: Check if error message contains keywords</span>
+error = <span class="string">"Invalid username or password"</span>
+
+<span class="keyword">if</span> <span class="string">"username"</span> <span class="keyword">in</span> error <span class="keyword">or</span> <span class="string">"password"</span> <span class="keyword">in</span> error:
+    <span class="function">print</span>(<span class="string">"Login credentials error"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 17: Logical Operators - NOT -->
+        <div class="slide">
+            <h2>Logical Operators: NOT</h2>
+
+            <p><code>not</code> - Inverts the boolean value</p>
+
+            <div class="code-block">
+is_raining = <span class="keyword">False</span>
+
+<span class="keyword">if</span> <span class="keyword">not</span> is_raining:
+    <span class="function">print</span>(<span class="string">"You don't need an umbrella"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Take an umbrella!"</span>)
+            </div>
+
+            <h3>NOT Truth Table</h3>
+            <table style="font-size: 0.9em;">
+                <tr>
+                    <th>Value</th>
+                    <th>not Value</th>
+                </tr>
+                <tr>
+                    <td>True</td>
+                    <td style="color: #dc3545;">False</td>
+                </tr>
+                <tr>
+                    <td>False</td>
+                    <td style="color: #28a745;"><strong>True</strong></td>
+                </tr>
+            </table>
+
+            <div class="code-block">
+<span class="comment"># Combining logical operators</span>
+age = <span class="number">25</span>
+is_student = <span class="keyword">False</span>
+
+<span class="keyword">if</span> age >= <span class="number">18</span> <span class="keyword">and</span> <span class="keyword">not</span> is_student:
+    <span class="function">print</span>(<span class="string">"Regular adult pricing"</span>)
+<span class="keyword">elif</span> age >= <span class="number">18</span> <span class="keyword">and</span> is_student:
+    <span class="function">print</span>(<span class="string">"Student discount available"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 18: Nested Conditions -->
+        <div class="slide">
+            <h2>Nested if Statements</h2>
+
+            <p>You can put if statements inside other if statements</p>
+
+            <div class="code-block">
+account_balance = <span class="number">500</span>
+withdrawal_amount = <span class="number">200</span>
+is_account_active = <span class="keyword">True</span>
+
+<span class="keyword">if</span> is_account_active:
+    <span class="function">print</span>(<span class="string">"Account is active"</span>)
+
+    <span class="keyword">if</span> account_balance >= withdrawal_amount:
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Withdrawal of ${withdrawal_amount} approved"</span>)
+        remaining = account_balance - withdrawal_amount
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Remaining balance: ${remaining}"</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"Insufficient funds"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Account is not active. Cannot withdraw"</span>)
+            </div>
+
+            <div class="warning-box">
+                <strong>💡 Tip:</strong> Too many nested ifs can be hard to read. Use logical operators (<code>and</code>, <code>or</code>) when possible!
+            </div>
+        </div>
+
+        <!-- Slide 19: Playwright Example - Login Flow -->
+        <div class="slide">
+            <h2>Automation Example: Login Validation</h2>
+
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Login validation logic</span>
+url = <span class="string">"example.com/dashboard"</span>
+title = <span class="string">"Dashboard"</span>
+user = <span class="string">"John Doe"</span>
+
+<span class="comment"># Check URL</span>
+<span class="keyword">if</span> <span class="string">"dashboard"</span> <span class="keyword">in</span> url:
+    <span class="function">print</span>(<span class="string">"✓ URL correct"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"✗ URL wrong"</span>)
+
+<span class="comment"># Check title</span>
+<span class="keyword">if</span> <span class="string">"Dashboard"</span> <span class="keyword">in</span> title:
+    <span class="function">print</span>(<span class="string">"✓ Title correct"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"✗ Title wrong"</span>)
+
+<span class="comment"># Check username</span>
+<span class="keyword">if</span> user:
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"✓ User: {user}"</span>)
+
+<span class="comment"># Overall result</span>
+<span class="keyword">if</span> <span class="string">"dashboard"</span> <span class="keyword">in</span> url <span class="keyword">and</span> title:
+    <span class="function">print</span>(<span class="string">"✓ Login OK!"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 20: Playwright Example - Error Handling -->
+        <div class="slide">
+            <h2>Automation Example: Error Handling</h2>
+
+            <div class="code-block">
+<span class="comment"># Handle different error messages</span>
+error_message = <span class="string">"Error: Invalid email format"</span>
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Error detected: {error_message}"</span>)
+
+<span class="keyword">if</span> <span class="string">"email"</span> <span class="keyword">in</span> error_message.<span class="function">lower</span>():
+    <span class="function">print</span>(<span class="string">"→ Fix email format and retry"</span>)
+<span class="keyword">elif</span> <span class="string">"password"</span> <span class="keyword">in</span> error_message.<span class="function">lower</span>():
+    <span class="function">print</span>(<span class="string">"→ Enter a valid password"</span>)
+<span class="keyword">elif</span> <span class="string">"account"</span> <span class="keyword">in</span> error_message.<span class="function">lower</span>():
+    <span class="function">print</span>(<span class="string">"→ Check username or register"</span>)
+<span class="keyword">elif</span> <span class="string">"network"</span> <span class="keyword">in</span> error_message.<span class="function">lower</span>():
+    <span class="function">print</span>(<span class="string">"→ Check internet connection"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"→ Unknown error - contact support"</span>)
+            </div>
+
+            <div class="success-box">
+                <strong>🎯 Real Testing:</strong> Your tests will check error messages and take different actions!
+            </div>
+        </div>
+
+        <!-- Slide 21: Playwright Example - Element State -->
+        <div class="slide">
+            <h2>Automation Example: Element State Check</h2>
+
+            <div class="code-block" style="font-size: 0.78em;">
+<span class="comment"># Element state check</span>
+vis = <span class="keyword">True</span>
+ena = <span class="keyword">True</span>
+val = <span class="keyword">True</span>
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Vis: {vis}"</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Ena: {ena}"</span>)
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Val: {val}"</span>)
+
+<span class="keyword">if</span> vis <span class="keyword">and</span> ena <span class="keyword">and</span> val:
+    <span class="function">print</span>(<span class="string">"✓ OK!"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"✗ Error:"</span>)
+    <span class="keyword">if</span> <span class="keyword">not</span> vis:
+        <span class="function">print</span>(<span class="string">"  - Hidden"</span>)
+    <span class="keyword">if</span> <span class="keyword">not</span> ena:
+        <span class="function">print</span>(<span class="string">"  - Disabled"</span>)
+    <span class="keyword">if</span> <span class="keyword">not</span> val:
+        <span class="function">print</span>(<span class="string">"  - Invalid"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Best Practice:</strong> Always check element state before interacting with it!
+            </div>
+        </div>
+
+        <!-- Slide 22: Practical Tips -->
+        <div class="slide">
+            <h2>Practical Tips for Automation</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>String Tips</h3>
+                    <ul style="font-size: 0.9em;">
+                        <li>Always <code>.strip()</code> scraped text</li>
+                        <li>Use <code>.lower()</code> for comparisons</li>
+                        <li>Prefer f-strings for readability</li>
+                        <li>Use <code>in</code> for substring checks</li>
+                        <li><code>.split()</code> is your friend for parsing</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Control Flow Tips</h3>
+                    <ul style="font-size: 0.9em;">
+                        <li>Check most specific conditions first</li>
+                        <li>Use <code>and</code> for required conditions</li>
+                        <li>Use <code>or</code> for alternatives</li>
+                        <li>Avoid deep nesting (max 2-3 levels)</li>
+                        <li>Add comments for complex logic</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>Common Mistakes to Avoid</h3>
+                <div class="code-block" style="margin-top: 10px; font-size: 0.85em;">
+<span class="comment"># ❌ Wrong: Assignment instead of comparison</span>
+<span class="keyword">if</span> status = <span class="number">200</span>:  <span class="comment"># SyntaxError!</span>
+
+<span class="comment"># ✓ Correct: Use == for comparison</span>
+<span class="keyword">if</span> status == <span class="number">200</span>:
+
+<span class="comment"># ❌ Wrong: Case-sensitive comparison</span>
+<span class="keyword">if</span> page_title == <span class="string">"dashboard"</span>:  <span class="comment"># Won't match "Dashboard"</span>
+
+<span class="comment"># ✓ Correct: Case-insensitive</span>
+<span class="keyword">if</span> page_title.<span class="function">lower</span>() == <span class="string">"dashboard"</span>:
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Practice Exercises -->
+        <div class="slide">
+            <h2>Practice Exercises</h2>
+
+            <h3>📁 Exercise Files</h3>
+            <ul>
+                <li><strong>exercise_01_string_practice.py</strong>
+                    <ul>
+                        <li>Email validation and domain extraction</li>
+                        <li>URL manipulation</li>
+                        <li>Text cleaning and parsing</li>
+                        <li>Password strength checker</li>
+                    </ul>
+                </li>
+                <li><strong>exercise_02_conditions.py</strong>
+                    <ul>
+                        <li>Grade calculator</li>
+                        <li>Login validator</li>
+                        <li>Shopping discount logic</li>
+                        <li>ATM withdrawal system</li>
+                    </ul>
+                </li>
+                <li><strong>exercise_03_playwright_scenarios.py</strong>
+                    <ul>
+                        <li>Login flow validation</li>
+                        <li>Search result checking</li>
+                        <li>Form field validation</li>
+                        <li>Multi-step form wizard</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="success-box">
+                <strong>💪 Challenge:</strong> Complete all exercises before checking solutions!
+            </div>
+        </div>
+
+        <!-- Slide 24: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>🎯 String Mastery</h3>
+                    <ul>
+                        <li><code>.upper()</code>, <code>.lower()</code>, <code>.strip()</code></li>
+                        <li><code>.replace()</code>, <code>.split()</code>, <code>.join()</code></li>
+                        <li>F-strings for formatting</li>
+                        <li><code>in</code> for substring checks</li>
+                        <li>Slicing for extraction</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>✅ Control Flow</h3>
+                    <ul>
+                        <li><code>if</code> for single condition</li>
+                        <li><code>elif</code> for multiple options</li>
+                        <li><code>else</code> for fallback</li>
+                        <li><code>and</code>, <code>or</code>, <code>not</code> for logic</li>
+                        <li>Comparison operators: <code>==</code>, <code>!=</code>, <code>></code>, <code><</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h3>🚀 Why This Matters for Automation</h3>
+                <ul>
+                    <li><strong>Strings:</strong> Verify text, parse data, build selectors</li>
+                    <li><strong>Control Flow:</strong> Make tests adaptive and intelligent</li>
+                    <li><strong>Together:</strong> Create robust, dynamic automation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 25: Resources & Next Steps -->
+        <div class="slide">
+            <h2>Resources & Next Steps</h2>
+
+            <h3>📁 Course Files</h3>
+            <ul>
+                <li><code>README.md</code> - Detailed lecture guide</li>
+                <li><code>examples/</code> - 4 comprehensive examples</li>
+                <li><code>exercises/</code> - 3 practice files + solutions</li>
+                <li><code>PRESENTATION_GUIDE.md</code> - Presentation tips</li>
+            </ul>
+
+            <h3>💡 Study Recommendations</h3>
+            <ul class="checklist">
+                <li>Run all example files and experiment with them</li>
+                <li>Complete exercises without looking at solutions first</li>
+                <li>Create your own string manipulation challenges</li>
+                <li>Write conditional logic for real scenarios</li>
+                <li>Think about automation use cases while learning</li>
+            </ul>
+
+            <h3>📚 Next Lecture Preview</h3>
+            <p><strong>Lecture 3:</strong> Lists, Loops & Functions - Building reusable automation logic!</p>
+
+            <div class="title-slide" style="margin-top: 50px;">
+                <h1 style="font-size: 2.5em;">Thank You! 🎉</h1>
+                <p style="font-size: 1.3em;">Keep Practicing!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <!-- Global presentation script shared across all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

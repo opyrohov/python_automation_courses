@@ -165,7 +165,7 @@ ul, ol {
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    max-height: 350px;
+    max-height: 500px;
     line-height: 1.4;
 }
 
