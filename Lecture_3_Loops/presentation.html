@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 3: Loops</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 3</h1>
+            <div class="subtitle">Loops</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>For Loops - Iterating over sequences</li>
+                <li>While Loops - Condition-based repetition</li>
+                <li>The range() Function</li>
+                <li>Break and Continue statements</li>
+                <li>Loops in Playwright Automation</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Master loops to process multiple elements and automate repetitive tasks efficiently!
+            </div>
+        </div>
+
+        <!-- Slide 3: Why Loops Matter for Automation -->
+        <div class="slide">
+            <h2>Why Loops Matter for Automation</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Common Use Cases</h3>
+                    <ul>
+                        <li><strong>Multiple Elements</strong> - Click all buttons</li>
+                        <li><strong>Form Fields</strong> - Fill multiple inputs</li>
+                        <li><strong>Data-Driven Tests</strong> - Run with different data</li>
+                        <li><strong>Retry Logic</strong> - Wait for elements</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Real Examples</h3>
+                    <ul>
+                        <li>Process all items in a shopping cart</li>
+                        <li>Validate every link on a page</li>
+                        <li>Test login with 10 different users</li>
+                        <li>Extract data from multiple pages</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 In Automation:</strong> Loops enable you to scale tests from 1 element to thousands!
+            </div>
+        </div>
+
+        <!-- Slide 4: For Loop Basics -->
+        <div class="slide">
+            <h2>For Loops - Basic Syntax</h2>
+
+            <div class="code-block">
+<span class="comment"># Loop through a list</span>
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+
+<span class="keyword">for</span> fruit <span class="keyword">in</span> fruits:
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"I like {fruit}s"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># I like apples</span>
+<span class="comment"># I like bananas</span>
+<span class="comment"># I like cherries</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Loop through a string</span>
+<span class="keyword">for</span> letter <span class="keyword">in</span> <span class="string">"Python"</span>:
+    <span class="function">print</span>(letter, end=<span class="string">" "</span>)
+
+<span class="comment"># Output: P y t h o n</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Key Concept:</strong> For loops work with any <em>iterable</em> (lists, strings, ranges, etc.)
+            </div>
+        </div>
+
+        <!-- Slide 5: For Loops with Numbers -->
+        <div class="slide">
+            <h2>For Loops with range()</h2>
+
+            <div class="code-block">
+<span class="comment"># Count from 0 to 4</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    <span class="function">print</span>(i, end=<span class="string">" "</span>)
+<span class="comment"># Output: 0 1 2 3 4</span>
+
+<span class="comment"># Count from 1 to 5</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">6</span>):
+    <span class="function">print</span>(i, end=<span class="string">" "</span>)
+<span class="comment"># Output: 1 2 3 4 5</span>
+
+<span class="comment"># Count by 2s</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
+    <span class="function">print</span>(i, end=<span class="string">" "</span>)
+<span class="comment"># Output: 0 2 4 6 8</span>
+
+<span class="comment"># Count backwards</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>, <span class="number">0</span>, <span class="number">-1</span>):
+    <span class="function">print</span>(i, end=<span class="string">" "</span>)
+<span class="comment"># Output: 5 4 3 2 1</span>
+            </div>
+
+            <div class="success-box">
+                <strong>🎯 Automation Use:</strong> Repeat actions N times, iterate with index!
+            </div>
+        </div>
+
+        <!-- Slide 6: Accumulating Values -->
+        <div class="slide">
+            <h2>Accumulating Values in Loops</h2>
+
+            <div class="code-block">
+<span class="comment"># Sum numbers</span>
+numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>]
+total = <span class="number">0</span>
+
+<span class="keyword">for</span> num <span class="keyword">in</span> numbers:
+    total += num
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Total: {total}"</span>)  <span class="comment"># Total: 150</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Count even numbers</span>
+numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>]
+even_count = <span class="number">0</span>
+
+<span class="keyword">for</span> num <span class="keyword">in</span> numbers:
+    <span class="keyword">if</span> num % <span class="number">2</span> == <span class="number">0</span>:
+        even_count += <span class="number">1</span>
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"Even numbers: {even_count}"</span>)  <span class="comment"># Even numbers: 5</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Pattern:</strong> Initialize accumulator before loop, update it inside!
+            </div>
+        </div>
+
+        <!-- Slide 7: Building Lists -->
+        <div class="slide">
+            <h2>Building Lists with Loops</h2>
+
+            <div class="code-block">
+<span class="comment"># Create list of squares</span>
+squares = []
+
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">6</span>):
+    squares.<span class="function">append</span>(i ** <span class="number">2</span>)
+
+<span class="function">print</span>(squares)  <span class="comment"># [1, 4, 9, 16, 25]</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># List comprehension (advanced shortcut)</span>
+squares = [i ** <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">6</span>)]
+<span class="function">print</span>(squares)  <span class="comment"># [1, 4, 9, 16, 25]</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Filter items</span>
+words = [<span class="string">"cat"</span>, <span class="string">"elephant"</span>, <span class="string">"dog"</span>, <span class="string">"programming"</span>]
+long_words = []
+
+<span class="keyword">for</span> word <span class="keyword">in</span> words:
+    <span class="keyword">if</span> <span class="function">len</span>(word) > <span class="number">5</span>:
+        long_words.<span class="function">append</span>(word)
+
+<span class="function">print</span>(long_words)  <span class="comment"># ['elephant', 'programming']</span>
+            </div>
+        </div>
+
+        <!-- Slide 8: While Loop Basics -->
+        <div class="slide">
+            <h2>While Loops - Basic Syntax</h2>
+
+            <div class="code-block">
+<span class="comment"># Count from 1 to 5</span>
+count = <span class="number">1</span>
+
+<span class="keyword">while</span> count <= <span class="number">5</span>:
+    <span class="function">print</span>(count)
+    count += <span class="number">1</span>
+
+<span class="comment"># Output: 1 2 3 4 5</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Countdown</span>
+countdown = <span class="number">10</span>
+
+<span class="keyword">while</span> countdown > <span class="number">0</span>:
+    <span class="function">print</span>(countdown, end=<span class="string">" "</span>)
+    countdown -= <span class="number">1</span>
+
+<span class="function">print</span>(<span class="string">"Blast off!"</span>)
+<span class="comment"># Output: 10 9 8 7 6 5 4 3 2 1 Blast off!</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Critical:</strong> Make sure the condition eventually becomes false, or you'll have an infinite loop!
+            </div>
+        </div>
+
+        <!-- Slide 9: While Loop Use Cases -->
+        <div class="slide">
+            <h2>When to Use While Loops</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Use For Loop When:</h3>
+                    <ul>
+                        <li>✓ You know what to iterate over</li>
+                        <li>✓ You have a list/sequence</li>
+                        <li>✓ You know iteration count</li>
+                        <li>✓ Code is cleaner with for</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Use While Loop When:</h3>
+                    <ul>
+                        <li>✓ Unknown iteration count</li>
+                        <li>✓ Waiting for condition</li>
+                        <li>✓ Retry logic</li>
+                        <li>✓ User input validation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># While loop example: Wait for element</span>
+element_found = <span class="keyword">False</span>
+attempts = <span class="number">0</span>
+max_attempts = <span class="number">5</span>
+
+<span class="keyword">while</span> <span class="keyword">not</span> element_found <span class="keyword">and</span> attempts < max_attempts:
+    attempts += <span class="number">1</span>
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Attempt {attempts}..."</span>)
+    <span class="comment"># Check if element exists...</span>
+    <span class="keyword">if</span> attempts == <span class="number">3</span>:  <span class="comment"># Simulate finding it</span>
+        element_found = <span class="keyword">True</span>
+            </div>
+        </div>
+
+        <!-- Slide 10: The range() Function -->
+        <div class="slide">
+            <h2>The range() Function in Detail</h2>
+
+            <div class="code-block">
+<span class="comment"># range(stop) - 0 to stop-1</span>
+<span class="function">print</span>(<span class="function">list</span>(<span class="function">range</span>(<span class="number">5</span>)))
+<span class="comment"># [0, 1, 2, 3, 4]</span>
+
+<span class="comment"># range(start, stop) - start to stop-1</span>
+<span class="function">print</span>(<span class="function">list</span>(<span class="function">range</span>(<span class="number">2</span>, <span class="number">7</span>)))
+<span class="comment"># [2, 3, 4, 5, 6]</span>
+
+<span class="comment"># range(start, stop, step) - with increment</span>
+<span class="function">print</span>(<span class="function">list</span>(<span class="function">range</span>(<span class="number">0</span>, <span class="number">11</span>, <span class="number">2</span>)))
+<span class="comment"># [0, 2, 4, 6, 8, 10]</span>
+
+<span class="comment"># Negative step - counting backwards</span>
+<span class="function">print</span>(<span class="function">list</span>(<span class="function">range</span>(<span class="number">10</span>, <span class="number">0</span>, <span class="number">-1</span>)))
+<span class="comment"># [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]</span>
+            </div>
+
+            <div class="success-box">
+                <strong>🎯 Remember:</strong> Stop value is <em>exclusive</em> - it's not included in the result!
+            </div>
+        </div>
+
+        <!-- Slide 11: Break Statement -->
+        <div class="slide">
+            <h2>Break - Exit Loop Early</h2>
+
+            <div class="code-block">
+<span class="comment"># Find first even number and stop</span>
+numbers = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">11</span>]
+
+<span class="keyword">for</span> num <span class="keyword">in</span> numbers:
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Checking {num}..."</span>)
+    <span class="keyword">if</span> num % <span class="number">2</span> == <span class="number">0</span>:
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Found first even: {num}"</span>)
+        <span class="keyword">break</span>  <span class="comment"># Exit loop immediately</span>
+
+<span class="comment"># Output:</span>
+<span class="comment"># Checking 1...</span>
+<span class="comment"># Checking 3...</span>
+<span class="comment"># Checking 5...</span>
+<span class="comment"># Checking 8...</span>
+<span class="comment"># Found first even: 8</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Use Case:</strong> Stop searching once you find what you need - saves time!
+            </div>
+        </div>
+
+        <!-- Slide 12: Continue Statement -->
+        <div class="slide">
+            <h2>Continue - Skip Iteration</h2>
+
+            <div class="code-block">
+<span class="comment"># Print only odd numbers</span>
+<span class="keyword">for</span> num <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">11</span>):
+    <span class="keyword">if</span> num % <span class="number">2</span> == <span class="number">0</span>:
+        <span class="keyword">continue</span>  <span class="comment"># Skip even numbers</span>
+    <span class="function">print</span>(num, end=<span class="string">" "</span>)
+
+<span class="comment"># Output: 1 3 5 7 9</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Skip disabled buttons</span>
+buttons = [
+    {<span class="string">"text"</span>: <span class="string">"Save"</span>, <span class="string">"enabled"</span>: <span class="keyword">True</span>},
+    {<span class="string">"text"</span>: <span class="string">"Delete"</span>, <span class="string">"enabled"</span>: <span class="keyword">False</span>},
+    {<span class="string">"text"</span>: <span class="string">"Edit"</span>, <span class="string">"enabled"</span>: <span class="keyword">True</span>}
+]
+
+<span class="keyword">for</span> button <span class="keyword">in</span> buttons:
+    <span class="keyword">if</span> <span class="keyword">not</span> button[<span class="string">"enabled"</span>]:
+        <span class="keyword">continue</span>  <span class="comment"># Skip disabled buttons</span>
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Clicking: {button['text']}"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Use Case:</strong> Skip unwanted items without nested if statements!
+            </div>
+        </div>
+
+        <!-- Slide 13: Nested Loops -->
+        <div class="slide">
+            <h2>Nested Loops</h2>
+
+            <div class="code-block">
+<span class="comment"># Multiplication table</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">4</span>):
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">4</span>):
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"{i} x {j} = {i * j}"</span>)
+    <span class="function">print</span>()  <span class="comment"># Blank line between sections</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Pattern printing</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">6</span>):
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(i):
+        <span class="function">print</span>(<span class="string">"*"</span>, end=<span class="string">""</span>)
+    <span class="function">print</span>()
+
+<span class="comment"># Output:</span>
+<span class="comment"># *</span>
+<span class="comment"># **</span>
+<span class="comment"># ***</span>
+<span class="comment"># ****</span>
+<span class="comment"># *****</span>
+            </div>
+        </div>
+
+        <!-- Slide 14: Enumerate and Zip -->
+        <div class="slide">
+            <h2>Useful Loop Functions</h2>
+
+            <div class="code-block">
+<span class="comment"># enumerate - get index and value</span>
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+
+<span class="keyword">for</span> index, fruit <span class="keyword">in</span> <span class="function">enumerate</span>(fruits):
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"{index}: {fruit}"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># 0: apple</span>
+<span class="comment"># 1: banana</span>
+<span class="comment"># 2: cherry</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># zip - iterate over multiple lists together</span>
+names = [<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Charlie"</span>]
+ages = [<span class="number">25</span>, <span class="number">30</span>, <span class="number">35</span>]
+
+<span class="keyword">for</span> name, age <span class="keyword">in</span> <span class="function">zip</span>(names, ages):
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"{name} is {age} years old"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># Alice is 25 years old</span>
+<span class="comment"># Bob is 30 years old</span>
+<span class="comment"># Charlie is 35 years old</span>
+            </div>
+        </div>
+
+        <!-- Slide 15: Automation Example - Multiple Buttons -->
+        <div class="slide">
+            <h2>Automation: Click Multiple Buttons</h2>
+
+            <div class="code-block">
+<span class="comment"># Simulating navigation buttons</span>
+menu_items = [<span class="string">"Home"</span>, <span class="string">"Products"</span>, <span class="string">"About"</span>, <span class="string">"Contact"</span>]
+
+<span class="function">print</span>(<span class="string">"Navigating through menu..."</span>)
+<span class="keyword">for</span> item <span class="keyword">in</span> menu_items:
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"  → Clicking: {item}"</span>)
+    <span class="comment"># In real Playwright: page.click(f"text={item}")</span>
+
+<span class="comment"># Output:</span>
+<span class="comment"># Navigating through menu...</span>
+<span class="comment">#   → Clicking: Home</span>
+<span class="comment">#   → Clicking: Products</span>
+<span class="comment">#   → Clicking: About</span>
+<span class="comment">#   → Clicking: Contact</span>
+            </div>
+
+            <div class="success-box">
+                <strong>🚀 Real Benefit:</strong> One loop can click 100 buttons as easily as 4!
+            </div>
+        </div>
+
+        <!-- Slide 16: Automation Example - Fill Form -->
+        <div class="slide">
+            <h2>Automation: Fill Multiple Form Fields</h2>
+
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Form data to fill</span>
+form_data = {
+    <span class="string">"First Name"</span>: <span class="string">"John"</span>,
+    <span class="string">"Last Name"</span>: <span class="string">"Doe"</span>,
+    <span class="string">"Email"</span>: <span class="string">"john.doe@example.com"</span>,
+    <span class="string">"Phone"</span>: <span class="string">"555-1234"</span>,
+    <span class="string">"Address"</span>: <span class="string">"123 Main St"</span>
+}
+
+<span class="function">print</span>(<span class="string">"Filling registration form..."</span>)
+<span class="keyword">for</span> field_name, value <span class="keyword">in</span> form_data.<span class="function">items</span>():
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"  Filling '{field_name}': {value}"</span>)
+    <span class="comment"># In real Playwright: page.fill(f"[name='{field_name}']", value)</span>
+
+<span class="function">print</span>(<span class="string">"  ✓ Form submitted"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Pro Pattern:</strong> Store test data in dictionaries, loop to fill forms!
+            </div>
+        </div>
+
+        <!-- Slide 17: Automation Example - Data-Driven Testing -->
+        <div class="slide">
+            <h2>Automation: Data-Driven Testing</h2>
+
+            <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># Multiple test cases</span>
+test_cases = [
+    {<span class="string">"username"</span>: <span class="string">"admin"</span>, <span class="string">"password"</span>: <span class="string">"admin123"</span>, <span class="string">"should_pass"</span>: <span class="keyword">True</span>},
+    {<span class="string">"username"</span>: <span class="string">"user"</span>, <span class="string">"password"</span>: <span class="string">"wrongpass"</span>, <span class="string">"should_pass"</span>: <span class="keyword">False</span>},
+    {<span class="string">"username"</span>: <span class="string">""</span>, <span class="string">"password"</span>: <span class="string">"pass123"</span>, <span class="string">"should_pass"</span>: <span class="keyword">False</span>}
+]
+
+<span class="function">print</span>(<span class="string">"Running login tests..."</span>)
+passed = <span class="number">0</span>
+
+<span class="keyword">for</span> i, test <span class="keyword">in</span> <span class="function">enumerate</span>(test_cases, <span class="number">1</span>):
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"\nTest {i}: {test['username']}"</span>)
+
+    <span class="comment"># Simulate login</span>
+    result = test[<span class="string">"should_pass"</span>]  <span class="comment"># In real test, actually login</span>
+
+    <span class="keyword">if</span> result == test[<span class="string">"should_pass"</span>]:
+        <span class="function">print</span>(<span class="string">"  ✓ PASS"</span>)
+        passed += <span class="number">1</span>
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"  ✗ FAIL"</span>)
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"\nResults: {passed}/{<span class="function">len</span>(test_cases)} passed"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 18: Automation Example - Retry Logic -->
+        <div class="slide">
+            <h2>Automation: Retry Logic</h2>
+
+            <div class="code-block">
+<span class="comment"># Wait for element with retries</span>
+max_retries = <span class="number">5</span>
+element_name = <span class="string">"Submit Button"</span>
+
+<span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, max_retries + <span class="number">1</span>):
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Attempt {attempt}..."</span>)
+
+    <span class="comment"># Check if element is ready</span>
+    <span class="keyword">if</span> attempt == <span class="number">3</span>:  <span class="comment"># Simulate success on 3rd try</span>
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"  ✓ {element_name} is ready!"</span>)
+        <span class="keyword">break</span>
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"  Element not ready, retrying..."</span>)
+<span class="keyword">else</span>:
+    <span class="comment"># This runs if loop completes without break</span>
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"  ✗ Failed after {max_retries} attempts"</span>)
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong> The <code>else</code> clause runs only if loop finishes without <code>break</code>!
+            </div>
+        </div>
+
+        <!-- Slide 19: Automation Example - Process Table -->
+        <div class="slide">
+            <h2>Automation: Process Table Data</h2>
+
+            <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># Simulate table rows from a web page</span>
+products = [
+    {<span class="string">"name"</span>: <span class="string">"Laptop"</span>, <span class="string">"price"</span>: <span class="number">999</span>, <span class="string">"stock"</span>: <span class="number">5</span>},
+    {<span class="string">"name"</span>: <span class="string">"Mouse"</span>, <span class="string">"price"</span>: <span class="number">29</span>, <span class="string">"stock"</span>: <span class="number">50</span>},
+    {<span class="string">"name"</span>: <span class="string">"Keyboard"</span>, <span class="string">"price"</span>: <span class="number">79</span>, <span class="string">"stock"</span>: <span class="number">0</span>},
+    {<span class="string">"name"</span>: <span class="string">"Monitor"</span>, <span class="string">"price"</span>: <span class="number">299</span>, <span class="string">"stock"</span>: <span class="number">10</span>}
+]
+
+<span class="function">print</span>(<span class="string">"Processing products..."</span>)
+in_stock = <span class="number">0</span>
+
+<span class="keyword">for</span> product <span class="keyword">in</span> products:
+    <span class="keyword">if</span> product[<span class="string">"stock"</span>] > <span class="number">0</span>:
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"  ✓ {product['name']}: ${product['price']}"</span>)
+        in_stock += <span class="number">1</span>
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"  ⊗ {product['name']}: OUT OF STOCK"</span>)
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"\nIn stock: {in_stock}/{<span class="function">len</span>(products)}"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 20: Automation Example - Multi-Page Scraping -->
+        <div class="slide">
+            <h2>Automation: Collect Data from Multiple Pages</h2>
+
+            <div class="code-block">
+<span class="comment"># Scrape data across multiple pages</span>
+all_items = []
+
+<span class="keyword">for</span> page_num <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">4</span>):
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"Scraping page {page_num}..."</span>)
+
+    <span class="comment"># Simulate items on this page</span>
+    items = [<span class="keyword">f</span><span class="string">"Item {(page_num-1)*3 + i}"</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">4</span>)]
+
+    <span class="keyword">for</span> item <span class="keyword">in</span> items:
+        <span class="function">print</span>(<span class="keyword">f</span><span class="string">"  Found: {item}"</span>)
+        all_items.<span class="function">append</span>(item)
+
+<span class="function">print</span>(<span class="keyword">f</span><span class="string">"\nTotal collected: {<span class="function">len</span>(all_items)} items"</span>)
+            </div>
+
+            <div class="success-box">
+                <strong>🎯 Scale:</strong> Loops let you process 1 page or 1000 pages with the same code!
+            </div>
+        </div>
+
+        <!-- Slide 21: Common Loop Patterns -->
+        <div class="slide">
+            <h2>Common Loop Patterns in Automation</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Pattern 1: Filter</h3>
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Process only enabled items</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    <span class="keyword">if</span> <span class="keyword">not</span> item[<span class="string">"enabled"</span>]:
+        <span class="keyword">continue</span>
+    <span class="comment"># Process item...</span>
+                    </div>
+
+                    <h3>Pattern 2: Find First</h3>
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Find and stop</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    <span class="keyword">if</span> item == target:
+        <span class="function">print</span>(<span class="string">"Found!"</span>)
+        <span class="keyword">break</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Pattern 3: Accumulate</h3>
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Count or sum</span>
+total = <span class="number">0</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    total += item[<span class="string">"value"</span>]
+                    </div>
+
+                    <h3>Pattern 4: Transform</h3>
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Build new list</span>
+results = []
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    results.<span class="function">append</span>(
+        transform(item)
+    )
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: For vs While - Decision Guide -->
+        <div class="slide">
+            <h2>For vs While - When to Use Each</h2>
+
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background-color: #2d2d2d;">
+                        <th style="padding: 12px; text-align: left; border: 1px solid #444;">Scenario</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #444;">Use For</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #444;">Use While</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #444;">Iterate over list/sequence</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">✓</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">-</td>
+                    </tr>
+                    <tr style="background-color: #1a1a1a;">
+                        <td style="padding: 10px; border: 1px solid #444;">Known iteration count</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">✓</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">-</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #444;">Wait for condition</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">-</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">✓</td>
+                    </tr>
+                    <tr style="background-color: #1a1a1a;">
+                        <td style="padding: 10px; border: 1px solid #444;">Unknown iteration count</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">-</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #444;">Retry logic</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">-</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">✓</td>
+                    </tr>
+                    <tr style="background-color: #1a1a1a;">
+                        <td style="padding: 10px; border: 1px solid #444;">User input validation</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">-</td>
+                        <td style="padding: 10px; border: 1px solid #444; text-align: center;">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <strong>👍 General Rule:</strong> Prefer <code>for</code> loops when possible - they're cleaner and safer!
+            </div>
+        </div>
+
+        <!-- Slide 23: Best Practices -->
+        <div class="slide">
+            <h2>Loop Best Practices</h2>
+
+            <div class="success-box">
+                <h3>✓ DO</h3>
+                <ul>
+                    <li>Use meaningful variable names (<code>for user in users</code>)</li>
+                    <li>Keep loops simple and focused on one task</li>
+                    <li>Use <code>break</code> when you find what you need</li>
+                    <li>Use <code>continue</code> to skip unwanted items</li>
+                    <li>Initialize accumulators before the loop</li>
+                    <li>Use <code>enumerate()</code> when you need the index</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>✗ DON'T</h3>
+                <ul>
+                    <li>Create infinite loops (always ensure exit condition)</li>
+                    <li>Modify a list while iterating over it</li>
+                    <li>Use generic names like <code>i</code> for non-numeric loops</li>
+                    <li>Nest too deeply (3+ levels gets hard to read)</li>
+                    <li>Forget to increment counters in while loops</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 24: Common Mistakes -->
+        <div class="slide">
+            <h2>Common Loop Mistakes to Avoid</h2>
+
+            <div class="code-block">
+<span class="comment"># ❌ WRONG: Infinite loop (missing increment)</span>
+count = <span class="number">0</span>
+<span class="keyword">while</span> count < <span class="number">5</span>:
+    <span class="function">print</span>(count)
+    <span class="comment"># Missing: count += 1</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># ❌ WRONG: Off-by-one error</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    items[i + <span class="number">1</span>]  <span class="comment"># Index out of range!</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># ❌ WRONG: Modifying list during iteration</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    items.<span class="function">remove</span>(item)  <span class="comment"># Don't do this!</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># ✓ CORRECT: Create new list or iterate over copy</span>
+items = [item <span class="keyword">for</span> item <span class="keyword">in</span> items <span class="keyword">if</span> condition]
+<span class="comment"># Or: for item in items.copy():</span>
+            </div>
+        </div>
+
+        <!-- Slide 25: Performance Tips -->
+        <div class="slide">
+            <h2>Loop Performance Tips</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Slow 🐌</h3>
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Searching without break</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> huge_list:
+    <span class="keyword">if</span> item == target:
+        found = <span class="keyword">True</span>
+    <span class="comment"># Keeps searching!</span>
+                    </div>
+
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Function call in loop</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(items)):
+    process(<span class="function">len</span>(items))
+    <span class="comment"># Recalculates each time!</span>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Fast ⚡</h3>
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Break when found</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> huge_list:
+    <span class="keyword">if</span> item == target:
+        found = <span class="keyword">True</span>
+        <span class="keyword">break</span>  <span class="comment"># Stop!</span>
+                    </div>
+
+                    <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># Calculate once</span>
+length = <span class="function">len</span>(items)
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(length):
+    process(length)
+    <span class="comment"># Reuses value</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <strong>💡 Key Insight:</strong> Use <code>break</code> and <code>continue</code> to avoid unnecessary work!
+            </div>
+        </div>
+
+        <!-- Slide 26: Quick Reference -->
+        <div class="slide">
+            <h2>Quick Reference</h2>
+
+            <div class="code-block" style="font-size: 0.75em;">
+<span class="comment"># For Loop</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> sequence:
+    <span class="comment"># code here</span>
+
+<span class="comment"># While Loop</span>
+<span class="keyword">while</span> condition:
+    <span class="comment"># code here</span>
+    <span class="comment"># (update condition!)</span>
+
+<span class="comment"># range() function</span>
+<span class="function">range</span>(<span class="number">5</span>)           <span class="comment"># 0, 1, 2, 3, 4</span>
+<span class="function">range</span>(<span class="number">2</span>, <span class="number">6</span>)        <span class="comment"># 2, 3, 4, 5</span>
+<span class="function">range</span>(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>)    <span class="comment"># 0, 2, 4, 6, 8</span>
+<span class="function">range</span>(<span class="number">10</span>, <span class="number">0</span>, <span class="number">-1</span>)   <span class="comment"># 10, 9, 8, ..., 1</span>
+
+<span class="comment"># Control statements</span>
+<span class="keyword">break</span>      <span class="comment"># Exit loop immediately</span>
+<span class="keyword">continue</span>   <span class="comment"># Skip to next iteration</span>
+
+<span class="comment"># Useful functions</span>
+<span class="function">enumerate</span>(items)      <span class="comment"># Get index and value</span>
+<span class="function">zip</span>(list1, list2)     <span class="comment"># Iterate multiple lists</span>
+            </div>
+        </div>
+
+        <!-- Slide 27: Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>What We Covered</h3>
+                    <ul class="checklist">
+                        <li>For loops for sequences</li>
+                        <li>While loops for conditions</li>
+                        <li>range() for numbers</li>
+                        <li>break and continue</li>
+                        <li>Automation patterns</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Loops process multiple items efficiently</li>
+                        <li>Choose for when you know the sequence</li>
+                        <li>Choose while for unknown iterations</li>
+                        <li>Use break/continue wisely</li>
+                        <li>Essential for automation!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h3>🚀 Why This Matters for Automation</h3>
+                <ul>
+                    <li><strong>Loops:</strong> Process multiple elements, forms, test data</li>
+                    <li><strong>Efficiency:</strong> Write once, process thousands</li>
+                    <li><strong>Together:</strong> Build scalable, robust automation!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 28: Resources & Next Steps -->
+        <div class="slide">
+            <h2>Resources & Next Steps</h2>
+
+            <h3>📁 Course Files</h3>
+            <ul>
+                <li><code>README.md</code> - Detailed lecture guide</li>
+                <li><code>examples/</code> - 4 comprehensive examples</li>
+                <li><code>exercises/</code> - 3 practice files + solutions</li>
+                <li><code>PRESENTATION_GUIDE.md</code> - Presentation tips</li>
+            </ul>
+
+            <h3>💡 Study Recommendations</h3>
+            <ul class="checklist">
+                <li>Run all example files and experiment with them</li>
+                <li>Complete exercises without looking at solutions first</li>
+                <li>Write your own loop challenges</li>
+                <li>Think about automation use cases while learning</li>
+                <li>Practice combining loops with conditions from Lecture 2</li>
+            </ul>
+
+            <h3>📚 Next Lecture Preview</h3>
+            <p><strong>Lecture 4:</strong> Functions & Error Handling - Building reusable, robust automation code!</p>
+
+            <div class="title-slide" style="margin-top: 50px;">
+                <h1 style="font-size: 2.5em;">Thank You! 🎉</h1>
+                <p style="font-size: 1.3em;">Keep Looping!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <!-- Global presentation script shared across all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
