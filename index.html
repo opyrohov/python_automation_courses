@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Automation Course - Lectures</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .lectures {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .lecture-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+        }
+
+        .lecture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .lecture-number {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .lecture-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .lecture-description {
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .lecture-title {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Python Automation Course</h1>
+        <p class="subtitle">Interactive Lecture Series</p>
+
+        <div class="lectures">
+            <a href="Lecture_1_Python_Basics_Setup/presentation.html" class="lecture-card">
+                <div class="lecture-number">LECTURE 1</div>
+                <div class="lecture-title">Python Basics & Setup</div>
+                <div class="lecture-description">
+                    Get started with Python fundamentals, installation, and development environment setup.
+                </div>
+            </a>
+
+            <a href="Lecture_2_Strings_Control_Flow/presentation.html" class="lecture-card">
+                <div class="lecture-number">LECTURE 2</div>
+                <div class="lecture-title">Strings & Control Flow</div>
+                <div class="lecture-description">
+                    Master string manipulation and learn how to control program flow with conditionals.
+                </div>
+            </a>
+
+            <a href="Lecture_3_Loops/presentation.html" class="lecture-card">
+                <div class="lecture-number">LECTURE 3</div>
+                <div class="lecture-title">Loops</div>
+                <div class="lecture-description">
+                    Understand iteration in Python using for loops, while loops, and loop control statements.
+                </div>
+            </a>
+        </div>
+
+        <div class="footer">
+            Click on any lecture to start the presentation
+        </div>
+    </div>
+</body>
+</html>
