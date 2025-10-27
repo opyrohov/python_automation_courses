@@ -7,7 +7,9 @@
       "Bash(git config:*)",
       "Bash(git remote set-url:*)",
       "Bash(mkdir:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": []

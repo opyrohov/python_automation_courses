@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 4: Lists & Dictionaries</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 4</h1>
+            <div class="subtitle">Lists & Dictionaries</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>Creating and accessing Lists</li>
+                <li>List methods (append, remove, insert, etc.)</li>
+                <li>List indexing and slicing</li>
+                <li>Dictionaries and key-value pairs</li>
+                <li>Dictionary methods</li>
+                <li>Using Lists & Dictionaries in Playwright</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Master data structures to organize and manage test data effectively!
+            </div>
+        </div>
+
+        <!-- Slide 3: Why Lists & Dictionaries Matter -->
+        <div class="slide">
+            <h2>Why Lists & Dictionaries Matter</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Lists</h3>
+                    <ul>
+                        <li><strong>Multiple Values</strong> - Store many items</li>
+                        <li><strong>Ordered</strong> - Items have positions</li>
+                        <li><strong>Mutable</strong> - Can be changed</li>
+                        <li><strong>Duplicates OK</strong> - Same values allowed</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Dictionaries</h3>
+                    <ul>
+                        <li><strong>Key-Value Pairs</strong> - Structured data</li>
+                        <li><strong>Fast Lookup</strong> - Find by key</li>
+                        <li><strong>Flexible</strong> - Store any data type</li>
+                        <li><strong>Real-World</strong> - Like JSON</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 In Automation:</strong> Lists store multiple locators, test data, and results. Dictionaries structure configuration and user data!
+            </div>
+        </div>
+
+        <!-- Slide 4: Creating Lists -->
+        <div class="slide">
+            <h2>Creating Lists</h2>
+
+            <div class="code-block">
+<span class="comment"># Empty list</span>
+empty_list = []
+
+<span class="comment"># List with values</span>
+numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+
+<span class="comment"># Mixed types (not recommended but possible)</span>
+mixed = [<span class="number">1</span>, <span class="string">"hello"</span>, <span class="number">3.14</span>, <span class="keyword">True</span>]
+
+<span class="comment"># List of lists (nested)</span>
+matrix = [
+    [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+    [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],
+    [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]
+]
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Best Practice:</strong> Use lists to store collections of similar items (all numbers, all strings, etc.)
+            </div>
+        </div>
+
+        <!-- Slide 5: Accessing List Items -->
+        <div class="slide">
+            <h2>Accessing List Items</h2>
+
+            <div class="code-block">
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>, <span class="string">"date"</span>, <span class="string">"elderberry"</span>]
+
+<span class="comment"># Access by index (starts at 0)</span>
+<span class="function">print</span>(fruits[<span class="number">0</span>])   <span class="comment"># apple</span>
+<span class="function">print</span>(fruits[<span class="number">2</span>])   <span class="comment"># cherry</span>
+
+<span class="comment"># Negative indexing (from the end)</span>
+<span class="function">print</span>(fruits[-<span class="number">1</span>])  <span class="comment"># elderberry (last item)</span>
+<span class="function">print</span>(fruits[-<span class="number">2</span>])  <span class="comment"># date (second from last)</span>
+
+<span class="comment"># Get length</span>
+<span class="function">print</span>(<span class="function">len</span>(fruits))  <span class="comment"># 5</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Watch Out:</strong> IndexError occurs if you try to access an index that doesn't exist!
+            </div>
+        </div>
+
+        <!-- Slide 6: List Slicing -->
+        <div class="slide">
+            <h2>List Slicing</h2>
+
+            <div class="code-block">
+numbers = [<span class="number">0</span>, <span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>, <span class="number">70</span>]
+
+<span class="comment"># Syntax: list[start:end:step]</span>
+
+<span class="comment"># Get first 3 items</span>
+<span class="function">print</span>(numbers[<span class="number">0</span>:<span class="number">3</span>])     <span class="comment"># [0, 10, 20]</span>
+
+<span class="comment"># Get items from index 2 to end</span>
+<span class="function">print</span>(numbers[<span class="number">2</span>:])       <span class="comment"># [20, 30, 40, 50, 60, 70]</span>
+
+<span class="comment"># Get last 3 items</span>
+<span class="function">print</span>(numbers[-<span class="number">3</span>:])      <span class="comment"># [50, 60, 70]</span>
+
+<span class="comment"># Get every other item</span>
+<span class="function">print</span>(numbers[::<span class="number">2</span>])      <span class="comment"># [0, 20, 40, 60]</span>
+
+<span class="comment"># Reverse a list</span>
+<span class="function">print</span>(numbers[::-<span class="number">1</span>])     <span class="comment"># [70, 60, 50, 40, 30, 20, 10, 0]</span>
+            </div>
+        </div>
+
+        <!-- Slide 7: List Methods - Adding Items -->
+        <div class="slide">
+            <h2>List Methods - Adding Items</h2>
+
+            <div class="code-block">
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>]
+
+<span class="comment"># append() - Add to end</span>
+fruits.<span class="function">append</span>(<span class="string">"cherry"</span>)
+<span class="function">print</span>(fruits)  <span class="comment"># ["apple", "banana", "cherry"]</span>
+
+<span class="comment"># insert() - Add at specific position</span>
+fruits.<span class="function">insert</span>(<span class="number">1</span>, <span class="string">"mango"</span>)
+<span class="function">print</span>(fruits)  <span class="comment"># ["apple", "mango", "banana", "cherry"]</span>
+
+<span class="comment"># extend() - Add multiple items</span>
+fruits.<span class="function">extend</span>([<span class="string">"date"</span>, <span class="string">"elderberry"</span>])
+<span class="function">print</span>(fruits)
+<span class="comment"># ["apple", "mango", "banana", "cherry", "date", "elderberry"]</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Tip:</strong> append() adds one item, extend() adds multiple items from another list
+            </div>
+        </div>
+
+        <!-- Slide 8: List Methods - Removing Items -->
+        <div class="slide">
+            <h2>List Methods - Removing Items</h2>
+
+            <div class="code-block">
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>, <span class="string">"banana"</span>]
+
+<span class="comment"># remove() - Remove first occurrence</span>
+fruits.<span class="function">remove</span>(<span class="string">"banana"</span>)
+<span class="function">print</span>(fruits)  <span class="comment"># ["apple", "cherry", "banana"]</span>
+
+<span class="comment"># pop() - Remove and return last item (or by index)</span>
+last = fruits.<span class="function">pop</span>()
+<span class="function">print</span>(last)      <span class="comment"># "banana"</span>
+<span class="function">print</span>(fruits)    <span class="comment"># ["apple", "cherry"]</span>
+
+<span class="comment"># clear() - Remove all items</span>
+fruits.<span class="function">clear</span>()
+<span class="function">print</span>(fruits)  <span class="comment"># []</span>
+            </div>
+        </div>
+
+        <!-- Slide 9: List Methods - Other Operations -->
+        <div class="slide">
+            <h2>List Methods - Other Operations</h2>
+
+            <div class="code-block">
+numbers = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">9</span>]
+
+<span class="comment"># sort() - Sort in place</span>
+numbers.<span class="function">sort</span>()
+<span class="function">print</span>(numbers)  <span class="comment"># [1, 1, 3, 4, 5, 9]</span>
+
+<span class="comment"># reverse() - Reverse in place</span>
+numbers.<span class="function">reverse</span>()
+<span class="function">print</span>(numbers)  <span class="comment"># [9, 5, 4, 3, 1, 1]</span>
+
+<span class="comment"># count() - Count occurrences</span>
+<span class="function">print</span>(numbers.<span class="function">count</span>(<span class="number">1</span>))  <span class="comment"># 2</span>
+
+<span class="comment"># index() - Find position of item</span>
+<span class="function">print</span>(numbers.<span class="function">index</span>(<span class="number">5</span>))  <span class="comment"># 1</span>
+            </div>
+        </div>
+
+        <!-- Slide 10: List Comprehensions -->
+        <div class="slide">
+            <h2>List Comprehensions (Preview)</h2>
+
+            <div class="code-block">
+<span class="comment"># Traditional way</span>
+squares = []
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">6</span>):
+    squares.<span class="function">append</span>(i ** <span class="number">2</span>)
+<span class="function">print</span>(squares)  <span class="comment"># [1, 4, 9, 16, 25]</span>
+
+<span class="comment"># List comprehension way (more Pythonic)</span>
+squares = [i ** <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">6</span>)]
+<span class="function">print</span>(squares)  <span class="comment"># [1, 4, 9, 16, 25]</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Note:</strong> We'll cover list comprehensions in detail in Lecture 11 (Advanced Python Concepts)
+            </div>
+        </div>
+
+        <!-- Slide 11: Lists in Playwright -->
+        <div class="slide">
+            <h2>Lists in Playwright Automation</h2>
+
+            <div class="code-block">
+<span class="comment"># Store multiple test URLs</span>
+urls = [
+    <span class="string">"https://example.com/page1"</span>,
+    <span class="string">"https://example.com/page2"</span>,
+    <span class="string">"https://example.com/page3"</span>
+]
+
+<span class="keyword">for</span> url <span class="keyword">in</span> urls:
+    page.<span class="function">goto</span>(url)
+    <span class="comment"># Test each page</span>
+
+<span class="comment"># Store multiple locators</span>
+buttons = [
+    <span class="string">"#submit-btn"</span>,
+    <span class="string">".cancel-button"</span>,
+    <span class="string">"[data-test='confirm']"</span>
+]
+
+<span class="comment"># Click all buttons</span>
+<span class="keyword">for</span> selector <span class="keyword">in</span> buttons:
+    page.<span class="function">click</span>(selector)
+            </div>
+        </div>
+
+        <!-- Slide 12: Introduction to Dictionaries -->
+        <div class="slide">
+            <h2>Introduction to Dictionaries</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>What is a Dictionary?</h3>
+                    <ul>
+                        <li>Collection of <strong>key-value pairs</strong></li>
+                        <li>Keys must be <strong>unique</strong></li>
+                        <li>Values can be <strong>any type</strong></li>
+                        <li>Unordered (before Python 3.7)</li>
+                        <li>Insertion ordered (Python 3.7+)</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>When to Use?</h3>
+                    <ul>
+                        <li>Store related information</li>
+                        <li>Configuration settings</li>
+                        <li>User data (like JSON)</li>
+                        <li>Test data with labels</li>
+                        <li>Fast lookups by key</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Simple dictionary</span>
+user = {
+    <span class="string">"name"</span>: <span class="string">"John"</span>,
+    <span class="string">"age"</span>: <span class="number">30</span>,
+    <span class="string">"email"</span>: <span class="string">"john@example.com"</span>
+}
+            </div>
+        </div>
+
+        <!-- Slide 13: Creating Dictionaries -->
+        <div class="slide">
+            <h2>Creating Dictionaries</h2>
+
+            <div class="code-block">
+<span class="comment"># Empty dictionary</span>
+empty_dict = {}
+
+<span class="comment"># Dictionary with values</span>
+person = {
+    <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+    <span class="string">"age"</span>: <span class="number">25</span>,
+    <span class="string">"city"</span>: <span class="string">"New York"</span>
+}
+
+<span class="comment"># Using dict() constructor</span>
+car = <span class="function">dict</span>(brand=<span class="string">"Toyota"</span>, model=<span class="string">"Camry"</span>, year=<span class="number">2023</span>)
+
+<span class="comment"># Dictionary with mixed value types</span>
+test_data = {
+    <span class="string">"username"</span>: <span class="string">"testuser"</span>,
+    <span class="string">"password"</span>: <span class="string">"secret123"</span>,
+    <span class="string">"is_active"</span>: <span class="keyword">True</span>,
+    <span class="string">"login_attempts"</span>: <span class="number">0</span>
+}
+            </div>
+        </div>
+
+        <!-- Slide 14: Accessing Dictionary Values -->
+        <div class="slide">
+            <h2>Accessing Dictionary Values</h2>
+
+            <div class="code-block">
+person = {
+    <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+    <span class="string">"age"</span>: <span class="number">25</span>,
+    <span class="string">"city"</span>: <span class="string">"New York"</span>
+}
+
+<span class="comment"># Access using bracket notation</span>
+<span class="function">print</span>(person[<span class="string">"name"</span>])   <span class="comment"># Alice</span>
+
+<span class="comment"># get() method (safer - doesn't error if key missing)</span>
+<span class="function">print</span>(person.<span class="function">get</span>(<span class="string">"age"</span>))      <span class="comment"># 25</span>
+<span class="function">print</span>(person.<span class="function">get</span>(<span class="string">"phone"</span>))    <span class="comment"># None</span>
+<span class="function">print</span>(person.<span class="function">get</span>(<span class="string">"phone"</span>, <span class="string">"Not found"</span>))  <span class="comment"># Not found</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Watch Out:</strong> Using brackets with non-existent key raises KeyError. Use .get() to avoid this!
+            </div>
+        </div>
+
+        <!-- Slide 15: Modifying Dictionaries -->
+        <div class="slide">
+            <h2>Modifying Dictionaries</h2>
+
+            <div class="code-block">
+person = {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"age"</span>: <span class="number">25</span>}
+
+<span class="comment"># Add new key-value pair</span>
+person[<span class="string">"city"</span>] = <span class="string">"New York"</span>
+
+<span class="comment"># Modify existing value</span>
+person[<span class="string">"age"</span>] = <span class="number">26</span>
+
+<span class="comment"># Update multiple values at once</span>
+person.<span class="function">update</span>({<span class="string">"email"</span>: <span class="string">"alice@example.com"</span>, <span class="string">"phone"</span>: <span class="string">"555-1234"</span>})
+
+<span class="function">print</span>(person)
+<span class="comment"># {'name': 'Alice', 'age': 26, 'city': 'New York',</span>
+<span class="comment">#  'email': 'alice@example.com', 'phone': '555-1234'}</span>
+            </div>
+        </div>
+
+        <!-- Slide 16: Dictionary Methods -->
+        <div class="slide">
+            <h2>Dictionary Methods</h2>
+
+            <div class="code-block">
+person = {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"age"</span>: <span class="number">25</span>, <span class="string">"city"</span>: <span class="string">"NYC"</span>}
+
+<span class="comment"># Get all keys</span>
+<span class="function">print</span>(person.<span class="function">keys</span>())    <span class="comment"># dict_keys(['name', 'age', 'city'])</span>
+
+<span class="comment"># Get all values</span>
+<span class="function">print</span>(person.<span class="function">values</span>())  <span class="comment"># dict_values(['Alice', 25, 'NYC'])</span>
+
+<span class="comment"># Get all key-value pairs</span>
+<span class="function">print</span>(person.<span class="function">items</span>())
+<span class="comment"># dict_items([('name', 'Alice'), ('age', 25), ('city', 'NYC')])</span>
+
+<span class="comment"># Remove a key</span>
+age = person.<span class="function">pop</span>(<span class="string">"age"</span>)
+<span class="function">print</span>(age)       <span class="comment"># 25</span>
+<span class="function">print</span>(person)   <span class="comment"># {'name': 'Alice', 'city': 'NYC'}</span>
+            </div>
+        </div>
+
+        <!-- Slide 17: Looping Through Dictionaries -->
+        <div class="slide">
+            <h2>Looping Through Dictionaries</h2>
+
+            <div class="code-block">
+person = {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"age"</span>: <span class="number">25</span>, <span class="string">"city"</span>: <span class="string">"NYC"</span>}
+
+<span class="comment"># Loop through keys</span>
+<span class="keyword">for</span> key <span class="keyword">in</span> person:
+    <span class="function">print</span>(key)
+<span class="comment"># name</span>
+<span class="comment"># age</span>
+<span class="comment"># city</span>
+
+<span class="comment"># Loop through values</span>
+<span class="keyword">for</span> value <span class="keyword">in</span> person.<span class="function">values</span>():
+    <span class="function">print</span>(value)
+
+<span class="comment"># Loop through both keys and values</span>
+<span class="keyword">for</span> key, value <span class="keyword">in</span> person.<span class="function">items</span>():
+    <span class="function">print</span>(<span class="keyword">f</span><span class="string">"{key}: {value}"</span>)
+<span class="comment"># name: Alice</span>
+<span class="comment"># age: 25</span>
+<span class="comment"># city: NYC</span>
+            </div>
+        </div>
+
+        <!-- Slide 18: Nested Dictionaries -->
+        <div class="slide">
+            <h2>Nested Dictionaries</h2>
+
+            <div class="code-block">
+<span class="comment"># Dictionary containing dictionaries</span>
+users = {
+    <span class="string">"user1"</span>: {
+        <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+        <span class="string">"age"</span>: <span class="number">25</span>,
+        <span class="string">"city"</span>: <span class="string">"NYC"</span>
+    },
+    <span class="string">"user2"</span>: {
+        <span class="string">"name"</span>: <span class="string">"Bob"</span>,
+        <span class="string">"age"</span>: <span class="number">30</span>,
+        <span class="string">"city"</span>: <span class="string">"LA"</span>
+    }
+}
+
+<span class="comment"># Access nested values</span>
+<span class="function">print</span>(users[<span class="string">"user1"</span>][<span class="string">"name"</span>])  <span class="comment"># Alice</span>
+<span class="function">print</span>(users[<span class="string">"user2"</span>][<span class="string">"age"</span>])   <span class="comment"># 30</span>
+            </div>
+        </div>
+
+        <!-- Slide 19: Dictionaries in Playwright -->
+        <div class="slide">
+            <h2>Dictionaries in Playwright</h2>
+
+            <div class="code-block">
+<span class="comment"># Test user data</span>
+user_data = {
+    <span class="string">"username"</span>: <span class="string">"testuser"</span>,
+    <span class="string">"password"</span>: <span class="string">"Test123!"</span>,
+    <span class="string">"email"</span>: <span class="string">"test@example.com"</span>,
+    <span class="string">"first_name"</span>: <span class="string">"Test"</span>,
+    <span class="string">"last_name"</span>: <span class="string">"User"</span>
+}
+
+<span class="comment"># Fill form using dictionary</span>
+page.<span class="function">fill</span>(<span class="string">"#username"</span>, user_data[<span class="string">"username"</span>])
+page.<span class="function">fill</span>(<span class="string">"#password"</span>, user_data[<span class="string">"password"</span>])
+page.<span class="function">fill</span>(<span class="string">"#email"</span>, user_data[<span class="string">"email"</span>])
+
+<span class="comment"># Store multiple locators with descriptions</span>
+locators = {
+    <span class="string">"login_button"</span>: <span class="string">"#login-btn"</span>,
+    <span class="string">"logout_button"</span>: <span class="string">"#logout-btn"</span>,
+    <span class="string">"profile_link"</span>: <span class="string">"a[href='/profile']"</span>
+}
+
+page.<span class="function">click</span>(locators[<span class="string">"login_button"</span>])
+            </div>
+        </div>
+
+        <!-- Slide 20: Lists vs Dictionaries -->
+        <div class="slide">
+            <h2>When to Use Lists vs Dictionaries?</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Use Lists When:</h3>
+                    <ul>
+                        <li>Order matters</li>
+                        <li>Items are similar</li>
+                        <li>Need to access by position</li>
+                        <li>Need duplicates</li>
+                        <li>Simple collection needed</li>
+                    </ul>
+                    <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Good use of list</span>
+urls = [
+    <span class="string">"page1.com"</span>,
+    <span class="string">"page2.com"</span>,
+    <span class="string">"page3.com"</span>
+]
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Use Dictionaries When:</h3>
+                    <ul>
+                        <li>Need key-value pairs</li>
+                        <li>Fast lookup by key</li>
+                        <li>Structured data</li>
+                        <li>Each item has properties</li>
+                        <li>Like JSON data</li>
+                    </ul>
+                    <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Good use of dict</span>
+config = {
+    <span class="string">"timeout"</span>: <span class="number">5000</span>,
+    <span class="string">"headless"</span>: <span class="keyword">True</span>,
+    <span class="string">"url"</span>: <span class="string">"test.com"</span>
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Combining Lists and Dictionaries -->
+        <div class="slide">
+            <h2>Combining Lists and Dictionaries</h2>
+
+            <div class="code-block">
+<span class="comment"># List of dictionaries - Very common pattern!</span>
+test_users = [
+    {
+        <span class="string">"username"</span>: <span class="string">"user1"</span>,
+        <span class="string">"password"</span>: <span class="string">"pass1"</span>,
+        <span class="string">"role"</span>: <span class="string">"admin"</span>
+    },
+    {
+        <span class="string">"username"</span>: <span class="string">"user2"</span>,
+        <span class="string">"password"</span>: <span class="string">"pass2"</span>,
+        <span class="string">"role"</span>: <span class="string">"user"</span>
+    },
+    {
+        <span class="string">"username"</span>: <span class="string">"user3"</span>,
+        <span class="string">"password"</span>: <span class="string">"pass3"</span>,
+        <span class="string">"role"</span>: <span class="string">"guest"</span>
+    }
+]
+
+<span class="comment"># Test login with all users</span>
+<span class="keyword">for</span> user <span class="keyword">in</span> test_users:
+    page.<span class="function">fill</span>(<span class="string">"#username"</span>, user[<span class="string">"username"</span>])
+    page.<span class="function">fill</span>(<span class="string">"#password"</span>, user[<span class="string">"password"</span>])
+    page.<span class="function">click</span>(<span class="string">"#login"</span>)
+    <span class="comment"># Verify role-specific access</span>
+            </div>
+        </div>
+
+        <!-- Slide 22: Real Automation Example -->
+        <div class="slide">
+            <h2>Real Automation Example</h2>
+
+            <div class="code-block">
+<span class="comment"># Test data as list of dictionaries</span>
+form_data = [
+    {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"email"</span>: <span class="string">"alice@test.com"</span>, <span class="string">"age"</span>: <span class="number">25</span>},
+    {<span class="string">"name"</span>: <span class="string">"Bob"</span>, <span class="string">"email"</span>: <span class="string">"bob@test.com"</span>, <span class="string">"age"</span>: <span class="number">30</span>},
+    {<span class="string">"name"</span>: <span class="string">"Carol"</span>, <span class="string">"email"</span>: <span class="string">"carol@test.com"</span>, <span class="string">"age"</span>: <span class="number">28</span>}
+]
+
+<span class="comment"># Test form submission with multiple users</span>
+<span class="keyword">for</span> data <span class="keyword">in</span> form_data:
+    <span class="comment"># Fill form</span>
+    page.<span class="function">fill</span>(<span class="string">"#name"</span>, data[<span class="string">"name"</span>])
+    page.<span class="function">fill</span>(<span class="string">"#email"</span>, data[<span class="string">"email"</span>])
+    page.<span class="function">fill</span>(<span class="string">"#age"</span>, <span class="function">str</span>(data[<span class="string">"age"</span>]))
+
+    <span class="comment"># Submit and verify</span>
+    page.<span class="function">click</span>(<span class="string">"#submit"</span>)
+
+    <span class="comment"># Verify success message</span>
+    <span class="keyword">assert</span> <span class="keyword">f</span><span class="string">"Welcome {data['name']}"</span> <span class="keyword">in</span> page.<span class="function">text_content</span>(<span class="string">".success"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 23: Checking if Key Exists -->
+        <div class="slide">
+            <h2>Checking if Key Exists</h2>
+
+            <div class="code-block">
+config = {
+    <span class="string">"timeout"</span>: <span class="number">5000</span>,
+    <span class="string">"headless"</span>: <span class="keyword">True</span>
+}
+
+<span class="comment"># Check if key exists</span>
+<span class="keyword">if</span> <span class="string">"timeout"</span> <span class="keyword">in</span> config:
+    <span class="function">print</span>(<span class="string">"Timeout is configured"</span>)
+
+<span class="keyword">if</span> <span class="string">"url"</span> <span class="keyword">not in</span> config:
+    <span class="function">print</span>(<span class="string">"URL not found, using default"</span>)
+    config[<span class="string">"url"</span>] = <span class="string">"https://default.com"</span>
+
+<span class="comment"># Safe access with get()</span>
+timeout = config.<span class="function">get</span>(<span class="string">"timeout"</span>, <span class="number">3000</span>)  <span class="comment"># Use 3000 if not found</span>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Best Practice:</strong> Always check if a key exists before accessing, or use .get() with a default value!
+            </div>
+        </div>
+
+        <!-- Slide 24: Dictionary Copy -->
+        <div class="slide">
+            <h2>Copying Dictionaries</h2>
+
+            <div class="code-block">
+original = {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"age"</span>: <span class="number">25</span>}
+
+<span class="comment"># Wrong way - creates reference, not copy!</span>
+wrong_copy = original
+wrong_copy[<span class="string">"age"</span>] = <span class="number">30</span>
+<span class="function">print</span>(original[<span class="string">"age"</span>])  <span class="comment"># 30 (original changed!)</span>
+
+<span class="comment"># Right way - use copy()</span>
+original = {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"age"</span>: <span class="number">25</span>}
+correct_copy = original.<span class="function">copy</span>()
+correct_copy[<span class="string">"age"</span>] = <span class="number">30</span>
+<span class="function">print</span>(original[<span class="string">"age"</span>])  <span class="comment"># 25 (original unchanged)</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Watch Out:</strong> Assignment (=) creates a reference, not a copy! Use .copy() to create an independent copy.
+            </div>
+        </div>
+
+        <!-- Slide 25: Common Patterns -->
+        <div class="slide">
+            <h2>Common Patterns in Test Automation</h2>
+
+            <div class="code-block">
+<span class="comment"># 1. Test configuration</span>
+config = {
+    <span class="string">"base_url"</span>: <span class="string">"https://example.com"</span>,
+    <span class="string">"timeout"</span>: <span class="number">5000</span>,
+    <span class="string">"headless"</span>: <span class="keyword">True</span>,
+    <span class="string">"viewport"</span>: {<span class="string">"width"</span>: <span class="number">1920</span>, <span class="string">"height"</span>: <span class="number">1080</span>}
+}
+
+<span class="comment"># 2. Expected vs Actual comparison</span>
+expected = [<span class="string">"Home"</span>, <span class="string">"About"</span>, <span class="string">"Contact"</span>]
+actual = page.<span class="function">query_selector_all</span>(<span class="string">".nav-link"</span>)
+actual_texts = [link.<span class="function">text_content</span>() <span class="keyword">for</span> link <span class="keyword">in</span> actual]
+
+<span class="keyword">assert</span> expected == actual_texts
+
+<span class="comment"># 3. Test results storage</span>
+test_results = {
+    <span class="string">"passed"</span>: [],
+    <span class="string">"failed"</span>: [],
+    <span class="string">"skipped"</span>: []
+}
+            </div>
+        </div>
+
+        <!-- Slide 26: Practice Exercise 1 -->
+        <div class="slide">
+            <h2>Practice Exercise 1</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Create a shopping cart system
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Create an empty list to store cart items</span>
+
+<span class="comment"># Add 3 items to the cart</span>
+
+<span class="comment"># Print the total number of items</span>
+
+<span class="comment"># Remove the second item</span>
+
+<span class="comment"># Print the final cart</span>
+            </div>
+
+            <div class="success-box">
+                <strong>Bonus:</strong> Use append(), len(), pop() or remove()
+            </div>
+        </div>
+
+        <!-- Slide 27: Practice Exercise 2 -->
+        <div class="slide">
+            <h2>Practice Exercise 2</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Create and use a user profile dictionary
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Create a dictionary for a user with:</span>
+<span class="comment"># - username</span>
+<span class="comment"># - email</span>
+<span class="comment"># - age</span>
+<span class="comment"># - is_active (boolean)</span>
+
+<span class="comment"># Print the user's email</span>
+
+<span class="comment"># Update the age to be 1 year older</span>
+
+<span class="comment"># Add a new field 'city'</span>
+
+<span class="comment"># Print all keys and values</span>
+            </div>
+        </div>
+
+        <!-- Slide 28: Practice Exercise 3 -->
+        <div class="slide">
+            <h2>Practice Exercise 3</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Test multiple login scenarios
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Create a list of 3 test user dictionaries</span>
+<span class="comment"># Each user should have: username, password, expected_result</span>
+
+test_users = [
+    <span class="comment"># Add your test users here</span>
+]
+
+<span class="comment"># Loop through test_users and print a message for each:</span>
+<span class="comment"># "Testing login for {username} - expect {expected_result}"</span>
+            </div>
+
+            <div class="success-box">
+                <strong>Bonus:</strong> Add a "role" field (admin/user/guest) to each user
+            </div>
+        </div>
+
+        <!-- Slide 29: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Lists</h3>
+                    <ul>
+                        <li>Ordered collections</li>
+                        <li>Access by index [0]</li>
+                        <li>Mutable (can change)</li>
+                        <li>Methods: append, remove, pop, sort</li>
+                        <li>Perfect for sequences</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Dictionaries</h3>
+                    <ul>
+                        <li>Key-value pairs</li>
+                        <li>Access by key ["name"]</li>
+                        <li>Fast lookups</li>
+                        <li>Methods: get, keys, values, items</li>
+                        <li>Perfect for structured data</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Remember:</strong> Lists for ordered collections, Dictionaries for labeled data!
+            </div>
+        </div>
+
+        <!-- Slide 30: Next Steps -->
+        <div class="slide">
+            <h2>Next Steps</h2>
+
+            <ul class="checklist">
+                <li>Complete the exercises in the exercises/ folder</li>
+                <li>Experiment with list and dictionary methods</li>
+                <li>Try combining lists and dictionaries</li>
+                <li>Review the examples in examples/ folder</li>
+                <li>Practice with your own test data structures</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>📚 Next Lecture:</strong> Functions - Organizing code with reusable functions
+            </div>
+
+            <div class="success-box" style="margin-top: 40px;">
+                <strong>Great job! 🎉</strong> You now understand how to organize and manage data in Python!
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <!-- Global presentation script shared across all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

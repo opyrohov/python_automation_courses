@@ -3,142 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Automation Course - Lectures</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            text-align: center;
-        }
-
-        .subtitle {
-            color: #666;
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 1.1em;
-        }
-
-        .lectures {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .lecture-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            padding: 30px;
-            color: white;
-            text-decoration: none;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: block;
-        }
-
-        .lecture-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .lecture-number {
-            font-size: 0.9em;
-            opacity: 0.9;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .lecture-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .lecture-description {
-            opacity: 0.95;
-            line-height: 1.6;
-        }
-
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-
-            .lecture-title {
-                font-size: 1.3em;
-            }
-        }
-    </style>
+    <title>Python + Playwright + Pytest Course</title>
+    <link rel="stylesheet" href="assets/css/landing.css">
 </head>
 <body>
     <div class="container">
-        <h1>Python Automation Course</h1>
-        <p class="subtitle">Interactive Lecture Series</p>
-
-        <div class="lectures">
-            <a href="Lecture_1_Python_Basics_Setup/presentation.html" class="lecture-card">
-                <div class="lecture-number">LECTURE 1</div>
-                <div class="lecture-title">Python Basics & Setup</div>
-                <div class="lecture-description">
-                    Get started with Python fundamentals, installation, and development environment setup.
+        <header>
+            <h1>Python + Playwright + Pytest</h1>
+            <p class="subtitle">Automation Testing Course</p>
+            <div class="course-info">
+                <div class="info-item">
+                    <span>📚</span>
+                    <span>36 Lectures</span>
                 </div>
-            </a>
-
-            <a href="Lecture_2_Strings_Control_Flow/presentation.html" class="lecture-card">
-                <div class="lecture-number">LECTURE 2</div>
-                <div class="lecture-title">Strings & Control Flow</div>
-                <div class="lecture-description">
-                    Master string manipulation and learn how to control program flow with conditionals.
+                <div class="info-item">
+                    <span>🎥</span>
+                    <span>Video Recordings Available</span>
                 </div>
-            </a>
-
-            <a href="Lecture_3_Loops/presentation.html" class="lecture-card">
-                <div class="lecture-number">LECTURE 3</div>
-                <div class="lecture-title">Loops</div>
-                <div class="lecture-description">
-                    Understand iteration in Python using for loops, while loops, and loop control statements.
+                <div class="info-item">
+                    <span>💻</span>
+                    <span>Hands-on Exercises</span>
                 </div>
-            </a>
+            </div>
+        </header>
+
+        <div class="search-filter-section">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search lectures by title or topic...">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Lectures</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+            </div>
         </div>
 
-        <div class="footer">
-            Click on any lecture to start the presentation
+        <div class="lectures" id="lecturesContainer">
+            <!-- Lecture 1 -->
+            <div class="lecture-card available" data-status="completed" data-search="lecture 1 python basics setup installation variables data types operators">
+                <div class="lecture-header">
+                    <div class="lecture-info">
+                        <div class="lecture-number">LECTURE 1</div>
+                        <div class="lecture-title">Python Basics & Setup</div>
+                        <div class="lecture-schedule">
+                            <div class="schedule-item">
+                                <span>📅</span>
+                                <span>October 20, 2025</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span>⏰</span>
+                                <span>19:30</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-completed-video">✓ Completed + Video</span>
+                </div>
+                <div class="lecture-description">
+                    Installation (Python + VS Code or PyCharm), Variables, data types (strings, numbers, booleans), Basic operators and print statements, Comments and code structure
+                </div>
+                <div class="lecture-actions">
+                    <a href="Lecture_1_Python_Basics_Setup/presentation.html" class="btn btn-primary">
+                        <span>📊</span>
+                        <span>View Presentation</span>
+                    </a>
+                    <a href="https://www.loom.com/share/6993038252184209b980ddd1c095191c?sid=27af9b17-fc79-42e3-9c54-ce1dc879723a" target="_blank" class="btn btn-video">
+                        <span>🎥</span>
+                        <span>Watch Recording</span>
+                    </a>
+                    <div class="resources-dropdown">
+                        <button class="btn btn-secondary">
+                            <span>📁</span>
+                            <span>Resources</span>
+                        </button>
+                        <div class="resources-menu">
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_1_Python_Basics_Setup/exercises" target="_blank">💪 Exercises</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_1_Python_Basics_Setup/exercises/SOLUTIONS.md" target="_blank">✅ Solutions</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_1_Python_Basics_Setup/examples" target="_blank">📝 Examples</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_1_Python_Basics_Setup/README.md" target="_blank">📄 README</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 2 -->
+            <div class="lecture-card available" data-status="completed" data-search="lecture 2 strings control flow if elif else conditional formatting">
+                <div class="lecture-header">
+                    <div class="lecture-info">
+                        <div class="lecture-number">LECTURE 2</div>
+                        <div class="lecture-title">Strings & Control Flow</div>
+                        <div class="lecture-schedule">
+                            <div class="schedule-item">
+                                <span>📅</span>
+                                <span>October 23, 2025</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span>⏰</span>
+                                <span>19:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-completed-video">✓ Completed + Video</span>
+                </div>
+                <div class="lecture-description">
+                    String manipulation and formatting, if/elif/else statements, Comparison operators, Why this matters for Playwright: Checking text on pages, conditional actions
+                </div>
+                <div class="lecture-actions">
+                    <a href="Lecture_2_Strings_Control_Flow/presentation.html" class="btn btn-primary">
+                        <span>📊</span>
+                        <span>View Presentation</span>
+                    </a>
+                    <a href="https://www.loom.com/share/707cf7b62f2241be9271babeb962ee94?sid=4ba2d172-b1c3-4b2c-9972-d1ee965a09dd" target="_blank" class="btn btn-video">
+                        <span>🎥</span>
+                        <span>Watch Recording</span>
+                    </a>
+                    <div class="resources-dropdown">
+                        <button class="btn btn-secondary">
+                            <span>📁</span>
+                            <span>Resources</span>
+                        </button>
+                        <div class="resources-menu">
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_2_Strings_Control_Flow/exercises" target="_blank">💪 Exercises</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_2_Strings_Control_Flow/exercises/SOLUTIONS.md" target="_blank">✅ Solutions</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_2_Strings_Control_Flow/examples" target="_blank">📝 Examples</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_2_Strings_Control_Flow/README.md" target="_blank">📄 README</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 3 -->
+            <div class="lecture-card available" data-status="completed" data-search="lecture 3 loops for while range break continue iteration">
+                <div class="lecture-header">
+                    <div class="lecture-info">
+                        <div class="lecture-number">LECTURE 3</div>
+                        <div class="lecture-title">Loops</div>
+                        <div class="lecture-schedule">
+                            <div class="schedule-item">
+                                <span>📅</span>
+                                <span>October 27, 2025</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span>⏰</span>
+                                <span>19:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-completed">✓ Completed</span>
+                </div>
+                <div class="lecture-description">
+                    for loops and while loops, range() function, break and continue, Playwright context: Iterating through multiple elements, filling forms
+                </div>
+                <div class="lecture-actions">
+                    <a href="Lecture_3_Loops/presentation.html" class="btn btn-primary">
+                        <span>📊</span>
+                        <span>View Presentation</span>
+                    </a>
+                    <div class="resources-dropdown">
+                        <button class="btn btn-secondary">
+                            <span>📁</span>
+                            <span>Resources</span>
+                        </button>
+                        <div class="resources-menu">
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_3_Loops/exercises" target="_blank">💪 Exercises</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_3_Loops/exercises/SOLUTIONS.md" target="_blank">✅ Solutions</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_3_Loops/examples" target="_blank">📝 Examples</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_3_Loops/README.md" target="_blank">📄 README</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 4 -->
+            <div class="lecture-card available" data-status="completed" data-search="lecture 4 lists dictionaries arrays key value pairs methods append">
+                <div class="lecture-header">
+                    <div class="lecture-info">
+                        <div class="lecture-number">LECTURE 4</div>
+                        <div class="lecture-title">Lists & Dictionaries</div>
+                        <div class="lecture-schedule">
+                            <div class="schedule-item">
+                                <span>📅</span>
+                                <span>October 30, 2025</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span>⏰</span>
+                                <span>19:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-completed">✓ Completed</span>
+                </div>
+                <div class="lecture-description">
+                    Creating and accessing lists, List methods (append, remove, indexing), Dictionaries (key-value pairs), Playwright context: Storing test data, working with multiple locators
+                </div>
+                <div class="lecture-actions">
+                    <a href="Lecture_4_Lists_Dictionaries/presentation.html" class="btn btn-primary">
+                        <span>📊</span>
+                        <span>View Presentation</span>
+                    </a>
+                    <div class="resources-dropdown">
+                        <button class="btn btn-secondary">
+                            <span>📁</span>
+                            <span>Resources</span>
+                        </button>
+                        <div class="resources-menu">
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_4_Lists_Dictionaries/exercises" target="_blank">💪 Exercises</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_4_Lists_Dictionaries/exercises/SOLUTIONS.md" target="_blank">✅ Solutions</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_4_Lists_Dictionaries/examples" target="_blank">📝 Examples</a>
+                            <a href="https://github.com/opyrohov/python_automation_courses/blob/main/Lecture_4_Lists_Dictionaries/README.md" target="_blank">📄 README</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 5 -->
+            <div class="lecture-card upcoming" data-status="upcoming" data-search="lecture 5 functions def parameters return values helper reusable">
+                <div class="lecture-header">
+                    <div class="lecture-info">
+                        <div class="lecture-number">LECTURE 5</div>
+                        <div class="lecture-title">Functions</div>
+                        <div class="lecture-schedule">
+                            <div class="schedule-item">
+                                <span>📅</span>
+                                <span>November 3, 2025</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span>⏰</span>
+                                <span>19:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-upcoming">⏳ Upcoming</span>
+                </div>
+                <div class="lecture-description">
+                    Defining and calling functions, Parameters and return values, Organizing code with functions, Playwright context: Reusable test steps, helper functions
+                </div>
+                <div class="lecture-actions">
+                    <button class="btn btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">
+                        <span>📊</span>
+                        <span>Coming Soon</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Upcoming Lectures (6-36) - These will be added as they become available -->
         </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            No lectures found matching your search.
+        </div>
+
+        <footer>
+            <p>Full course schedule contains 36 lectures covering Python basics through advanced Playwright automation</p>
+        </footer>
     </div>
+
+    <script>
+        // Search functionality
+        const searchBox = document.getElementById('searchBox');
+        const lecturesContainer = document.getElementById('lecturesContainer');
+        const noResults = document.getElementById('noResults');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        let currentFilter = 'all';
+
+        searchBox.addEventListener('input', filterLectures);
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                filterLectures();
+            });
+        });
+
+        function filterLectures() {
+            const searchTerm = searchBox.value.toLowerCase();
+            const lectures = lecturesContainer.querySelectorAll('.lecture-card');
+            let visibleCount = 0;
+
+            lectures.forEach(lecture => {
+                const searchContent = lecture.dataset.search || '';
+                const status = lecture.dataset.status;
+
+                const matchesSearch = searchContent.includes(searchTerm);
+                const matchesFilter = currentFilter === 'all' ||
+                                     (currentFilter === 'completed' && status === 'completed') ||
+                                     (currentFilter === 'upcoming' && status === 'upcoming');
+
+                if (matchesSearch && matchesFilter) {
+                    lecture.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    lecture.style.display = 'none';
+                }
+            });
+
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Resources dropdown functionality
+        document.addEventListener('click', function(event) {
+            const dropdowns = document.querySelectorAll('.resources-dropdown');
+            let clickedInsideAnyDropdown = false;
+            let clickedButton = null;
+
+            // Check if click was on a dropdown button
+            dropdowns.forEach(dropdown => {
+                const button = dropdown.querySelector('.btn-secondary');
+                if (button && button.contains(event.target)) {
+                    clickedButton = dropdown;
+                    clickedInsideAnyDropdown = true;
+                }
+            });
+
+            // Check if click was inside a menu
+            dropdowns.forEach(dropdown => {
+                const menu = dropdown.querySelector('.resources-menu');
+                if (menu && menu.contains(event.target)) {
+                    clickedInsideAnyDropdown = true;
+                }
+            });
+
+            // Handle the click
+            if (clickedButton) {
+                // Toggle the clicked dropdown
+                const menu = clickedButton.querySelector('.resources-menu');
+                const wasOpen = menu.classList.contains('show');
+
+                // Close all dropdowns first
+                dropdowns.forEach(dropdown => {
+                    dropdown.querySelector('.resources-menu').classList.remove('show');
+                });
+
+                // If it wasn't open, open it now
+                if (!wasOpen) {
+                    menu.classList.add('show');
+                }
+            } else if (!clickedInsideAnyDropdown) {
+                // Click outside any dropdown - close all
+                dropdowns.forEach(dropdown => {
+                    dropdown.querySelector('.resources-menu').classList.remove('show');
+                });
+            }
+        });
+
+        // Close dropdowns when hovering over lecture cards
+        const lectureCards = document.querySelectorAll('.lecture-card');
+        lectureCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const dropdowns = document.querySelectorAll('.resources-dropdown');
+                dropdowns.forEach(dropdown => {
+                    dropdown.querySelector('.resources-menu').classList.remove('show');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
