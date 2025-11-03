@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 13: Introduction to Playwright & Setup</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">45</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 13</h1>
+            <div class="subtitle">Introduction to Playwright & Setup</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>What is Playwright and Browser Automation</li>
+                <li>Playwright vs Selenium Comparison</li>
+                <li>Installing Playwright and pytest-playwright</li>
+                <li>Browser Drivers Setup (Chromium, Firefox, WebKit)</li>
+                <li>Project Structure for Playwright</li>
+                <li>Your First Script: Opening Browser & Navigating</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> By the end, you'll have Playwright running and your first browser automation script working!
+            </div>
+        </div>
+
+        <!-- SECTION 1: WHAT IS PLAYWRIGHT -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>What is Playwright?</h2>
+            <p>Understanding browser automation</p>
+        </div>
+
+        <!-- Slide 3: What is Browser Automation? -->
+        <div class="slide">
+            <h2>What is Browser Automation?</h2>
+
+            <p><strong>Browser Automation</strong> = Making a browser do things automatically with code</p>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <strong>Without Automation (Manual):</strong>
+                <ul style="margin-top: 10px;">
+                    <li>👤 Human opens browser</li>
+                    <li>👤 Human types URL</li>
+                    <li>👤 Human clicks buttons</li>
+                    <li>👤 Human fills forms</li>
+                    <li>👤 Human checks results</li>
+                </ul>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>With Automation (Playwright):</strong>
+                <ul style="margin-top: 10px;">
+                    <li>🤖 Code opens browser</li>
+                    <li>🤖 Code navigates to URL</li>
+                    <li>🤖 Code clicks buttons</li>
+                    <li>🤖 Code fills forms</li>
+                    <li>🤖 Code verifies results</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: What is Playwright? -->
+        <div class="slide">
+            <h2>What is Playwright?</h2>
+
+            <div class="info-box">
+                <strong>Playwright</strong> is a modern browser automation framework created by Microsoft
+            </div>
+
+            <p style="margin-top: 30px;"><strong>Key Features:</strong></p>
+            <ul>
+                <li>🌐 <strong>Cross-browser</strong>: Chromium, Firefox, WebKit (Safari)</li>
+                <li>⚡ <strong>Fast & Reliable</strong>: Auto-waiting, no flaky tests</li>
+                <li>🔧 <strong>Developer-friendly</strong>: Great API, excellent documentation</li>
+                <li>📱 <strong>Mobile support</strong>: Test mobile web views</li>
+                <li>🎥 <strong>Screenshots & Videos</strong>: Built-in recording</li>
+                <li>🌍 <strong>Multiple languages</strong>: Python, JavaScript, Java, .NET</li>
+            </ul>
+
+            <div class="success-box" style="margin-top: 30px;">
+                <strong>Released:</strong> 2020 by Microsoft<br>
+                <strong>Status:</strong> Active development, production-ready
+            </div>
+        </div>
+
+        <!-- Slide 5: Why Playwright? -->
+        <div class="slide">
+            <h2>Why Use Playwright?</h2>
+
+            <div class="success-box">
+                <strong>✅ Modern & Fast</strong>
+                <p style="font-size: 0.9em; margin-top: 5px;">Built from ground up for modern web apps</p>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Reliable</strong>
+                <p style="font-size: 0.9em; margin-top: 5px;">Auto-waits for elements, reduces flaky tests</p>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Powerful</strong>
+                <p style="font-size: 0.9em; margin-top: 5px;">Network interception, mock APIs, geolocation, permissions</p>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Complete Testing Solution</strong>
+                <p style="font-size: 0.9em; margin-top: 5px;">Screenshots, videos, trace viewer, inspector</p>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Great for CI/CD</strong>
+                <p style="font-size: 0.9em; margin-top: 5px;">Headless mode, parallelization, Docker support</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Use Cases -->
+        <div class="slide">
+            <h2>What Can You Do With Playwright?</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="info-box">
+                    <strong>🧪 End-to-End Testing</strong>
+                    <p style="font-size: 0.85em; margin-top: 5px;">Test complete user workflows</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>🔍 Web Scraping</strong>
+                    <p style="font-size: 0.85em; margin-top: 5px;">Extract data from websites</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>📸 Screenshot Testing</strong>
+                    <p style="font-size: 0.85em; margin-top: 5px;">Visual regression testing</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>🤖 Process Automation</strong>
+                    <p style="font-size: 0.85em; margin-top: 5px;">Automate repetitive web tasks</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>📊 Performance Testing</strong>
+                    <p style="font-size: 0.85em; margin-top: 5px;">Measure page load times</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>♿ Accessibility Testing</strong>
+                    <p style="font-size: 0.85em; margin-top: 5px;">Check ARIA, contrast, keyboard nav</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: PLAYWRIGHT VS SELENIUM -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Playwright vs Selenium</h2>
+            <p>Understanding the differences</p>
+        </div>
+
+        <!-- Slide 7: Selenium Overview -->
+        <div class="slide">
+            <h2>What is Selenium?</h2>
+
+            <div class="info-box">
+                <strong>Selenium</strong> has been the standard for browser automation since 2004
+            </div>
+
+            <p style="margin-top: 20px;"><strong>Characteristics:</strong></p>
+            <ul>
+                <li>⏰ <strong>Mature:</strong> 20+ years old, battle-tested</li>
+                <li>🌍 <strong>Popular:</strong> Huge community, lots of resources</li>
+                <li>🔧 <strong>WebDriver Protocol:</strong> Industry standard (W3C)</li>
+                <li>📚 <strong>Many bindings:</strong> Python, Java, C#, Ruby, JavaScript</li>
+                <li>🌐 <strong>Cross-browser:</strong> Chrome, Firefox, Safari, Edge</li>
+            </ul>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>Challenges:</strong>
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Slower execution</li>
+                    <li>Flaky tests (timing issues)</li>
+                    <li>Complex setup (drivers, versions)</li>
+                    <li>Limited built-in features</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Playwright vs Selenium Comparison -->
+        <div class="slide">
+            <h2>Playwright vs Selenium: Key Differences</h2>
+
+            <table style="width: 100%; font-size: 0.85em; margin-top: 20px;">
+                <thead>
+                    <tr style="background: #667eea; color: white;">
+                        <th style="padding: 10px;">Feature</th>
+                        <th style="padding: 10px;">Playwright</th>
+                        <th style="padding: 10px;">Selenium</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Age</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">2020 (Modern)</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">2004 (Mature)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Speed</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">⚡ Faster</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">🐢 Slower</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Auto-waiting</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">✅ Built-in</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">❌ Manual</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Browsers</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Chromium, Firefox, WebKit</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Chrome, Firefox, Safari, Edge</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Setup</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">✅ Simple (auto-install)</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">⚠️ Complex (driver mgmt)</td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Network Control</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">✅ Full control</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">❌ Limited</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Screenshots/Video</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">✅ Built-in</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">⚠️ Third-party</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 9: When to Use Which? -->
+        <div class="slide">
+            <h2>When to Use Playwright vs Selenium?</h2>
+
+            <div class="success-box">
+                <strong>Choose Playwright if:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>✅ Starting a new project</li>
+                    <li>✅ Need speed and reliability</li>
+                    <li>✅ Testing modern web applications</li>
+                    <li>✅ Want built-in features (video, screenshots, network)</li>
+                    <li>✅ Need mobile browser emulation</li>
+                </ul>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <strong>Choose Selenium if:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>⚠️ Large existing Selenium test suite</li>
+                    <li>⚠️ Team already expert in Selenium</li>
+                    <li>⚠️ Organizational requirement or policy</li>
+                    <li>⚠️ Need specific Selenium ecosystem tools</li>
+                </ul>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>💡 Tip:</strong> For new projects, Playwright is the modern choice!
+            </div>
+        </div>
+
+        <!-- SECTION 3: INSTALLATION -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Installing Playwright</h2>
+            <p>Setting up your environment</p>
+        </div>
+
+        <!-- Slide 10: Prerequisites -->
+        <div class="slide">
+            <h2>Prerequisites Check</h2>
+
+            <p>Before installing Playwright, ensure you have:</p>
+
+            <div class="success-box">
+                <strong>✅ Python 3.1x</strong> installed
+                <div class="code-block" style="margin-top: 10px;">
+python --version
+<span class="comment"># Should show Python 3.10+</span>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Virtual Environment</strong> created and activated
+                <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Create venv</span>
+python -m venv venv
+
+<span class="comment"># Activate (Windows)</span>
+venv\Scripts\activate
+
+<span class="comment"># Activate (Mac/Linux)</span>
+source venv/bin/activate
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>📦 Disk Space:</strong> ~500 MB for browser binaries
+            </div>
+        </div>
+
+        <!-- Slide 11: Installation Steps -->
+        <div class="slide">
+            <h2>Installation: Step-by-Step</h2>
+
+            <div class="code-block">
+<span class="comment"># Step 1: Ensure venv is activated</span>
+(venv) $
+
+<span class="comment"># Step 2: Install Playwright Python package</span>
+pip install playwright
+
+<span class="comment"># Step 3: Install pytest and pytest-playwright</span>
+pip install pytest pytest-playwright
+
+<span class="comment"># Step 4: Install browser binaries</span>
+playwright install
+
+<span class="comment"># Step 5: Verify installation</span>
+playwright --version
+pytest --version
+            </div>
+
+            <div class="success-box">
+                <strong>✅ That's it!</strong> Playwright is ready to use.
+            </div>
+        </div>
+
+        <!-- Slide 12: What Gets Installed? -->
+        <div class="slide">
+            <h2>What Gets Installed?</h2>
+
+            <p><strong>Python Packages:</strong></p>
+            <div class="code-block">
+playwright==1.55.0          <span class="comment"># Core Playwright library</span>
+pytest==8.4.2               <span class="comment"># Testing framework</span>
+pytest-playwright==0.7.1    <span class="comment"># Pytest + Playwright integration</span>
+            </div>
+
+            <p style="margin-top: 30px;"><strong>Browser Binaries:</strong></p>
+            <ul>
+                <li>🌐 <strong>Chromium</strong> ~300 MB (Chrome/Edge engine)</li>
+                <li>🦊 <strong>Firefox</strong> ~150 MB (Mozilla Firefox)</li>
+                <li>🧭 <strong>WebKit</strong> ~50 MB (Safari engine)</li>
+            </ul>
+
+            <p style="margin-top: 20px;"><strong>Total:</strong> ~500 MB</p>
+
+            <div class="info-box">
+                <strong>Location:</strong> Browsers stored in user cache directory, not in venv
+            </div>
+        </div>
+
+        <!-- SECTION 4: BROWSER DRIVERS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Browser Drivers Setup</h2>
+            <p>Understanding browser binaries</p>
+        </div>
+
+        <!-- Slide 13: Browser Drivers Explained -->
+        <div class="slide">
+            <h2>What are Browser Drivers?</h2>
+
+            <div class="info-box">
+                <strong>Browser Driver</strong> = A program that controls the browser
+            </div>
+
+            <p style="margin-top: 30px;"><strong>How it works:</strong></p>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="display: inline-block; padding: 15px 25px; background: #667eea; color: white; border-radius: 8px; margin: 10px;">
+                    Your Python Code
+                </div>
+                <div style="display: inline-block; margin: 0 10px; font-size: 2em;">→</div>
+                <div style="display: inline-block; padding: 15px 25px; background: #5ec269; color: white; border-radius: 8px; margin: 10px;">
+                    Playwright
+                </div>
+                <div style="display: inline-block; margin: 0 10px; font-size: 2em;">→</div>
+                <div style="display: inline-block; padding: 15px 25px; background: #f39c12; color: white; border-radius: 8px; margin: 10px;">
+                    Browser Driver
+                </div>
+                <div style="display: inline-block; margin: 0 10px; font-size: 2em;">→</div>
+                <div style="display: inline-block; padding: 15px 25px; background: #4a9eff; color: white; border-radius: 8px; margin: 10px;">
+                    Browser
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Playwright Advantage:</strong> Automatically downloads and manages all browser drivers!
+            </div>
+        </div>
+
+        <!-- Slide 14: The Three Browsers -->
+        <div class="slide">
+            <h2>Playwright's Three Browsers</h2>
+
+            <div class="info-box">
+                <strong>1. Chromium</strong> (Default)
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Open-source version of Chrome/Edge</li>
+                    <li>Most popular browser engine (~65% market share)</li>
+                    <li>Use for: Testing Chrome, Edge, Brave, Opera</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>2. Firefox</strong>
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Mozilla Firefox browser</li>
+                    <li>Different rendering engine (Gecko)</li>
+                    <li>Use for: Firefox-specific testing</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>3. WebKit</strong>
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Safari's rendering engine</li>
+                    <li>Works on Windows/Linux too!</li>
+                    <li>Use for: Safari/iOS web testing</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: Installing Specific Browsers -->
+        <div class="slide">
+            <h2>Installing Browsers</h2>
+
+            <div class="code-block">
+<span class="comment"># Install all browsers (recommended)</span>
+playwright install
+
+<span class="comment"># Install specific browser</span>
+playwright install chromium
+playwright install firefox
+playwright install webkit
+
+<span class="comment"># Install browsers with dependencies (Linux)</span>
+playwright install --with-deps
+
+<span class="comment"># List installed browsers</span>
+playwright install --help
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong> Run <code>playwright install</code> after installing the Python package!
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Tip:</strong> For CI/CD, install only chromium to save space and time
+            </div>
+        </div>
+
+        <!-- SECTION 5: PROJECT STRUCTURE -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Project Structure Setup</h2>
+            <p>Organizing your Playwright project</p>
+        </div>
+
+        <!-- Slide 16: Recommended Structure -->
+        <div class="slide">
+            <h2>Playwright Project Structure</h2>
+
+            <div class="code-block">
+my_playwright_project/
+│
+├── venv/                      <span class="comment"># Virtual environment</span>
+│
+├── tests/                     <span class="comment"># Test files</span>
+│   ├── __init__.py
+│   ├── conftest.py           <span class="comment"># Pytest fixtures</span>
+│   ├── test_login.py
+│   ├── test_search.py
+│   └── test_checkout.py
+│
+├── pages/                     <span class="comment"># Page Object Model (later)</span>
+│   ├── __init__.py
+│   └── base_page.py
+│
+├── utils/                     <span class="comment"># Helper utilities</span>
+│   ├── __init__.py
+│   └── config.py
+│
+├── test_data/                 <span class="comment"># Test data</span>
+│   └── users.json
+│
+├── requirements.txt           <span class="comment"># Dependencies</span>
+├── pytest.ini                 <span class="comment"># Pytest config</span>
+└── .env                       <span class="comment"># Environment variables</span>
+            </div>
+        </div>
+
+        <!-- Slide 17: Create Your Project -->
+        <div class="slide">
+            <h2>Creating Project Structure</h2>
+
+            <div class="code-block">
+<span class="comment"># Create project folder</span>
+mkdir my_playwright_project
+cd my_playwright_project
+
+<span class="comment"># Create folder structure</span>
+mkdir tests pages utils test_data
+
+<span class="comment"># Create __init__.py files (Windows)</span>
+type nul > tests\__init__.py
+type nul > pages\__init__.py
+type nul > utils\__init__.py
+
+<span class="comment"># Create __init__.py files (Mac/Linux)</span>
+touch tests/__init__.py pages/__init__.py utils/__init__.py
+
+<span class="comment"># Create virtual environment</span>
+python -m venv venv
+venv\Scripts\activate  <span class="comment"># Windows</span>
+source venv/bin/activate  <span class="comment"># Mac/Linux</span>
+            </div>
+        </div>
+
+        <!-- Slide 18: requirements.txt for Playwright -->
+        <div class="slide">
+            <h2>Create requirements.txt</h2>
+
+            <div class="code-block">
+<span class="comment"># requirements.txt for Playwright project</span>
+
+playwright==1.55.0
+pytest==8.4.2
+pytest-playwright==0.7.1
+python-dotenv==1.2.1
+            </div>
+
+            <p style="margin-top: 30px;"><strong>Install dependencies:</strong></p>
+
+            <div class="code-block">
+<span class="comment"># Install all packages</span>
+pip install -r requirements.txt
+
+<span class="comment"># Install browser binaries</span>
+playwright install
+
+<span class="comment"># Verify</span>
+pip list | findstr playwright  <span class="comment"># Windows</span>
+pip list | grep playwright     <span class="comment"># Mac/Linux</span>
+            </div>
+        </div>
+
+        <!-- Slide 19: pytest.ini for Playwright -->
+        <div class="slide">
+            <h2>Configure pytest.ini</h2>
+
+            <div class="code-block">
+<span class="comment"># pytest.ini</span>
+
+[pytest]
+<span class="comment"># Where to find tests</span>
+testpaths = tests
+
+<span class="comment"># Test markers</span>
+markers =
+    smoke: Quick smoke tests
+    regression: Full regression suite
+    login: Login flow tests
+    browser: Browser-specific tests
+
+<span class="comment"># Default command-line options</span>
+addopts = -v --tb=short --strict-markers
+
+<span class="comment"># Playwright-specific options (optional)</span>
+<span class="comment"># --headed: Run tests in headed mode (see browser)</span>
+<span class="comment"># --browser chromium: Run tests in specific browser</span>
+<span class="comment"># --slowmo 1000: Slow down operations by 1000ms</span>
+            </div>
+        </div>
+
+        <!-- SECTION 6: FIRST SCRIPT -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Your First Playwright Script</h2>
+            <p>Opening a browser and navigating</p>
+        </div>
+
+        <!-- Slide 20: First Script - Sync API -->
+        <div class="slide">
+            <h2>Method 1: Sync API (Simple)</h2>
+
+            <div class="code-block">
+<span class="comment"># first_script.py - Simple Playwright script</span>
+
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    <span class="comment"># Launch browser</span>
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+
+    <span class="comment"># Create new page</span>
+    page = browser.<span class="function">new_page</span>()
+
+    <span class="comment"># Navigate to URL</span>
+    page.<span class="function">goto</span>(<span class="string">"https://playwright.dev"</span>)
+
+    <span class="comment"># Print page title</span>
+    <span class="function">print</span>(<span class="string">f"Page title: </span><span class="string">{page.title()}"</span>)
+
+    <span class="comment"># Close browser</span>
+    browser.<span class="function">close</span>()
+            </div>
+
+            <div class="success-box">
+                <strong>Run it:</strong> <code>python first_script.py</code>
+            </div>
+        </div>
+
+        <!-- Slide 21: Understanding the Code -->
+        <div class="slide">
+            <h2>Breaking Down the Script</h2>
+
+            <div class="code-block">
+<span class="comment"># 1. Import Playwright</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+            </div>
+
+            <div class="code-block">
+<span class="comment"># 2. Create Playwright instance</span>
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    <span class="comment"># 'p' is the Playwright object</span>
+    <span class="comment"># 'with' ensures proper cleanup</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># 3. Launch browser</span>
+browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+<span class="comment"># headless=False: See the browser window</span>
+<span class="comment"># headless=True: Run in background (default)</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># 4. Create page (tab)</span>
+page = browser.<span class="function">new_page</span>()
+            </div>
+
+            <div class="code-block">
+<span class="comment"># 5. Navigate</span>
+page.<span class="function">goto</span>(<span class="string">"https://playwright.dev"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 22: First Pytest Test -->
+        <div class="slide">
+            <h2>Method 2: Pytest Test (Recommended)</h2>
+
+            <div class="code-block">
+<span class="comment"># tests/test_first.py</span>
+
+<span class="keyword">import</span> pytest
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page, expect
+
+
+<span class="keyword">def</span> <span class="function">test_playwright_homepage</span>(page: Page):
+    <span class="comment">"""Test that Playwright homepage loads correctly."""</span>
+
+    <span class="comment"># ARRANGE</span>
+    url = <span class="string">"https://playwright.dev"</span>
+
+    <span class="comment"># ACT</span>
+    page.<span class="function">goto</span>(url)
+
+    <span class="comment"># ASSERT</span>
+    <span class="function">expect</span>(page).<span class="function">to_have_title</span>(<span class="string">"Playwright"</span>)
+    <span class="function">expect</span>(page).<span class="function">to_have_url</span>(url)
+
+    <span class="function">print</span>(<span class="string">f"✅ Successfully navigated to </span><span class="string">{url}"</span>)
+            </div>
+
+            <div class="success-box">
+                <strong>Run it:</strong> <code>pytest tests/test_first.py</code>
+            </div>
+        </div>
+
+        <!-- Slide 23: The Magic of pytest-playwright -->
+        <div class="slide">
+            <h2>The Magic `page` Fixture</h2>
+
+            <div class="info-box">
+                <strong>pytest-playwright</strong> provides automatic fixtures:
+            </div>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">test_example</span>(page: Page):
+    <span class="comment"># 'page' is provided automatically!</span>
+    <span class="comment"># No need to launch browser or create page manually</span>
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+            </div>
+
+            <p style="margin-top: 30px;"><strong>What pytest-playwright does for you:</strong></p>
+            <ul>
+                <li>✅ Launches browser before test</li>
+                <li>✅ Creates fresh page for each test</li>
+                <li>✅ Takes screenshot on failure</li>
+                <li>✅ Closes browser after test</li>
+                <li>✅ Handles cleanup automatically</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>Result:</strong> Cleaner test code, less boilerplate!
+            </div>
+        </div>
+
+        <!-- Slide 24: Running Playwright Tests -->
+        <div class="slide">
+            <h2>Running Your Tests</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic run (headless mode)</span>
+pytest
+
+<span class="comment"># Run in headed mode (see browser)</span>
+pytest --headed
+
+<span class="comment"># Run with specific browser</span>
+pytest --browser chromium
+pytest --browser firefox
+pytest --browser webkit
+
+<span class="comment"># Run all browsers</span>
+pytest --browser chromium --browser firefox --browser webkit
+
+<span class="comment"># Slow down execution (helpful for watching)</span>
+pytest --headed --slowmo 1000
+
+<span class="comment"># Run specific test file</span>
+pytest tests/test_first.py
+
+<span class="comment"># Run specific test function</span>
+pytest tests/test_first.py::test_playwright_homepage
+            </div>
+        </div>
+
+        <!-- Slide 25: Common Playwright Commands -->
+        <div class="slide">
+            <h2>Essential Playwright Commands</h2>
+
+            <div class="code-block">
+<span class="comment"># Navigation</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page.<span class="function">go_back</span>()
+page.<span class="function">go_forward</span>()
+page.<span class="function">reload</span>()
+
+<span class="comment"># Get information</span>
+title = page.<span class="function">title</span>()
+url = page.<span class="function">url</span>
+content = page.<span class="function">content</span>()
+
+<span class="comment"># Screenshots</span>
+page.<span class="function">screenshot</span>(path=<span class="string">"screenshot.png"</span>)
+
+<span class="comment"># Wait for page load</span>
+page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
+page.<span class="function">wait_for_load_state</span>(<span class="string">"domcontentloaded"</span>)
+
+<span class="comment"># Close</span>
+page.<span class="function">close</span>()
+            </div>
+        </div>
+
+        <!-- Slide 26: Browser Launch Options -->
+        <div class="slide">
+            <h2>Browser Launch Options</h2>
+
+            <div class="code-block">
+<span class="comment"># Headed mode (see browser window)</span>
+browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+
+<span class="comment"># Headless mode (no UI, faster)</span>
+browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">True</span>)
+
+<span class="comment"># Slow down operations (for debugging)</span>
+browser = p.chromium.<span class="function">launch</span>(
+    headless=<span class="keyword">False</span>,
+    slow_mo=<span class="number">1000</span>  <span class="comment"># 1 second delay between actions</span>
+)
+
+<span class="comment"># Custom window size</span>
+browser = p.chromium.<span class="function">launch</span>(
+    headless=<span class="keyword">False</span>,
+    args=[<span class="string">'--window-size=1920,1080'</span>]
+)
+
+<span class="comment"># Enable devtools</span>
+browser = p.chromium.<span class="function">launch</span>(
+    headless=<span class="keyword">False</span>,
+    devtools=<span class="keyword">True</span>
+)
+            </div>
+        </div>
+
+        <!-- Slide 27: Page Options -->
+        <div class="slide">
+            <h2>Page Creation Options</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic page</span>
+page = browser.<span class="function">new_page</span>()
+
+<span class="comment"># Page with custom viewport</span>
+page = browser.<span class="function">new_page</span>(
+    viewport={<span class="string">'width'</span>: <span class="number">1920</span>, <span class="string">'height'</span>: <span class="number">1080</span>}
+)
+
+<span class="comment"># Mobile emulation</span>
+page = browser.<span class="function">new_page</span>(
+    viewport={<span class="string">'width'</span>: <span class="number">375</span>, <span class="string">'height'</span>: <span class="number">667</span>},
+    user_agent=<span class="string">'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)'</span>
+)
+
+<span class="comment"># Enable video recording</span>
+page = browser.<span class="function">new_page</span>(
+    record_video_dir=<span class="string">"videos/"</span>
+)
+
+<span class="comment"># Set default timeout</span>
+page.<span class="function">set_default_timeout</span>(<span class="number">30000</span>)  <span class="comment"># 30 seconds</span>
+            </div>
+        </div>
+
+        <!-- Slide 28: Complete Example -->
+        <div class="slide">
+            <h2>Complete Working Example</h2>
+
+            <div class="code-block">
+<span class="comment"># tests/test_google_search.py</span>
+
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page, expect
+
+
+<span class="keyword">def</span> <span class="function">test_google_search</span>(page: Page):
+    <span class="comment">"""Test Google search functionality."""</span>
+
+    <span class="comment"># Navigate to Google</span>
+    page.<span class="function">goto</span>(<span class="string">"https://www.google.com"</span>)
+
+    <span class="comment"># Verify page loaded</span>
+    <span class="function">expect</span>(page).<span class="function">to_have_title</span>(<span class="string">"Google"</span>)
+
+    <span class="comment"># Verify search box is visible</span>
+    search_box = page.<span class="function">locator</span>(<span class="string">"textarea[name='q']"</span>)
+    <span class="function">expect</span>(search_box).<span class="function">to_be_visible</span>()
+
+    <span class="comment"># Type search query</span>
+    search_box.<span class="function">fill</span>(<span class="string">"Playwright Python"</span>)
+
+    <span class="comment"># Press Enter</span>
+    search_box.<span class="function">press</span>(<span class="string">"Enter"</span>)
+
+    <span class="comment"># Wait for results</span>
+    page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
+
+    <span class="comment"># Verify results page loaded</span>
+    <span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"**/search?**"</span>)
+
+    <span class="function">print</span>(<span class="string">"✅ Google search test passed!"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 29: Debugging Tools -->
+        <div class="slide">
+            <h2>Playwright Debugging Tools</h2>
+
+            <div class="success-box">
+                <strong>1. Headed Mode</strong>
+                <div class="code-block" style="margin-top: 10px;">
+pytest --headed
+                </div>
+                <p style="font-size: 0.9em;">Watch tests run in real browser window</p>
+            </div>
+
+            <div class="success-box">
+                <strong>2. Slow Motion</strong>
+                <div class="code-block" style="margin-top: 10px;">
+pytest --headed --slowmo 1000
+                </div>
+                <p style="font-size: 0.9em;">Slow down operations to see what's happening</p>
+            </div>
+
+            <div class="success-box">
+                <strong>3. Playwright Inspector</strong>
+                <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Add this to your code</span>
+page.<span class="function">pause</span>()
+                </div>
+                <p style="font-size: 0.9em;">Pauses execution, opens interactive debugger</p>
+            </div>
+
+            <div class="success-box">
+                <strong>4. Screenshots</strong>
+                <div class="code-block" style="margin-top: 10px;">
+page.<span class="function">screenshot</span>(path=<span class="string">"debug.png"</span>)
+                </div>
+                <p style="font-size: 0.9em;">Capture state at any point</p>
+            </div>
+        </div>
+
+        <!-- Slide 30: Common Setup Issues -->
+        <div class="slide">
+            <h2>Troubleshooting Common Issues</h2>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> "playwright: command not found"
+                <br><strong>Solution:</strong> Activate virtual environment
+                <div class="code-block" style="margin-top: 5px;">
+venv\Scripts\activate  <span class="comment"># Windows</span>
+source venv/bin/activate  <span class="comment"># Mac/Linux</span>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> "No module named 'playwright'"
+                <br><strong>Solution:</strong> Install playwright
+                <div class="code-block" style="margin-top: 5px;">
+pip install playwright pytest-playwright
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> "Executable doesn't exist"
+                <br><strong>Solution:</strong> Install browser binaries
+                <div class="code-block" style="margin-top: 5px;">
+playwright install
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> Tests fail with timeout
+                <br><strong>Solution:</strong> Increase timeout or check network
+                <div class="code-block" style="margin-top: 5px;">
+page.<span class="function">set_default_timeout</span>(<span class="number">60000</span>)  <span class="comment"># 60 seconds</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 31: Best Practices -->
+        <div class="slide">
+            <h2>Playwright Best Practices</h2>
+
+            <div class="success-box">
+                ✅ <strong>Use pytest-playwright fixtures</strong> - Cleaner code
+            </div>
+
+            <div class="success-box">
+                ✅ <strong>Use expect() assertions</strong> - Auto-waiting built-in
+            </div>
+
+            <div class="success-box">
+                ✅ <strong>Run headless in CI/CD</strong> - Faster execution
+            </div>
+
+            <div class="success-box">
+                ✅ <strong>Use meaningful locators</strong> - data-testid, text, role
+            </div>
+
+            <div class="success-box">
+                ✅ <strong>One test = one thing</strong> - Keep tests focused
+            </div>
+
+            <div class="success-box">
+                ✅ <strong>Use Page Object Model</strong> - Better organization (we'll learn this!)
+            </div>
+
+            <div class="success-box">
+                ✅ <strong>Enable screenshots/videos on failure</strong> - Easier debugging
+            </div>
+        </div>
+
+        <!-- Slide 32: What's Next? -->
+        <div class="slide">
+            <h2>Coming Up Next</h2>
+
+            <div class="info-box">
+                <strong>Lecture 14:</strong> Playwright Locators & Interactions
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Finding elements (CSS, text, role)</li>
+                    <li>Clicking, typing, selecting</li>
+                    <li>Handling forms</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>Lecture 15:</strong> Playwright Assertions & Waits
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>expect() assertions</li>
+                    <li>Auto-waiting</li>
+                    <li>Handling dynamic content</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>Lecture 16:</strong> Page Object Model
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Organizing test code</li>
+                    <li>Reusable page classes</li>
+                    <li>Best practices</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 33: Practice Exercise -->
+        <div class="slide">
+            <h2>Practice Exercise</h2>
+
+            <div class="info-box">
+                <strong>Before Next Lecture:</strong>
+                <ol>
+                    <li>Install Playwright and all browsers</li>
+                    <li>Create project structure</li>
+                    <li>Run the example tests successfully</li>
+                    <li>Write your own test that:
+                        <ul>
+                            <li>Navigates to your favorite website</li>
+                            <li>Verifies the page title</li>
+                            <li>Takes a screenshot</li>
+                        </ul>
+                    </li>
+                    <li>Experiment with different browsers (chromium, firefox, webkit)</li>
+                    <li>Try headed vs headless mode</li>
+                </ol>
+            </div>
+
+            <div class="success-box">
+                <strong>📝 Check exercises folder for detailed practice problems!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 34: Quick Reference -->
+        <div class="slide">
+            <h2>Quick Reference Cheat Sheet</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.85em;">
+                <div class="code-block">
+<span class="comment"># Install</span>
+pip install playwright
+pip install pytest-playwright
+playwright install
+                </div>
+
+                <div class="code-block">
+<span class="comment"># Run tests</span>
+pytest
+pytest --headed
+pytest --browser firefox
+                </div>
+
+                <div class="code-block">
+<span class="comment"># Navigation</span>
+page.goto(url)
+page.go_back()
+page.reload()
+                </div>
+
+                <div class="code-block">
+<span class="comment"># Info</span>
+page.title()
+page.url
+page.content()
+                </div>
+
+                <div class="code-block">
+<span class="comment"># Screenshots</span>
+page.screenshot(path=<span class="string">"test.png"</span>)
+                </div>
+
+                <div class="code-block">
+<span class="comment"># Debug</span>
+page.pause()
+pytest --headed --slowmo 1000
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 35: Summary -->
+        <div class="slide">
+            <h2>Lecture 13 Summary</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <div class="success-box">
+                        <strong>✓ What is Playwright</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Modern browser automation framework</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ Playwright vs Selenium</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Compared features and use cases</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ Installation</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Set up Playwright & pytest-playwright</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="success-box">
+                        <strong>✓ Browser Drivers</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Chromium, Firefox, WebKit</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ Project Structure</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Organized Playwright projects</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ First Script</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Opening browser & navigation</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px; text-align: center;">
+                <strong>🎉 You can now write basic browser automation scripts with Playwright!</strong>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Ready to Automate!</h1>
+            <div class="subtitle">See you in Lecture 14</div>
+            <p style="margin-top: 50px; font-size: 1.2em;">Questions?</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <!-- Global JavaScript for all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
