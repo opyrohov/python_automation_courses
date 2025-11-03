@@ -1,0 +1,98 @@
+# Example requirements.txt for Playwright Automation Project
+#
+# This file lists all Python packages needed for this project.
+# Install all at once with: pip install -r requirements.txt
+
+# ============================================================================
+# CORE TESTING FRAMEWORKS
+# ============================================================================
+
+# Playwright - Browser automation library
+playwright==1.40.0
+
+# Pytest - Testing framework
+pytest==8.0.0
+
+# Pytest-Playwright - Pytest plugin for Playwright integration
+pytest-playwright==0.4.4
+
+
+# ============================================================================
+# UTILITIES
+# ============================================================================
+
+# Python-dotenv - Load environment variables from .env file
+python-dotenv==1.0.0
+
+# Requests - HTTP library for API testing (optional)
+requests==2.31.0
+
+
+# ============================================================================
+# DATA HANDLING (optional, add if needed)
+# ============================================================================
+
+# Pandas - Data manipulation (for handling CSV/Excel test data)
+# pandas==2.1.4
+
+# Openpyxl - Read/write Excel files
+# openpyxl==3.1.2
+
+
+# ============================================================================
+# REPORTING (optional, add if needed)
+# ============================================================================
+
+# Pytest-html - HTML test reports
+# pytest-html==4.1.1
+
+# Allure-pytest - Allure reporting
+# allure-pytest==2.13.2
+
+
+# ============================================================================
+# VERSION PINNING STRATEGIES
+# ============================================================================
+
+# Exact version (most strict, recommended for production)
+# playwright==1.40.0
+
+# Minimum version (allows updates)
+# playwright>=1.40.0
+
+# Compatible version (allows patch updates)
+# playwright~=1.40.0
+
+# Version range
+# playwright>=1.40.0,<2.0.0
+
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+# - Keep this file updated when adding new dependencies
+# - Pin versions to ensure reproducible builds
+# - Test after updating dependencies
+# - Don't add unnecessary packages
+# - Document why each package is needed (use comments)
+# - Periodically update to latest stable versions
+# - Use `pip freeze > requirements.txt` to capture exact environment
+#   (but prefer manually maintaining this file for clarity)
+
+
+# ============================================================================
+# INSTALLATION COMMANDS
+# ============================================================================
+
+# Install all dependencies:
+#   pip install -r requirements.txt
+
+# Install Playwright browsers after pip install:
+#   playwright install
+
+# Update all packages to latest compatible versions:
+#   pip install --upgrade -r requirements.txt
+
+# Check outdated packages:
+#   pip list --outdated

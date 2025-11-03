@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 12: Python Review & Project Setup</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 12</h1>
+            <div class="subtitle">Python Review & Project Setup</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>Review all Python fundamentals (Lectures 1-11)</li>
+                <li>Virtual Environments with venv</li>
+                <li>Project Structure Best Practices</li>
+                <li>Dependency Management (requirements.txt)</li>
+                <li>Introduction to Testing Mindset</li>
+                <li>Setting Up Your First Automation Project</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Consolidate your Python knowledge and prepare for Playwright automation!
+            </div>
+        </div>
+
+        <!-- SECTION 1: PYTHON REVIEW -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Python Fundamentals Review</h2>
+            <p>Quick recap of everything we've learned</p>
+        </div>
+
+        <!-- Slide 3: Python Basics Recap -->
+        <div class="slide">
+            <h2>Lecture 1-2: Basics & Strings</h2>
+
+            <div class="code-block">
+<span class="comment"># Variables and data types</span>
+name = <span class="string">"Python"</span>
+version = <span class="number">3.12</span>
+is_awesome = <span class="keyword">True</span>
+
+<span class="comment"># String manipulation</span>
+message = <span class="string">f"</span><span class="string">{name} {version} is awesome!"</span>
+upper_message = message.<span class="function">upper</span>()
+
+<span class="comment"># Conditional logic</span>
+<span class="keyword">if</span> version >= <span class="number">3.10</span>:
+    <span class="function">print</span>(<span class="string">"Modern Python!"</span>)
+<span class="keyword">elif</span> version >= <span class="number">3.0</span>:
+    <span class="function">print</span>(<span class="string">"Python 3"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Legacy Python"</span>)
+            </div>
+
+            <div class="success-box">
+                <strong>Key Concepts:</strong> Variables, data types, f-strings, if/elif/else
+            </div>
+        </div>
+
+        <!-- Slide 4: Loops Review -->
+        <div class="slide">
+            <h2>Lecture 3: Loops</h2>
+
+            <div class="code-block">
+<span class="comment"># For loops</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    <span class="function">print</span>(i)  <span class="comment"># 0, 1, 2, 3, 4</span>
+
+<span class="comment"># While loops</span>
+count = <span class="number">0</span>
+<span class="keyword">while</span> count < <span class="number">3</span>:
+    <span class="function">print</span>(count)
+    count += <span class="number">1</span>
+
+<span class="comment"># Loop control</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
+    <span class="keyword">if</span> i == <span class="number">5</span>:
+        <span class="keyword">break</span>  <span class="comment"># Exit loop</span>
+    <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>:
+        <span class="keyword">continue</span>  <span class="comment"># Skip to next iteration</span>
+    <span class="function">print</span>(i)
+            </div>
+
+            <div class="success-box">
+                <strong>Key Concepts:</strong> for, while, range(), break, continue
+            </div>
+        </div>
+
+        <!-- Slide 5: Lists and Dictionaries Review -->
+        <div class="slide">
+            <h2>Lecture 4: Lists & Dictionaries</h2>
+
+            <div class="code-block">
+<span class="comment"># Lists</span>
+browsers = [<span class="string">"chrome"</span>, <span class="string">"firefox"</span>, <span class="string">"edge"</span>]
+browsers.<span class="function">append</span>(<span class="string">"safari"</span>)
+first = browsers[<span class="number">0</span>]
+
+<span class="comment"># Dictionaries</span>
+user = {
+    <span class="string">"name"</span>: <span class="string">"John"</span>,
+    <span class="string">"age"</span>: <span class="number">30</span>,
+    <span class="string">"email"</span>: <span class="string">"john@example.com"</span>
+}
+name = user[<span class="string">"name"</span>]
+user[<span class="string">"city"</span>] = <span class="string">"New York"</span>
+
+<span class="comment"># Iteration</span>
+<span class="keyword">for</span> browser <span class="keyword">in</span> browsers:
+    <span class="function">print</span>(browser)
+
+<span class="keyword">for</span> key, value <span class="keyword">in</span> user.<span class="function">items</span>():
+    <span class="function">print</span>(<span class="string">f"</span><span class="string">{key}: {value}"</span>)
+            </div>
+
+            <div class="success-box">
+                <strong>Key Concepts:</strong> Lists, dictionaries, indexing, iteration
+            </div>
+        </div>
+
+        <!-- Slide 6: Functions Review -->
+        <div class="slide">
+            <h2>Lecture 5: Functions</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic function</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name):
+    <span class="keyword">return</span> <span class="string">f"Hello, </span><span class="string">{name}!"</span>
+
+<span class="comment"># Function with default parameters</span>
+<span class="keyword">def</span> <span class="function">login</span>(username, password, timeout=<span class="number">30</span>):
+    <span class="function">print</span>(<span class="string">f"Logging in </span><span class="string">{username} with timeout {timeout}s"</span>)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="comment"># Multiple return values</span>
+<span class="keyword">def</span> <span class="function">get_user_info</span>():
+    <span class="keyword">return</span> <span class="string">"John"</span>, <span class="number">30</span>, <span class="string">"john@example.com"</span>
+
+name, age, email = <span class="function">get_user_info</span>()
+            </div>
+
+            <div class="success-box">
+                <strong>Key Concepts:</strong> def, parameters, return values, default arguments
+            </div>
+        </div>
+
+        <!-- Slide 7: Modules and Imports Review -->
+        <div class="slide">
+            <h2>Lecture 6: Modules & Imports</h2>
+
+            <div class="code-block">
+<span class="comment"># Different import styles</span>
+<span class="keyword">import</span> os
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+<span class="keyword">import</span> requests <span class="keyword">as</span> req
+
+<span class="comment"># Using imported modules</span>
+current_dir = os.<span class="function">getcwd</span>()
+data = json.<span class="function">loads</span>(<span class="string">'{"name": "test"}'</span>)
+now = datetime.<span class="function">now</span>()
+file_path = Path(<span class="string">"test.txt"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>pip install:</strong> Install external packages like playwright, pytest, requests
+            </div>
+        </div>
+
+        <!-- Slide 8: File Handling Review -->
+        <div class="slide">
+            <h2>Lecture 7: File Handling & JSON</h2>
+
+            <div class="code-block">
+<span class="comment"># Reading and writing files</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"test.txt"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> file:
+    file.<span class="function">write</span>(<span class="string">"Hello, World!"</span>)
+
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"test.txt"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> file:
+    content = file.<span class="function">read</span>()
+
+<span class="comment"># Working with JSON</span>
+<span class="keyword">import</span> json
+
+<span class="comment"># Save to JSON</span>
+data = {<span class="string">"users"</span>: [<span class="string">"Alice"</span>, <span class="string">"Bob"</span>]}
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"data.json"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:
+    json.<span class="function">dump</span>(data, f)
+
+<span class="comment"># Load from JSON</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"data.json"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+    loaded = json.<span class="function">load</span>(f)
+            </div>
+        </div>
+
+        <!-- Slide 9: Error Handling Review -->
+        <div class="slide">
+            <h2>Lecture 8: Error Handling</h2>
+
+            <div class="code-block">
+<span class="comment"># Try-except blocks</span>
+<span class="keyword">try</span>:
+    result = <span class="number">10</span> / <span class="number">0</span>
+<span class="keyword">except</span> ZeroDivisionError:
+    <span class="function">print</span>(<span class="string">"Cannot divide by zero!"</span>)
+
+<span class="comment"># Multiple exceptions</span>
+<span class="keyword">try</span>:
+    data = json.<span class="function">loads</span>(invalid_json)
+<span class="keyword">except</span> json.JSONDecodeError <span class="keyword">as</span> e:
+    <span class="function">print</span>(<span class="string">f"JSON error: </span><span class="string">{e}"</span>)
+<span class="keyword">except</span> FileNotFoundError:
+    <span class="function">print</span>(<span class="string">"File not found"</span>)
+<span class="keyword">finally</span>:
+    <span class="function">print</span>(<span class="string">"Cleanup code here"</span>)
+            </div>
+
+            <div class="warning-box">
+                <strong>Testing Context:</strong> Handle timeouts, element not found, network errors
+            </div>
+        </div>
+
+        <!-- Slide 10: Classes Review Part 1 -->
+        <div class="slide">
+            <h2>Lecture 9: Classes & Objects (Part 1)</h2>
+
+            <div class="code-block">
+<span class="comment"># Creating a class</span>
+<span class="keyword">class</span> <span class="class-name">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+        <span class="keyword">self</span>.username_field = <span class="string">"#username"</span>
+        <span class="keyword">self</span>.password_field = <span class="string">"#password"</span>
+        <span class="keyword">self</span>.login_button = <span class="string">"button[type='submit']"</span>
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, username, password):
+        <span class="keyword">self</span>.page.<span class="function">fill</span>(<span class="keyword">self</span>.username_field, username)
+        <span class="keyword">self</span>.page.<span class="function">fill</span>(<span class="keyword">self</span>.password_field, password)
+        <span class="keyword">self</span>.page.<span class="function">click</span>(<span class="keyword">self</span>.login_button)
+
+<span class="comment"># Using the class</span>
+login_page = LoginPage(page)
+login_page.<span class="function">login</span>(<span class="string">"user@example.com"</span>, <span class="string">"password123"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 11: Classes Review Part 2 -->
+        <div class="slide">
+            <h2>Lecture 10: Classes & Objects (Part 2)</h2>
+
+            <div class="code-block">
+<span class="comment"># Inheritance - BasePage pattern</span>
+<span class="keyword">class</span> <span class="class-name">BasePage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+
+    <span class="keyword">def</span> <span class="function">navigate</span>(<span class="keyword">self</span>, url):
+        <span class="keyword">self</span>.page.<span class="function">goto</span>(url)
+
+<span class="keyword">class</span> <span class="class-name">LoginPage</span>(BasePage):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">super</span>().<span class="function">__init__</span>(page)
+        <span class="keyword">self</span>.username = <span class="string">"#username"</span>
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, user, pwd):
+        <span class="keyword">self</span>.<span class="function">navigate</span>(<span class="string">"/login"</span>)
+        <span class="keyword">self</span>.page.<span class="function">fill</span>(<span class="keyword">self</span>.username, user)
+        <span class="comment"># ... login logic</span>
+            </div>
+
+            <div class="success-box">
+                <strong>Page Object Model:</strong> Organize test code with reusable page classes
+            </div>
+        </div>
+
+        <!-- Slide 12: Advanced Python Review -->
+        <div class="slide">
+            <h2>Lecture 11: Advanced Python</h2>
+
+            <div class="code-block">
+<span class="comment"># List comprehensions</span>
+squares = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>)]
+
+<span class="comment"># Dictionary comprehensions</span>
+user_map = {user[<span class="string">"id"</span>]: user[<span class="string">"name"</span>] <span class="keyword">for</span> user <span class="keyword">in</span> users}
+
+<span class="comment"># *args and **kwargs</span>
+<span class="keyword">def</span> <span class="function">flexible_function</span>(*args, **kwargs):
+    <span class="function">print</span>(args)    <span class="comment"># Tuple of positional args</span>
+    <span class="function">print</span>(kwargs)  <span class="comment"># Dict of keyword args</span>
+
+<span class="comment"># Working with datetime</span>
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+now = datetime.<span class="function">now</span>()
+formatted = now.<span class="function">strftime</span>(<span class="string">"%Y-%m-%d %H:%M:%S"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 13: Review Summary -->
+        <div class="slide">
+            <h2>Python Fundamentals: Complete! ✓</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px;">
+                <div class="info-box">
+                    <strong>Core Concepts</strong>
+                    <ul style="margin-top: 10px; font-size: 0.9em;">
+                        <li>Variables & Data Types</li>
+                        <li>Conditionals & Loops</li>
+                        <li>Lists & Dictionaries</li>
+                        <li>Functions</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <strong>Advanced Topics</strong>
+                    <ul style="margin-top: 10px; font-size: 0.9em;">
+                        <li>Modules & Imports</li>
+                        <li>File Handling & JSON</li>
+                        <li>Error Handling</li>
+                        <li>Classes & OOP</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="success-box" style="margin-top: 30px;">
+                <strong>🎉 You now have a solid Python foundation for automation testing!</strong>
+            </div>
+        </div>
+
+        <!-- SECTION 2: VIRTUAL ENVIRONMENTS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Virtual Environments</h2>
+            <p>Isolate project dependencies</p>
+        </div>
+
+        <!-- Slide 14: Why Virtual Environments? -->
+        <div class="slide">
+            <h2>Why Virtual Environments?</h2>
+
+            <div class="warning-box">
+                <strong>The Problem:</strong> Different projects need different package versions
+            </div>
+
+            <div style="margin-top: 30px;">
+                <p><strong>Without virtual environments:</strong></p>
+                <ul>
+                    <li>Project A needs pytest 7.0</li>
+                    <li>Project B needs pytest 8.0</li>
+                    <li>Both installed globally = CONFLICT! 💥</li>
+                </ul>
+
+                <p style="margin-top: 30px;"><strong>With virtual environments:</strong></p>
+                <ul>
+                    <li>Each project has its own isolated environment</li>
+                    <li>No conflicts between projects</li>
+                    <li>Clean, reproducible setups</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <strong>Best Practice:</strong> Always use a virtual environment for your projects!
+            </div>
+        </div>
+
+        <!-- Slide 15: Creating Virtual Environment -->
+        <div class="slide">
+            <h2>Creating a Virtual Environment</h2>
+
+            <div class="code-block">
+<span class="comment"># Navigate to your project folder</span>
+cd my_automation_project
+
+<span class="comment"># Create virtual environment (named 'venv')</span>
+python -m venv venv
+
+<span class="comment"># On Windows: Activate it</span>
+venv\Scripts\activate
+
+<span class="comment"># On Mac/Linux: Activate it</span>
+source venv/bin/activate
+
+<span class="comment"># You'll see (venv) in your terminal prompt</span>
+(venv) C:\my_automation_project>
+            </div>
+
+            <div class="info-box">
+                <strong>venv folder:</strong> Contains Python interpreter and all installed packages for this project
+            </div>
+        </div>
+
+        <!-- Slide 16: Using Virtual Environment -->
+        <div class="slide">
+            <h2>Working with Virtual Environments</h2>
+
+            <div class="code-block">
+<span class="comment"># After activation, install packages</span>
+pip install playwright pytest
+
+<span class="comment"># Check installed packages</span>
+pip list
+
+<span class="comment"># Deactivate when done</span>
+deactivate
+
+<span class="comment"># Next time you work on this project:</span>
+<span class="comment"># 1. Activate the venv</span>
+venv\Scripts\activate
+<span class="comment"># 2. Start coding!</span>
+            </div>
+
+            <div class="success-box">
+                <strong>Remember:</strong> Always activate your venv before working on your project!
+            </div>
+        </div>
+
+        <!-- Slide 17: .gitignore -->
+        <div class="slide">
+            <h2>Don't Commit Virtual Environment!</h2>
+
+            <div class="warning-box">
+                <strong>Important:</strong> Never commit the venv folder to Git!
+            </div>
+
+            <p style="margin-top: 30px;"><strong>Create a .gitignore file:</strong></p>
+
+            <div class="code-block">
+<span class="comment"># .gitignore</span>
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+*.log
+screenshots/
+test-results/
+            </div>
+
+            <div class="info-box">
+                <strong>Why?</strong> venv is large and machine-specific. Other developers create their own venv.
+            </div>
+        </div>
+
+        <!-- SECTION 3: PROJECT STRUCTURE -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Project Structure Best Practices</h2>
+            <p>Organize your automation project</p>
+        </div>
+
+        <!-- Slide 18: Ideal Project Structure -->
+        <div class="slide">
+            <h2>Recommended Project Structure</h2>
+
+            <div class="code-block">
+my_automation_project/
+│
+├── venv/                      <span class="comment"># Virtual environment (don't commit)</span>
+├── tests/                     <span class="comment"># All test files</span>
+│   ├── test_login.py
+│   ├── test_checkout.py
+│   └── test_search.py
+│
+├── pages/                     <span class="comment"># Page Object Model classes</span>
+│   ├── base_page.py
+│   ├── login_page.py
+│   └── home_page.py
+│
+├── utils/                     <span class="comment"># Helper functions</span>
+│   ├── config.py
+│   └── helpers.py
+│
+├── test_data/                 <span class="comment"># Test data files</span>
+│   └── users.json
+│
+├── requirements.txt           <span class="comment"># Project dependencies</span>
+├── pytest.ini                 <span class="comment"># Pytest configuration</span>
+└── .gitignore                 <span class="comment"># Git ignore rules</span>
+            </div>
+        </div>
+
+        <!-- Slide 19: Test Files Naming -->
+        <div class="slide">
+            <h2>Naming Conventions</h2>
+
+            <div class="success-box">
+                <strong>Test Files:</strong> Must start with <code>test_</code> or end with <code>_test.py</code>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># ✅ Good test file names</span>
+test_login.py
+test_user_registration.py
+test_api_endpoints.py
+
+<span class="comment"># ❌ Bad test file names (pytest won't find them)</span>
+login_test.py
+tests.py
+my_login_tests.py
+            </div>
+
+            <div class="info-box">
+                <strong>Test Functions:</strong> Must start with <code>test_</code>
+            </div>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">test_successful_login</span>():
+    <span class="comment"># test code</span>
+
+<span class="keyword">def</span> <span class="function">test_login_with_invalid_password</span>():
+    <span class="comment"># test code</span>
+            </div>
+        </div>
+
+        <!-- SECTION 4: REQUIREMENTS.TXT -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Dependency Management</h2>
+            <p>requirements.txt</p>
+        </div>
+
+        <!-- Slide 20: What is requirements.txt? -->
+        <div class="slide">
+            <h2>requirements.txt</h2>
+
+            <p>A file listing all Python packages your project needs</p>
+
+            <div class="code-block">
+<span class="comment"># requirements.txt</span>
+playwright==1.40.0
+pytest==8.0.0
+pytest-playwright==0.4.4
+python-dotenv==1.0.0
+requests==2.31.0
+            </div>
+
+            <div class="success-box">
+                <strong>Benefit:</strong> Anyone can set up your project with one command!
+            </div>
+        </div>
+
+        <!-- Slide 21: Creating requirements.txt -->
+        <div class="slide">
+            <h2>Creating requirements.txt</h2>
+
+            <div class="code-block">
+<span class="comment"># Method 1: Freeze current packages</span>
+pip freeze > requirements.txt
+
+<span class="comment"># Method 2: Create manually (recommended)</span>
+<span class="comment"># Only list what you actually use</span>
+playwright==1.40.0
+pytest==8.0.0
+pytest-playwright==0.4.4
+            </div>
+
+            <div class="warning-box">
+                <strong>Tip:</strong> Manual creation gives you cleaner, more maintainable requirements
+            </div>
+        </div>
+
+        <!-- Slide 22: Using requirements.txt -->
+        <div class="slide">
+            <h2>Installing from requirements.txt</h2>
+
+            <div class="code-block">
+<span class="comment"># New team member clones your project</span>
+git clone https://github.com/username/automation-project.git
+cd automation-project
+
+<span class="comment"># Create virtual environment</span>
+python -m venv venv
+venv\Scripts\activate
+
+<span class="comment"># Install all dependencies at once!</span>
+pip install -r requirements.txt
+
+<span class="comment"># Install Playwright browsers</span>
+playwright install
+            </div>
+
+            <div class="success-box">
+                <strong>Result:</strong> Exact same environment as everyone else on the team!
+            </div>
+        </div>
+
+        <!-- SECTION 5: TESTING MINDSET -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Introduction to Testing Mindset</h2>
+            <p>Think like a tester</p>
+        </div>
+
+        <!-- Slide 23: What is Testing? -->
+        <div class="slide">
+            <h2>What is Software Testing?</h2>
+
+            <div class="info-box">
+                <strong>Testing:</strong> Verifying that software works as expected and finding bugs before users do
+            </div>
+
+            <div style="margin-top: 30px;">
+                <p><strong>Manual Testing:</strong> Human clicks through the app</p>
+                <ul>
+                    <li>✅ Good for exploratory testing</li>
+                    <li>❌ Slow, repetitive, error-prone</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>Automated Testing:</strong> Code tests the app</p>
+                <ul>
+                    <li>✅ Fast, reliable, repeatable</li>
+                    <li>✅ Runs overnight, on every code change</li>
+                    <li>❌ Requires initial setup time</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 24: Types of Tests -->
+        <div class="slide">
+            <h2>Types of Automated Tests</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="info-box">
+                    <strong>Unit Tests</strong>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Test individual functions in isolation</p>
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="keyword">def</span> <span class="function">test_add</span>():
+    <span class="keyword">assert</span> add(<span class="number">2</span>, <span class="number">3</span>) == <span class="number">5</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>Integration Tests</strong>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Test multiple components together</p>
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="keyword">def</span> <span class="function">test_api_flow</span>():
+    <span class="comment"># Test API + DB</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>E2E (End-to-End) Tests:</strong> Test the entire user flow through the UI
+                <br>← This is what we'll do with Playwright!
+            </div>
+        </div>
+
+        <!-- Slide 25: Testing Pyramid -->
+        <div class="slide">
+            <h2>The Testing Pyramid</h2>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <div style="width: 300px; height: 60px; background: #4a9eff; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                    E2E Tests (Few)
+                </div>
+                <div style="width: 450px; height: 80px; background: #5ec269; margin: 10px auto 0; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                    Integration Tests (Some)
+                </div>
+                <div style="width: 600px; height: 100px; background: #f39c12; margin: 10px auto 0; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                    Unit Tests (Many)
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <strong>Strategy:</strong> Lots of fast unit tests, fewer slow E2E tests
+            </div>
+        </div>
+
+        <!-- Slide 26: Good Test Characteristics -->
+        <div class="slide">
+            <h2>What Makes a Good Test?</h2>
+
+            <div class="success-box">
+                <strong>✅ FAST:</strong> Runs quickly so you can run often
+            </div>
+
+            <div class="success-box">
+                <strong>✅ INDEPENDENT:</strong> Doesn't depend on other tests
+            </div>
+
+            <div class="success-box">
+                <strong>✅ REPEATABLE:</strong> Same result every time
+            </div>
+
+            <div class="success-box">
+                <strong>✅ CLEAR:</strong> Easy to understand what it tests
+            </div>
+
+            <div class="success-box">
+                <strong>✅ FOCUSED:</strong> Tests one thing at a time
+            </div>
+        </div>
+
+        <!-- Slide 27: AAA Pattern -->
+        <div class="slide">
+            <h2>AAA Pattern for Tests</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">test_successful_login</span>(page):
+    <span class="comment"># ARRANGE - Set up test data and preconditions</span>
+    username = <span class="string">"test@example.com"</span>
+    password = <span class="string">"SecurePass123"</span>
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+
+    <span class="comment"># ACT - Perform the action being tested</span>
+    page.<span class="function">fill</span>(<span class="string">"#username"</span>, username)
+    page.<span class="function">fill</span>(<span class="string">"#password"</span>, password)
+    page.<span class="function">click</span>(<span class="string">"button[type='submit']"</span>)
+
+    <span class="comment"># ASSERT - Verify the expected outcome</span>
+    <span class="keyword">assert</span> page.<span class="function">is_visible</span>(<span class="string">".dashboard"</span>)
+    <span class="keyword">assert</span> <span class="string">"Welcome"</span> <span class="keyword">in</span> page.<span class="function">text_content</span>(<span class="string">".user-greeting"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>AAA = Arrange, Act, Assert</strong> - Standard test structure
+            </div>
+        </div>
+
+        <!-- SECTION 6: PROJECT SETUP -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Setting Up Your First Automation Project</h2>
+            <p>Let's build it together!</p>
+        </div>
+
+        <!-- Slide 28: Step 1 - Create Project -->
+        <div class="slide">
+            <h2>Step 1: Create Project Structure</h2>
+
+            <div class="code-block">
+<span class="comment"># Create project folder</span>
+mkdir my_first_automation
+cd my_first_automation
+
+<span class="comment"># Create folder structure</span>
+mkdir tests
+mkdir pages
+mkdir utils
+mkdir test_data
+
+<span class="comment"># Create empty files</span>
+<span class="comment"># Windows:</span>
+type nul > tests\__init__.py
+type nul > pages\__init__.py
+type nul > utils\__init__.py
+
+<span class="comment"># Mac/Linux:</span>
+touch tests/__init__.py
+touch pages/__init__.py
+touch utils/__init__.py
+            </div>
+
+            <div class="info-box">
+                <strong>__init__.py:</strong> Makes folders into Python packages
+            </div>
+        </div>
+
+        <!-- Slide 29: Step 2 - Virtual Environment -->
+        <div class="slide">
+            <h2>Step 2: Set Up Virtual Environment</h2>
+
+            <div class="code-block">
+<span class="comment"># Create virtual environment</span>
+python -m venv venv
+
+<span class="comment"># Activate it (Windows)</span>
+venv\Scripts\activate
+
+<span class="comment"># Activate it (Mac/Linux)</span>
+source venv/bin/activate
+
+<span class="comment"># Verify activation - you should see (venv)</span>
+(venv) C:\my_first_automation>
+            </div>
+
+            <div class="success-box">
+                <strong>✓ Virtual environment ready!</strong> Now we can install packages.
+            </div>
+        </div>
+
+        <!-- Slide 30: Step 3 - Create requirements.txt -->
+        <div class="slide">
+            <h2>Step 3: Create requirements.txt</h2>
+
+            <div class="code-block">
+<span class="comment"># Create requirements.txt file with these contents:</span>
+
+playwright==1.40.0
+pytest==8.0.0
+pytest-playwright==0.4.4
+python-dotenv==1.0.0
+            </div>
+
+            <p style="margin-top: 30px;"><strong>What each package does:</strong></p>
+            <ul>
+                <li><strong>playwright:</strong> Browser automation library</li>
+                <li><strong>pytest:</strong> Testing framework</li>
+                <li><strong>pytest-playwright:</strong> Pytest integration for Playwright</li>
+                <li><strong>python-dotenv:</strong> Load environment variables from .env file</li>
+            </ul>
+        </div>
+
+        <!-- Slide 31: Step 4 - Install Dependencies -->
+        <div class="slide">
+            <h2>Step 4: Install Dependencies</h2>
+
+            <div class="code-block">
+<span class="comment"># Install all packages from requirements.txt</span>
+pip install -r requirements.txt
+
+<span class="comment"># This might take a minute...</span>
+<span class="comment"># You'll see packages being downloaded and installed</span>
+
+<span class="comment"># After installation completes:</span>
+<span class="comment"># Install Playwright browsers (Chrome, Firefox, Safari)</span>
+playwright install
+
+<span class="comment"># Verify installation</span>
+pytest --version
+playwright --version
+            </div>
+
+            <div class="success-box">
+                <strong>✓ All dependencies installed!</strong> Ready to write tests.
+            </div>
+        </div>
+
+        <!-- Slide 32: Step 5 - Create .gitignore -->
+        <div class="slide">
+            <h2>Step 5: Create .gitignore</h2>
+
+            <div class="code-block">
+<span class="comment"># .gitignore - files/folders to exclude from Git</span>
+
+<span class="comment"># Virtual environment</span>
+venv/
+env/
+
+<span class="comment"># Python cache</span>
+__pycache__/
+*.pyc
+*.pyo
+
+<span class="comment"># Pytest cache</span>
+.pytest_cache/
+
+<span class="comment"># Test results</span>
+test-results/
+screenshots/
+videos/
+
+<span class="comment"># Environment variables</span>
+.env
+
+<span class="comment"># IDE settings</span>
+.vscode/
+.idea/
+            </div>
+        </div>
+
+        <!-- Slide 33: Step 6 - Create pytest.ini -->
+        <div class="slide">
+            <h2>Step 6: Create pytest.ini</h2>
+
+            <div class="code-block">
+<span class="comment"># pytest.ini - Pytest configuration</span>
+
+[pytest]
+<span class="comment"># Where to look for tests</span>
+testpaths = tests
+
+<span class="comment"># Markers for organizing tests</span>
+markers =
+    smoke: Quick smoke tests
+    regression: Full regression suite
+    login: Login-related tests
+
+<span class="comment"># Output options</span>
+addopts = -v --tb=short
+            </div>
+
+            <div class="info-box">
+                <strong>Usage:</strong> Run specific test groups with <code>pytest -m smoke</code>
+            </div>
+        </div>
+
+        <!-- Slide 34: Step 7 - Create Config File -->
+        <div class="slide">
+            <h2>Step 7: Create Configuration</h2>
+
+            <div class="code-block">
+<span class="comment"># utils/config.py</span>
+
+<span class="keyword">import</span> os
+<span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv
+
+<span class="comment"># Load environment variables from .env file</span>
+<span class="function">load_dotenv</span>()
+
+<span class="comment"># Base URL for tests</span>
+BASE_URL = os.<span class="function">getenv</span>(<span class="string">"BASE_URL"</span>, <span class="string">"https://example.com"</span>)
+
+<span class="comment"># Browser settings</span>
+HEADLESS = os.<span class="function">getenv</span>(<span class="string">"HEADLESS"</span>, <span class="string">"False"</span>) == <span class="string">"True"</span>
+BROWSER = os.<span class="function">getenv</span>(<span class="string">"BROWSER"</span>, <span class="string">"chromium"</span>)
+
+<span class="comment"># Timeouts (in milliseconds)</span>
+DEFAULT_TIMEOUT = <span class="number">30000</span>
+NAVIGATION_TIMEOUT = <span class="number">60000</span>
+            </div>
+        </div>
+
+        <!-- Slide 35: Step 8 - Create .env File -->
+        <div class="slide">
+            <h2>Step 8: Create .env File</h2>
+
+            <div class="code-block">
+<span class="comment"># .env - Environment-specific variables (don't commit!)</span>
+
+BASE_URL=https://example.com
+HEADLESS=False
+BROWSER=chromium
+
+<span class="comment"># Test credentials (never commit real credentials!)</span>
+TEST_USERNAME=test@example.com
+TEST_PASSWORD=TestPassword123
+            </div>
+
+            <div class="warning-box">
+                <strong>Security:</strong> Never commit .env to Git! It's in .gitignore.
+            </div>
+
+            <div class="info-box">
+                <strong>Create .env.example:</strong> Template without real credentials
+            </div>
+        </div>
+
+        <!-- Slide 36: Your First Test File -->
+        <div class="slide">
+            <h2>Your First Test - test_example.py</h2>
+
+            <div class="code-block">
+<span class="comment"># tests/test_example.py</span>
+
+<span class="keyword">import</span> pytest
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page
+
+<span class="keyword">def</span> <span class="function">test_google_search</span>(page: Page):
+    <span class="comment"># Navigate to Google</span>
+    page.<span class="function">goto</span>(<span class="string">"https://www.google.com"</span>)
+
+    <span class="comment"># Verify page loaded</span>
+    <span class="keyword">assert</span> page.<span class="function">title</span>() == <span class="string">"Google"</span>
+
+    <span class="comment"># Search for something</span>
+    page.<span class="function">fill</span>(<span class="string">"textarea[name='q']"</span>, <span class="string">"Playwright Python"</span>)
+    page.<span class="function">press</span>(<span class="string">"textarea[name='q']"</span>, <span class="string">"Enter"</span>)
+
+    <span class="comment"># Wait for results</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">"#search"</span>)
+
+    <span class="comment"># Verify results appeared</span>
+    <span class="keyword">assert</span> page.<span class="function">is_visible</span>(<span class="string">"#search"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 37: Running Your First Test -->
+        <div class="slide">
+            <h2>Running Your Test</h2>
+
+            <div class="code-block">
+<span class="comment"># Make sure venv is activated!</span>
+(venv) C:\my_first_automation>
+
+<span class="comment"># Run all tests</span>
+pytest
+
+<span class="comment"># Run with more details</span>
+pytest -v
+
+<span class="comment"># Run specific test file</span>
+pytest tests/test_example.py
+
+<span class="comment"># Run in headed mode (see browser)</span>
+pytest --headed
+
+<span class="comment"># Run in specific browser</span>
+pytest --browser firefox
+            </div>
+
+            <div class="success-box">
+                <strong>🎉 If test passes:</strong> You've successfully set up your automation project!
+            </div>
+        </div>
+
+        <!-- Slide 38: Final Project Structure -->
+        <div class="slide">
+            <h2>Your Complete Project Structure</h2>
+
+            <div class="code-block">
+my_first_automation/
+│
+├── venv/                      <span class="comment"># ✓ Created</span>
+├── tests/                     <span class="comment"># ✓ Created</span>
+│   ├── __init__.py
+│   └── test_example.py        <span class="comment"># ✓ Your first test!</span>
+│
+├── pages/                     <span class="comment"># ✓ Created (for later)</span>
+│   └── __init__.py
+│
+├── utils/                     <span class="comment"># ✓ Created</span>
+│   ├── __init__.py
+│   └── config.py              <span class="comment"># ✓ Configuration</span>
+│
+├── test_data/                 <span class="comment"># ✓ Created (for later)</span>
+│
+├── requirements.txt           <span class="comment"># ✓ Dependencies listed</span>
+├── pytest.ini                 <span class="comment"># ✓ Pytest config</span>
+├── .env                       <span class="comment"># ✓ Environment vars</span>
+├── .env.example               <span class="comment"># ✓ Template</span>
+└── .gitignore                 <span class="comment"># ✓ Git exclusions</span>
+            </div>
+        </div>
+
+        <!-- SECTION 7: PLAYWRIGHT PREPARATION -->
+        <div class="slide section-slide">
+            <h1>Part 7</h1>
+            <h2>Preparing for Playwright</h2>
+            <p>Installation checklist</p>
+        </div>
+
+        <!-- Slide 39: Playwright Installation Checklist -->
+        <div class="slide">
+            <h2>Playwright Installation Checklist</h2>
+
+            <div class="success-box">
+                <strong>✓ Step 1:</strong> Python 3.1x installed
+            </div>
+
+            <div class="success-box">
+                <strong>✓ Step 2:</strong> Virtual environment created and activated
+            </div>
+
+            <div class="success-box">
+                <strong>✓ Step 3:</strong> Playwright installed via pip
+            </div>
+
+            <div class="success-box">
+                <strong>✓ Step 4:</strong> Browser drivers installed (<code>playwright install</code>)
+            </div>
+
+            <div class="success-box">
+                <strong>✓ Step 5:</strong> pytest and pytest-playwright installed
+            </div>
+        </div>
+
+        <!-- Slide 40: Verify Installation -->
+        <div class="slide">
+            <h2>Verify Your Setup</h2>
+
+            <div class="code-block">
+<span class="comment"># Check Python version (should be 3.1x)</span>
+python --version
+
+<span class="comment"># Check virtual environment is activated (should see 'venv')</span>
+<span class="comment"># Windows:</span>
+where python
+<span class="comment"># Should show path inside venv folder</span>
+
+<span class="comment"># Check pytest is installed</span>
+pytest --version
+
+<span class="comment"># Check playwright is installed</span>
+playwright --version
+
+<span class="comment"># List installed packages</span>
+pip list | findstr playwright
+pip list | findstr pytest
+            </div>
+        </div>
+
+        <!-- Slide 41: Playwright Browsers -->
+        <div class="slide">
+            <h2>Playwright Browsers</h2>
+
+            <p>Playwright installs and manages browser versions for you:</p>
+
+            <div class="info-box">
+                <strong>Chromium:</strong> Open-source version of Chrome (default)
+            </div>
+
+            <div class="info-box">
+                <strong>Firefox:</strong> Mozilla Firefox
+            </div>
+
+            <div class="info-box">
+                <strong>WebKit:</strong> Safari's engine (works on Windows/Linux too!)
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Install all browsers</span>
+playwright install
+
+<span class="comment"># Install specific browser</span>
+playwright install chromium
+playwright install firefox
+playwright install webkit
+            </div>
+        </div>
+
+        <!-- Slide 42: Common Setup Issues -->
+        <div class="slide">
+            <h2>Common Setup Issues & Solutions</h2>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> "playwright: command not found"
+                <br><strong>Solution:</strong> Make sure venv is activated
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> "ModuleNotFoundError: No module named 'playwright'"
+                <br><strong>Solution:</strong> Run <code>pip install playwright</code>
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> Tests can't find browsers
+                <br><strong>Solution:</strong> Run <code>playwright install</code>
+            </div>
+
+            <div class="warning-box">
+                <strong>Issue:</strong> Wrong Python version
+                <br><strong>Solution:</strong> Create venv with correct Python: <code>python3.11 -m venv venv</code>
+            </div>
+        </div>
+
+        <!-- Slide 43: Useful Pytest Commands -->
+        <div class="slide">
+            <h2>Useful Pytest Commands</h2>
+
+            <div class="code-block">
+<span class="comment"># Run all tests</span>
+pytest
+
+<span class="comment"># Run specific test file</span>
+pytest tests/test_login.py
+
+<span class="comment"># Run specific test function</span>
+pytest tests/test_login.py::test_successful_login
+
+<span class="comment"># Run with verbose output</span>
+pytest -v
+
+<span class="comment"># Run tests with specific marker</span>
+pytest -m smoke
+
+<span class="comment"># Run in headed mode (see browser)</span>
+pytest --headed
+
+<span class="comment"># Run with specific browser</span>
+pytest --browser firefox
+
+<span class="comment"># Stop on first failure</span>
+pytest -x
+            </div>
+        </div>
+
+        <!-- Slide 44: Next Steps -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+
+            <div class="info-box">
+                <strong>Lecture 13:</strong> Introduction to Playwright
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Playwright basics</li>
+                    <li>Page object interactions</li>
+                    <li>Locators and selectors</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>Lecture 14:</strong> Writing Your First Tests
+                <ul style="margin-top: 10px; font-size: 0.9em;">
+                    <li>Test structure</li>
+                    <li>Assertions</li>
+                    <li>Fixtures</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <strong>You're ready!</strong> Python foundation ✓ + Project setup ✓ = Time for automation! 🚀
+            </div>
+        </div>
+
+        <!-- Slide 45: Practice Exercise -->
+        <div class="slide">
+            <h2>Practice Exercise</h2>
+
+            <div class="info-box">
+                <strong>Before Next Lecture:</strong>
+                <ol>
+                    <li>Create your automation project folder</li>
+                    <li>Set up virtual environment</li>
+                    <li>Create requirements.txt and install dependencies</li>
+                    <li>Run the example test successfully</li>
+                    <li>Explore: Try running tests in different browsers</li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <strong>Troubleshooting?</strong> Check the exercises/SOLUTIONS.md file or ask questions!
+            </div>
+        </div>
+
+        <!-- Slide 46: Summary -->
+        <div class="slide">
+            <h2>Lecture 12 Summary</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <div class="success-box">
+                        <strong>✓ Python Review</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">All fundamentals consolidated</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ Virtual Environments</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Isolated project dependencies</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ Project Structure</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Best practices for organization</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="success-box">
+                        <strong>✓ requirements.txt</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Dependency management</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ Testing Mindset</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">AAA pattern, test pyramid</p>
+                    </div>
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>✓ Playwright Setup</strong>
+                        <p style="font-size: 0.85em; margin-top: 5px;">Ready for automation!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px; text-align: center;">
+                <strong>🎉 Congratulations! You're ready to start automation testing with Playwright!</strong>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🚀</div>
+            <h1>Ready for Playwright!</h1>
+            <div class="subtitle">See you in Lecture 13</div>
+            <p style="margin-top: 50px; font-size: 1.2em;">Questions?</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <!-- Global JavaScript for all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
