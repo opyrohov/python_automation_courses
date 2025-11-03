@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 11: Advanced Python Concepts</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">45</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 11</h1>
+            <div class="subtitle">Advanced Python Concepts</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>List and Dictionary Comprehensions</li>
+                <li>*args and **kwargs in Functions</li>
+                <li>Decorators Basics</li>
+                <li>Working with Datetime Module</li>
+                <li>String Methods Deep Dive</li>
+                <li>Applying Concepts to Test Automation</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Level up your Python skills for professional test automation!
+            </div>
+        </div>
+
+        <!-- SECTION 1: COMPREHENSIONS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>List & Dictionary Comprehensions</h2>
+            <p>Write elegant, efficient Python code</p>
+        </div>
+
+        <!-- Slide 3: What Are Comprehensions? -->
+        <div class="slide">
+            <h2>What Are Comprehensions?</h2>
+            <p>Concise way to create lists, dictionaries, and sets from existing iterables</p>
+
+            <div class="code-block">
+<span class="comment"># Traditional loop</span>
+squares = []
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    squares.<span class="function">append</span>(x ** <span class="number">2</span>)
+
+<span class="comment"># List comprehension (one line!)</span>
+squares = [x ** <span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>)]
+            </div>
+
+            <div class="success-box">
+                <strong>Benefits:</strong> More readable, faster execution, more Pythonic!
+            </div>
+        </div>
+
+        <!-- Slide 4: List Comprehension Syntax -->
+        <div class="slide">
+            <h2>List Comprehension Syntax</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic syntax</span>
+[expression <span class="keyword">for</span> item <span class="keyword">in</span> iterable]
+
+<span class="comment"># With condition (filter)</span>
+[expression <span class="keyword">for</span> item <span class="keyword">in</span> iterable <span class="keyword">if</span> condition]
+
+<span class="comment"># With if-else (transform)</span>
+[expr_if_true <span class="keyword">if</span> condition <span class="keyword">else</span> expr_if_false <span class="keyword">for</span> item <span class="keyword">in</span> iterable]
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Examples</span>
+evens = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>) <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span>]
+<span class="comment"># [0, 2, 4, 6, 8]</span>
+
+labels = [<span class="string">"even"</span> <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">else</span> <span class="string">"odd"</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>)]
+<span class="comment"># ['even', 'odd', 'even', 'odd', 'even']</span>
+            </div>
+        </div>
+
+        <!-- Slide 5: Dictionary Comprehensions -->
+        <div class="slide">
+            <h2>Dictionary Comprehensions</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic syntax</span>
+{key_expr: value_expr <span class="keyword">for</span> item <span class="keyword">in</span> iterable}
+
+<span class="comment"># Example: Create squares dictionary</span>
+squares = {x: x ** <span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="number">6</span>)}
+<span class="comment"># {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}</span>
+
+<span class="comment"># Example: Zip two lists</span>
+names = [<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Charlie"</span>]
+ages = [<span class="number">25</span>, <span class="number">30</span>, <span class="number">35</span>]
+people = {name: age <span class="keyword">for</span> name, age <span class="keyword">in</span> <span class="function">zip</span>(names, ages)}
+<span class="comment"># {'Alice': 25, 'Bob': 30, 'Charlie': 35}</span>
+            </div>
+
+            <div class="info-box">
+                <strong>Use Case:</strong> Transform data, filter dictionaries, create lookups
+            </div>
+        </div>
+
+        <!-- Slide 6: Comprehensions in Testing -->
+        <div class="slide">
+            <h2>Comprehensions in Test Automation</h2>
+
+            <div class="code-block">
+<span class="comment"># Filter test data</span>
+all_users = get_users()
+active_admins = [u <span class="keyword">for</span> u <span class="keyword">in</span> all_users
+                 <span class="keyword">if</span> u[<span class="string">"active"</span>] <span class="keyword">and</span> u[<span class="string">"role"</span>] == <span class="string">"admin"</span>]
+
+<span class="comment"># Generate test selectors</span>
+button_ids = [<span class="string">"submit"</span>, <span class="string">"cancel"</span>, <span class="string">"delete"</span>]
+selectors = [<span class="string">f"button#{btn}"</span> <span class="keyword">for</span> btn <span class="keyword">in</span> button_ids]
+
+<span class="comment"># Extract failed test names</span>
+results = get_test_results()
+failed = [t[<span class="string">"name"</span>] <span class="keyword">for</span> t <span class="keyword">in</span> results <span class="keyword">if</span> t[<span class="string">"status"</span>] == <span class="string">"failed"</span>]
+
+<span class="comment"># Generate test combinations</span>
+browsers = [<span class="string">"chrome"</span>, <span class="string">"firefox"</span>]
+envs = [<span class="string">"dev"</span>, <span class="string">"staging"</span>]
+combos = [{<span class="string">"browser"</span>: b, <span class="string">"env"</span>: e} <span class="keyword">for</span> b <span class="keyword">in</span> browsers <span class="keyword">for</span> e <span class="keyword">in</span> envs]
+            </div>
+        </div>
+
+        <!-- SECTION 2: ARGS AND KWARGS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>*args and **kwargs</h2>
+            <p>Flexible function signatures</p>
+        </div>
+
+        <!-- Slide 7: What Are *args? -->
+        <div class="slide">
+            <h2>*args - Variable Positional Arguments</h2>
+
+            <div class="code-block">
+<span class="comment"># Accept any number of positional arguments</span>
+<span class="keyword">def</span> <span class="function">sum_numbers</span>(*args):
+    <span class="keyword">return</span> <span class="function">sum</span>(args)
+
+<span class="function">print</span>(<span class="function">sum_numbers</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))        <span class="comment"># 6</span>
+<span class="function">print</span>(<span class="function">sum_numbers</span>(<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>))  <span class="comment"># 100</span>
+
+
+<span class="comment"># *args is a tuple</span>
+<span class="keyword">def</span> <span class="function">print_args</span>(*args):
+    <span class="function">print</span>(<span class="function">type</span>(args))    <span class="comment"># &lt;class 'tuple'&gt;</span>
+    <span class="keyword">for</span> arg <span class="keyword">in</span> args:
+        <span class="function">print</span>(arg)
+            </div>
+
+            <div class="success-box">
+                <strong>Use Case:</strong> Functions that need to work with varying numbers of arguments
+            </div>
+        </div>
+
+        <!-- Slide 8: What Are **kwargs? -->
+        <div class="slide">
+            <h2>**kwargs - Variable Keyword Arguments</h2>
+
+            <div class="code-block">
+<span class="comment"># Accept any number of keyword arguments</span>
+<span class="keyword">def</span> <span class="function">print_info</span>(**kwargs):
+    <span class="keyword">for</span> key, value <span class="keyword">in</span> kwargs.<span class="function">items</span>():
+        <span class="function">print</span>(<span class="string">f"</span>{key}<span class="string">: </span>{value}<span class="string">"</span>)
+
+<span class="function">print_info</span>(name=<span class="string">"Alice"</span>, age=<span class="number">25</span>, city=<span class="string">"NYC"</span>)
+<span class="comment"># name: Alice</span>
+<span class="comment"># age: 25</span>
+<span class="comment"># city: NYC</span>
+
+
+<span class="comment"># **kwargs is a dictionary</span>
+<span class="keyword">def</span> <span class="function">show_kwargs</span>(**kwargs):
+    <span class="function">print</span>(<span class="function">type</span>(kwargs))    <span class="comment"># &lt;class 'dict'&gt;</span>
+    <span class="function">print</span>(kwargs)
+            </div>
+        </div>
+
+        <!-- Slide 9: Combining Parameters -->
+        <div class="slide">
+            <h2>Combining Parameter Types</h2>
+
+            <div class="code-block">
+<span class="comment"># Order matters!</span>
+<span class="keyword">def</span> <span class="function">flexible_function</span>(required, *args, default=<span class="string">"value"</span>, **kwargs):
+    <span class="function">print</span>(<span class="string">f"Required: </span>{required}<span class="string">"</span>)
+    <span class="function">print</span>(<span class="string">f"Args: </span>{args}<span class="string">"</span>)
+    <span class="function">print</span>(<span class="string">f"Default: </span>{default}<span class="string">"</span>)
+    <span class="function">print</span>(<span class="string">f"Kwargs: </span>{kwargs}<span class="string">"</span>)
+
+<span class="function">flexible_function</span>(
+    <span class="string">"must_have"</span>,
+    <span class="string">"extra1"</span>,
+    <span class="string">"extra2"</span>,
+    default=<span class="string">"custom"</span>,
+    option1=<span class="string">"val1"</span>,
+    option2=<span class="string">"val2"</span>
+)
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Parameter Order:</strong><br>
+                1. Regular parameters<br>
+                2. *args<br>
+                3. Default parameters<br>
+                4. **kwargs
+            </div>
+        </div>
+
+        <!-- Slide 10: Args/Kwargs in Testing -->
+        <div class="slide">
+            <h2>*args/**kwargs in Test Automation</h2>
+
+            <div class="code-block">
+<span class="comment"># Check multiple elements</span>
+<span class="keyword">def</span> <span class="function">assert_visible</span>(*selectors, timeout=<span class="number">5</span>):
+    <span class="keyword">for</span> sel <span class="keyword">in</span> selectors:
+        page.<span class="function">wait_for_selector</span>(sel, timeout=timeout * <span class="number">1000</span>)
+
+<span class="function">assert_visible</span>(<span class="string">"#header"</span>, <span class="string">".menu"</span>, <span class="string">"#footer"</span>)
+
+
+<span class="comment"># Flexible form filler</span>
+<span class="keyword">def</span> <span class="function">fill_form</span>(**fields):
+    <span class="keyword">for</span> name, value <span class="keyword">in</span> fields.<span class="function">items</span>():
+        page.<span class="function">fill</span>(<span class="string">f"[name='</span>{name}<span class="string">']"</span>, value)
+
+<span class="function">fill_form</span>(username=<span class="string">"test"</span>, email=<span class="string">"t@test.com"</span>, password=<span class="string">"pass"</span>)
+
+
+<span class="comment"># Build query string</span>
+<span class="keyword">def</span> <span class="function">build_url</span>(base, **params):
+    query = <span class="string">"&"</span>.<span class="function">join</span>(<span class="string">f"</span>{k}<span class="string">=</span>{v}<span class="string">"</span> <span class="keyword">for</span> k, v <span class="keyword">in</span> params.<span class="function">items</span>())
+    <span class="keyword">return</span> <span class="string">f"</span>{base}<span class="string">?</span>{query}<span class="string">"</span>
+            </div>
+        </div>
+
+        <!-- SECTION 3: DECORATORS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Decorators Basics</h2>
+            <p>Extend function behavior elegantly</p>
+        </div>
+
+        <!-- Slide 11: What Are Decorators? -->
+        <div class="slide">
+            <h2>What Are Decorators?</h2>
+
+            <p>Functions that modify or enhance other functions without changing their code</p>
+
+            <div class="code-block">
+<span class="comment"># Simple decorator</span>
+<span class="keyword">def</span> <span class="function">my_decorator</span>(func):
+    <span class="keyword">def</span> <span class="function">wrapper</span>():
+        <span class="function">print</span>(<span class="string">"Before function"</span>)
+        <span class="function">func</span>()
+        <span class="function">print</span>(<span class="string">"After function"</span>)
+    <span class="keyword">return</span> wrapper
+
+<span class="comment"># Apply decorator with @ syntax</span>
+@my_decorator
+<span class="keyword">def</span> <span class="function">say_hello</span>():
+    <span class="function">print</span>(<span class="string">"Hello!"</span>)
+
+<span class="function">say_hello</span>()
+<span class="comment"># Output:</span>
+<span class="comment"># Before function</span>
+<span class="comment"># Hello!</span>
+<span class="comment"># After function</span>
+            </div>
+        </div>
+
+        <!-- Slide 12: Decorator with Arguments -->
+        <div class="slide">
+            <h2>Decorators with Function Arguments</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> functools
+
+<span class="keyword">def</span> <span class="function">log_calls</span>(func):
+    @functools.<span class="function">wraps</span>(func)  <span class="comment"># Preserve function metadata</span>
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        <span class="function">print</span>(<span class="string">f"Calling </span>{func.__name__}<span class="string"> with </span>{args}<span class="string">, </span>{kwargs}<span class="string">"</span>)
+        result = <span class="function">func</span>(*args, **kwargs)
+        <span class="function">print</span>(<span class="string">f"Result: </span>{result}<span class="string">"</span>)
+        <span class="keyword">return</span> result
+    <span class="keyword">return</span> wrapper
+
+@log_calls
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+<span class="function">add</span>(<span class="number">5</span>, <span class="number">3</span>)
+<span class="comment"># Calling add with (5, 3), {}</span>
+<span class="comment"># Result: 8</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Always use @functools.wraps</strong> to preserve function name and docstring!
+            </div>
+        </div>
+
+        <!-- Slide 13: Practical Decorators -->
+        <div class="slide">
+            <h2>Practical Decorator Examples</h2>
+
+            <div class="code-block">
+<span class="comment"># Timing decorator</span>
+<span class="keyword">def</span> <span class="function">timer</span>(func):
+    @functools.<span class="function">wraps</span>(func)
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        start = time.<span class="function">time</span>()
+        result = <span class="function">func</span>(*args, **kwargs)
+        duration = time.<span class="function">time</span>() - start
+        <span class="function">print</span>(<span class="string">f"</span>{func.__name__}<span class="string"> took </span>{duration:.2f}<span class="string">s"</span>)
+        <span class="keyword">return</span> result
+    <span class="keyword">return</span> wrapper
+
+<span class="comment"># Retry decorator</span>
+<span class="keyword">def</span> <span class="function">retry</span>(max_attempts=<span class="number">3</span>):
+    <span class="keyword">def</span> <span class="function">decorator</span>(func):
+        @functools.<span class="function">wraps</span>(func)
+        <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+            <span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="function">range</span>(max_attempts):
+                <span class="keyword">try</span>:
+                    <span class="keyword">return</span> <span class="function">func</span>(*args, **kwargs)
+                <span class="keyword">except</span> <span class="built-in">Exception</span> <span class="keyword">as</span> e:
+                    <span class="keyword">if</span> attempt == max_attempts - <span class="number">1</span>:
+                        <span class="keyword">raise</span>
+        <span class="keyword">return</span> wrapper
+    <span class="keyword">return</span> decorator
+            </div>
+        </div>
+
+        <!-- Slide 14: Decorators in Testing -->
+        <div class="slide">
+            <h2>Decorators in Test Automation</h2>
+
+            <div class="code-block">
+<span class="comment"># Screenshot on failure</span>
+<span class="keyword">def</span> <span class="function">screenshot_on_failure</span>(func):
+    @functools.<span class="function">wraps</span>(func)
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        <span class="keyword">try</span>:
+            <span class="keyword">return</span> <span class="function">func</span>(*args, **kwargs)
+        <span class="keyword">except</span> <span class="built-in">Exception</span>:
+            page.<span class="function">screenshot</span>(path=<span class="string">f"</span>{func.__name__}<span class="string">_failed.png"</span>)
+            <span class="keyword">raise</span>
+    <span class="keyword">return</span> wrapper
+
+<span class="comment"># Retry flaky tests</span>
+@retry(max_attempts=<span class="number">3</span>)
+@screenshot_on_failure
+<span class="keyword">def</span> <span class="function">test_flaky_feature</span>():
+    <span class="comment"># Test code here</span>
+    <span class="keyword">pass</span>
+            </div>
+
+            <div class="success-box">
+                <strong>Use Cases:</strong> Retry logic, logging, timing, screenshots, cleanup, authentication
+            </div>
+        </div>
+
+        <!-- SECTION 4: DATETIME -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Working with Datetime</h2>
+            <p>Handle dates and times like a pro</p>
+        </div>
+
+        <!-- Slide 15: Datetime Basics -->
+        <div class="slide">
+            <h2>Datetime Module Basics</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, date, timedelta
+
+<span class="comment"># Current date and time</span>
+now = datetime.<span class="function">now</span>()
+today = date.<span class="function">today</span>()
+
+<span class="comment"># Create specific dates</span>
+birthday = <span class="function">date</span>(<span class="number">1990</span>, <span class="number">5</span>, <span class="number">15</span>)
+meeting = <span class="function">datetime</span>(<span class="number">2024</span>, <span class="number">12</span>, <span class="number">25</span>, <span class="number">14</span>, <span class="number">30</span>)
+
+<span class="comment"># Date components</span>
+<span class="function">print</span>(now.year, now.month, now.day)
+<span class="function">print</span>(now.hour, now.minute, now.second)
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Date arithmetic</span>
+tomorrow = today + <span class="function">timedelta</span>(days=<span class="number">1</span>)
+next_week = today + <span class="function">timedelta</span>(weeks=<span class="number">1</span>)
+future = now + <span class="function">timedelta</span>(days=<span class="number">7</span>, hours=<span class="number">3</span>, minutes=<span class="number">30</span>)
+            </div>
+        </div>
+
+        <!-- Slide 16: Formatting Dates -->
+        <div class="slide">
+            <h2>Formatting and Parsing Dates</h2>
+
+            <div class="code-block">
+<span class="comment"># Format datetime to string (strftime)</span>
+now = datetime.<span class="function">now</span>()
+<span class="function">print</span>(now.<span class="function">strftime</span>(<span class="string">"%Y-%m-%d"</span>))          <span class="comment"># 2024-12-25</span>
+<span class="function">print</span>(now.<span class="function">strftime</span>(<span class="string">"%m/%d/%Y"</span>))          <span class="comment"># 12/25/2024</span>
+<span class="function">print</span>(now.<span class="function">strftime</span>(<span class="string">"%B %d, %Y"</span>))        <span class="comment"># December 25, 2024</span>
+<span class="function">print</span>(now.<span class="function">strftime</span>(<span class="string">"%I:%M %p"</span>))          <span class="comment"># 02:30 PM</span>
+
+<span class="comment"># Parse string to datetime (strptime)</span>
+date_str = <span class="string">"2024-12-25"</span>
+parsed = datetime.<span class="function">strptime</span>(date_str, <span class="string">"%Y-%m-%d"</span>)
+
+date_str2 = <span class="string">"December 25, 2024"</span>
+parsed2 = datetime.<span class="function">strptime</span>(date_str2, <span class="string">"%B %d, %Y"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>Common Format Codes:</strong><br>
+                %Y=year, %m=month, %d=day, %H=hour(24), %I=hour(12), %M=minute, %S=second, %p=AM/PM
+            </div>
+        </div>
+
+        <!-- Slide 17: Datetime in Testing -->
+        <div class="slide">
+            <h2>Datetime in Test Automation</h2>
+
+            <div class="code-block">
+<span class="comment"># Generate test dates</span>
+<span class="keyword">def</span> <span class="function">generate_test_dates</span>(days):
+    today = date.<span class="function">today</span>()
+    <span class="keyword">return</span> [today + <span class="function">timedelta</span>(days=i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(days)]
+
+<span class="comment"># Test expiration scenarios</span>
+today = datetime.<span class="function">now</span>()
+test_cases = {
+    <span class="string">"expired"</span>: today - <span class="function">timedelta</span>(days=<span class="number">1</span>),
+    <span class="string">"expires_today"</span>: today,
+    <span class="string">"expires_soon"</span>: today + <span class="function">timedelta</span>(days=<span class="number">7</span>),
+}
+
+<span class="comment"># Format for date inputs</span>
+<span class="keyword">def</span> <span class="function">format_for_input</span>(date_obj):
+    <span class="keyword">return</span> date_obj.<span class="function">strftime</span>(<span class="string">"%m/%d/%Y"</span>)
+
+<span class="comment"># Timestamp for screenshots</span>
+timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d_%H%M%S"</span>)
+filename = <span class="string">f"screenshot_</span>{timestamp}<span class="string">.png"</span>
+            </div>
+        </div>
+
+        <!-- SECTION 5: STRING METHODS -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>String Methods Deep Dive</h2>
+            <p>Master essential string operations</p>
+        </div>
+
+        <!-- Slide 18: Split and Join -->
+        <div class="slide">
+            <h2>Split and Join</h2>
+
+            <div class="code-block">
+<span class="comment"># SPLIT - Break string into list</span>
+text = <span class="string">"Hello World Python"</span>
+words = text.<span class="function">split</span>()  <span class="comment"># Split on whitespace</span>
+<span class="comment"># ['Hello', 'World', 'Python']</span>
+
+csv = <span class="string">"Alice,25,NYC"</span>
+fields = csv.<span class="function">split</span>(<span class="string">","</span>)  <span class="comment"># Split on comma</span>
+<span class="comment"># ['Alice', '25', 'NYC']</span>
+
+
+<span class="comment"># JOIN - Combine list into string</span>
+words = [<span class="string">"Hello"</span>, <span class="string">"World"</span>]
+joined = <span class="string">" "</span>.<span class="function">join</span>(words)  <span class="comment"># Join with space</span>
+<span class="comment"># 'Hello World'</span>
+
+path_parts = [<span class="string">"home"</span>, <span class="string">"user"</span>, <span class="string">"docs"</span>]
+path = <span class="string">"/"</span>.<span class="function">join</span>(path_parts)  <span class="comment"># Join with slash</span>
+<span class="comment"># 'home/user/docs'</span>
+            </div>
+        </div>
+
+        <!-- Slide 19: Strip and Replace -->
+        <div class="slide">
+            <h2>Strip and Replace</h2>
+
+            <div class="code-block">
+<span class="comment"># STRIP - Remove whitespace</span>
+text = <span class="string">"   Hello World   "</span>
+cleaned = text.<span class="function">strip</span>()       <span class="comment"># Remove from both ends</span>
+<span class="comment"># 'Hello World'</span>
+
+left = text.<span class="function">lstrip</span>()        <span class="comment"># Remove from left</span>
+right = text.<span class="function">rstrip</span>()       <span class="comment"># Remove from right</span>
+
+
+<span class="comment"># REPLACE - Substitute substring</span>
+text = <span class="string">"Hello World"</span>
+new_text = text.<span class="function">replace</span>(<span class="string">"World"</span>, <span class="string">"Python"</span>)
+<span class="comment"># 'Hello Python'</span>
+
+<span class="comment"># Replace all spaces with underscores</span>
+text = <span class="string">"Hello World Python"</span>
+url_safe = text.<span class="function">replace</span>(<span class="string">" "</span>, <span class="string">"_"</span>)
+<span class="comment"># 'Hello_World_Python'</span>
+            </div>
+        </div>
+
+        <!-- Slide 20: Case Methods -->
+        <div class="slide">
+            <h2>Case Conversion Methods</h2>
+
+            <div class="code-block">
+text = <span class="string">"Hello World Python"</span>
+
+text.<span class="function">upper</span>()        <span class="comment"># 'HELLO WORLD PYTHON'</span>
+text.<span class="function">lower</span>()        <span class="comment"># 'hello world python'</span>
+text.<span class="function">title</span>()        <span class="comment"># 'Hello World Python'</span>
+text.<span class="function">capitalize</span>()   <span class="comment"># 'Hello world python'</span>
+
+
+<span class="comment"># Case-insensitive comparison</span>
+name1 = <span class="string">"Alice"</span>
+name2 = <span class="string">"ALICE"</span>
+<span class="keyword">if</span> name1.<span class="function">lower</span>() == name2.<span class="function">lower</span>():
+    <span class="function">print</span>(<span class="string">"Names match!"</span>)
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Validation methods</span>
+<span class="string">"123"</span>.<span class="function">isdigit</span>()      <span class="comment"># True</span>
+<span class="string">"abc"</span>.<span class="function">isalpha</span>()      <span class="comment"># True</span>
+<span class="string">"abc123"</span>.<span class="function">isalnum</span>()   <span class="comment"># True</span>
+<span class="string">"   "</span>.<span class="function">isspace</span>()      <span class="comment"># True</span>
+            </div>
+        </div>
+
+        <!-- Slide 21: Search Methods -->
+        <div class="slide">
+            <h2>Search and Check Methods</h2>
+
+            <div class="code-block">
+<span class="comment"># FIND - Returns position or -1</span>
+text = <span class="string">"Hello World Python"</span>
+pos = text.<span class="function">find</span>(<span class="string">"World"</span>)    <span class="comment"># 6</span>
+pos = text.<span class="function">find</span>(<span class="string">"Java"</span>)     <span class="comment"># -1 (not found)</span>
+
+<span class="comment"># COUNT - Count occurrences</span>
+text = <span class="string">"test test test"</span>
+count = text.<span class="function">count</span>(<span class="string">"test"</span>)   <span class="comment"># 3</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># STARTSWITH / ENDSWITH</span>
+filename = <span class="string">"test_login.py"</span>
+filename.<span class="function">startswith</span>(<span class="string">"test_"</span>)   <span class="comment"># True</span>
+filename.<span class="function">endswith</span>(<span class="string">".py"</span>)        <span class="comment"># True</span>
+
+<span class="comment"># Check multiple extensions</span>
+<span class="keyword">if</span> filename.<span class="function">endswith</span>((<span class="string">".py"</span>, <span class="string">".js"</span>, <span class="string">".ts"</span>)):
+    <span class="function">print</span>(<span class="string">"It's a code file!"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 22: Strings in Testing -->
+        <div class="slide">
+            <h2>String Methods in Test Automation</h2>
+
+            <div class="code-block">
+<span class="comment"># Clean user input</span>
+<span class="keyword">def</span> <span class="function">clean_email</span>(email):
+    <span class="keyword">return</span> email.<span class="function">strip</span>().<span class="function">lower</span>()
+
+<span class="comment"># Build selectors</span>
+<span class="keyword">def</span> <span class="function">build_selector</span>(element_type, text):
+    clean_text = text.<span class="function">lower</span>().<span class="function">replace</span>(<span class="string">" "</span>, <span class="string">"-"</span>)
+    <span class="keyword">return</span> <span class="string">f"[data-testid='</span>{element_type}<span class="string">-</span>{clean_text}<span class="string">']"</span>
+
+<span class="comment"># Parse CSV test data</span>
+<span class="keyword">def</span> <span class="function">parse_test_data</span>(csv_line):
+    fields = csv_line.<span class="function">strip</span>().<span class="function">split</span>(<span class="string">","</span>)
+    <span class="keyword">return</span> {
+        <span class="string">"username"</span>: fields[<span class="number">0</span>],
+        <span class="string">"password"</span>: fields[<span class="number">1</span>],
+        <span class="string">"role"</span>: fields[<span class="number">2</span>]
+    }
+
+<span class="comment"># Extract domain from email</span>
+email = <span class="string">"user@example.com"</span>
+domain = email.<span class="function">split</span>(<span class="string">"@"</span>)[<span class="number">1</span>]  <span class="comment"># 'example.com'</span>
+            </div>
+        </div>
+
+        <!-- SECTION 6: PUTTING IT ALL TOGETHER -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Putting It All Together</h2>
+            <p>Real-world automation patterns</p>
+        </div>
+
+        <!-- Slide 23: Test Data Generator -->
+        <div class="slide">
+            <h2>Example: Test Data Generator</h2>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="class">TestDataGenerator</span>:
+    @<span class="keyword">staticmethod</span>
+    <span class="keyword">def</span> <span class="function">generate_users</span>(count, domain=<span class="string">"test.com"</span>):
+        <span class="string">"""Generate test users using comprehensions"""</span>
+        base_date = datetime.<span class="function">now</span>().<span class="function">date</span>()
+        <span class="keyword">return</span> [
+            {
+                <span class="string">"id"</span>: i,
+                <span class="string">"username"</span>: <span class="string">f"user</span>{i}<span class="string">"</span>,
+                <span class="string">"email"</span>: <span class="string">f"user</span>{i}<span class="string">@</span>{domain}<span class="string">"</span>,
+                <span class="string">"created"</span>: (base_date - <span class="function">timedelta</span>(days=i)).<span class="function">strftime</span>(<span class="string">"%Y-%m-%d"</span>)
+            }
+            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, count + <span class="number">1</span>)
+        ]
+
+    @<span class="keyword">staticmethod</span>
+    <span class="keyword">def</span> <span class="function">generate_orders</span>(*product_ids, **details):
+        <span class="string">"""Generate order using *args and **kwargs"""</span>
+        order = {
+            <span class="string">"order_id"</span>: <span class="string">f"ORD-</span>{datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">'%Y%m%d%H%M%S'</span>)}<span class="string">"</span>,
+            <span class="string">"products"</span>: <span class="function">list</span>(product_ids),
+            <span class="string">"timestamp"</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>()
+        }
+        order.<span class="function">update</span>(details)
+        <span class="keyword">return</span> order
+            </div>
+        </div>
+
+        <!-- Slide 24: Retry Decorator Pattern -->
+        <div class="slide">
+            <h2>Example: Retry with Logging</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">retry_with_log</span>(max_attempts=<span class="number">3</span>, delay=<span class="number">1</span>):
+    <span class="string">"""Retry decorator with logging"""</span>
+    <span class="keyword">def</span> <span class="function">decorator</span>(func):
+        @functools.<span class="function">wraps</span>(func)
+        <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+            <span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, max_attempts + <span class="number">1</span>):
+                <span class="keyword">try</span>:
+                    <span class="function">print</span>(<span class="string">f"[</span>{datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">'%H:%M:%S'</span>)}<span class="string">] Attempt </span>{attempt}<span class="string">"</span>)
+                    result = <span class="function">func</span>(*args, **kwargs)
+                    <span class="keyword">if</span> attempt > <span class="number">1</span>:
+                        <span class="function">print</span>(<span class="string">f"✓ Success on attempt </span>{attempt}<span class="string">"</span>)
+                    <span class="keyword">return</span> result
+                <span class="keyword">except</span> <span class="built-in">Exception</span> <span class="keyword">as</span> e:
+                    <span class="keyword">if</span> attempt == max_attempts:
+                        <span class="function">print</span>(<span class="string">f"✗ Failed after </span>{max_attempts}<span class="string"> attempts"</span>)
+                        <span class="keyword">raise</span>
+                    <span class="function">print</span>(<span class="string">f"✗ Failed: </span>{e}<span class="string">, retrying..."</span>)
+                    time.<span class="function">sleep</span>(delay)
+        <span class="keyword">return</span> wrapper
+    <span class="keyword">return</span> decorator
+
+@retry_with_log(max_attempts=<span class="number">3</span>)
+<span class="keyword">def</span> <span class="function">test_flaky_operation</span>():
+    <span class="comment"># Test code here</span>
+    <span class="keyword">pass</span>
+            </div>
+        </div>
+
+        <!-- Slide 25: URL Builder -->
+        <div class="slide">
+            <h2>Example: Flexible URL Builder</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">build_api_url</span>(base, *paths, **params):
+    <span class="string">"""
+    Build API URL with paths and query parameters
+    Example: build_api_url('api.test.com', 'users', 123, page=1, limit=10)
+    Returns: 'api.test.com/users/123?page=1&limit=10'
+    """</span>
+    <span class="comment"># Join base with paths</span>
+    url = base.<span class="function">rstrip</span>(<span class="string">"/"</span>)
+    <span class="keyword">if</span> paths:
+        path_str = <span class="string">"/"</span>.<span class="function">join</span>(<span class="function">str</span>(p).<span class="function">strip</span>(<span class="string">"/"</span>) <span class="keyword">for</span> p <span class="keyword">in</span> paths)
+        url += <span class="string">f"/</span>{path_str}<span class="string">"</span>
+
+    <span class="comment"># Add query parameters</span>
+    <span class="keyword">if</span> params:
+        query = <span class="string">"&"</span>.<span class="function">join</span>(<span class="string">f"</span>{k}<span class="string">=</span>{v}<span class="string">"</span> <span class="keyword">for</span> k, v <span class="keyword">in</span> params.<span class="function">items</span>())
+        url += <span class="string">f"?</span>{query}<span class="string">"</span>
+
+    <span class="keyword">return</span> url
+
+<span class="comment"># Usage</span>
+url = <span class="function">build_api_url</span>(
+    <span class="string">"https://api.example.com"</span>,
+    <span class="string">"v1"</span>, <span class="string">"users"</span>, <span class="number">123</span>,
+    page=<span class="number">1</span>, limit=<span class="number">10</span>, sort=<span class="string">"name"</span>
+)
+            </div>
+        </div>
+
+        <!-- Slide 26: Test Report -->
+        <div class="slide">
+            <h2>Example: Test Report Generator</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">generate_report</span>(results, **metadata):
+    <span class="string">"""Generate formatted test report"""</span>
+    lines = [<span class="string">"="</span> * <span class="number">60</span>, <span class="string">"TEST REPORT"</span>, <span class="string">"="</span> * <span class="number">60</span>]
+
+    <span class="comment"># Add timestamp</span>
+    timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y-%m-%d %H:%M:%S"</span>)
+    lines.<span class="function">append</span>(<span class="string">f"Generated: </span>{timestamp}<span class="string">"</span>)
+    lines.<span class="function">append</span>(<span class="string">""</span>)
+
+    <span class="comment"># Add metadata</span>
+    <span class="keyword">if</span> metadata:
+        lines.<span class="function">append</span>(<span class="string">"Environment:"</span>)
+        <span class="keyword">for</span> key, value <span class="keyword">in</span> metadata.<span class="function">items</span>():
+            lines.<span class="function">append</span>(<span class="string">f"  </span>{key.<span class="function">title</span>()}<span class="string">: </span>{value}<span class="string">"</span>)
+        lines.<span class="function">append</span>(<span class="string">""</span>)
+
+    <span class="comment"># Calculate statistics using comprehensions</span>
+    total = <span class="function">len</span>(results)
+    passed = <span class="function">sum</span>(<span class="number">1</span> <span class="keyword">for</span> r <span class="keyword">in</span> results <span class="keyword">if</span> r[<span class="string">"status"</span>] == <span class="string">"passed"</span>)
+    duration = <span class="function">sum</span>(r[<span class="string">"duration"</span>] <span class="keyword">for</span> r <span class="keyword">in</span> results)
+
+    lines.<span class="function">append</span>(<span class="string">f"Total: </span>{total}<span class="string">, Passed: </span>{passed}<span class="string">, Duration: </span>{duration}<span class="string">s"</span>)
+
+    <span class="keyword">return</span> <span class="string">"\n"</span>.<span class="function">join</span>(lines)
+            </div>
+        </div>
+
+        <!-- Slide 27: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Comprehensions</h3>
+                    <ul>
+                        <li>✓ More concise code</li>
+                        <li>✓ Better performance</li>
+                        <li>✓ Pythonic style</li>
+                        <li>⚠️ Don't overuse complexity</li>
+                    </ul>
+
+                    <h3>*args/**kwargs</h3>
+                    <ul>
+                        <li>✓ Flexible functions</li>
+                        <li>✓ Variable parameters</li>
+                        <li>✓ Forward arguments</li>
+                        <li>⚠️ Remember order</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Decorators</h3>
+                    <ul>
+                        <li>✓ Extend behavior</li>
+                        <li>✓ Clean syntax</li>
+                        <li>✓ Reusable logic</li>
+                        <li>⚠️ Use @wraps</li>
+                    </ul>
+
+                    <h3>Datetime & Strings</h3>
+                    <ul>
+                        <li>✓ Essential for testing</li>
+                        <li>✓ Format flexibility</li>
+                        <li>✓ Data manipulation</li>
+                        <li>⚠️ Watch timezones</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28: Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+
+            <ul class="checklist">
+                <li><strong>Comprehensions:</strong> Keep them readable - split complex ones into loops</li>
+                <li><strong>*args/**kwargs:</strong> Document expected parameters in docstrings</li>
+                <li><strong>Decorators:</strong> Always use @functools.wraps to preserve metadata</li>
+                <li><strong>Datetime:</strong> Use ISO format for consistency, be timezone-aware</li>
+                <li><strong>Strings:</strong> Remember most methods return new strings (immutable)</li>
+                <li><strong>Testing:</strong> Combine concepts for powerful automation helpers</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Common Pitfalls:</strong><br>
+                • Over-complex comprehensions<br>
+                • Forgetting @wraps in decorators<br>
+                • Timezone issues in production<br>
+                • Modifying strings in loops (use join instead)
+            </div>
+        </div>
+
+        <!-- Slide 29: Practice Exercises -->
+        <div class="slide">
+            <h2>Practice Exercises</h2>
+
+            <div class="info-box">
+                <strong>📚 Complete the Exercises:</strong>
+                <ul>
+                    <li><code>exercise_01_comprehensions.py</code> - Master comprehensions</li>
+                    <li><code>exercise_02_args_kwargs_decorators.py</code> - Flexible functions & decorators</li>
+                    <li><code>exercise_03_datetime_strings.py</code> - Date/time & string manipulation</li>
+                    <li><code>exercise_04_automation_helpers.py</code> - Build real automation utilities</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Learning Path:</strong><br>
+                1. Review example files in <code>examples/</code><br>
+                2. Complete exercises progressively<br>
+                3. Check solutions only after attempting<br>
+                4. Apply concepts in your test code<br>
+                5. Build your own utility library
+            </div>
+        </div>
+
+        <!-- Slide 30: Next Steps -->
+        <div class="slide">
+            <h2>Next Steps</h2>
+
+            <h3>Apply These Concepts:</h3>
+            <ul>
+                <li>✓ Use comprehensions for test data filtering and transformation</li>
+                <li>✓ Create flexible test helpers with *args/**kwargs</li>
+                <li>✓ Add retry and screenshot decorators to flaky tests</li>
+                <li>✓ Generate timestamped test artifacts</li>
+                <li>✓ Build dynamic selectors with string methods</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>🎯 Challenge:</strong> Refactor an existing test using these advanced concepts to make it more elegant and maintainable!
+            </div>
+
+            <div class="info-box">
+                <strong>📖 Coming Up:</strong> Lecture 12 will introduce Playwright fundamentals where you'll apply all these Python skills to real browser automation!
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <h1>Great Job!</h1>
+            <div class="subtitle">You've Mastered Advanced Python</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Ready to build professional test automation! 🚀</p>
+            <div class="success-box" style="margin-top: 50px;">
+                <strong>Remember:</strong> Practice these concepts regularly - they'll become second nature and make your automation code elegant and maintainable!
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
