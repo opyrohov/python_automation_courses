@@ -1,0 +1,23 @@
+{
+  "environment": "staging",
+  "base_url": "https://staging.example.com",
+  "api_url": "https://api.staging.example.com",
+  "browser": {
+    "type": "chromium",
+    "headless": false,
+    "slow_mo": 100
+  },
+  "timeouts": {
+    "default": 30000,
+    "navigation": 60000,
+    "action": 10000
+  },
+  "screenshots": {
+    "on_failure": true,
+    "path": "screenshots"
+  },
+  "test_data": {
+    "default_password": "Test123!",
+    "admin_email": "admin@example.com"
+  }
+}

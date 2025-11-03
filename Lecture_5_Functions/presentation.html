@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 5: Functions</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 5</h1>
+            <div class="subtitle">Functions</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>Defining and calling functions</li>
+                <li>Function parameters and arguments</li>
+                <li>Return values</li>
+                <li>Default parameters and keyword arguments</li>
+                <li>Variable arguments (*args and **kwargs)</li>
+                <li>Building reusable automation helpers</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Master functions to write clean, reusable automation code!
+            </div>
+        </div>
+
+        <!-- Slide 3: Why Functions Matter -->
+        <div class="slide">
+            <h2>Why Functions Matter</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Without Functions</h3>
+                    <ul>
+                        <li>❌ Repeated code</li>
+                        <li>❌ Hard to maintain</li>
+                        <li>❌ Difficult to test</li>
+                        <li>❌ Harder to read</li>
+                        <li>❌ More bugs</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>With Functions</h3>
+                    <ul>
+                        <li>✅ DRY principle</li>
+                        <li>✅ Easy to maintain</li>
+                        <li>✅ Easy to test</li>
+                        <li>✅ Self-documenting</li>
+                        <li>✅ Fewer bugs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 In Automation:</strong> Functions are the building blocks of maintainable test code!
+            </div>
+        </div>
+
+        <!-- Slide 4: Your First Function -->
+        <div class="slide">
+            <h2>Your First Function</h2>
+
+            <div class="code-block">
+<span class="comment"># Define a function</span>
+<span class="keyword">def</span> <span class="function">greet</span>():
+    <span class="function">print</span>(<span class="string">"Hello, World!"</span>)
+
+<span class="comment"># Call the function</span>
+<span class="function">greet</span>()  <span class="comment"># Output: Hello, World!</span>
+            </div>
+
+            <div class="info-box">
+                <strong>Syntax:</strong>
+                <ul>
+                    <li><code>def</code> keyword starts the definition</li>
+                    <li>Function name (lowercase with underscores)</li>
+                    <li>Parentheses <code>()</code> - even if no parameters</li>
+                    <li>Colon <code>:</code> to end the definition line</li>
+                    <li>Indented body (4 spaces)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Function with Parameter -->
+        <div class="slide">
+            <h2>Functions with Parameters</h2>
+
+            <div class="code-block">
+<span class="comment"># Function with ONE parameter</span>
+<span class="keyword">def</span> <span class="function">greet_user</span>(name):
+    <span class="function">print</span>(<span class="string">f"Hello, </span>{name}<span class="string">!"</span>)
+
+<span class="function">greet_user</span>(<span class="string">"Alice"</span>)  <span class="comment"># Hello, Alice!</span>
+<span class="function">greet_user</span>(<span class="string">"Bob"</span>)    <span class="comment"># Hello, Bob!</span>
+
+
+<span class="comment"># Function with MULTIPLE parameters</span>
+<span class="keyword">def</span> <span class="function">introduce</span>(name, age):
+    <span class="function">print</span>(<span class="string">f"My name is </span>{name}<span class="string"> and I'm </span>{age}<span class="string"> years old"</span>)
+
+<span class="function">introduce</span>(<span class="string">"Alice"</span>, <span class="number">25</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>Parameters vs Arguments:</strong><br>
+                <strong>Parameter</strong> = Variable in function definition<br>
+                <strong>Argument</strong> = Actual value passed to function
+            </div>
+        </div>
+
+        <!-- Slide 6: Return Values -->
+        <div class="slide">
+            <h2>Return Values</h2>
+
+            <div class="code-block">
+<span class="comment"># Function that returns a value</span>
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+<span class="comment"># Use the return value</span>
+result = <span class="function">add</span>(<span class="number">5</span>, <span class="number">3</span>)
+<span class="function">print</span>(result)  <span class="comment"># 8</span>
+
+<span class="comment"># Use directly in expressions</span>
+total = <span class="function">add</span>(<span class="number">10</span>, <span class="number">20</span>) + <span class="function">add</span>(<span class="number">5</span>, <span class="number">15</span>)
+<span class="function">print</span>(total)  <span class="comment"># 50</span>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Key Point:</strong> <code>return</code> sends a value back to the caller and exits the function
+            </div>
+        </div>
+
+        <!-- Slide 7: Multiple Return Values -->
+        <div class="slide">
+            <h2>Multiple Return Values</h2>
+
+            <div class="code-block">
+<span class="comment"># Return multiple values as a tuple</span>
+<span class="keyword">def</span> <span class="function">get_user_info</span>():
+    name = <span class="string">"Alice"</span>
+    age = <span class="number">25</span>
+    city = <span class="string">"New York"</span>
+    <span class="keyword">return</span> name, age, city
+
+<span class="comment"># Unpack the return values</span>
+user_name, user_age, user_city = <span class="function">get_user_info</span>()
+<span class="function">print</span>(user_name)  <span class="comment"># Alice</span>
+<span class="function">print</span>(user_age)   <span class="comment"># 25</span>
+<span class="function">print</span>(user_city)  <span class="comment"># New York</span>
+
+<span class="comment"># Or get as tuple</span>
+user_data = <span class="function">get_user_info</span>()
+<span class="function">print</span>(user_data)  <span class="comment"># ('Alice', 25, 'New York')</span>
+            </div>
+        </div>
+
+        <!-- Slide 8: Default Parameters -->
+        <div class="slide">
+            <h2>Default Parameters</h2>
+
+            <div class="code-block">
+<span class="comment"># Function with default parameter</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name, greeting=<span class="string">"Hello"</span>):
+    <span class="function">print</span>(<span class="string">f"</span>{greeting}<span class="string">, </span>{name}<span class="string">!"</span>)
+
+<span class="comment"># Use default</span>
+<span class="function">greet</span>(<span class="string">"Alice"</span>)  <span class="comment"># Hello, Alice!</span>
+
+<span class="comment"># Override default</span>
+<span class="function">greet</span>(<span class="string">"Bob"</span>, <span class="string">"Hi"</span>)  <span class="comment"># Hi, Bob!</span>
+<span class="function">greet</span>(<span class="string">"Charlie"</span>, <span class="string">"Good morning"</span>)  <span class="comment"># Good morning, Charlie!</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Best Practice:</strong> Put required parameters first, then optional parameters with defaults
+            </div>
+        </div>
+
+        <!-- Slide 9: Keyword Arguments -->
+        <div class="slide">
+            <h2>Keyword Arguments</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">create_user</span>(name, email, age, is_admin=<span class="keyword">False</span>):
+    <span class="function">print</span>(<span class="string">f"Name: </span>{name}<span class="string">"</span>)
+    <span class="function">print</span>(<span class="string">f"Email: </span>{email}<span class="string">"</span>)
+    <span class="function">print</span>(<span class="string">f"Age: </span>{age}<span class="string">"</span>)
+    <span class="function">print</span>(<span class="string">f"Admin: </span>{is_admin}<span class="string">"</span>)
+
+<span class="comment"># Positional arguments (order matters)</span>
+<span class="function">create_user</span>(<span class="string">"Alice"</span>, <span class="string">"alice@test.com"</span>, <span class="number">25</span>)
+
+<span class="comment"># Keyword arguments (order doesn't matter!)</span>
+<span class="function">create_user</span>(email=<span class="string">"bob@test.com"</span>, name=<span class="string">"Bob"</span>, age=<span class="number">30</span>)
+
+<span class="comment"># Mix (positional first, then keyword)</span>
+<span class="function">create_user</span>(<span class="string">"Charlie"</span>, <span class="string">"charlie@test.com"</span>, age=<span class="number">35</span>, is_admin=<span class="keyword">True</span>)
+            </div>
+        </div>
+
+        <!-- Slide 10: Variable Arguments *args -->
+        <div class="slide">
+            <h2>Variable Arguments: *args</h2>
+
+            <div class="code-block">
+<span class="comment"># Accept any number of positional arguments</span>
+<span class="keyword">def</span> <span class="function">sum_all</span>(*numbers):
+    total = <span class="number">0</span>
+    <span class="keyword">for</span> num <span class="keyword">in</span> numbers:
+        total += num
+    <span class="keyword">return</span> total
+
+<span class="function">print</span>(<span class="function">sum_all</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))           <span class="comment"># 6</span>
+<span class="function">print</span>(<span class="function">sum_all</span>(<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>))    <span class="comment"># 100</span>
+<span class="function">print</span>(<span class="function">sum_all</span>(<span class="number">5</span>))                <span class="comment"># 5</span>
+            </div>
+
+            <div class="info-box">
+                <strong>*args:</strong> Collects extra positional arguments into a tuple
+            </div>
+        </div>
+
+        <!-- Slide 11: Variable Keyword Arguments **kwargs -->
+        <div class="slide">
+            <h2>Variable Keyword Arguments: **kwargs</h2>
+
+            <div class="code-block">
+<span class="comment"># Accept any number of keyword arguments</span>
+<span class="keyword">def</span> <span class="function">print_config</span>(**settings):
+    <span class="keyword">for</span> key, value <span class="keyword">in</span> settings.<span class="function">items</span>():
+        <span class="function">print</span>(<span class="string">f"</span>{key}<span class="string">: </span>{value}<span class="string">"</span>)
+
+<span class="function">print_config</span>(browser=<span class="string">"Chrome"</span>, timeout=<span class="number">30</span>, headless=<span class="keyword">True</span>)
+<span class="comment"># Output:</span>
+<span class="comment"># browser: Chrome</span>
+<span class="comment"># timeout: 30</span>
+<span class="comment"># headless: True</span>
+            </div>
+
+            <div class="info-box">
+                <strong>**kwargs:</strong> Collects extra keyword arguments into a dictionary
+            </div>
+        </div>
+
+        <!-- Slide 12: Early Return -->
+        <div class="slide">
+            <h2>Early Return Pattern</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">divide</span>(a, b):
+    <span class="comment"># Check for error condition first</span>
+    <span class="keyword">if</span> b == <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">"Error: Cannot divide by zero!"</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="comment"># Normal case</span>
+    <span class="keyword">return</span> a / b
+
+result1 = <span class="function">divide</span>(<span class="number">10</span>, <span class="number">2</span>)  <span class="comment"># 5.0</span>
+result2 = <span class="function">divide</span>(<span class="number">10</span>, <span class="number">0</span>)  <span class="comment"># None (with error message)</span>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Best Practice:</strong> Handle edge cases and errors first, then the main logic
+            </div>
+        </div>
+
+        <!-- Slide 13: Function Scope -->
+        <div class="slide">
+            <h2>Function Scope</h2>
+
+            <div class="code-block">
+<span class="comment"># Global variable</span>
+counter = <span class="number">0</span>
+
+<span class="keyword">def</span> <span class="function">increment_local</span>():
+    <span class="comment"># Local variable (only exists in function)</span>
+    local_counter = <span class="number">0</span>
+    local_counter += <span class="number">1</span>
+    <span class="function">print</span>(<span class="string">f"Local: </span>{local_counter}<span class="string">"</span>)
+
+<span class="function">increment_local</span>()  <span class="comment"># 1</span>
+<span class="function">increment_local</span>()  <span class="comment"># 1 (resets each time!)</span>
+
+<span class="keyword">def</span> <span class="function">increment_global</span>():
+    <span class="keyword">global</span> counter  <span class="comment"># Access global variable</span>
+    counter += <span class="number">1</span>
+    <span class="function">print</span>(<span class="string">f"Global: </span>{counter}<span class="string">"</span>)
+
+<span class="function">increment_global</span>()  <span class="comment"># 1</span>
+<span class="function">increment_global</span>()  <span class="comment"># 2</span>
+            </div>
+        </div>
+
+        <!-- Slide 14: Docstrings -->
+        <div class="slide">
+            <h2>Documenting Functions with Docstrings</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">calculate_area</span>(width, height):
+    <span class="string">"""
+    Calculate the area of a rectangle.
+
+    Args:
+        width: The width of the rectangle
+        height: The height of the rectangle
+
+    Returns:
+        The area (width * height)
+    """</span>
+    <span class="keyword">return</span> width * height
+
+<span class="comment"># Access docstring</span>
+<span class="function">print</span>(calculate_area.__doc__)
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Best Practice:</strong> Document complex functions with docstrings
+            </div>
+        </div>
+
+        <!-- Slide 15: Lambda Functions -->
+        <div class="slide">
+            <h2>Lambda Functions (Quick Functions)</h2>
+
+            <div class="code-block">
+<span class="comment"># Regular function</span>
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+<span class="comment"># Lambda function (one-liner)</span>
+add_lambda = <span class="keyword">lambda</span> a, b: a + b
+
+<span class="function">print</span>(<span class="function">add</span>(<span class="number">5</span>, <span class="number">3</span>))         <span class="comment"># 8</span>
+<span class="function">print</span>(<span class="function">add_lambda</span>(<span class="number">5</span>, <span class="number">3</span>))  <span class="comment"># 8</span>
+
+<span class="comment"># Common use: sorting</span>
+users = [
+    {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"age"</span>: <span class="number">25</span>},
+    {<span class="string">"name"</span>: <span class="string">"Bob"</span>, <span class="string">"age"</span>: <span class="number">20</span>},
+    {<span class="string">"name"</span>: <span class="string">"Charlie"</span>, <span class="string">"age"</span>: <span class="number">30</span>}
+]
+sorted_users = <span class="function">sorted</span>(users, key=<span class="keyword">lambda</span> u: u[<span class="string">"age"</span>])
+            </div>
+        </div>
+
+        <!-- Slide 16: Automation - Login Helper -->
+        <div class="slide">
+            <h2>Automation Example: Login Helper</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">login</span>(username, password, remember_me=<span class="keyword">False</span>):
+    <span class="string">"""
+    Reusable login function for tests.
+
+    Args:
+        username: User's email or username
+        password: User's password
+        remember_me: Whether to check 'Remember Me'
+
+    Returns:
+        True if login successful
+    """</span>
+    <span class="function">print</span>(<span class="string">f"Logging in as: </span>{username}<span class="string">"</span>)
+
+    <span class="comment"># Fill form fields</span>
+    page.<span class="function">fill</span>(<span class="string">"#username"</span>, username)
+    page.<span class="function">fill</span>(<span class="string">"#password"</span>, password)
+
+    <span class="keyword">if</span> remember_me:
+        page.<span class="function">check</span>(<span class="string">"#remember"</span>)
+
+    page.<span class="function">click</span>(<span class="string">"#login-button"</span>)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+            </div>
+        </div>
+
+        <!-- Slide 17: Automation - Navigation Helper -->
+        <div class="slide">
+            <h2>Automation Example: Navigation Helper</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">navigate_to</span>(url, timeout=<span class="number">30</span>):
+    <span class="string">"""Navigate to URL with timeout."""</span>
+    <span class="function">print</span>(<span class="string">f"Navigating to: </span>{url}<span class="string">"</span>)
+    page.<span class="function">goto</span>(url, timeout=timeout * <span class="number">1000</span>)
+    page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="keyword">def</span> <span class="function">click_element</span>(selector, wait=<span class="keyword">True</span>):
+    <span class="string">"""Click element with optional wait."""</span>
+    <span class="keyword">if</span> wait:
+        page.<span class="function">wait_for_selector</span>(selector)
+    page.<span class="function">click</span>(selector)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="keyword">def</span> <span class="function">fill_field</span>(selector, value):
+    <span class="string">"""Fill a form field."""</span>
+    page.<span class="function">fill</span>(selector, value)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+            </div>
+        </div>
+
+        <!-- Slide 18: Automation - Form Helper -->
+        <div class="slide">
+            <h2>Automation Example: Form Helper</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">fill_form</span>(form_data, submit=<span class="keyword">True</span>):
+    <span class="string">"""
+    Fill a form with dictionary of field data.
+
+    Args:
+        form_data: Dictionary of {selector: value}
+        submit: Whether to submit form after filling
+
+    Returns:
+        True if successful
+    """</span>
+    <span class="keyword">for</span> selector, value <span class="keyword">in</span> form_data.<span class="function">items</span>():
+        page.<span class="function">fill</span>(selector, value)
+
+    <span class="keyword">if</span> submit:
+        page.<span class="function">click</span>(<span class="string">"button[type='submit']"</span>)
+
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="comment"># Usage</span>
+<span class="function">fill_form</span>({
+    <span class="string">"#first-name"</span>: <span class="string">"John"</span>,
+    <span class="string">"#last-name"</span>: <span class="string">"Doe"</span>,
+    <span class="string">"#email"</span>: <span class="string">"john@test.com"</span>
+})
+            </div>
+        </div>
+
+        <!-- Slide 19: Automation - Verification Helpers -->
+        <div class="slide">
+            <h2>Automation Example: Verification Helpers</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">verify_text</span>(text):
+    <span class="string">"""Verify text is present on page."""</span>
+    <span class="keyword">try</span>:
+        page.<span class="function">wait_for_selector</span>(<span class="string">f"text=</span>{text}<span class="string">"</span>)
+        <span class="keyword">return</span> <span class="keyword">True</span>
+    <span class="keyword">except</span>:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+
+<span class="keyword">def</span> <span class="function">verify_element_visible</span>(selector):
+    <span class="string">"""Verify element is visible."""</span>
+    <span class="keyword">return</span> page.<span class="function">is_visible</span>(selector)
+
+<span class="keyword">def</span> <span class="function">verify_url_contains</span>(expected):
+    <span class="string">"""Verify URL contains expected string."""</span>
+    current_url = page.<span class="function">url</span>
+    <span class="keyword">return</span> expected <span class="keyword">in</span> current_url
+
+<span class="comment"># Usage</span>
+<span class="keyword">assert</span> <span class="function">verify_text</span>(<span class="string">"Welcome"</span>)
+<span class="keyword">assert</span> <span class="function">verify_element_visible</span>(<span class="string">"#nav-menu"</span>)
+<span class="keyword">assert</span> <span class="function">verify_url_contains</span>(<span class="string">"/dashboard"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 20: Automation - Wait Helpers -->
+        <div class="slide">
+            <h2>Automation Example: Wait Helpers</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">wait_for_element</span>(selector, timeout=<span class="number">10</span>):
+    <span class="string">"""Wait for element to appear."""</span>
+    page.<span class="function">wait_for_selector</span>(selector, timeout=timeout * <span class="number">1000</span>)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="keyword">def</span> <span class="function">wait_for_text</span>(text, timeout=<span class="number">10</span>):
+    <span class="string">"""Wait for text to appear."""</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">f"text=</span>{text}<span class="string">"</span>, timeout=timeout * <span class="number">1000</span>)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="keyword">def</span> <span class="function">wait_and_click</span>(selector, timeout=<span class="number">10</span>):
+    <span class="string">"""Wait for element then click it."""</span>
+    <span class="function">wait_for_element</span>(selector, timeout)
+    page.<span class="function">click</span>(selector)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="comment"># Usage</span>
+<span class="function">wait_and_click</span>(<span class="string">"#submit-button"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 21: Automation - Complete Test Example -->
+        <div class="slide">
+            <h2>Complete Test with Helper Functions</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">test_login_flow</span>():
+    <span class="string">"""Complete login test using helper functions."""</span>
+
+    <span class="comment"># Step 1: Navigate</span>
+    <span class="function">navigate_to</span>(<span class="string">"https://example.com/login"</span>)
+
+    <span class="comment"># Step 2: Login</span>
+    <span class="function">login</span>(<span class="string">"test@example.com"</span>, <span class="string">"Password123"</span>)
+
+    <span class="comment"># Step 3: Wait for dashboard</span>
+    <span class="function">wait_for_text</span>(<span class="string">"Welcome"</span>)
+
+    <span class="comment"># Step 4: Verify</span>
+    <span class="keyword">assert</span> <span class="function">verify_url_contains</span>(<span class="string">"/dashboard"</span>)
+    <span class="keyword">assert</span> <span class="function">verify_element_visible</span>(<span class="string">"#user-menu"</span>)
+
+    <span class="function">print</span>(<span class="string">"✅ Login test passed!"</span>)
+
+<span class="comment"># Run test</span>
+<span class="function">test_login_flow</span>()
+            </div>
+        </div>
+
+        <!-- Slide 22: Data-Driven Tests with Functions -->
+        <div class="slide">
+            <h2>Data-Driven Tests</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">run_test_with_data</span>(test_data_list, test_function):
+    <span class="string">"""Run tests with multiple data sets."""</span>
+    passed = <span class="number">0</span>
+    failed = <span class="number">0</span>
+
+    <span class="keyword">for</span> i, data <span class="keyword">in</span> <span class="function">enumerate</span>(test_data_list, <span class="number">1</span>):
+        <span class="function">print</span>(<span class="string">f"Test Case </span>{i}<span class="string">"</span>)
+        <span class="keyword">try</span>:
+            <span class="function">test_function</span>(data)
+            passed += <span class="number">1</span>
+        <span class="keyword">except</span> <span class="keyword">Exception</span> <span class="keyword">as</span> e:
+            <span class="function">print</span>(<span class="string">f"Failed: </span>{e}<span class="string">"</span>)
+            failed += <span class="number">1</span>
+
+    <span class="keyword">return</span> {<span class="string">"passed"</span>: passed, <span class="string">"failed"</span>: failed}
+
+<span class="comment"># Test data</span>
+test_data = [
+    {<span class="string">"username"</span>: <span class="string">"user1@test.com"</span>, <span class="string">"password"</span>: <span class="string">"Pass1"</span>},
+    {<span class="string">"username"</span>: <span class="string">"user2@test.com"</span>, <span class="string">"password"</span>: <span class="string">"Pass2"</span>}
+]
+            </div>
+        </div>
+
+        <!-- Slide 23: Function Best Practices -->
+        <div class="slide">
+            <h2>Function Best Practices</h2>
+
+            <ul class="checklist">
+                <li><strong>Single Responsibility:</strong> Each function should do ONE thing well</li>
+                <li><strong>Descriptive Names:</strong> Use clear, verb-based names (click_button, verify_text)</li>
+                <li><strong>Keep It Short:</strong> Functions should be 10-20 lines ideally</li>
+                <li><strong>Use Docstrings:</strong> Document complex functions</li>
+                <li><strong>Return Values:</strong> Return meaningful values (True/False, data, None)</li>
+                <li><strong>Handle Errors:</strong> Use early returns for error cases</li>
+                <li><strong>Consistent Style:</strong> Follow project naming conventions</li>
+            </ul>
+        </div>
+
+        <!-- Slide 24: Function Naming Conventions -->
+        <div class="slide">
+            <h2>Function Naming Conventions</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>✅ Good Names</h3>
+                    <div class="code-block">
+<span class="function">calculate_total</span>()
+<span class="function">send_email</span>()
+<span class="function">validate_user_input</span>()
+<span class="function">get_user_by_id</span>()
+<span class="function">is_valid_email</span>()
+<span class="function">has_permission</span>()
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>❌ Bad Names</h3>
+                    <div class="code-block">
+<span class="function">func1</span>()
+<span class="function">doStuff</span>()
+<span class="function">x</span>()
+<span class="function">calculate</span>()
+<span class="function">process</span>()
+<span class="function">data</span>()
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Pattern:</strong> verb_noun() or action_target()
+            </div>
+        </div>
+
+        <!-- Slide 25: When to Create a Function -->
+        <div class="slide">
+            <h2>When to Create a Function?</h2>
+
+            <div class="success-box">
+                <strong>Create a function when:</strong>
+                <ul>
+                    <li>✅ Code is repeated 2+ times</li>
+                    <li>✅ Code does one clear task</li>
+                    <li>✅ You want to test something in isolation</li>
+                    <li>✅ Code is complex and needs a name</li>
+                    <li>✅ You want to reuse logic across tests</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>Don't over-engineer:</strong>
+                <ul>
+                    <li>❌ Don't create functions for single-use code</li>
+                    <li>❌ Don't create functions that are 1-2 lines</li>
+                    <li>❌ Don't create functions that are too generic</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 26: Practice Exercise 1 -->
+        <div class="slide">
+            <h2>Practice Exercise 1</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Create a temperature converter
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Create a function celsius_to_fahrenheit(celsius)</span>
+<span class="comment"># Formula: (celsius * 9/5) + 32</span>
+<span class="comment"># Return the fahrenheit value</span>
+
+
+<span class="comment"># Test your function</span>
+<span class="function">print</span>(<span class="function">celsius_to_fahrenheit</span>(<span class="number">0</span>))    <span class="comment"># Should be 32</span>
+<span class="function">print</span>(<span class="function">celsius_to_fahrenheit</span>(<span class="number">100</span>))  <span class="comment"># Should be 212</span>
+            </div>
+        </div>
+
+        <!-- Slide 27: Practice Exercise 2 -->
+        <div class="slide">
+            <h2>Practice Exercise 2</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Create a login helper function
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Create a function login_user(username, password, remember_me=False)</span>
+<span class="comment"># - Print "Logging in as: {username}"</span>
+<span class="comment"># - If remember_me is True, print "Remember me: checked"</span>
+<span class="comment"># - Return True</span>
+
+
+<span class="comment"># Test your function</span>
+<span class="function">login_user</span>(<span class="string">"test@example.com"</span>, <span class="string">"Pass123"</span>)
+<span class="function">login_user</span>(<span class="string">"admin@test.com"</span>, <span class="string">"Admin456"</span>, remember_me=<span class="keyword">True</span>)
+            </div>
+        </div>
+
+        <!-- Slide 28: Practice Exercise 3 -->
+        <div class="slide">
+            <h2>Practice Exercise 3</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Create a test data generator
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Create a function create_test_user(name, email, age=18)</span>
+<span class="comment"># - Return a dictionary with name, email, age</span>
+<span class="comment"># - Default age should be 18</span>
+
+
+<span class="comment"># Test your function</span>
+user1 = <span class="function">create_test_user</span>(<span class="string">"Alice"</span>, <span class="string">"alice@test.com"</span>)
+user2 = <span class="function">create_test_user</span>(<span class="string">"Bob"</span>, <span class="string">"bob@test.com"</span>, <span class="number">25</span>)
+
+<span class="function">print</span>(user1)
+<span class="function">print</span>(user2)
+            </div>
+
+            <div class="success-box">
+                <strong>Bonus:</strong> Add a 'role' parameter with default value 'user'
+            </div>
+        </div>
+
+        <!-- Slide 29: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Function Basics</h3>
+                    <ul>
+                        <li>Define with <code>def</code></li>
+                        <li>Parameters make them flexible</li>
+                        <li>Return values with <code>return</code></li>
+                        <li>Use default parameters</li>
+                        <li>Keyword arguments for clarity</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>In Automation</h3>
+                    <ul>
+                        <li>Reusable test steps</li>
+                        <li>Helper functions</li>
+                        <li>Page objects pattern</li>
+                        <li>Data-driven tests</li>
+                        <li>Cleaner, maintainable code</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Remember:</strong> Functions are the foundation of clean, reusable automation code!
+            </div>
+        </div>
+
+        <!-- Slide 30: Next Steps -->
+        <div class="slide">
+            <h2>Next Steps</h2>
+
+            <ul class="checklist">
+                <li>Complete the exercises in the exercises/ folder</li>
+                <li>Create your own helper functions</li>
+                <li>Practice with the examples in examples/ folder</li>
+                <li>Start building a library of reusable test utilities</li>
+                <li>Apply functions to your existing automation code</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>📚 Next Lecture:</strong> More Python fundamentals and moving toward Playwright!
+            </div>
+
+            <div class="success-box" style="margin-top: 40px;">
+                <strong>Great job! 🎉</strong> You now know how to write reusable, maintainable automation code with functions!
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <!-- Global presentation script shared across all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

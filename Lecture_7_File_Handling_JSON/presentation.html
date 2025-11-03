@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 7: File Handling & JSON</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 7</h1>
+            <div class="subtitle">File Handling & JSON</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>Reading and writing text files</li>
+                <li>File modes and context managers</li>
+                <li>Working with JSON data</li>
+                <li>Handling CSV files</li>
+                <li>Path operations with pathlib</li>
+                <li>File handling in automation</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Master file operations for test data management!
+            </div>
+        </div>
+
+        <!-- Slide 3: Why File Handling Matters -->
+        <div class="slide">
+            <h2>Why File Handling Matters</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>In Automation</h3>
+                    <ul>
+                        <li>📊 Test data management</li>
+                        <li>⚙️ Configuration files</li>
+                        <li>📝 Test reports</li>
+                        <li>📸 Save screenshots</li>
+                        <li>📋 Execution logs</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Common Files</h3>
+                    <ul>
+                        <li><strong>JSON</strong> - Config & data</li>
+                        <li><strong>CSV</strong> - Test cases</li>
+                        <li><strong>TXT</strong> - Logs</li>
+                        <li><strong>PNG</strong> - Screenshots</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Key Point:</strong> Files are essential for data-driven testing!
+            </div>
+        </div>
+
+        <!-- Slide 4: Reading Files - Basic -->
+        <div class="slide">
+            <h2>Reading Files - Basics</h2>
+
+            <div class="code-block">
+<span class="comment"># Open and read entire file</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'file.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+    content = f.<span class="function">read</span>()
+    <span class="function">print</span>(content)
+
+
+<span class="comment"># Read line by line</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'file.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+    <span class="keyword">for</span> line <span class="keyword">in</span> f:
+        <span class="function">print</span>(line.<span class="function">strip</span>())
+
+
+<span class="comment"># Read all lines into a list</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'file.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+    lines = f.<span class="function">readlines</span>()
+            </div>
+
+            <div class="info-box">
+                <strong>Always use</strong> <code>with</code> statement - it auto-closes the file!
+            </div>
+        </div>
+
+        <!-- Slide 5: Writing Files -->
+        <div class="slide">
+            <h2>Writing Files</h2>
+
+            <div class="code-block">
+<span class="comment"># Write (overwrite) - mode 'w'</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'output.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+    f.<span class="function">write</span>(<span class="string">"Hello, World!\n"</span>)
+    f.<span class="function">write</span>(<span class="string">"Line 2\n"</span>)
+
+
+<span class="comment"># Append - mode 'a'</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'output.txt'</span>, <span class="string">'a'</span>) <span class="keyword">as</span> f:
+    f.<span class="function">write</span>(<span class="string">"Appended line\n"</span>)
+
+
+<span class="comment"># Write multiple lines</span>
+lines = [<span class="string">"Line 1\n"</span>, <span class="string">"Line 2\n"</span>]
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'output.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+    f.<span class="function">writelines</span>(lines)
+            </div>
+
+            <div class="info-box">
+                <strong>'w'</strong> = overwrite &nbsp; | &nbsp; <strong>'a'</strong> = append
+            </div>
+        </div>
+
+        <!-- Slide 6: File Modes -->
+        <div class="slide">
+            <h2>File Modes</h2>
+
+            <div class="code-block">
+<span class="comment"># Common file modes</span>
+<span class="string">'r'</span>   <span class="comment"># Read (default)</span>
+<span class="string">'w'</span>   <span class="comment"># Write (overwrite)</span>
+<span class="string">'a'</span>   <span class="comment"># Append</span>
+<span class="string">'x'</span>   <span class="comment"># Exclusive creation (fails if exists)</span>
+<span class="string">'r+'</span>  <span class="comment"># Read and write</span>
+<span class="string">'b'</span>   <span class="comment"># Binary mode (rb, wb)</span>
+            </div>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Text Mode</h3>
+                    <ul>
+                        <li>Default mode</li>
+                        <li>Handles encoding</li>
+                        <li>For .txt, .json, .csv</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Binary Mode</h3>
+                    <ul>
+                        <li>Add 'b' to mode</li>
+                        <li>For images, PDFs</li>
+                        <li>No encoding</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Context Managers -->
+        <div class="slide">
+            <h2>Why Use Context Managers?</h2>
+
+            <div class="code-block">
+<span class="comment"># ❌ Without context manager (bad!)</span>
+f = <span class="function">open</span>(<span class="string">'file.txt'</span>, <span class="string">'r'</span>)
+content = f.<span class="function">read</span>()
+f.<span class="function">close</span>()  <span class="comment"># Easy to forget!</span>
+
+
+<span class="comment"># ✅ With context manager (good!)</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'file.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+    content = f.<span class="function">read</span>()
+<span class="comment"># File auto-closes here!</span>
+            </div>
+
+            <div class="success-box">
+                <strong>Benefits:</strong>
+                <ul>
+                    <li>✅ Automatic cleanup</li>
+                    <li>✅ Handles exceptions</li>
+                    <li>✅ Cleaner code</li>
+                    <li>✅ Prevents resource leaks</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Introduction to JSON -->
+        <div class="slide">
+            <h2>What is JSON?</h2>
+
+            <div class="info-box">
+                <strong>JSON</strong> (JavaScript Object Notation) is a lightweight data format perfect for configuration and test data.
+            </div>
+
+            <div class="code-block">
+{
+  <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+  <span class="string">"age"</span>: <span class="number">25</span>,
+  <span class="string">"active"</span>: <span class="keyword">true</span>,
+  <span class="string">"roles"</span>: [<span class="string">"user"</span>, <span class="string">"tester"</span>],
+  <span class="string">"config"</span>: {
+    <span class="string">"theme"</span>: <span class="string">"dark"</span>,
+    <span class="string">"notifications"</span>: <span class="keyword">true</span>
+  }
+}
+            </div>
+
+            <div class="info-box">
+                <strong>Python ↔ JSON:</strong><br>
+                dict → object | list → array | True/False → true/false
+            </div>
+        </div>
+
+        <!-- Slide 9: Reading JSON -->
+        <div class="slide">
+            <h2>Reading JSON Files</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> json
+
+<span class="comment"># Read JSON from file</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'data.json'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+    data = json.<span class="function">load</span>(f)
+
+<span class="function">print</span>(data[<span class="string">'name'</span>])  <span class="comment"># Alice</span>
+<span class="function">print</span>(data[<span class="string">'age'</span>])   <span class="comment"># 25</span>
+
+
+<span class="comment"># Parse JSON string</span>
+json_str = <span class="string">'{"name": "Bob", "age": 30}'</span>
+data = json.<span class="function">loads</span>(json_str)
+<span class="function">print</span>(data[<span class="string">'name'</span>])  <span class="comment"># Bob</span>
+            </div>
+
+            <div class="info-box">
+                <strong>load</strong> = from file &nbsp; | &nbsp; <strong>loads</strong> = from string
+            </div>
+        </div>
+
+        <!-- Slide 10: Writing JSON -->
+        <div class="slide">
+            <h2>Writing JSON Files</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> json
+
+<span class="comment"># Create data</span>
+data = {
+    <span class="string">"username"</span>: <span class="string">"testuser"</span>,
+    <span class="string">"email"</span>: <span class="string">"test@example.com"</span>,
+    <span class="string">"age"</span>: <span class="number">25</span>,
+    <span class="string">"active"</span>: <span class="keyword">True</span>
+}
+
+<span class="comment"># Write to file</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'user.json'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+    json.<span class="function">dump</span>(data, f, indent=<span class="number">2</span>)
+
+
+<span class="comment"># Convert to string</span>
+json_str = json.<span class="function">dumps</span>(data, indent=<span class="number">2</span>)
+<span class="function">print</span>(json_str)
+            </div>
+
+            <div class="info-box">
+                <strong>dump</strong> = to file &nbsp; | &nbsp; <strong>dumps</strong> = to string<br>
+                <strong>indent=2</strong> makes it pretty!
+            </div>
+        </div>
+
+        <!-- Slide 11: JSON in Automation -->
+        <div class="slide">
+            <h2>JSON for Test Data</h2>
+
+            <div class="code-block">
+<span class="comment"># users.json - Test users file</span>
+{
+  <span class="string">"users"</span>: [
+    {
+      <span class="string">"username"</span>: <span class="string">"testuser1"</span>,
+      <span class="string">"password"</span>: <span class="string">"Test123!"</span>,
+      <span class="string">"role"</span>: <span class="string">"user"</span>
+    },
+    {
+      <span class="string">"username"</span>: <span class="string">"admin"</span>,
+      <span class="string">"password"</span>: <span class="string">"Admin456!"</span>,
+      <span class="string">"role"</span>: <span class="string">"admin"</span>
+    }
+  ]
+}
+
+<span class="comment"># Load and use in tests</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'users.json'</span>) <span class="keyword">as</span> f:
+    users = json.<span class="function">load</span>(f)[<span class="string">'users'</span>]
+
+<span class="keyword">for</span> user <span class="keyword">in</span> users:
+    <span class="function">test_login</span>(user[<span class="string">'username'</span>], user[<span class="string">'password'</span>])
+            </div>
+        </div>
+
+        <!-- Slide 12: JSON Configuration -->
+        <div class="slide">
+            <h2>JSON for Configuration</h2>
+
+            <div class="code-block">
+<span class="comment"># config.json</span>
+{
+  <span class="string">"environment"</span>: <span class="string">"staging"</span>,
+  <span class="string">"base_url"</span>: <span class="string">"https://staging.example.com"</span>,
+  <span class="string">"browser"</span>: {
+    <span class="string">"type"</span>: <span class="string">"chromium"</span>,
+    <span class="string">"headless"</span>: <span class="keyword">false</span>
+  },
+  <span class="string">"timeouts"</span>: {
+    <span class="string">"default"</span>: <span class="number">30000</span>,
+    <span class="string">"navigation"</span>: <span class="number">60000</span>
+  }
+}
+
+<span class="comment"># Load configuration</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'config.json'</span>) <span class="keyword">as</span> f:
+    config = json.<span class="function">load</span>(f)
+
+page.<span class="function">goto</span>(config[<span class="string">'base_url'</span>])
+            </div>
+        </div>
+
+        <!-- Slide 13: Introduction to CSV -->
+        <div class="slide">
+            <h2>What is CSV?</h2>
+
+            <div class="info-box">
+                <strong>CSV</strong> (Comma-Separated Values) is perfect for tabular test data.
+            </div>
+
+            <div class="code-block">
+<span class="comment"># test_cases.csv</span>
+test_id,test_name,username,password,expected
+1,Valid Login,user@test.com,Test123!,success
+2,Invalid Password,user@test.com,wrong,failure
+3,Empty Username,,Test123!,failure
+4,Empty Password,user@test.com,,failure
+            </div>
+
+            <div class="success-box">
+                <strong>Use CSV for:</strong>
+                <ul>
+                    <li>Data-driven testing</li>
+                    <li>Test cases with parameters</li>
+                    <li>Test reports</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: Reading CSV -->
+        <div class="slide">
+            <h2>Reading CSV Files</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> csv
+
+<span class="comment"># Method 1: Basic reader</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'data.csv'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+    reader = csv.<span class="function">reader</span>(f)
+    <span class="keyword">for</span> row <span class="keyword">in</span> reader:
+        <span class="function">print</span>(row)
+
+
+<span class="comment"># Method 2: DictReader (better!)</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'data.csv'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+    reader = csv.<span class="function">DictReader</span>(f)
+    <span class="keyword">for</span> row <span class="keyword">in</span> reader:
+        <span class="function">print</span>(row[<span class="string">'username'</span>])
+        <span class="function">print</span>(row[<span class="string">'password'</span>])
+            </div>
+
+            <div class="info-box">
+                <strong>DictReader</strong> gives you dictionaries - much easier to use!
+            </div>
+        </div>
+
+        <!-- Slide 15: Writing CSV -->
+        <div class="slide">
+            <h2>Writing CSV Files</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> csv
+
+<span class="comment"># Write with DictWriter</span>
+data = [
+    {<span class="string">'name'</span>: <span class="string">'Alice'</span>, <span class="string">'email'</span>: <span class="string">'alice@test.com'</span>},
+    {<span class="string">'name'</span>: <span class="string">'Bob'</span>, <span class="string">'email'</span>: <span class="string">'bob@test.com'</span>}
+]
+
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'users.csv'</span>, <span class="string">'w'</span>, newline=<span class="string">''</span>) <span class="keyword">as</span> f:
+    fieldnames = [<span class="string">'name'</span>, <span class="string">'email'</span>]
+    writer = csv.<span class="function">DictWriter</span>(f, fieldnames=fieldnames)
+
+    writer.<span class="function">writeheader</span>()
+    writer.<span class="function">writerows</span>(data)
+            </div>
+
+            <div class="info-box">
+                <strong>Note:</strong> Use <code>newline=''</code> to prevent blank lines on Windows
+            </div>
+        </div>
+
+        <!-- Slide 16: Data-Driven Testing -->
+        <div class="slide">
+            <h2>Data-Driven Testing with CSV</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> csv
+
+<span class="comment"># test_cases.csv has test scenarios</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'test_cases.csv'</span>) <span class="keyword">as</span> f:
+    reader = csv.<span class="function">DictReader</span>(f)
+
+    <span class="keyword">for</span> test_case <span class="keyword">in</span> reader:
+        <span class="comment"># Run test with this data</span>
+        page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+        page.<span class="function">fill</span>(<span class="string">"#username"</span>, test_case[<span class="string">'username'</span>])
+        page.<span class="function">fill</span>(<span class="string">"#password"</span>, test_case[<span class="string">'password'</span>])
+        page.<span class="function">click</span>(<span class="string">"#login-button"</span>)
+
+        <span class="comment"># Verify result matches expected</span>
+        <span class="keyword">if</span> test_case[<span class="string">'expected'</span>] == <span class="string">'success'</span>:
+            <span class="keyword">assert</span> page.<span class="function">url</span>.<span class="function">endswith</span>(<span class="string">'/dashboard'</span>)
+            </div>
+        </div>
+
+        <!-- Slide 17: Path Operations -->
+        <div class="slide">
+            <h2>Working with Paths - pathlib</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="comment"># Current file location</span>
+current_file = <span class="function">Path</span>(__file__)
+<span class="function">print</span>(current_file.name)      <span class="comment"># File name</span>
+<span class="function">print</span>(current_file.parent)    <span class="comment"># Parent directory</span>
+
+<span class="comment"># Build paths (works on any OS!)</span>
+project_root = <span class="function">Path</span>(<span class="string">"/project"</span>)
+data_file = project_root / <span class="string">"test_data"</span> / <span class="string">"users.json"</span>
+
+<span class="comment"># Check properties</span>
+<span class="keyword">if</span> data_file.<span class="function">exists</span>():
+    <span class="function">print</span>(<span class="string">"File exists!"</span>)
+            </div>
+
+            <div class="success-box">
+                <strong>pathlib</strong> is cross-platform and object-oriented!
+            </div>
+        </div>
+
+        <!-- Slide 18: File Organization -->
+        <div class="slide">
+            <h2>Organizing Test Files</h2>
+
+            <div class="code-block">
+test_project/
+├── tests/
+│   └── test_login.py
+├── test_data/
+│   ├── users.json            <span class="comment"># Test credentials</span>
+│   ├── test_cases.csv        <span class="comment"># Test scenarios</span>
+│   └── expected_results.json <span class="comment"># Expected data</span>
+├── config/
+│   ├── dev_config.json       <span class="comment"># Dev settings</span>
+│   └── prod_config.json      <span class="comment"># Prod settings</span>
+├── output/
+│   ├── results/              <span class="comment"># Test results</span>
+│   ├── screenshots/          <span class="comment"># Screenshots</span>
+│   └── logs/                 <span class="comment"># Execution logs</span>
+└── requirements.txt
+            </div>
+        </div>
+
+        <!-- Slide 19: Loading Configuration -->
+        <div class="slide">
+            <h2>Loading Configuration Files</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> json
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="keyword">def</span> <span class="function">load_config</span>(env=<span class="string">"dev"</span>):
+    <span class="string">"""Load configuration for environment."""</span>
+    config_file = <span class="function">Path</span>(<span class="string">"config"</span>) / <span class="string">f"</span>{env}<span class="string">_config.json"</span>
+
+    <span class="keyword">with</span> <span class="function">open</span>(config_file) <span class="keyword">as</span> f:
+        <span class="keyword">return</span> json.<span class="function">load</span>(f)
+
+<span class="comment"># Usage</span>
+config = <span class="function">load_config</span>(<span class="string">"staging"</span>)
+<span class="function">print</span>(config[<span class="string">'base_url'</span>])
+            </div>
+        </div>
+
+        <!-- Slide 20: Saving Test Results -->
+        <div class="slide">
+            <h2>Saving Test Results</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="comment"># Collect results</span>
+results = {
+    <span class="string">"test_run_id"</span>: <span class="string">"run_001"</span>,
+    <span class="string">"timestamp"</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>(),
+    <span class="string">"total"</span>: <span class="number">50</span>,
+    <span class="string">"passed"</span>: <span class="number">45</span>,
+    <span class="string">"failed"</span>: <span class="number">5</span>,
+    <span class="string">"test_cases"</span>: [
+        {<span class="string">"name"</span>: <span class="string">"test_login"</span>, <span class="string">"status"</span>: <span class="string">"passed"</span>},
+        {<span class="string">"name"</span>: <span class="string">"test_logout"</span>, <span class="string">"status"</span>: <span class="string">"failed"</span>}
+    ]
+}
+
+<span class="comment"># Save to file</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'test_results.json'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+    json.<span class="function">dump</span>(results, f, indent=<span class="number">2</span>)
+            </div>
+        </div>
+
+        <!-- Slide 21: Logging -->
+        <div class="slide">
+            <h2>Writing Log Files</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">def</span> <span class="function">log_message</span>(message, level=<span class="string">"INFO"</span>):
+    <span class="string">"""Write log message with timestamp."""</span>
+    timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y-%m-%d %H:%M:%S"</span>)
+    log_entry = <span class="string">f"[</span>{timestamp}<span class="string">] [</span>{level}<span class="string">] </span>{message}<span class="string">\n"</span>
+
+    <span class="keyword">with</span> <span class="function">open</span>(<span class="string">'test.log'</span>, <span class="string">'a'</span>) <span class="keyword">as</span> f:
+        f.<span class="function">write</span>(log_entry)
+
+<span class="comment"># Usage</span>
+<span class="function">log_message</span>(<span class="string">"Test started"</span>)
+<span class="function">log_message</span>(<span class="string">"Login successful"</span>, <span class="string">"SUCCESS"</span>)
+<span class="function">log_message</span>(<span class="string">"Test failed"</span>, <span class="string">"ERROR"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 22: Creating Directories -->
+        <div class="slide">
+            <h2>Creating Directories</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="comment"># Create single directory</span>
+screenshots_dir = <span class="function">Path</span>(<span class="string">"screenshots"</span>)
+screenshots_dir.<span class="function">mkdir</span>(exist_ok=<span class="keyword">True</span>)
+
+<span class="comment"># Create nested directories</span>
+results_dir = <span class="function">Path</span>(<span class="string">"output/results/2024"</span>)
+results_dir.<span class="function">mkdir</span>(parents=<span class="keyword">True</span>, exist_ok=<span class="keyword">True</span>)
+
+<span class="comment"># Organize by date</span>
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+today = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d"</span>)
+daily_dir = <span class="function">Path</span>(<span class="string">"logs"</span>) / today
+daily_dir.<span class="function">mkdir</span>(parents=<span class="keyword">True</span>, exist_ok=<span class="keyword">True</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>exist_ok=True</strong> prevents errors if directory exists
+            </div>
+        </div>
+
+        <!-- Slide 23: Best Practices -->
+        <div class="slide">
+            <h2>File Handling Best Practices</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>✅ DO</h3>
+                    <ul>
+                        <li>Use <code>with</code> statement</li>
+                        <li>Use pathlib for paths</li>
+                        <li>Check file existence</li>
+                        <li>Handle exceptions</li>
+                        <li>Use JSON for config</li>
+                        <li>Use CSV for test data</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>❌ DON'T</h3>
+                    <ul>
+                        <li>Forget to close files</li>
+                        <li>Hardcode paths</li>
+                        <li>Ignore encoding</li>
+                        <li>Store secrets in files</li>
+                        <li>Commit output files</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 24: Error Handling -->
+        <div class="slide">
+            <h2>Error Handling</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="keyword">def</span> <span class="function">safe_read_json</span>(file_path):
+    <span class="string">"""Safely read JSON file with error handling."""</span>
+    file_path = <span class="function">Path</span>(file_path)
+
+    <span class="keyword">if</span> <span class="keyword">not</span> file_path.<span class="function">exists</span>():
+        <span class="function">print</span>(<span class="string">f"File not found: </span>{file_path}<span class="string">"</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="keyword">try</span>:
+        <span class="keyword">with</span> <span class="function">open</span>(file_path) <span class="keyword">as</span> f:
+            <span class="keyword">return</span> json.<span class="function">load</span>(f)
+    <span class="keyword">except</span> json.JSONDecodeError:
+        <span class="function">print</span>(<span class="string">"Invalid JSON format"</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+            </div>
+        </div>
+
+        <!-- Slide 25: Helper Functions -->
+        <div class="slide">
+            <h2>Reusable Helper Functions</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">load_json_data</span>(file_path):
+    <span class="string">"""Load JSON data from file."""</span>
+    <span class="keyword">with</span> <span class="function">open</span>(file_path) <span class="keyword">as</span> f:
+        <span class="keyword">return</span> json.<span class="function">load</span>(f)
+
+<span class="keyword">def</span> <span class="function">save_json_data</span>(data, file_path):
+    <span class="string">"""Save data to JSON file."""</span>
+    <span class="keyword">with</span> <span class="function">open</span>(file_path, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+        json.<span class="function">dump</span>(data, f, indent=<span class="number">2</span>)
+
+<span class="keyword">def</span> <span class="function">load_test_cases</span>(csv_path):
+    <span class="string">"""Load test cases from CSV."""</span>
+    <span class="keyword">with</span> <span class="function">open</span>(csv_path) <span class="keyword">as</span> f:
+        <span class="keyword">return</span> <span class="function">list</span>(csv.<span class="function">DictReader</span>(f))
+            </div>
+        </div>
+
+        <!-- Slide 26: Practice Exercise 1 -->
+        <div class="slide">
+            <h2>Practice Exercise 1</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> File operations
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Create a file "test_log.txt"</span>
+<span class="comment"># Write 3 lines with different log messages</span>
+<span class="comment"># Read the file and print its contents</span>
+
+
+<span class="comment"># TODO: Append a new line to the file</span>
+
+
+<span class="comment"># TODO: Count and print the total lines</span>
+            </div>
+        </div>
+
+        <!-- Slide 27: Practice Exercise 2 -->
+        <div class="slide">
+            <h2>Practice Exercise 2</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> JSON handling
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Create a dictionary with test user info:</span>
+<span class="comment"># username, email, password, active (True/False)</span>
+
+
+<span class="comment"># TODO: Save it to "test_user.json"</span>
+
+
+<span class="comment"># TODO: Read the file and print the username</span>
+
+
+<span class="comment"># TODO: Add a new field "role": "tester"</span>
+<span class="comment"># Save the updated data</span>
+            </div>
+        </div>
+
+        <!-- Slide 28: Practice Exercise 3 -->
+        <div class="slide">
+            <h2>Practice Exercise 3</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> CSV operations
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Create a CSV file "test_results.csv"</span>
+<span class="comment"># Columns: test_name, status, duration</span>
+<span class="comment"># Add 3 test results</span>
+
+
+<span class="comment"># TODO: Read the CSV and print each test</span>
+
+
+<span class="comment"># TODO: Append a new test result</span>
+            </div>
+        </div>
+
+        <!-- Slide 29: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Files</h3>
+                    <ul>
+                        <li>Always use <code>with</code></li>
+                        <li>Read: 'r', Write: 'w', Append: 'a'</li>
+                        <li>Handle errors gracefully</li>
+                        <li>Use pathlib for paths</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Formats</h3>
+                    <ul>
+                        <li>JSON for configuration</li>
+                        <li>CSV for test data</li>
+                        <li>TXT for logs</li>
+                        <li>Organize in folders</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Remember:</strong> Good file organization = maintainable tests!
+            </div>
+        </div>
+
+        <!-- Slide 30: Next Steps -->
+        <div class="slide">
+            <h2>Next Steps</h2>
+
+            <ul class="checklist">
+                <li>Complete the exercises in the exercises/ folder</li>
+                <li>Create your own test data files</li>
+                <li>Practice JSON and CSV operations</li>
+                <li>Organize test data in your projects</li>
+                <li>Review the examples in examples/ folder</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>📚 Next Lecture:</strong> Hands-on Playwright - Start building real automation tests!
+            </div>
+
+            <div class="success-box" style="margin-top: 40px;">
+                <strong>Great job! 🎉</strong> You're ready to manage test data like a pro!
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

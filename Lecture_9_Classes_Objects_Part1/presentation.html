@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 9: Classes & Objects (Part 1)</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 9</h1>
+            <div class="subtitle">Classes & Objects (Part 1)</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>What are classes and objects?</li>
+                <li>Creating classes with __init__</li>
+                <li>Instance variables and attributes</li>
+                <li>Instance methods</li>
+                <li>Page Object Model pattern</li>
+                <li>Organizing automation code with OOP</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Master Object-Oriented Programming basics for test automation!
+            </div>
+        </div>
+
+        <!-- Slide 3: What is a Class? -->
+        <div class="slide">
+            <h2>What is a Class?</h2>
+            <p>A <strong>class</strong> is a blueprint or template for creating objects.</p>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Real-World Analogy:</h3>
+                    <ul>
+                        <li>🍪 Cookie cutter → Class</li>
+                        <li>🍪 Cookies → Objects</li>
+                        <li>🏗️ Blueprint → Class</li>
+                        <li>🏠 Houses → Objects</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Code Example:</h3>
+                    <ul>
+                        <li>Dog class → Blueprint</li>
+                        <li>my_dog → Specific dog</li>
+                        <li>your_dog → Different dog</li>
+                        <li>Each has own data</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Key Point:</strong> Classes define structure, objects are actual instances!
+            </div>
+        </div>
+
+        <!-- Slide 4: Creating Your First Class -->
+        <div class="slide">
+            <h2>Creating Your First Class</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Dog</span>:
+    <span class="string">"""A simple dog class."""</span>
+    <span class="keyword">pass</span>  <span class="comment"># Empty class for now</span>
+
+<span class="comment"># Create instances (objects)</span>
+my_dog = Dog()
+your_dog = Dog()
+
+<span class="function">print</span>(my_dog)  <span class="comment"># &lt;__main__.Dog object at 0x...&gt;</span>
+            </div>
+            <div class="info-box">
+                <strong>Note:</strong> Use <strong>PascalCase</strong> for class names (capitalize each word)
+            </div>
+        </div>
+
+        <!-- Slide 5: The __init__ Method -->
+        <div class="slide">
+            <h2>The __init__ Method</h2>
+            <p><code>__init__</code> is a special method called a <strong>constructor</strong>.</p>
+            <p>It runs automatically when you create a new object.</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Dog</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, age):
+        <span class="string">"""Initialize a new dog."""</span>
+        <span class="keyword">self</span>.name = name
+        <span class="keyword">self</span>.age = age
+
+<span class="comment"># Create dogs with different data</span>
+buddy = Dog(<span class="string">"Buddy"</span>, <span class="number">3</span>)
+max_dog = Dog(<span class="string">"Max"</span>, <span class="number">5</span>)
+
+<span class="function">print</span>(buddy.name)  <span class="comment"># Buddy</span>
+<span class="function">print</span>(max_dog.name)  <span class="comment"># Max</span>
+            </div>
+        </div>
+
+        <!-- Slide 6: Understanding self -->
+        <div class="slide">
+            <h2>Understanding 'self'</h2>
+            <p><code>self</code> represents the current instance being created or used.</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Person</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name):
+        <span class="keyword">self</span>.name = name  <span class="comment"># THIS instance's name</span>
+
+person1 = Person(<span class="string">"Alice"</span>)  <span class="comment"># self = person1</span>
+person2 = Person(<span class="string">"Bob"</span>)    <span class="comment"># self = person2</span>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Think of self as:</strong> "This specific object's..."
+                <br>self.name = "This object's name"
+            </div>
+        </div>
+
+        <!-- Slide 7: Instance Variables -->
+        <div class="slide">
+            <h2>Instance Variables</h2>
+            <p>Instance variables are data that belongs to each specific object.</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Student</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, grade):
+        <span class="keyword">self</span>.name = name      <span class="comment"># Instance variable</span>
+        <span class="keyword">self</span>.grade = grade    <span class="comment"># Instance variable</span>
+        <span class="keyword">self</span>.courses = []     <span class="comment"># Instance variable</span>
+
+student1 = Student(<span class="string">"Alice"</span>, <span class="string">"A"</span>)
+student2 = Student(<span class="string">"Bob"</span>, <span class="string">"B"</span>)
+
+<span class="comment"># Each student has their own data</span>
+<span class="function">print</span>(student1.name)  <span class="comment"># Alice</span>
+<span class="function">print</span>(student2.name)  <span class="comment"># Bob</span>
+            </div>
+        </div>
+
+        <!-- Slide 8: Instance Methods -->
+        <div class="slide">
+            <h2>Instance Methods</h2>
+            <p>Methods are functions that belong to a class.</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Dog</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name):
+        <span class="keyword">self</span>.name = name
+
+    <span class="keyword">def</span> <span class="function">bark</span>(<span class="keyword">self</span>):
+        <span class="string">"""Make the dog bark."""</span>
+        <span class="function">print</span>(<span class="string">f"{self.name} says Woof!"</span>)
+
+    <span class="keyword">def</span> <span class="function">sit</span>(<span class="keyword">self</span>):
+        <span class="string">"""Make the dog sit."""</span>
+        <span class="function">print</span>(<span class="string">f"{self.name} is sitting"</span>)
+
+dog = Dog(<span class="string">"Buddy"</span>)
+dog.<span class="function">bark</span>()  <span class="comment"># Buddy says Woof!</span>
+dog.<span class="function">sit</span>()   <span class="comment"># Buddy is sitting</span>
+            </div>
+        </div>
+
+        <!-- Slide 9: Methods with Parameters -->
+        <div class="slide">
+            <h2>Methods with Parameters</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BankAccount</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, owner, balance=<span class="number">0</span>):
+        <span class="keyword">self</span>.owner = owner
+        <span class="keyword">self</span>.balance = balance
+
+    <span class="keyword">def</span> <span class="function">deposit</span>(<span class="keyword">self</span>, amount):
+        <span class="string">"""Deposit money."""</span>
+        <span class="keyword">self</span>.balance += amount
+        <span class="function">print</span>(<span class="string">f"Deposited ${amount}"</span>)
+
+    <span class="keyword">def</span> <span class="function">get_balance</span>(<span class="keyword">self</span>):
+        <span class="string">"""Get current balance."""</span>
+        <span class="keyword">return</span> <span class="keyword">self</span>.balance
+
+account = BankAccount(<span class="string">"Alice"</span>, <span class="number">1000</span>)
+account.<span class="function">deposit</span>(<span class="number">500</span>)
+<span class="function">print</span>(account.<span class="function">get_balance</span>())  <span class="comment"># 1500</span>
+            </div>
+        </div>
+
+        <!-- Slide 10: Class vs Instance -->
+        <div class="slide">
+            <h2>Class vs Instance</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Class</h3>
+                    <ul>
+                        <li>Blueprint/Template</li>
+                        <li>Defined once</li>
+                        <li>Creates objects</li>
+                        <li>Example: Dog</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Instance (Object)</h3>
+                    <ul>
+                        <li>Actual thing created</li>
+                        <li>Can have many</li>
+                        <li>Has own data</li>
+                        <li>Example: my_dog</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Dog</span>:  <span class="comment"># This is the class (blueprint)</span>
+    <span class="keyword">pass</span>
+
+my_dog = Dog()    <span class="comment"># This is an instance</span>
+your_dog = Dog()  <span class="comment"># This is another instance</span>
+            </div>
+        </div>
+
+        <!-- Slide 11: Why Use Classes in Automation? -->
+        <div class="slide">
+            <h2>Why Use Classes in Automation?</h2>
+            <ul class="checklist">
+                <li><strong>Organization:</strong> Group related functionality</li>
+                <li><strong>Reusability:</strong> Write once, use many times</li>
+                <li><strong>Maintainability:</strong> Easy to update and fix</li>
+                <li><strong>Scalability:</strong> Build large test suites</li>
+                <li><strong>Page Object Model:</strong> Industry standard</li>
+                <li><strong>Clean Code:</strong> More readable tests</li>
+            </ul>
+        </div>
+
+        <!-- Slide 12: Automation Example - TestUser Class -->
+        <div class="slide">
+            <h2>Automation Example: TestUser Class</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">TestUser</span>:
+    <span class="string">"""Represents a test user."""</span>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, username, password, email):
+        <span class="keyword">self</span>.username = username
+        <span class="keyword">self</span>.password = password
+        <span class="keyword">self</span>.email = email
+        <span class="keyword">self</span>.is_logged_in = <span class="keyword">False</span>
+
+    <span class="keyword">def</span> <span class="function">get_credentials</span>(<span class="keyword">self</span>):
+        <span class="string">"""Get login credentials."""</span>
+        <span class="keyword">return</span> {
+            <span class="string">"username"</span>: <span class="keyword">self</span>.username,
+            <span class="string">"password"</span>: <span class="keyword">self</span>.password
+        }
+
+<span class="comment"># Usage in tests</span>
+user = TestUser(<span class="string">"testuser1"</span>, <span class="string">"Pass123!"</span>, <span class="string">"test@example.com"</span>)
+creds = user.get_credentials()
+            </div>
+        </div>
+
+        <!-- Slide 13: Automation Example - Browser Class -->
+        <div class="slide">
+            <h2>Automation Example: Browser Class</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BrowserConfig</span>:
+    <span class="string">"""Browser configuration."""</span>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, browser=<span class="string">"chromium"</span>, headless=<span class="keyword">False</span>):
+        <span class="keyword">self</span>.browser = browser
+        <span class="keyword">self</span>.headless = headless
+        <span class="keyword">self</span>.timeout = <span class="number">30000</span>
+        <span class="keyword">self</span>.viewport = {<span class="string">"width"</span>: <span class="number">1280</span>, <span class="string">"height"</span>: <span class="number">720</span>}
+
+    <span class="keyword">def</span> <span class="function">get_config</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> {
+            <span class="string">"headless"</span>: <span class="keyword">self</span>.headless,
+            <span class="string">"timeout"</span>: <span class="keyword">self</span>.timeout
+        }
+
+config = BrowserConfig(headless=<span class="keyword">True</span>)
+            </div>
+        </div>
+
+        <!-- Slide 14: Multiple Instances Example -->
+        <div class="slide">
+            <h2>Working with Multiple Instances</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">TestCase</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, priority=<span class="string">"medium"</span>):
+        <span class="keyword">self</span>.name = name
+        <span class="keyword">self</span>.priority = priority
+        <span class="keyword">self</span>.status = <span class="string">"pending"</span>
+
+    <span class="keyword">def</span> <span class="function">run</span>(<span class="keyword">self</span>):
+        <span class="function">print</span>(<span class="string">f"Running: {self.name}"</span>)
+        <span class="keyword">self</span>.status = <span class="string">"passed"</span>
+
+<span class="comment"># Create multiple test cases</span>
+test1 = TestCase(<span class="string">"Login Test"</span>, <span class="string">"high"</span>)
+test2 = TestCase(<span class="string">"Logout Test"</span>, <span class="string">"medium"</span>)
+test3 = TestCase(<span class="string">"Profile Test"</span>, <span class="string">"low"</span>)
+
+test1.run()
+            </div>
+        </div>
+
+        <!-- Slide 15: Methods Calling Other Methods -->
+        <div class="slide">
+            <h2>Methods Calling Other Methods</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">ShoppingCart</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.items = []
+
+    <span class="keyword">def</span> <span class="function">add_item</span>(<span class="keyword">self</span>, item):
+        <span class="keyword">self</span>.items.append(item)
+        <span class="keyword">self</span>.update_count()  <span class="comment"># Call another method</span>
+
+    <span class="keyword">def</span> <span class="function">update_count</span>(<span class="keyword">self</span>):
+        <span class="function">print</span>(<span class="string">f"Cart has {len(self.items)} items"</span>)
+
+    <span class="keyword">def</span> <span class="function">checkout</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.update_count()
+        <span class="function">print</span>(<span class="string">"Processing checkout..."</span>)
+
+cart = ShoppingCart()
+cart.add_item(<span class="string">"Laptop"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 16: String Representation -->
+        <div class="slide">
+            <h2>String Representation: __str__ and __repr__</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Product</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, price):
+        <span class="keyword">self</span>.name = name
+        <span class="keyword">self</span>.price = price
+
+    <span class="keyword">def</span> <span class="function">__str__</span>(<span class="keyword">self</span>):
+        <span class="string">"""User-friendly string."""</span>
+        <span class="keyword">return</span> <span class="string">f"{self.name} - ${self.price}"</span>
+
+    <span class="keyword">def</span> <span class="function">__repr__</span>(<span class="keyword">self</span>):
+        <span class="string">"""Developer-friendly representation."""</span>
+        <span class="keyword">return</span> <span class="string">f"Product('{self.name}', {self.price})"</span>
+
+laptop = Product(<span class="string">"Laptop"</span>, <span class="number">999.99</span>)
+<span class="function">print</span>(laptop)  <span class="comment"># Laptop - $999.99</span>
+            </div>
+        </div>
+
+        <!-- Slide 17: Data Validation in Classes -->
+        <div class="slide">
+            <h2>Data Validation in __init__</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">User</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, username, age):
+        <span class="comment"># Validate username</span>
+        <span class="keyword">if</span> <span class="keyword">len</span>(username) < <span class="number">3</span>:
+            <span class="keyword">raise</span> ValueError(<span class="string">"Username too short"</span>)
+        <span class="keyword">self</span>.username = username
+
+        <span class="comment"># Validate age</span>
+        <span class="keyword">if</span> age < <span class="number">0</span> <span class="keyword">or</span> age > <span class="number">150</span>:
+            <span class="keyword">raise</span> ValueError(<span class="string">"Invalid age"</span>)
+        <span class="keyword">self</span>.age = age
+
+<span class="comment"># This will raise an error</span>
+<span class="comment"># user = User("ab", 25)  # ValueError: Username too short</span>
+
+user = User(<span class="string">"alice"</span>, <span class="number">25</span>)  <span class="comment"># Valid</span>
+            </div>
+        </div>
+
+        <!-- Slide 18: Working with Lists and Dicts -->
+        <div class="slide">
+            <h2>Instance Variables: Lists & Dicts</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Student</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name):
+        <span class="keyword">self</span>.name = name
+        <span class="keyword">self</span>.courses = []           <span class="comment"># List</span>
+        <span class="keyword">self</span>.grades = {}            <span class="comment"># Dictionary</span>
+
+    <span class="keyword">def</span> <span class="function">enroll</span>(<span class="keyword">self</span>, course):
+        <span class="keyword">self</span>.courses.append(course)
+
+    <span class="keyword">def</span> <span class="function">add_grade</span>(<span class="keyword">self</span>, course, grade):
+        <span class="keyword">self</span>.grades[course] = grade
+
+student = Student(<span class="string">"Alice"</span>)
+student.enroll(<span class="string">"Math"</span>)
+student.add_grade(<span class="string">"Math"</span>, <span class="string">"A"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 19: Common Mistakes to Avoid -->
+        <div class="slide">
+            <h2>Common Mistakes to Avoid</h2>
+            <div class="warning-box">
+                <h3>❌ Forgetting self</h3>
+                <code>def bark():</code> → <code>def bark(self):</code>
+            </div>
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>❌ Forgetting self when accessing variables</h3>
+                <code>name = "Buddy"</code> → <code>self.name = "Buddy"</code>
+            </div>
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>❌ Using lowercase for class names</h3>
+                <code>class dog:</code> → <code>class Dog:</code>
+            </div>
+            <div class="success-box" style="margin-top: 30px;">
+                <strong>✅ Always use self as first parameter!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 20: Page Object Model Introduction -->
+        <div class="slide">
+            <h2>Page Object Model (POM)</h2>
+            <p><strong>POM</strong> is a design pattern where each web page is a class.</p>
+
+            <div class="success-box">
+                <h3>Benefits:</h3>
+                <ul>
+                    <li>✅ Selectors in one place</li>
+                    <li>✅ Easy to maintain</li>
+                    <li>✅ Reusable page actions</li>
+                    <li>✅ Clean test code</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>Without POM:</h3>
+                <code>page.fill("#username", "test")</code> scattered everywhere!
+            </div>
+        </div>
+
+        <!-- Slide 21: POM - Without Pattern -->
+        <div class="slide">
+            <h2>Testing WITHOUT Page Objects</h2>
+            <div class="code-block">
+<span class="comment"># Test 1 - Login</span>
+page.goto(<span class="string">"https://example.com/login"</span>)
+page.fill(<span class="string">"#username"</span>, <span class="string">"testuser"</span>)
+page.fill(<span class="string">"#password"</span>, <span class="string">"pass123"</span>)
+page.click(<span class="string">"#submit"</span>)
+
+<span class="comment"># Test 2 - Login again (duplicated code!)</span>
+page.goto(<span class="string">"https://example.com/login"</span>)
+page.fill(<span class="string">"#username"</span>, <span class="string">"admin"</span>)
+page.fill(<span class="string">"#password"</span>, <span class="string">"admin123"</span>)
+page.click(<span class="string">"#submit"</span>)
+
+<span class="comment"># Problem: If selector changes, update everywhere!</span>
+            </div>
+            <div class="warning-box">
+                <strong>⚠️ Problems:</strong> Duplicated code, hard to maintain, selector changes affect many tests
+            </div>
+        </div>
+
+        <!-- Slide 22: POM - With Pattern -->
+        <div class="slide">
+            <h2>Testing WITH Page Objects</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+        <span class="keyword">self</span>.username_input = <span class="string">"#username"</span>
+        <span class="keyword">self</span>.password_input = <span class="string">"#password"</span>
+        <span class="keyword">self</span>.submit_button = <span class="string">"#submit"</span>
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, username, password):
+        <span class="keyword">self</span>.page.fill(<span class="keyword">self</span>.username_input, username)
+        <span class="keyword">self</span>.page.fill(<span class="keyword">self</span>.password_input, password)
+        <span class="keyword">self</span>.page.click(<span class="keyword">self</span>.submit_button)
+
+<span class="comment"># Test 1</span>
+login_page = LoginPage(page)
+login_page.login(<span class="string">"testuser"</span>, <span class="string">"pass123"</span>)
+
+<span class="comment"># Test 2</span>
+login_page.login(<span class="string">"admin"</span>, <span class="string">"admin123"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 23: Creating a LoginPage Class -->
+        <div class="slide">
+            <h2>Step-by-Step: LoginPage Class</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="string">"""Page object for login page."""</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="comment"># Store the Playwright page</span>
+        <span class="keyword">self</span>.page = page
+
+        <span class="comment"># Define all selectors in one place</span>
+        <span class="keyword">self</span>.username_input = <span class="string">"#username"</span>
+        <span class="keyword">self</span>.password_input = <span class="string">"#password"</span>
+        <span class="keyword">self</span>.submit_button = <span class="string">"button[type='submit']"</span>
+        <span class="keyword">self</span>.error_message = <span class="string">".error"</span>
+            </div>
+            <div class="info-box">
+                <strong>💡 Tip:</strong> Store all selectors as instance variables for easy updates!
+            </div>
+        </div>
+
+        <!-- Slide 24: Adding Methods to LoginPage -->
+        <div class="slide">
+            <h2>Adding Methods to LoginPage</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+        <span class="keyword">self</span>.username_input = <span class="string">"#username"</span>
+        <span class="keyword">self</span>.password_input = <span class="string">"#password"</span>
+        <span class="keyword">self</span>.submit_button = <span class="string">"#submit"</span>
+
+    <span class="keyword">def</span> <span class="function">enter_username</span>(<span class="keyword">self</span>, username):
+        <span class="keyword">self</span>.page.fill(<span class="keyword">self</span>.username_input, username)
+
+    <span class="keyword">def</span> <span class="function">enter_password</span>(<span class="keyword">self</span>, password):
+        <span class="keyword">self</span>.page.fill(<span class="keyword">self</span>.password_input, password)
+
+    <span class="keyword">def</span> <span class="function">click_submit</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.page.click(<span class="keyword">self</span>.submit_button)
+            </div>
+        </div>
+
+        <!-- Slide 25: Complete Login Method -->
+        <div class="slide">
+            <h2>Complete login() Method</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+        <span class="keyword">self</span>.username_input = <span class="string">"#username"</span>
+        <span class="keyword">self</span>.password_input = <span class="string">"#password"</span>
+        <span class="keyword">self</span>.submit_button = <span class="string">"#submit"</span>
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, username, password):
+        <span class="string">"""Perform complete login action."""</span>
+        <span class="keyword">self</span>.page.fill(<span class="keyword">self</span>.username_input, username)
+        <span class="keyword">self</span>.page.fill(<span class="keyword">self</span>.password_input, password)
+        <span class="keyword">self</span>.page.click(<span class="keyword">self</span>.submit_button)
+
+<span class="comment"># Usage in tests</span>
+login_page = LoginPage(page)
+login_page.login(<span class="string">"testuser"</span>, <span class="string">"Pass123!"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 26: Creating a HomePage Class -->
+        <div class="slide">
+            <h2>Example: HomePage Class</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">HomePage</span>:
+    <span class="string">"""Page object for home page."""</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+        <span class="keyword">self</span>.welcome_message = <span class="string">".welcome"</span>
+        <span class="keyword">self</span>.logout_button = <span class="string">"#logout"</span>
+        <span class="keyword">self</span>.profile_link = <span class="string">"a[href='/profile']"</span>
+
+    <span class="keyword">def</span> <span class="function">get_welcome_text</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="keyword">self</span>.page.locator(<span class="keyword">self</span>.welcome_message).text_content()
+
+    <span class="keyword">def</span> <span class="function">logout</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.page.click(<span class="keyword">self</span>.logout_button)
+
+    <span class="keyword">def</span> <span class="function">go_to_profile</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.page.click(<span class="keyword">self</span>.profile_link)
+            </div>
+        </div>
+
+        <!-- Slide 27: Using Multiple Page Objects -->
+        <div class="slide">
+            <h2>Using Multiple Page Objects Together</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">test_login_flow</span>(page):
+    <span class="comment"># Navigate to login page</span>
+    page.goto(<span class="string">"https://example.com/login"</span>)
+
+    <span class="comment"># Use LoginPage</span>
+    login_page = LoginPage(page)
+    login_page.login(<span class="string">"testuser"</span>, <span class="string">"Pass123!"</span>)
+
+    <span class="comment"># Use HomePage</span>
+    home_page = HomePage(page)
+    welcome_text = home_page.get_welcome_text()
+    <span class="keyword">assert</span> <span class="string">"Welcome"</span> <span class="keyword">in</span> welcome_text
+
+    <span class="comment"># Logout</span>
+    home_page.logout()
+            </div>
+            <div class="success-box">
+                <strong>✅ Clean, readable, maintainable tests!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 28: BasePage Pattern -->
+        <div class="slide">
+            <h2>BasePage Pattern (Advanced)</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BasePage</span>:
+    <span class="string">"""Base class for all page objects."""</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+
+    <span class="keyword">def</span> <span class="function">navigate_to</span>(<span class="keyword">self</span>, url):
+        <span class="keyword">self</span>.page.goto(url)
+
+    <span class="keyword">def</span> <span class="function">get_title</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="keyword">self</span>.page.title()
+
+<span class="keyword">class</span> <span class="function">LoginPage</span>(BasePage):  <span class="comment"># Inherit from BasePage</span>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">super</span>().__init__(page)  <span class="comment"># Call parent __init__</span>
+        <span class="keyword">self</span>.username_input = <span class="string">"#username"</span>
+            </div>
+        </div>
+
+        <!-- Slide 29: POM Best Practices -->
+        <div class="slide">
+            <h2>Page Object Model Best Practices</h2>
+            <ul class="checklist">
+                <li><strong>One class per page:</strong> Each page gets its own class</li>
+                <li><strong>Store selectors:</strong> All selectors in __init__</li>
+                <li><strong>Descriptive methods:</strong> Use clear method names</li>
+                <li><strong>Return values:</strong> Methods should return data when needed</li>
+                <li><strong>No assertions:</strong> Keep assertions in tests, not page objects</li>
+                <li><strong>Reusable actions:</strong> Create methods for common actions</li>
+            </ul>
+            <div class="info-box">
+                <strong>💡 Remember:</strong> Page objects represent actions users can take!
+            </div>
+        </div>
+
+        <!-- Slide 30: Summary -->
+        <div class="slide">
+            <h2>Summary & Next Steps</h2>
+            <h3>What We Learned:</h3>
+            <ul class="checklist">
+                <li>Classes are blueprints for objects</li>
+                <li>__init__ initializes new objects</li>
+                <li>self refers to current instance</li>
+                <li>Instance variables store object data</li>
+                <li>Instance methods define behaviors</li>
+                <li>Page Object Model organizes tests</li>
+            </ul>
+            <h3>Next Steps:</h3>
+            <ol>
+                <li>Complete all exercises</li>
+                <li>Build page objects for your tests</li>
+                <li>Practice creating classes</li>
+                <li>Ready for Lecture 10!</li>
+            </ol>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

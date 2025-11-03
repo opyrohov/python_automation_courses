@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 10: Classes & Objects (Part 2)</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 10</h1>
+            <div class="subtitle">Classes & Objects (Part 2)</div>
+            <p style="font-size: 1.3em; color: #888;">Inheritance & Advanced OOP</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>Inheritance fundamentals</li>
+                <li>The super() function</li>
+                <li>Method overriding</li>
+                <li>BasePage pattern for Playwright</li>
+                <li>Organizing test code with classes</li>
+                <li>OOP best practices</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Build maintainable test automation with inheritance!
+            </div>
+        </div>
+
+        <!-- Slide 3: What is Inheritance? -->
+        <div class="slide">
+            <h2>What is Inheritance?</h2>
+            <p>Inheritance allows a class to <strong>inherit</strong> attributes and methods from another class.</p>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Terms:</h3>
+                    <ul>
+                        <li><strong>Parent Class:</strong> Base/Super class</li>
+                        <li><strong>Child Class:</strong> Derived/Sub class</li>
+                        <li><strong>Inherits:</strong> Gets parent's code</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Benefits:</h3>
+                    <ul>
+                        <li>✅ Code reuse</li>
+                        <li>✅ Organization</li>
+                        <li>✅ Maintainability</li>
+                        <li>✅ Extensibility</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Key:</strong> Child classes inherit everything from parent!
+            </div>
+        </div>
+
+        <!-- Slide 4: Basic Inheritance Syntax -->
+        <div class="slide">
+            <h2>Basic Inheritance Syntax</h2>
+            <div class="code-block">
+<span class="comment"># Parent class</span>
+<span class="keyword">class</span> <span class="function">Animal</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name):
+        <span class="keyword">self</span>.name = name
+
+    <span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+        <span class="function">print</span>(<span class="string">f"{self.name} makes a sound"</span>)
+
+<span class="comment"># Child class inherits from Animal</span>
+<span class="keyword">class</span> <span class="function">Dog</span>(Animal):  <span class="comment"># ← Inheritance!</span>
+    <span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+        <span class="function">print</span>(<span class="string">f"{self.name} says Woof!"</span>)
+
+dog = Dog(<span class="string">"Buddy"</span>)
+dog.speak()  <span class="comment"># Buddy says Woof!</span>
+            </div>
+            <div class="info-box">
+                <strong>Syntax:</strong> class ChildClass(ParentClass):
+            </div>
+        </div>
+
+        <!-- Slide 5: The super() Function -->
+        <div class="slide">
+            <h2>The super() Function</h2>
+            <p><code>super()</code> calls methods from the parent class.</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Person</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, age):
+        <span class="keyword">self</span>.name = name
+        <span class="keyword">self</span>.age = age
+
+<span class="keyword">class</span> <span class="function">Employee</span>(Person):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, age, employee_id):
+        <span class="keyword">super</span>().__init__(name, age)  <span class="comment"># Call parent!</span>
+        <span class="keyword">self</span>.employee_id = employee_id
+
+emp = Employee(<span class="string">"Alice"</span>, <span class="number">30</span>, <span class="string">"EMP001"</span>)
+<span class="function">print</span>(emp.name)  <span class="comment"># Alice</span>
+            </div>
+        </div>
+
+        <!-- Slide 6: Why Use super()? -->
+        <div class="slide">
+            <h2>Why Use super()?</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>❌ Without super():</h3>
+                    <div class="warning-box">
+<pre>def __init__(self, name, age, emp_id):
+    self.name = name     # Duplicate
+    self.age = age       # Duplicate
+    self.employee_id = emp_id</pre>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>✅ With super():</h3>
+                    <div class="success-box">
+<pre>def __init__(self, name, age, emp_id):
+    super().__init__(name, age)
+    self.employee_id = emp_id</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="info-box">
+                <strong>Best Practice:</strong> Always use super() to call parent's __init__()
+            </div>
+        </div>
+
+        <!-- Slide 7: Method Overriding -->
+        <div class="slide">
+            <h2>Method Overriding</h2>
+            <p>Child classes can <strong>override</strong> parent methods.</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Shape</span>:
+    <span class="keyword">def</span> <span class="function">area</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="number">0</span>  <span class="comment"># Default implementation</span>
+
+<span class="keyword">class</span> <span class="function">Rectangle</span>(Shape):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, width, height):
+        <span class="keyword">self</span>.width = width
+        <span class="keyword">self</span>.height = height
+
+    <span class="keyword">def</span> <span class="function">area</span>(<span class="keyword">self</span>):  <span class="comment"># Override parent's area()</span>
+        <span class="keyword">return</span> <span class="keyword">self</span>.width * <span class="keyword">self</span>.height
+
+rect = Rectangle(<span class="number">5</span>, <span class="number">10</span>)
+<span class="function">print</span>(rect.area())  <span class="comment"># 50</span>
+            </div>
+        </div>
+
+        <!-- Slide 8: Complete Override vs Extend -->
+        <div class="slide">
+            <h2>Override vs Extend</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Complete Override:</h3>
+                    <div class="code-block">
+<span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+    <span class="comment"># Replace completely</span>
+    <span class="keyword">return</span> <span class="string">"Woof!"</span>
+                    </div>
+                    <p><small>Use when behavior is completely different</small></p>
+                </div>
+                <div class="column">
+                    <h3>Extend (use super()):</h3>
+                    <div class="code-block">
+<span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+    <span class="comment"># Call parent first</span>
+    <span class="keyword">super</span>().speak()
+    <span class="function">print</span>(<span class="string">"Woof!"</span>)
+                    </div>
+                    <p><small>Use when adding to parent's behavior</small></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Multiple Child Classes -->
+        <div class="slide">
+            <h2>Multiple Child Classes</h2>
+            <p>One parent can have many children!</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Animal</span>:
+    <span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+        <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="function">Dog</span>(Animal):
+    <span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="string">"Woof!"</span>
+
+<span class="keyword">class</span> <span class="function">Cat</span>(Animal):
+    <span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="string">"Meow!"</span>
+
+<span class="keyword">class</span> <span class="function">Bird</span>(Animal):
+    <span class="keyword">def</span> <span class="function">speak</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="string">"Tweet!"</span>
+            </div>
+        </div>
+
+        <!-- Slide 10: Multi-Level Inheritance -->
+        <div class="slide">
+            <h2>Multi-Level Inheritance</h2>
+            <p>Inheritance can have multiple levels:</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">Animal</span>:        <span class="comment"># Level 1</span>
+    <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="function">Mammal</span>(Animal):  <span class="comment"># Level 2</span>
+    <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="function">Dog</span>(Mammal):     <span class="comment"># Level 3</span>
+    <span class="keyword">pass</span>
+
+<span class="comment"># Dog inherits from Mammal AND Animal!</span>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Warning:</strong> Keep inheritance 2-3 levels max. Too deep = hard to maintain!
+            </div>
+        </div>
+
+        <!-- Slide 11: Why Use Inheritance in Automation? -->
+        <div class="slide">
+            <h2>Why Use Inheritance in Automation?</h2>
+            <ul class="checklist">
+                <li><strong>BasePage Pattern:</strong> Common page functionality</li>
+                <li><strong>BaseTest Pattern:</strong> Common test setup</li>
+                <li><strong>Code Reuse:</strong> Write once, use everywhere</li>
+                <li><strong>Consistency:</strong> Same behavior across all pages</li>
+                <li><strong>Maintainability:</strong> Update in one place</li>
+                <li><strong>Industry Standard:</strong> Professional approach</li>
+            </ul>
+        </div>
+
+        <!-- Slide 12: The BasePage Pattern -->
+        <div class="slide">
+            <h2>The BasePage Pattern</h2>
+            <p>Create a base class with common page functionality:</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BasePage</span>:
+    <span class="string">"""Base class for all page objects."""</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+
+    <span class="keyword">def</span> <span class="function">click</span>(<span class="keyword">self</span>, selector):
+        <span class="keyword">self</span>.page.click(selector)
+
+    <span class="keyword">def</span> <span class="function">fill</span>(<span class="keyword">self</span>, selector, text):
+        <span class="keyword">self</span>.page.fill(selector, text)
+
+    <span class="keyword">def</span> <span class="function">get_text</span>(<span class="keyword">self</span>, selector):
+        <span class="keyword">return</span> <span class="keyword">self</span>.page.locator(selector).text_content()
+            </div>
+        </div>
+
+        <!-- Slide 13: Creating Page Objects from BasePage -->
+        <div class="slide">
+            <h2>Creating Page Objects from BasePage</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>(BasePage):
+    <span class="string">"""Login page inherits from BasePage."""</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">super</span>().__init__(page)
+        <span class="keyword">self</span>.username_input = <span class="string">"#username"</span>
+        <span class="keyword">self</span>.password_input = <span class="string">"#password"</span>
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, username, password):
+        <span class="keyword">self</span>.fill(<span class="keyword">self</span>.username_input, username)  <span class="comment"># From BasePage!</span>
+        <span class="keyword">self</span>.fill(<span class="keyword">self</span>.password_input, password)
+        <span class="keyword">self</span>.click(<span class="string">"#submit"</span>)  <span class="comment"># From BasePage!</span>
+            </div>
+            <div class="success-box">
+                <strong>✅ LoginPage has all BasePage methods automatically!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 14: BasePage Benefits -->
+        <div class="slide">
+            <h2>BasePage Pattern Benefits</h2>
+
+            <div class="success-box">
+                <h3>✅ Code Reuse</h3>
+                <p>Write click(), fill(), wait() once → use in all pages</p>
+            </div>
+
+            <div class="success-box">
+                <h3>✅ Consistency</h3>
+                <p>All pages behave the same way</p>
+            </div>
+
+            <div class="success-box">
+                <h3>✅ Maintainability</h3>
+                <p>Update BasePage → all pages updated automatically</p>
+            </div>
+
+            <div class="success-box">
+                <h3>✅ Error Handling</h3>
+                <p>Add screenshots/logging in one place</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Complete BasePage Example -->
+        <div class="slide">
+            <h2>Complete BasePage Example</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BasePage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">self</span>.page = page
+
+    <span class="keyword">def</span> <span class="function">click</span>(<span class="keyword">self</span>, selector):
+        <span class="keyword">self</span>.page.click(selector)
+
+    <span class="keyword">def</span> <span class="function">fill</span>(<span class="keyword">self</span>, selector, text):
+        <span class="keyword">self</span>.page.fill(selector, text)
+
+    <span class="keyword">def</span> <span class="function">is_visible</span>(<span class="keyword">self</span>, selector):
+        <span class="keyword">return</span> <span class="keyword">self</span>.page.is_visible(selector)
+
+    <span class="keyword">def</span> <span class="function">wait_for_element</span>(<span class="keyword">self</span>, selector):
+        <span class="keyword">self</span>.page.wait_for_selector(selector)
+
+    <span class="keyword">def</span> <span class="function">screenshot</span>(<span class="keyword">self</span>, name):
+        <span class="keyword">self</span>.page.screenshot(path=<span class="string">f"{name}.png"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 16: Using BasePage in Multiple Pages -->
+        <div class="slide">
+            <h2>Using BasePage in Multiple Pages</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">HomePage</span>(BasePage):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">super</span>().__init__(page)
+        <span class="keyword">self</span>.search_box = <span class="string">"#search"</span>
+
+    <span class="keyword">def</span> <span class="function">search</span>(<span class="keyword">self</span>, query):
+        <span class="keyword">self</span>.fill(<span class="keyword">self</span>.search_box, query)  <span class="comment"># From BasePage</span>
+
+<span class="keyword">class</span> <span class="function">ProductPage</span>(BasePage):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page):
+        <span class="keyword">super</span>().__init__(page)
+        <span class="keyword">self</span>.add_to_cart_btn = <span class="string">"#add-to-cart"</span>
+
+    <span class="keyword">def</span> <span class="function">add_to_cart</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.click(<span class="keyword">self</span>.add_to_cart_btn)  <span class="comment"># From BasePage</span>
+            </div>
+        </div>
+
+        <!-- Slide 17: Specialized Base Classes -->
+        <div class="slide">
+            <h2>Specialized Base Classes</h2>
+            <p>Create specialized base classes for specific needs:</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BasePage</span>:
+    <span class="comment"># Basic functionality</span>
+    <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="function">AuthBasePage</span>(BasePage):
+    <span class="string">"""For pages requiring authentication."""</span>
+
+    <span class="keyword">def</span> <span class="function">verify_logged_in</span>(<span class="keyword">self</span>):
+        <span class="keyword">return</span> <span class="keyword">self</span>.is_visible(<span class="string">".user-menu"</span>)
+
+    <span class="keyword">def</span> <span class="function">logout</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.click(<span class="string">"#logout"</span>)
+
+<span class="keyword">class</span> <span class="function">DashboardPage</span>(AuthBasePage):
+    <span class="comment"># Inherits from AuthBasePage!</span>
+    <span class="keyword">pass</span>
+            </div>
+        </div>
+
+        <!-- Slide 18: Organizing Test Code -->
+        <div class="slide">
+            <h2>Organizing Test Code with Classes</h2>
+            <p>Use classes to organize tests:</p>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">TestLogin</span>:
+    <span class="string">"""Group login tests together."""</span>
+
+    <span class="keyword">def</span> <span class="function">setup_method</span>(<span class="keyword">self</span>):
+        <span class="string">"""Run before each test."""</span>
+        <span class="function">print</span>(<span class="string">"Setup test"</span>)
+
+    <span class="keyword">def</span> <span class="function">teardown_method</span>(<span class="keyword">self</span>):
+        <span class="string">"""Run after each test."""</span>
+        <span class="function">print</span>(<span class="string">"Cleanup test"</span>)
+
+    <span class="keyword">def</span> <span class="function">test_valid_login</span>(<span class="keyword">self</span>):
+        <span class="function">print</span>(<span class="string">"Testing valid login"</span>)
+
+    <span class="keyword">def</span> <span class="function">test_invalid_password</span>(<span class="keyword">self</span>):
+        <span class="function">print</span>(<span class="string">"Testing invalid password"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 19: Base Test Class -->
+        <div class="slide">
+            <h2>Creating a Base Test Class</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">BaseTest</span>:
+    <span class="string">"""Base class for all tests."""</span>
+
+    <span class="keyword">def</span> <span class="function">setup_method</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.base_url = <span class="string">"https://example.com"</span>
+        <span class="keyword">self</span>.timeout = <span class="number">30000</span>
+
+    <span class="keyword">def</span> <span class="function">teardown_method</span>(<span class="keyword">self</span>):
+        <span class="comment"># Cleanup code</span>
+        <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="function">TestLogin</span>(BaseTest):
+    <span class="string">"""Inherits setup/teardown from BaseTest!"""</span>
+
+    <span class="keyword">def</span> <span class="function">test_login</span>(<span class="keyword">self</span>):
+        <span class="function">print</span>(<span class="keyword">self</span>.base_url)  <span class="comment"># From BaseTest!</span>
+            </div>
+        </div>
+
+        <!-- Slide 20: Test Data Management -->
+        <div class="slide">
+            <h2>Managing Test Data with Classes</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">TestData</span>:
+    <span class="string">"""Centralized test data."""</span>
+
+    VALID_USERS = [
+        {<span class="string">"email"</span>: <span class="string">"user1@test.com"</span>, <span class="string">"password"</span>: <span class="string">"Pass123!"</span>},
+        {<span class="string">"email"</span>: <span class="string">"user2@test.com"</span>, <span class="string">"password"</span>: <span class="string">"Pass456!"</span>},
+    ]
+
+    <span class="keyword">def</span> <span class="function">get_valid_user</span>(<span class="keyword">self</span>, index=<span class="number">0</span>):
+        <span class="keyword">return</span> <span class="keyword">self</span>.VALID_USERS[index]
+
+    <span class="decorator">@staticmethod</span>
+    <span class="keyword">def</span> <span class="function">generate_random_email</span>():
+        <span class="keyword">import</span> random
+        <span class="keyword">return</span> <span class="string">f"test{random.randint(1000, 9999)}@test.com"</span>
+            </div>
+        </div>
+
+        <!-- Slide 21: Complete Test Organization -->
+        <div class="slide">
+            <h2>Complete Test Organization</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">TestCheckout</span>(BaseTest):
+    <span class="keyword">def</span> <span class="function">setup_method</span>(<span class="keyword">self</span>):
+        <span class="keyword">super</span>().setup_method()
+        <span class="comment"># Initialize page objects</span>
+        <span class="keyword">self</span>.login_page = LoginPage(<span class="keyword">self</span>.page)
+        <span class="keyword">self</span>.checkout_page = CheckoutPage(<span class="keyword">self</span>.page)
+        <span class="comment"># Get test data</span>
+        <span class="keyword">self</span>.test_data = TestData()
+
+    <span class="keyword">def</span> <span class="function">test_complete_checkout</span>(<span class="keyword">self</span>):
+        user = <span class="keyword">self</span>.test_data.get_valid_user()
+        <span class="keyword">self</span>.login_page.login(user[<span class="string">'email'</span>], user[<span class="string">'password'</span>])
+        <span class="keyword">self</span>.checkout_page.complete_checkout()
+            </div>
+        </div>
+
+        <!-- Slide 22: Best Practice - Single Responsibility -->
+        <div class="slide">
+            <h2>Best Practice: Single Responsibility</h2>
+            <p>Each class should have ONE reason to change.</p>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>❌ BAD:</h3>
+                    <div class="warning-box">
+<pre>class LoginPage:
+    def login(self):
+        # UI interaction
+        # Database check
+        # Send email
+        # All in one class!</pre>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>✅ GOOD:</h3>
+                    <div class="success-box">
+<pre>class LoginPage:
+    # Only UI
+
+class UserRepository:
+    # Only database
+
+class EmailService:
+    # Only email</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Best Practice - DRY -->
+        <div class="slide">
+            <h2>Best Practice: DRY (Don't Repeat Yourself)</h2>
+
+            <div class="warning-box">
+                <h3>❌ Code Duplication:</h3>
+<pre>class HomePage:
+    def click_logout(self):
+        print("Waiting...")
+        self.page.click("#logout")
+
+class ProfilePage:
+    def click_logout(self):
+        print("Waiting...")  # DUPLICATE!
+        self.page.click("#logout")  # DUPLICATE!</pre>
+            </div>
+
+            <div class="success-box">
+                <h3>✅ Use Inheritance:</h3>
+<pre>class BasePage:
+    def click_element(self, selector):
+        print("Waiting...")
+        self.page.click(selector)
+
+# Both inherit from BasePage - no duplication!</pre>
+            </div>
+        </div>
+
+        <!-- Slide 24: Best Practice - Clear Naming -->
+        <div class="slide">
+            <h2>Best Practice: Clear, Meaningful Names</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>❌ BAD Names:</h3>
+                    <div class="warning-box">
+<pre>class LP:
+    def do(self, u, p):
+        pass
+
+class Thing:
+    def process(self):
+        pass</pre>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>✅ GOOD Names:</h3>
+                    <div class="success-box">
+<pre>class LoginPage:
+    def login(self, username, password):
+        pass
+
+class UserValidator:
+    def validate_email(self):
+        pass</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 25: Best Practice - Small Methods -->
+        <div class="slide">
+            <h2>Best Practice: Keep Methods Small</h2>
+
+            <p>Each method should do ONE thing well.</p>
+
+            <div class="code-block">
+<span class="comment"># ❌ BAD: One giant method</span>
+<span class="keyword">def</span> <span class="function">complete_checkout</span>(<span class="keyword">self</span>, all_data):
+    <span class="comment"># 50 lines of code doing everything!</span>
+    <span class="keyword">pass</span>
+
+<span class="comment"># ✅ GOOD: Break into smaller methods</span>
+<span class="keyword">def</span> <span class="function">fill_billing_info</span>(<span class="keyword">self</span>, billing_data):
+    <span class="comment"># 5 lines</span>
+
+<span class="keyword">def</span> <span class="function">fill_payment_info</span>(<span class="keyword">self</span>, payment_data):
+    <span class="comment"># 5 lines</span>
+
+<span class="keyword">def</span> <span class="function">complete_checkout</span>(<span class="keyword">self</span>, billing, payment):
+    <span class="keyword">self</span>.fill_billing_info(billing)
+    <span class="keyword">self</span>.fill_payment_info(payment)
+            </div>
+        </div>
+
+        <!-- Slide 26: Best Practice - Documentation -->
+        <div class="slide">
+            <h2>Best Practice: Use Docstrings</h2>
+
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>(BasePage):
+    <span class="string">"""
+    Page object for the login page.
+
+    This class handles all login-related interactions
+    including entering credentials and submitting the form.
+    """</span>
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, username, password):
+        <span class="string">"""
+        Perform login with given credentials.
+
+        Args:
+            username (str): User's email address
+            password (str): User's password
+
+        Returns:
+            None
+        """</span>
+        <span class="keyword">self</span>.fill(<span class="keyword">self</span>.username_input, username)
+            </div>
+        </div>
+
+        <!-- Slide 27: Best Practice - Exception Handling -->
+        <div class="slide">
+            <h2>Best Practice: Handle Exceptions</h2>
+
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">click_element</span>(<span class="keyword">self</span>, selector):
+    <span class="string">"""Click element with error handling."""</span>
+    <span class="keyword">try</span>:
+        <span class="keyword">self</span>.page.click(selector)
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        <span class="function">print</span>(<span class="string">f"❌ Failed to click {selector}"</span>)
+        <span class="comment"># Take screenshot for debugging</span>
+        <span class="keyword">self</span>.screenshot(<span class="string">f"error_{selector}"</span>)
+        <span class="comment"># Re-raise exception</span>
+        <span class="keyword">raise</span>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Always log errors and take screenshots for debugging!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 28: Best Practice - Avoid Deep Inheritance -->
+        <div class="slide">
+            <h2>Best Practice: Shallow Inheritance</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>❌ Too Deep:</h3>
+                    <div class="warning-box">
+<pre>BasePage
+  ↓
+AuthPage
+  ↓
+UserPage
+  ↓
+ProfilePage
+  ↓
+EditPage  # Too deep!</pre>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>✅ Keep Shallow:</h3>
+                    <div class="success-box">
+<pre>BasePage
+  ↓
+LoginPage
+HomePage
+ProductPage
+
+Max 2-3 levels!</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 29: Page Object Best Practices -->
+        <div class="slide">
+            <h2>Page Object Specific Best Practices</h2>
+
+            <ul class="checklist">
+                <li><strong>Store selectors in __init__:</strong> All selectors in one place</li>
+                <li><strong>Use UPPERCASE for selectors:</strong> Easy to identify</li>
+                <li><strong>Return data, don't assert:</strong> Let tests do assertions</li>
+                <li><strong>Use private methods:</strong> _method_name for internal use</li>
+                <li><strong>One page = one class:</strong> Don't combine pages</li>
+                <li><strong>Inherit from BasePage:</strong> Always use base class</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>💡 Remember:</strong> Page objects represent user actions, not implementation!
+            </div>
+        </div>
+
+        <!-- Slide 30: Summary -->
+        <div class="slide">
+            <h2>Summary & Key Takeaways</h2>
+
+            <h3>What We Learned:</h3>
+            <ul class="checklist">
+                <li>Inheritance allows code reuse</li>
+                <li>super() calls parent class methods</li>
+                <li>Method overriding changes behavior</li>
+                <li>BasePage pattern is essential for automation</li>
+                <li>Organize tests with base classes</li>
+                <li>Follow OOP best practices</li>
+            </ul>
+
+            <h3>Next Steps:</h3>
+            <ol>
+                <li>Complete all exercises</li>
+                <li>Build your page object hierarchy</li>
+                <li>Organize your test code</li>
+                <li>Apply best practices to real projects</li>
+            </ol>
+
+            <div class="success-box">
+                <strong>🎉 You've mastered advanced OOP for test automation!</strong>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

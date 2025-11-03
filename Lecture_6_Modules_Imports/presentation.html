@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 6: Modules & Imports</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 6</h1>
+            <div class="subtitle">Modules & Imports</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: What You'll Learn -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>What are modules and why use them</li>
+                <li>Different ways to import modules</li>
+                <li>Creating your own modules</li>
+                <li>Using Python's standard library</li>
+                <li>Installing packages with pip</li>
+                <li>Setting up Playwright</li>
+            </ul>
+            <div class="info-box">
+                <strong>🎯 Goal:</strong> Organize code with modules and prepare for Playwright automation!
+            </div>
+        </div>
+
+        <!-- Slide 3: What are Modules? -->
+        <div class="slide">
+            <h2>What are Modules?</h2>
+
+            <div class="info-box">
+                A <strong>module</strong> is a Python file containing functions, classes, and variables that you can import and use in other programs.
+            </div>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Why Use Modules?</h3>
+                    <ul>
+                        <li>✅ Code organization</li>
+                        <li>✅ Reusability</li>
+                        <li>✅ Avoid repetition</li>
+                        <li>✅ Easier testing</li>
+                        <li>✅ Team collaboration</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Types</h3>
+                    <ul>
+                        <li><strong>Module:</strong> Single .py file</li>
+                        <li><strong>Package:</strong> Folder with modules</li>
+                        <li><strong>Library:</strong> Collection of packages</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Import Entire Module -->
+        <div class="slide">
+            <h2>Importing Modules</h2>
+
+            <div class="code-block">
+<span class="comment"># Method 1: Import entire module</span>
+<span class="keyword">import</span> math
+
+<span class="function">print</span>(math.<span class="function">sqrt</span>(<span class="number">16</span>))  <span class="comment"># 4.0</span>
+<span class="function">print</span>(math.pi)    <span class="comment"># 3.14159...</span>
+<span class="function">print</span>(math.<span class="function">ceil</span>(<span class="number">4.2</span>))  <span class="comment"># 5</span>
+            </div>
+
+            <div class="info-box">
+                <strong>Syntax:</strong> <code>import module_name</code><br>
+                <strong>Usage:</strong> <code>module_name.function()</code>
+            </div>
+        </div>
+
+        <!-- Slide 5: Import Specific Items -->
+        <div class="slide">
+            <h2>Import Specific Items</h2>
+
+            <div class="code-block">
+<span class="comment"># Method 2: Import specific items</span>
+<span class="keyword">from</span> math <span class="keyword">import</span> sqrt, pi
+
+<span class="function">print</span>(<span class="function">sqrt</span>(<span class="number">25</span>))  <span class="comment"># 5.0 - no need for math. prefix</span>
+<span class="function">print</span>(pi)      <span class="comment"># 3.14159...</span>
+
+
+<span class="comment"># Import multiple items</span>
+<span class="keyword">from</span> math <span class="keyword">import</span> sqrt, pi, ceil, floor
+
+<span class="function">print</span>(<span class="function">sqrt</span>(<span class="number">16</span>))
+<span class="function">print</span>(<span class="function">ceil</span>(<span class="number">4.3</span>))
+<span class="function">print</span>(<span class="function">floor</span>(<span class="number">4.8</span>))
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Benefit:</strong> Cleaner code - no module prefix needed!
+            </div>
+        </div>
+
+        <!-- Slide 6: Import with Alias -->
+        <div class="slide">
+            <h2>Import with Alias</h2>
+
+            <div class="code-block">
+<span class="comment"># Method 3: Import with alias</span>
+<span class="keyword">import</span> datetime <span class="keyword">as</span> dt
+
+now = dt.datetime.<span class="function">now</span>()
+<span class="function">print</span>(now)
+
+today = dt.date.<span class="function">today</span>()
+<span class="function">print</span>(today)
+
+
+<span class="comment"># Import specific item with alias</span>
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime <span class="keyword">as</span> dt_now
+
+<span class="function">print</span>(<span class="function">dt_now.now</span>())
+            </div>
+
+            <div class="info-box">
+                <strong>When to use aliases:</strong>
+                <ul>
+                    <li>Long module names</li>
+                    <li>Avoid naming conflicts</li>
+                    <li>Convention (e.g., numpy as np, pandas as pd)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Import Patterns Comparison -->
+        <div class="slide">
+            <h2>Import Patterns Comparison</h2>
+
+            <div class="code-block">
+<span class="comment"># Pattern 1: Import module</span>
+<span class="keyword">import</span> random
+<span class="function">print</span>(random.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">10</span>))
+
+<span class="comment"># Pattern 2: Import specific function</span>
+<span class="keyword">from</span> random <span class="keyword">import</span> randint
+<span class="function">print</span>(<span class="function">randint</span>(<span class="number">1</span>, <span class="number">10</span>))
+
+<span class="comment"># Pattern 3: Import with alias</span>
+<span class="keyword">import</span> random <span class="keyword">as</span> rnd
+<span class="function">print</span>(rnd.<span class="function">randint</span>(<span class="number">1</span>, <span class="number">10</span>))
+
+<span class="comment"># Pattern 4: Import all (NOT recommended!)</span>
+<span class="keyword">from</span> random <span class="keyword">import</span> *  <span class="comment"># Avoid this!</span>
+            </div>
+
+            <div class="info-box">
+                <strong>⚠️ Avoid:</strong> <code>from module import *</code><br>
+                It imports everything and can cause naming conflicts
+            </div>
+        </div>
+
+        <!-- Slide 8: Creating Your Own Module -->
+        <div class="slide">
+            <h2>Creating Your Own Module</h2>
+
+            <div class="code-block">
+<span class="comment"># greetings.py - your custom module</span>
+<span class="keyword">def</span> <span class="function">say_hello</span>(name):
+    <span class="keyword">return</span> <span class="string">f"Hello, </span>{name}<span class="string">!"</span>
+
+<span class="keyword">def</span> <span class="function">say_goodbye</span>(name):
+    <span class="keyword">return</span> <span class="string">f"Goodbye, </span>{name}<span class="string">!"</span>
+
+MODULE_VERSION = <span class="string">"1.0.0"</span>
+
+
+<span class="comment"># main.py - using your module</span>
+<span class="keyword">from</span> greetings <span class="keyword">import</span> say_hello, say_goodbye
+
+<span class="function">print</span>(<span class="function">say_hello</span>(<span class="string">"Alice"</span>))
+<span class="function">print</span>(<span class="function">say_goodbye</span>(<span class="string">"Bob"</span>))
+            </div>
+
+            <div class="success-box">
+                <strong>That's it!</strong> Any .py file is a module you can import
+            </div>
+        </div>
+
+        <!-- Slide 9: The __name__ Variable -->
+        <div class="slide">
+            <h2>The __name__ Variable</h2>
+
+            <div class="code-block">
+<span class="comment"># calculator.py</span>
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+<span class="keyword">def</span> <span class="function">multiply</span>(a, b):
+    <span class="keyword">return</span> a * b
+
+<span class="comment"># This only runs when file is executed directly</span>
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    <span class="function">print</span>(<span class="string">"Testing calculator module"</span>)
+    <span class="function">print</span>(<span class="function">add</span>(<span class="number">5</span>, <span class="number">3</span>))
+    <span class="function">print</span>(<span class="function">multiply</span>(<span class="number">4</span>, <span class="number">6</span>))
+            </div>
+
+            <div class="info-box">
+                <strong>__name__</strong> is:
+                <ul>
+                    <li><code>"__main__"</code> when file is run directly</li>
+                    <li>Module name when imported</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: Python Standard Library -->
+        <div class="slide">
+            <h2>Python Standard Library</h2>
+
+            <div class="success-box">
+                Python comes with <strong>200+ built-in modules</strong> - no installation needed!
+            </div>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Commonly Used</h3>
+                    <ul>
+                        <li><strong>datetime</strong> - Dates and times</li>
+                        <li><strong>random</strong> - Random numbers</li>
+                        <li><strong>json</strong> - JSON handling</li>
+                        <li><strong>os</strong> - Operating system</li>
+                        <li><strong>pathlib</strong> - File paths</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>For Automation</h3>
+                    <ul>
+                        <li><strong>time</strong> - Time functions</li>
+                        <li><strong>math</strong> - Math operations</li>
+                        <li><strong>string</strong> - String ops</li>
+                        <li><strong>re</strong> - Regular expressions</li>
+                        <li><strong>logging</strong> - Logging</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: datetime Module -->
+        <div class="slide">
+            <h2>datetime Module</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta
+
+<span class="comment"># Current date and time</span>
+now = datetime.<span class="function">now</span>()
+<span class="function">print</span>(now)
+<span class="function">print</span>(now.<span class="function">strftime</span>(<span class="string">"%Y-%m-%d %H:%M:%S"</span>))
+
+<span class="comment"># Date arithmetic</span>
+today = datetime.<span class="function">now</span>().<span class="function">date</span>()
+tomorrow = today + <span class="function">timedelta</span>(days=<span class="number">1</span>)
+next_week = today + <span class="function">timedelta</span>(weeks=<span class="number">1</span>)
+
+<span class="function">print</span>(<span class="string">f"Today: </span>{today}<span class="string">"</span>)
+<span class="function">print</span>(<span class="string">f"Tomorrow: </span>{tomorrow}<span class="string">"</span>)
+<span class="function">print</span>(<span class="string">f"Next week: </span>{next_week}<span class="string">"</span>)
+            </div>
+
+            <div class="info-box">
+                <strong>Perfect for:</strong> Timestamps, test data, time calculations
+            </div>
+        </div>
+
+        <!-- Slide 12: random Module -->
+        <div class="slide">
+            <h2>random Module</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> random <span class="keyword">import</span> randint, choice, shuffle
+
+<span class="comment"># Random integer</span>
+<span class="function">print</span>(<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>))  <span class="comment"># Random between 1-100</span>
+
+<span class="comment"># Random choice</span>
+browsers = [<span class="string">"Chrome"</span>, <span class="string">"Firefox"</span>, <span class="string">"Safari"</span>]
+<span class="function">print</span>(<span class="function">choice</span>(browsers))
+
+<span class="comment"># Shuffle list</span>
+numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+<span class="function">shuffle</span>(numbers)
+<span class="function">print</span>(numbers)
+            </div>
+
+            <div class="success-box">
+                <strong>Great for:</strong> Generating test data, randomizing test order
+            </div>
+        </div>
+
+        <!-- Slide 13: json Module -->
+        <div class="slide">
+            <h2>json Module</h2>
+
+            <div class="code-block">
+<span class="keyword">import</span> json
+
+<span class="comment"># Python dict to JSON string</span>
+user = {
+    <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+    <span class="string">"email"</span>: <span class="string">"alice@example.com"</span>,
+    <span class="string">"age"</span>: <span class="number">25</span>
+}
+
+json_string = json.<span class="function">dumps</span>(user, indent=<span class="number">2</span>)
+<span class="function">print</span>(json_string)
+
+<span class="comment"># JSON string to Python dict</span>
+json_data = <span class="string">'{"name": "Bob", "score": 95}'</span>
+data = json.<span class="function">loads</span>(json_data)
+<span class="function">print</span>(data[<span class="string">"name"</span>])  <span class="comment"># Bob</span>
+            </div>
+
+            <div class="info-box">
+                <strong>Use for:</strong> API testing, configuration files, test data
+            </div>
+        </div>
+
+        <!-- Slide 14: pathlib Module -->
+        <div class="slide">
+            <h2>pathlib Module (Modern Path Handling)</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="comment"># Current file path</span>
+current_file = <span class="function">Path</span>(__file__)
+<span class="function">print</span>(current_file.name)    <span class="comment"># File name</span>
+<span class="function">print</span>(current_file.parent)  <span class="comment"># Parent directory</span>
+
+<span class="comment"># Build paths (works on any OS!)</span>
+project_root = <span class="function">Path</span>(<span class="string">"/project"</span>)
+tests_dir = project_root / <span class="string">"tests"</span>
+test_file = tests_dir / <span class="string">"test_login.py"</span>
+
+<span class="comment"># Check properties</span>
+<span class="function">print</span>(current_file.<span class="function">exists</span>())
+<span class="function">print</span>(current_file.<span class="function">is_file</span>())
+            </div>
+
+            <div class="success-box">
+                <strong>Benefit:</strong> Cross-platform path handling!
+            </div>
+        </div>
+
+        <!-- Slide 15: What is pip? -->
+        <div class="slide">
+            <h2>Installing Packages with pip</h2>
+
+            <div class="success-box">
+                <strong>pip</strong> is Python's package installer<br>
+                It downloads packages from <strong>PyPI</strong> (Python Package Index)
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Install a package</span>
+pip install requests
+
+<span class="comment"># Install specific version</span>
+pip install playwright==<span class="number">1.40.0</span>
+
+<span class="comment"># Install multiple packages</span>
+pip install requests pytest playwright
+
+<span class="comment"># Upgrade a package</span>
+pip install --upgrade requests
+
+<span class="comment"># Uninstall a package</span>
+pip uninstall requests
+            </div>
+        </div>
+
+        <!-- Slide 16: pip Commands -->
+        <div class="slide">
+            <h2>Essential pip Commands</h2>
+
+            <div class="code-block">
+<span class="comment"># Check pip version</span>
+pip --version
+
+<span class="comment"># List installed packages</span>
+pip list
+
+<span class="comment"># Show package details</span>
+pip show playwright
+
+<span class="comment"># Check outdated packages</span>
+pip list --outdated
+
+<span class="comment"># Freeze current packages</span>
+pip freeze > requirements.txt
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Tip:</strong> If <code>pip</code> doesn't work, try <code>python -m pip</code>
+            </div>
+        </div>
+
+        <!-- Slide 17: requirements.txt -->
+        <div class="slide">
+            <h2>requirements.txt File</h2>
+
+            <div class="code-block">
+<span class="comment"># requirements.txt - list all project dependencies</span>
+
+<span class="comment"># Testing framework</span>
+pytest==<span class="number">7.4.3</span>
+pytest-playwright==<span class="number">0.4.3</span>
+
+<span class="comment"># Playwright for browser automation</span>
+playwright==<span class="number">1.40.0</span>
+
+<span class="comment"># HTTP requests</span>
+requests==<span class="number">2.31.0</span>
+
+<span class="comment"># Test data generation</span>
+faker==<span class="number">20.1.0</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Install all packages from requirements.txt</span>
+pip install -r requirements.txt
+            </div>
+
+            <div class="success-box">
+                <strong>Best Practice:</strong> Always use requirements.txt for projects!
+            </div>
+        </div>
+
+        <!-- Slide 18: Installing Playwright -->
+        <div class="slide">
+            <h2>Installing Playwright</h2>
+
+            <div class="info-box">
+                <strong>Two steps required:</strong>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Step 1: Install the Python package</span>
+pip install playwright
+
+<span class="comment"># Step 2: Install browser binaries</span>
+playwright install
+
+<span class="comment"># Or install specific browsers</span>
+playwright install chromium
+playwright install firefox
+playwright install webkit
+
+<span class="comment"># Check installation</span>
+playwright --version
+            </div>
+
+            <div class="success-box">
+                <strong>✅ You're ready for browser automation!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 19: Playwright Import Patterns -->
+        <div class="slide">
+            <h2>Playwright Import Patterns</h2>
+
+            <div class="code-block">
+<span class="comment"># Sync API (we'll use this!)</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="comment"># Import with expect for assertions</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright, expect
+
+<span class="comment"># Import specific classes</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page, Browser, BrowserContext
+
+<span class="comment"># All-in-one for tests</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> (
+    sync_playwright,
+    expect,
+    Page,
+    Browser
+)
+            </div>
+        </div>
+
+        <!-- Slide 20: Basic Playwright Script -->
+        <div class="slide">
+            <h2>Basic Playwright Script</h2>
+
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">def</span> <span class="function">run</span>():
+    <span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+        <span class="comment"># Launch browser</span>
+        browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+
+        <span class="comment"># Create a page</span>
+        page = browser.<span class="function">new_page</span>()
+
+        <span class="comment"># Navigate</span>
+        page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+
+        <span class="comment"># Close browser</span>
+        browser.<span class="function">close</span>()
+
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    <span class="function">run</span>()
+            </div>
+        </div>
+
+        <!-- Slide 21: Organizing Test Projects -->
+        <div class="slide">
+            <h2>Organizing Test Projects</h2>
+
+            <div class="code-block">
+test_project/
+├── tests/
+│   ├── __init__.py
+│   ├── test_login.py
+│   └── test_search.py
+│
+├── pages/              <span class="comment"># Page Object Models</span>
+│   ├── __init__.py
+│   ├── login_page.py
+│   └── home_page.py
+│
+├── utils/              <span class="comment"># Helper functions</span>
+│   ├── __init__.py
+│   └── helpers.py
+│
+├── config/             <span class="comment"># Configuration</span>
+│   ├── __init__.py
+│   └── settings.py
+│
+└── requirements.txt
+            </div>
+        </div>
+
+        <!-- Slide 22: Page Object Pattern -->
+        <div class="slide">
+            <h2>Page Object Pattern</h2>
+
+            <div class="code-block">
+<span class="comment"># pages/login_page.py</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page
+
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, page: Page):
+        <span class="keyword">self</span>.page = page
+
+    <span class="keyword">def</span> <span class="function">navigate</span>(<span class="keyword">self</span>):
+        <span class="keyword">self</span>.page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="keyword">self</span>, username, password):
+        <span class="keyword">self</span>.page.<span class="function">fill</span>(<span class="string">"#username"</span>, username)
+        <span class="keyword">self</span>.page.<span class="function">fill</span>(<span class="string">"#password"</span>, password)
+        <span class="keyword">self</span>.page.<span class="function">click</span>(<span class="string">"#login-btn"</span>)
+
+
+<span class="comment"># tests/test_login.py</span>
+<span class="keyword">from</span> pages.login_page <span class="keyword">import</span> LoginPage
+
+<span class="keyword">def</span> <span class="function">test_login</span>(page):
+    login_page = <span class="function">LoginPage</span>(page)
+    login_page.<span class="function">navigate</span>()
+    login_page.<span class="function">login</span>(<span class="string">"user"</span>, <span class="string">"pass"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 23: Helper Functions Module -->
+        <div class="slide">
+            <h2>Creating Helper Functions</h2>
+
+            <div class="code-block">
+<span class="comment"># utils/helpers.py</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">def</span> <span class="function">take_screenshot</span>(page: Page, name: <span class="keyword">str</span>):
+    <span class="string">"""Take a screenshot with timestamp"""</span>
+    timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d_%H%M%S"</span>)
+    filename = <span class="string">f"screenshots/</span>{name}<span class="string">_</span>{timestamp}<span class="string">.png"</span>
+    page.<span class="function">screenshot</span>(path=filename)
+    <span class="keyword">return</span> filename
+
+<span class="keyword">def</span> <span class="function">wait_and_click</span>(page: Page, selector: <span class="keyword">str</span>):
+    <span class="string">"""Wait for element and click it"""</span>
+    page.<span class="function">wait_for_selector</span>(selector)
+    page.<span class="function">click</span>(selector)
+
+
+<span class="comment"># tests/test_example.py</span>
+<span class="keyword">from</span> utils.helpers <span class="keyword">import</span> take_screenshot, wait_and_click
+            </div>
+        </div>
+
+        <!-- Slide 24: Configuration Module -->
+        <div class="slide">
+            <h2>Configuration Module</h2>
+
+            <div class="code-block">
+<span class="comment"># config/settings.py</span>
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="comment"># Paths</span>
+PROJECT_ROOT = <span class="function">Path</span>(__file__).parent.parent
+SCREENSHOTS_DIR = PROJECT_ROOT / <span class="string">"screenshots"</span>
+
+<span class="comment"># Test environment</span>
+BASE_URL = <span class="string">"https://example.com"</span>
+DEFAULT_TIMEOUT = <span class="number">30000</span>
+
+<span class="comment"># Browser config</span>
+BROWSER_TYPE = <span class="string">"chromium"</span>
+HEADLESS = <span class="keyword">False</span>
+
+<span class="comment"># Test data</span>
+TEST_USERS = {
+    <span class="string">"valid"</span>: {
+        <span class="string">"username"</span>: <span class="string">"testuser@example.com"</span>,
+        <span class="string">"password"</span>: <span class="string">"Test123!"</span>
+    }
+}
+            </div>
+        </div>
+
+        <!-- Slide 25: Module Best Practices -->
+        <div class="slide">
+            <h2>Module Best Practices</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>✅ DO</h3>
+                    <ul>
+                        <li>One module = one purpose</li>
+                        <li>Descriptive names</li>
+                        <li>Add docstrings</li>
+                        <li>Group related functions</li>
+                        <li>Use __init__.py for packages</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>❌ DON'T</h3>
+                    <ul>
+                        <li>Huge modules with everything</li>
+                        <li>Generic names (utils, helpers)</li>
+                        <li>Circular dependencies</li>
+                        <li>Use <code>from x import *</code></li>
+                        <li>Forget requirements.txt</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 26: Import Best Practices -->
+        <div class="slide">
+            <h2>Import Best Practices</h2>
+
+            <div class="code-block">
+<span class="comment"># Organize imports in this order:</span>
+
+<span class="comment"># 1. Standard library</span>
+<span class="keyword">import</span> json
+<span class="keyword">import</span> time
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="comment"># 2. Third-party libraries</span>
+<span class="keyword">import</span> pytest
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page, expect
+
+<span class="comment"># 3. Your own modules</span>
+<span class="keyword">from</span> pages.login_page <span class="keyword">import</span> LoginPage
+<span class="keyword">from</span> utils.helpers <span class="keyword">import</span> take_screenshot
+<span class="keyword">from</span> config.settings <span class="keyword">import</span> BASE_URL
+            </div>
+
+            <div class="success-box">
+                <strong>Clean imports = readable code!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 27: Practice Exercise 1 -->
+        <div class="slide">
+            <h2>Practice Exercise 1</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Import and use modules
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Import randint from random</span>
+<span class="comment"># TODO: Import datetime and timedelta from datetime</span>
+<span class="comment"># TODO: Import json</span>
+
+
+<span class="comment"># Generate a random number between 1 and 100</span>
+
+<span class="comment"># Print today's date</span>
+
+<span class="comment"># Print the date 7 days from now</span>
+
+<span class="comment"># Create a dict and convert to JSON</span>
+            </div>
+        </div>
+
+        <!-- Slide 28: Practice Exercise 2 -->
+        <div class="slide">
+            <h2>Practice Exercise 2</h2>
+
+            <div class="info-box">
+                <strong>🎯 Challenge:</strong> Create your own module
+            </div>
+
+            <div class="code-block">
+<span class="comment"># TODO: Create a file called test_helpers.py</span>
+<span class="comment"># Add these functions:</span>
+<span class="comment">#   - generate_test_email(): Returns random email</span>
+<span class="comment">#   - generate_username(): Returns random username</span>
+<span class="comment">#   - log_message(msg): Prints with timestamp</span>
+
+
+<span class="comment"># Then import and use your module:</span>
+<span class="comment"># from test_helpers import generate_test_email, log_message</span>
+            </div>
+        </div>
+
+        <!-- Slide 29: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Modules</h3>
+                    <ul>
+                        <li>Any .py file is a module</li>
+                        <li>Multiple import styles</li>
+                        <li>Use for code organization</li>
+                        <li>Standard library = free!</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Packages</h3>
+                    <ul>
+                        <li>Install with pip</li>
+                        <li>requirements.txt for projects</li>
+                        <li>Playwright needs 2 steps</li>
+                        <li>Organize tests with modules</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>💡 Remember:</strong> Good organization = maintainable tests!
+            </div>
+        </div>
+
+        <!-- Slide 30: Next Steps -->
+        <div class="slide">
+            <h2>Next Steps</h2>
+
+            <ul class="checklist">
+                <li>Complete the exercises in the exercises/ folder</li>
+                <li>Create your own helper modules</li>
+                <li>Install Playwright: <code>pip install playwright</code></li>
+                <li>Install browsers: <code>playwright install</code></li>
+                <li>Review the examples in examples/ folder</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>📚 Next Lecture:</strong> Hands-on Playwright - Your first browser automation!
+            </div>
+
+            <div class="success-box" style="margin-top: 40px;">
+                <strong>Great job! 🎉</strong> You're ready to organize code and start with Playwright!
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <!-- Global presentation script shared across all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

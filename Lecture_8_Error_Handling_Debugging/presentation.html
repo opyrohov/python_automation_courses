@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 8: Error Handling & Debugging</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🐍</div>
+            <h1>Lecture 8</h1>
+            <div class="subtitle">Error Handling & Debugging</div>
+            <p style="font-size: 1.3em; color: #888;">Python Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: Why Error Handling Matters -->
+        <div class="slide">
+            <h2>Why Error Handling Matters</h2>
+            <ul class="checklist">
+                <li><strong>Reliability:</strong> Tests don't crash unexpectedly</li>
+                <li><strong>User Experience:</strong> Graceful error messages</li>
+                <li><strong>Debugging:</strong> Better error information</li>
+                <li><strong>Production Ready:</strong> Handle edge cases</li>
+                <li><strong>Maintenance:</strong> Easier to fix issues</li>
+            </ul>
+            <div class="success-box">
+                <strong>💡 Key Point:</strong> Good error handling is the difference between fragile code and production-ready code!
+            </div>
+        </div>
+
+        <!-- Slide 3: What Are Exceptions? -->
+        <div class="slide">
+            <h2>What Are Exceptions?</h2>
+            <p>Exceptions are Python's way of saying "something went wrong"</p>
+            <div class="code-block">
+<span class="comment"># Without error handling - Crash!</span>
+result = <span class="number">10</span> / <span class="number">0</span>  <span class="comment"># ZeroDivisionError</span>
+
+<span class="comment"># With error handling - Graceful</span>
+<span class="keyword">try</span>:
+    result = <span class="number">10</span> / <span class="number">0</span>
+<span class="keyword">except</span> ZeroDivisionError:
+    <span class="function">print</span>(<span class="string">"Cannot divide by zero!"</span>)
+    result = <span class="keyword">None</span>
+            </div>
+            <p>✅ <strong>With handling:</strong> Program continues running</p>
+            <p>❌ <strong>Without handling:</strong> Program crashes</p>
+        </div>
+
+        <!-- Slide 4: Try/Except Basics -->
+        <div class="slide">
+            <h2>Try/Except Basics</h2>
+            <div class="code-block">
+<span class="keyword">try</span>:
+    <span class="comment"># Code that might fail</span>
+    number = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter number: "</span>))
+    result = <span class="number">100</span> / number
+    <span class="function">print</span>(<span class="string">f"Result: {result}"</span>)
+
+<span class="keyword">except</span> ZeroDivisionError:
+    <span class="comment"># Handle division by zero</span>
+    <span class="function">print</span>(<span class="string">"Cannot divide by zero"</span>)
+
+<span class="keyword">except</span> ValueError:
+    <span class="comment"># Handle invalid input</span>
+    <span class="function">print</span>(<span class="string">"Please enter a valid number"</span>)
+            </div>
+            <p><strong>Structure:</strong> try → except → specific handling</p>
+        </div>
+
+        <!-- Slide 5: Multiple Except Blocks -->
+        <div class="slide">
+            <h2>Multiple Except Blocks</h2>
+            <div class="code-block">
+<span class="keyword">try</span>:
+    data = {<span class="string">'name'</span>: <span class="string">'Alice'</span>}
+    age = <span class="function">int</span>(data[<span class="string">'age'</span>])
+
+<span class="keyword">except</span> KeyError:
+    <span class="function">print</span>(<span class="string">"Missing data field"</span>)
+
+<span class="keyword">except</span> ValueError:
+    <span class="function">print</span>(<span class="string">"Invalid data format"</span>)
+
+<span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+    <span class="function">print</span>(<span class="string">f"Unexpected error: {e}"</span>)
+            </div>
+            <div class="info-box">
+                <strong>💡 Best Practice:</strong> Catch specific exceptions first, generic Exception last
+            </div>
+        </div>
+
+        <!-- Slide 6: Try/Except/Else/Finally -->
+        <div class="slide">
+            <h2>Try/Except/Else/Finally</h2>
+            <div class="code-block">
+<span class="keyword">try</span>:
+    file = <span class="function">open</span>(<span class="string">"data.txt"</span>, <span class="string">"r"</span>)
+    content = file.<span class="function">read</span>()
+<span class="keyword">except</span> FileNotFoundError:
+    <span class="function">print</span>(<span class="string">"File not found"</span>)
+<span class="keyword">else</span>:
+    <span class="comment"># Runs only if no exception</span>
+    <span class="function">print</span>(<span class="string">"File read successfully"</span>)
+<span class="keyword">finally</span>:
+    <span class="comment"># ALWAYS runs</span>
+    file.<span class="function">close</span>()
+    <span class="function">print</span>(<span class="string">"Cleanup complete"</span>)
+            </div>
+            <ul>
+                <li><code>else</code>: Runs if no exception occurred</li>
+                <li><code>finally</code>: Always runs (cleanup)</li>
+            </ul>
+        </div>
+
+        <!-- Slide 7: Common Python Errors -->
+        <div class="slide">
+            <h2>Common Python Errors</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Type Errors:</h3>
+                    <ul>
+                        <li><code>NameError</code> - Undefined variable</li>
+                        <li><code>TypeError</code> - Wrong type</li>
+                        <li><code>ValueError</code> - Invalid value</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Access Errors:</h3>
+                    <ul>
+                        <li><code>IndexError</code> - List index</li>
+                        <li><code>KeyError</code> - Dict key</li>
+                        <li><code>AttributeError</code> - Attribute</li>
+                    </ul>
+                </div>
+            </div>
+            <h3>Other Common Errors:</h3>
+            <ul>
+                <li><code>FileNotFoundError</code> - File doesn't exist</li>
+                <li><code>ZeroDivisionError</code> - Division by zero</li>
+            </ul>
+        </div>
+
+        <!-- Slide 8: SyntaxError & NameError -->
+        <div class="slide">
+            <h2>SyntaxError & NameError</h2>
+            <h3>SyntaxError:</h3>
+            <div class="code-block">
+<span class="comment"># Wrong:</span>
+<span class="keyword">if</span> <span class="keyword">True</span>
+    <span class="function">print</span>(<span class="string">"Missing colon"</span>)
+
+<span class="comment"># Right:</span>
+<span class="keyword">if</span> <span class="keyword">True</span>:
+    <span class="function">print</span>(<span class="string">"Correct syntax"</span>)
+            </div>
+
+            <h3>NameError:</h3>
+            <div class="code-block">
+<span class="comment"># Wrong:</span>
+<span class="function">print</span>(undefined_variable)
+
+<span class="comment"># Right:</span>
+variable = <span class="string">"value"</span>
+<span class="function">print</span>(variable)
+            </div>
+        </div>
+
+        <!-- Slide 9: TypeError & ValueError -->
+        <div class="slide">
+            <h2>TypeError & ValueError</h2>
+            <h3>TypeError:</h3>
+            <div class="code-block">
+<span class="comment"># Wrong:</span>
+result = <span class="string">"5"</span> + <span class="number">5</span>  <span class="comment"># Can't add string and int</span>
+
+<span class="comment"># Right:</span>
+result = <span class="function">int</span>(<span class="string">"5"</span>) + <span class="number">5</span>  <span class="comment"># Convert first</span>
+            </div>
+
+            <h3>ValueError:</h3>
+            <div class="code-block">
+<span class="comment"># Wrong:</span>
+age = <span class="function">int</span>(<span class="string">"twenty"</span>)  <span class="comment"># Can't convert</span>
+
+<span class="comment"># Right with handling:</span>
+<span class="keyword">try</span>:
+    age = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Age: "</span>))
+<span class="keyword">except</span> ValueError:
+    <span class="function">print</span>(<span class="string">"Please enter a number"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 10: IndexError & KeyError -->
+        <div class="slide">
+            <h2>IndexError & KeyError</h2>
+            <h3>IndexError:</h3>
+            <div class="code-block">
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>]
+
+<span class="comment"># Wrong:</span>
+<span class="function">print</span>(fruits[<span class="number">10</span>])  <span class="comment"># Index doesn't exist</span>
+
+<span class="comment"># Right:</span>
+<span class="keyword">if</span> <span class="function">len</span>(fruits) > <span class="number">2</span>:
+    <span class="function">print</span>(fruits[<span class="number">2</span>])
+            </div>
+
+            <h3>KeyError:</h3>
+            <div class="code-block">
+user = {<span class="string">"name"</span>: <span class="string">"Alice"</span>}
+
+<span class="comment"># Wrong:</span>
+email = user[<span class="string">"email"</span>]  <span class="comment"># Key doesn't exist</span>
+
+<span class="comment"># Right:</span>
+email = user.<span class="function">get</span>(<span class="string">"email"</span>, <span class="string">"No email"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 11: Raising Exceptions -->
+        <div class="slide">
+            <h2>Raising Exceptions</h2>
+            <p>You can raise your own exceptions:</p>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">validate_age</span>(age):
+    <span class="keyword">if</span> age < <span class="number">0</span>:
+        <span class="keyword">raise</span> ValueError(<span class="string">"Age cannot be negative"</span>)
+    <span class="keyword">if</span> age > <span class="number">150</span>:
+        <span class="keyword">raise</span> ValueError(<span class="string">"Age seems unrealistic"</span>)
+    <span class="keyword">return</span> age
+
+<span class="keyword">try</span>:
+    validate_age(-<span class="number">5</span>)
+<span class="keyword">except</span> ValueError <span class="keyword">as</span> e:
+    <span class="function">print</span>(<span class="string">f"Invalid age: {e}"</span>)
+            </div>
+            <p><strong>When to raise:</strong> Input validation, business logic errors</p>
+        </div>
+
+        <!-- Slide 12: Custom Exceptions -->
+        <div class="slide">
+            <h2>Custom Exceptions</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">TestAutomationError</span>(Exception):
+    <span class="string">"""Base exception for test automation."""</span>
+    <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="function">ElementNotFoundError</span>(TestAutomationError):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, selector):
+        <span class="keyword">self</span>.selector = selector
+        <span class="function">super</span>().<span class="function">__init__</span>(<span class="string">f"Element not found: {selector}"</span>)
+
+<span class="comment"># Usage:</span>
+<span class="keyword">try</span>:
+    <span class="keyword">raise</span> ElementNotFoundError(<span class="string">"#submit-button"</span>)
+<span class="keyword">except</span> ElementNotFoundError <span class="keyword">as</span> e:
+    <span class="function">print</span>(e)
+    <span class="function">print</span>(<span class="string">f"Selector was: {e.selector}"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 13: Debugging Introduction -->
+        <div class="slide">
+            <h2>Debugging: Introduction</h2>
+            <p><strong>Debugging</strong> is the process of finding and fixing bugs in your code.</p>
+
+            <h3>Common Debugging Methods:</h3>
+            <ol>
+                <li><strong>Print debugging</strong> - Quick and simple</li>
+                <li><strong>Logging</strong> - Better than print for production</li>
+                <li><strong>Python debugger (pdb)</strong> - Step through code</li>
+                <li><strong>IDE debugger</strong> - Visual debugging</li>
+                <li><strong>Stack traces</strong> - Read error messages</li>
+            </ol>
+        </div>
+
+        <!-- Slide 14: Print Debugging -->
+        <div class="slide">
+            <h2>Print Debugging</h2>
+            <p>The simplest debugging technique:</p>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">calculate_total</span>(items):
+    <span class="function">print</span>(<span class="string">f"DEBUG: Processing {len(items)} items"</span>)
+
+    total = <span class="number">0</span>
+    <span class="keyword">for</span> item <span class="keyword">in</span> items:
+        <span class="function">print</span>(<span class="string">f"DEBUG: Item = {item}"</span>)
+        price = item[<span class="string">'price'</span>]
+        <span class="function">print</span>(<span class="string">f"DEBUG: Price = {price}"</span>)
+        total += price
+
+    <span class="function">print</span>(<span class="string">f"DEBUG: Final total = {total}"</span>)
+    <span class="keyword">return</span> total
+            </div>
+            <p>✅ <strong>Pros:</strong> Quick, easy, no tools needed</p>
+            <p>❌ <strong>Cons:</strong> Clutters code, not for production</p>
+        </div>
+
+        <!-- Slide 15: Using repr() for Debugging -->
+        <div class="slide">
+            <h2>Using repr() for Debugging</h2>
+            <div class="code-block">
+<span class="comment"># repr() shows exact representation</span>
+text = <span class="string">"hello"</span>
+empty = <span class="string">""</span>
+none_val = <span class="keyword">None</span>
+
+<span class="function">print</span>(<span class="string">f"text = {repr(text)}"</span>)      <span class="comment"># 'hello'</span>
+<span class="function">print</span>(<span class="string">f"empty = {repr(empty)}"</span>)    <span class="comment"># ''</span>
+<span class="function">print</span>(<span class="string">f"none = {repr(none_val)}"</span>)  <span class="comment"># None</span>
+
+<span class="comment"># Helpful for seeing invisible characters</span>
+hidden = <span class="string">"hello\n\t"</span>
+<span class="function">print</span>(<span class="string">f"hidden = {repr(hidden)}"</span>)  <span class="comment"># 'hello\n\t'</span>
+            </div>
+            <div class="info-box">
+                <strong>💡 Tip:</strong> Use <code>repr()</code> to see exact string content including whitespace
+            </div>
+        </div>
+
+        <!-- Slide 16: Stack Traces -->
+        <div class="slide">
+            <h2>Reading Stack Traces</h2>
+            <div class="code-block">
+Traceback (most recent call last):
+  File <span class="string">"test.py"</span>, line <span class="number">10</span>, in &lt;module&gt;
+    result = calculate()
+  File <span class="string">"test.py"</span>, line <span class="number">6</span>, in calculate
+    <span class="keyword">return</span> divide(<span class="number">10</span>, <span class="number">0</span>)
+  File <span class="string">"test.py"</span>, line <span class="number">2</span>, in divide
+    <span class="keyword">return</span> a / b
+ZeroDivisionError: division by zero
+            </div>
+            <p><strong>How to read:</strong></p>
+            <ol>
+                <li>Read from <strong>bottom to top</strong></li>
+                <li>Last line = error type and message</li>
+                <li>Above = where error occurred</li>
+                <li>Trace back = function call chain</li>
+            </ol>
+        </div>
+
+        <!-- Slide 17: Logging Basics -->
+        <div class="slide">
+            <h2>Logging Basics</h2>
+            <div class="code-block">
+<span class="keyword">import</span> logging
+
+<span class="comment"># Configure logging</span>
+logging.<span class="function">basicConfig</span>(
+    level=logging.DEBUG,
+    format=<span class="string">'%(levelname)s: %(message)s'</span>
+)
+
+<span class="comment"># Different log levels</span>
+logging.<span class="function">debug</span>(<span class="string">"Detailed diagnostic info"</span>)
+logging.<span class="function">info</span>(<span class="string">"General information"</span>)
+logging.<span class="function">warning</span>(<span class="string">"Warning message"</span>)
+logging.<span class="function">error</span>(<span class="string">"Error occurred"</span>)
+logging.<span class="function">critical</span>(<span class="string">"Critical error"</span>)
+            </div>
+            <p><strong>Better than print because:</strong> Levels, formatting, file output, timestamps</p>
+        </div>
+
+        <!-- Slide 18: Logging Levels -->
+        <div class="slide">
+            <h2>Logging Levels</h2>
+            <div class="info-box">
+                <h3>When to use each level:</h3>
+                <ul>
+                    <li><strong>DEBUG:</strong> Detailed information for diagnosing problems</li>
+                    <li><strong>INFO:</strong> General progress messages</li>
+                    <li><strong>WARNING:</strong> Something unexpected but not an error</li>
+                    <li><strong>ERROR:</strong> Something failed</li>
+                    <li><strong>CRITICAL:</strong> Serious failure</li>
+                </ul>
+            </div>
+            <div class="success-box">
+                <strong>💡 Production Tip:</strong> Use INFO in production, DEBUG during development
+            </div>
+        </div>
+
+        <!-- Slide 19: Logging in Functions -->
+        <div class="slide">
+            <h2>Logging in Functions</h2>
+            <div class="code-block">
+<span class="keyword">import</span> logging
+
+logger = logging.<span class="function">getLogger</span>(__name__)
+
+<span class="keyword">def</span> <span class="function">login_user</span>(username, password):
+    logger.<span class="function">info</span>(<span class="string">f"Login attempt: {username}"</span>)
+
+    <span class="keyword">if</span> <span class="keyword">not</span> username:
+        logger.<span class="function">error</span>(<span class="string">"Username is empty"</span>)
+        <span class="keyword">return</span> <span class="keyword">False</span>
+
+    <span class="keyword">if</span> <span class="function">len</span>(password) < <span class="number">6</span>:
+        logger.<span class="function">warning</span>(<span class="string">f"Weak password for {username}"</span>)
+
+    logger.<span class="function">info</span>(<span class="string">f"Login successful: {username}"</span>)
+    <span class="keyword">return</span> <span class="keyword">True</span>
+            </div>
+        </div>
+
+        <!-- Slide 20: Logging Exceptions -->
+        <div class="slide">
+            <h2>Logging Exceptions</h2>
+            <div class="code-block">
+<span class="keyword">import</span> logging
+
+<span class="keyword">try</span>:
+    result = <span class="number">10</span> / <span class="number">0</span>
+<span class="keyword">except</span> ZeroDivisionError:
+    <span class="comment"># Log with traceback</span>
+    logging.<span class="function">exception</span>(<span class="string">"Division error occurred"</span>)
+
+<span class="comment"># Or manually:</span>
+<span class="keyword">try</span>:
+    result = <span class="number">10</span> / <span class="number">0</span>
+<span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:
+    logging.<span class="function">error</span>(<span class="string">f"Error: {e}"</span>)
+    logging.<span class="function">error</span>(<span class="string">"Full traceback:"</span>, exc_info=<span class="keyword">True</span>)
+            </div>
+            <div class="info-box">
+                <strong>💡</strong> <code>logging.exception()</code> automatically includes traceback
+            </div>
+        </div>
+
+        <!-- Slide 21: Defensive Programming -->
+        <div class="slide">
+            <h2>Defensive Programming</h2>
+            <p>Write code that expects things to go wrong:</p>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">get_user_email</span>(user_id):
+    <span class="comment"># Check 1: Valid input</span>
+    <span class="keyword">if</span> <span class="keyword">not</span> <span class="function">isinstance</span>(user_id, <span class="function">int</span>):
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="comment"># Check 2: User exists</span>
+    <span class="keyword">if</span> user_id <span class="keyword">not</span> <span class="keyword">in</span> users:
+        logging.<span class="function">warning</span>(<span class="string">f"User {user_id} not found"</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="comment"># Check 3: Email exists</span>
+    user = users[user_id]
+    <span class="keyword">if</span> <span class="string">'email'</span> <span class="keyword">not</span> <span class="keyword">in</span> user:
+        logging.<span class="function">error</span>(<span class="string">f"User {user_id} has no email"</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="keyword">return</span> user[<span class="string">'email'</span>]
+            </div>
+        </div>
+
+        <!-- Slide 22: Playwright TimeoutError -->
+        <div class="slide">
+            <h2>Playwright: TimeoutError</h2>
+            <p>Most common Playwright error - element not found:</p>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> TimeoutError
+
+<span class="keyword">try</span>:
+    page.<span class="function">click</span>(<span class="string">"#submit"</span>, timeout=<span class="number">5000</span>)
+<span class="keyword">except</span> TimeoutError:
+    <span class="function">print</span>(<span class="string">"Element not found within 5 seconds"</span>)
+    <span class="comment"># Take screenshot for debugging</span>
+    page.<span class="function">screenshot</span>(path=<span class="string">"timeout_error.png"</span>)
+    <span class="comment"># Log current URL</span>
+    <span class="function">print</span>(<span class="string">f"URL: {page.url}"</span>)
+            </div>
+            <div class="warning-box">
+                <strong>💡 Always handle timeouts in automation!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 23: Playwright Error Handling Patterns -->
+        <div class="slide">
+            <h2>Playwright Error Patterns</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">safe_click</span>(page, selector):
+    <span class="string">"""Click with error handling."""</span>
+    <span class="keyword">try</span>:
+        page.<span class="function">click</span>(selector, timeout=<span class="number">5000</span>)
+        <span class="keyword">return</span> <span class="keyword">True</span>
+    <span class="keyword">except</span> TimeoutError:
+        logging.<span class="function">error</span>(<span class="string">f"Element not found: {selector}"</span>)
+        page.<span class="function">screenshot</span>(path=<span class="string">f"error_{selector}.png"</span>)
+        <span class="keyword">return</span> <span class="keyword">False</span>
+
+<span class="comment"># Usage:</span>
+<span class="keyword">if</span> safe_click(page, <span class="string">"#submit"</span>):
+    <span class="function">print</span>(<span class="string">"Success"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Failed to click"</span>)
+            </div>
+        </div>
+
+        <!-- Slide 24: Retry Logic -->
+        <div class="slide">
+            <h2>Retry Logic for Flaky Operations</h2>
+            <div class="code-block">
+<span class="keyword">import</span> time
+
+<span class="keyword">def</span> <span class="function">retry_click</span>(page, selector, retries=<span class="number">3</span>):
+    <span class="string">"""Click with retries."""</span>
+    <span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, retries + <span class="number">1</span>):
+        <span class="keyword">try</span>:
+            page.<span class="function">click</span>(selector)
+            <span class="keyword">return</span> <span class="keyword">True</span>
+        <span class="keyword">except</span> TimeoutError:
+            logging.<span class="function">warning</span>(<span class="string">f"Attempt {attempt} failed"</span>)
+            <span class="keyword">if</span> attempt < retries:
+                time.<span class="function">sleep</span>(<span class="number">1</span>)  <span class="comment"># Wait before retry</span>
+
+    <span class="keyword">return</span> <span class="keyword">False</span>
+
+<span class="comment"># Usage:</span>
+retry_click(page, <span class="string">"#flaky-button"</span>, retries=<span class="number">3</span>)
+            </div>
+        </div>
+
+        <!-- Slide 25: Screenshots on Error -->
+        <div class="slide">
+            <h2>Always Take Screenshots on Errors</h2>
+            <div class="code-block">
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">def</span> <span class="function">execute_test</span>(page, test_func):
+    <span class="string">"""Execute test with screenshot on error."""</span>
+    <span class="keyword">try</span>:
+        test_func(page)
+        logging.<span class="function">info</span>(<span class="string">"Test passed"</span>)
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        logging.<span class="function">error</span>(<span class="string">f"Test failed: {e}"</span>)
+
+        <span class="comment"># Take screenshot</span>
+        timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d_%H%M%S"</span>)
+        filename = <span class="string">f"error_{timestamp}.png"</span>
+        page.<span class="function">screenshot</span>(path=filename)
+
+        logging.<span class="function">info</span>(<span class="string">f"Screenshot saved: {filename}"</span>)
+        <span class="keyword">raise</span>
+            </div>
+        </div>
+
+        <!-- Slide 26: Test Context Manager -->
+        <div class="slide">
+            <h2>Test Context Manager</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">TestContext</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, test_name):
+        <span class="keyword">self</span>.test_name = test_name
+        <span class="keyword">self</span>.page = <span class="keyword">None</span>
+
+    <span class="keyword">def</span> <span class="function">__enter__</span>(<span class="keyword">self</span>):
+        <span class="comment"># Setup</span>
+        logging.<span class="function">info</span>(<span class="string">f"Starting: {self.test_name}"</span>)
+        <span class="keyword">return</span> <span class="keyword">self</span>
+
+    <span class="keyword">def</span> <span class="function">__exit__</span>(<span class="keyword">self</span>, exc_type, exc_val, exc_tb):
+        <span class="keyword">if</span> exc_type:
+            logging.<span class="function">error</span>(<span class="string">f"Failed: {self.test_name}"</span>)
+            <span class="keyword">self</span>.page.<span class="function">screenshot</span>(path=<span class="string">f"{self.test_name}.png"</span>)
+        <span class="comment"># Cleanup</span>
+        <span class="keyword">if</span> <span class="keyword">self</span>.page:
+            <span class="keyword">self</span>.page.<span class="function">close</span>()
+        <span class="keyword">return</span> <span class="keyword">False</span>
+            </div>
+        </div>
+
+        <!-- Slide 27: Debugging Checklist -->
+        <div class="slide">
+            <h2>Debugging Checklist</h2>
+            <ol>
+                <li><strong>Read the error message</strong> - What does it say?</li>
+                <li><strong>Check the line number</strong> - Where did it fail?</li>
+                <li><strong>Check variable values</strong> - Print/log them</li>
+                <li><strong>Read the stack trace</strong> - What led to the error?</li>
+                <li><strong>Check your assumptions</strong> - Is data what you expect?</li>
+                <li><strong>Isolate the problem</strong> - Test small parts separately</li>
+                <li><strong>Search for similar errors</strong> - Google the error message</li>
+                <li><strong>Take a break</strong> - Fresh eyes help!</li>
+            </ol>
+        </div>
+
+        <!-- Slide 28: Best Practices Summary -->
+        <div class="slide">
+            <h2>Best Practices Summary</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Error Handling:</h3>
+                    <ul>
+                        <li>✅ Catch specific exceptions</li>
+                        <li>✅ Use finally for cleanup</li>
+                        <li>✅ Provide meaningful messages</li>
+                        <li>✅ Log errors with context</li>
+                        <li>❌ Don't use bare <code>except:</code></li>
+                        <li>❌ Don't hide errors silently</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Debugging:</h3>
+                    <ul>
+                        <li>✅ Use logging not print</li>
+                        <li>✅ Take screenshots on errors</li>
+                        <li>✅ Add retry logic</li>
+                        <li>✅ Validate inputs early</li>
+                        <li>✅ Read stack traces</li>
+                        <li>✅ Test edge cases</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 29: Practice Exercise -->
+        <div class="slide">
+            <h2>Practice Exercise</h2>
+            <div class="info-box">
+                <h3>Create a robust login function:</h3>
+                <ol>
+                    <li>Validate username and password (not empty, correct length)</li>
+                    <li>Handle all possible errors (ValueError, TypeError, etc.)</li>
+                    <li>Log each step (attempt, validation, result)</li>
+                    <li>Take screenshot if login fails</li>
+                    <li>Return success/failure status</li>
+                    <li>Clean up resources in finally block</li>
+                </ol>
+            </div>
+            <p style="margin-top: 30px;"><strong>💡 Bonus:</strong> Add retry logic with exponential backoff!</p>
+        </div>
+
+        <!-- Slide 30: Summary & Next Steps -->
+        <div class="slide">
+            <h2>Summary & Next Steps</h2>
+            <h3>What We Learned:</h3>
+            <ul class="checklist">
+                <li>Try/except blocks for error handling</li>
+                <li>Common Python errors and fixes</li>
+                <li>Debugging techniques (print, logging, stack traces)</li>
+                <li>Playwright-specific error handling</li>
+                <li>Best practices for robust code</li>
+            </ul>
+            <h3>Next Steps:</h3>
+            <ol>
+                <li>Complete all exercises in <code>exercises/</code></li>
+                <li>Add error handling to your existing tests</li>
+                <li>Practice debugging with provided buggy code</li>
+                <li>Create a library of helper functions</li>
+                <li>Ready for Lecture 9!</li>
+            </ol>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

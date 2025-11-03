@@ -1,0 +1,10 @@
+Welcome to Python File Handling!
+
+This is a sample text file.
+It contains multiple lines.
+Each line can be read separately.
+
+Python makes file handling easy.
+You can read, write, and modify files.
+
+Remember to always close files or use context managers!

@@ -1,0 +1,7 @@
+test_id,test_name,username,password,expected_result
+1,Valid Login,testuser1@example.com,Test123!,success
+2,Invalid Password,testuser1@example.com,wrongpass,failure
+3,Invalid Username,wronguser@example.com,Test123!,failure
+4,Empty Username,,Test123!,failure
+5,Empty Password,testuser1@example.com,,failure
+6,Admin Login,admin@example.com,Admin456!,success
