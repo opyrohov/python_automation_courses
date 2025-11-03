@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 14: Basic Navigation & Interactions</title>
+    <link rel="stylesheet" href="../assets/css/presentation.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Lecture 14</h1>
+            <h2>Basic Navigation & Interactions</h2>
+            <p>Master the fundamentals of browser navigation and user interactions</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Navigate to URLs and control browser history</li>
+                <li>✓ Understand pages and browser contexts</li>
+                <li>✓ Perform basic actions: click, fill, type</li>
+                <li>✓ Extract page information (title, URL)</li>
+                <li>✓ Properly close browsers and pages</li>
+                <li>✓ Handle multiple pages and tabs</li>
+                <li>✓ Best practices for browser automation</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Today's Topics -->
+        <div class="slide">
+            <h2>Lecture Outline</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div class="info-box">
+                    <h3>Part 1: Navigation</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>goto() method</li>
+                        <li>go_back() & go_forward()</li>
+                        <li>reload() page</li>
+                        <li>Wait for navigation</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Part 2: Pages & Contexts</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>Browser contexts</li>
+                        <li>Pages vs tabs</li>
+                        <li>Multiple pages</li>
+                        <li>Isolation</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Part 3: Basic Actions</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>click() elements</li>
+                        <li>fill() and type()</li>
+                        <li>Difference between fill/type</li>
+                        <li>Common patterns</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Part 4: Page Info & Cleanup</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>Get title and URL</li>
+                        <li>Get page content</li>
+                        <li>Close pages properly</li>
+                        <li>Resource management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: NAVIGATION -->
+
+        <!-- Slide 4: Navigation Basics -->
+        <div class="slide">
+            <h2>Part 1: Navigation Basics</h2>
+            <div class="highlight-box">
+                <p><strong>Navigation</strong> is how you control the browser to visit URLs, move through history, and reload pages.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Key Navigation Methods:</h3>
+            <ul>
+                <li><strong>page.goto(url)</strong> - Navigate to a URL</li>
+                <li><strong>page.go_back()</strong> - Go back in history</li>
+                <li><strong>page.go_forward()</strong> - Go forward in history</li>
+                <li><strong>page.reload()</strong> - Reload current page</li>
+            </ul>
+        </div>
+
+        <!-- Slide 5: goto() Method -->
+        <div class="slide">
+            <h2>page.goto() - Navigate to URL</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic navigation</span>
+page.goto("https://example.com")
+
+<span class="comment"># With options</span>
+page.goto("https://example.com",
+          wait_until="networkidle",  <span class="comment"># Wait for network to be idle</span>
+          timeout=30000)              <span class="comment"># 30 seconds timeout</span>
+            </div>
+
+            <h3 style="margin-top: 30px;">wait_until Options:</h3>
+            <table style="width: 100%; font-size: 0.85em; margin-top: 10px;">
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>load</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Wait for 'load' event (default)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>domcontentloaded</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Wait for DOM to be loaded</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>networkidle</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Wait until no network activity for 500ms</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>commit</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Wait for navigation to commit</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 6: goto() Examples -->
+        <div class="slide">
+            <h2>goto() Practical Examples</h2>
+
+            <div class="code-block">
+<span class="comment"># Example 1: Simple navigation</span>
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+
+    <span class="comment"># Navigate to website</span>
+    page.goto("https://playwright.dev")
+    print(f"Navigated to: {page.url}")
+
+    browser.close()
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Example 2: With error handling</span>
+try:
+    response = page.goto("https://example.com")
+    print(f"Status code: {response.status}")
+    print(f"OK: {response.ok}")  <span class="comment"># True if status 200-299</span>
+except Exception as e:
+    print(f"Navigation failed: {e}")
+            </div>
+        </div>
+
+        <!-- Slide 7: go_back() and go_forward() -->
+        <div class="slide">
+            <h2>Browser History Navigation</h2>
+
+            <div class="code-block">
+<span class="comment"># Navigate through browser history</span>
+page.goto("https://example.com")
+print(f"Page 1: {page.url}")
+
+page.goto("https://playwright.dev")
+print(f"Page 2: {page.url}")
+
+<span class="comment"># Go back</span>
+page.go_back()
+print(f"After back: {page.url}")  <span class="comment"># https://example.com</span>
+
+<span class="comment"># Go forward</span>
+page.go_forward()
+print(f"After forward: {page.url}")  <span class="comment"># https://playwright.dev</span>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>Note:</strong> go_back() and go_forward() will raise an error if there's no history to navigate to. Always ensure there's a valid history entry.
+            </div>
+        </div>
+
+        <!-- Slide 8: reload() Method -->
+        <div class="slide">
+            <h2>page.reload() - Refresh Page</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic reload</span>
+page.goto("https://example.com")
+page.reload()
+
+<span class="comment"># Reload with options</span>
+page.reload(wait_until="networkidle", timeout=30000)
+            </div>
+
+            <h3 style="margin-top: 30px;">Common Use Cases:</h3>
+            <ul>
+                <li>✓ Testing dynamic content updates</li>
+                <li>✓ Verifying page state after changes</li>
+                <li>✓ Resetting form data</li>
+                <li>✓ Testing page load performance</li>
+            </ul>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Example: Verify content after reload</span>
+page.goto("https://example.com")
+title_before = page.title()
+
+page.reload()
+title_after = page.title()
+
+assert title_before == title_after
+            </div>
+        </div>
+
+        <!-- Slide 9: Navigation Complete Example -->
+        <div class="slide">
+            <h2>Complete Navigation Example</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+import time
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False, slow_mo=1000)
+    page = browser.new_page()
+
+    <span class="comment"># 1. Navigate to first page</span>
+    page.goto("https://example.com")
+    print(f"1. Current: {page.url}")
+    time.sleep(1)
+
+    <span class="comment"># 2. Navigate to second page</span>
+    page.goto("https://playwright.dev")
+    print(f"2. Current: {page.url}")
+    time.sleep(1)
+
+    <span class="comment"># 3. Go back</span>
+    page.go_back()
+    print(f"3. After back: {page.url}")
+    time.sleep(1)
+
+    <span class="comment"># 4. Go forward</span>
+    page.go_forward()
+    print(f"4. After forward: {page.url}")
+    time.sleep(1)
+
+    <span class="comment"># 5. Reload</span>
+    page.reload()
+    print(f"5. After reload: {page.url}")
+
+    browser.close()
+            </div>
+        </div>
+
+        <!-- PART 2: PAGES & BROWSER CONTEXTS -->
+
+        <!-- Slide 10: Understanding Browser Contexts -->
+        <div class="slide">
+            <h2>Part 2: Pages & Browser Contexts</h2>
+
+            <div class="highlight-box">
+                <p><strong>Browser Context:</strong> An isolated incognito-like session within a browser instance. Think of it as a separate browser profile.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div>
+                    <h3>🌐 Browser</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>The browser process (Chrome, Firefox, etc.)</li>
+                        <li>Heavy to create</li>
+                        <li>Contains contexts</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>📂 Context</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>Isolated session (cookies, storage)</li>
+                        <li>Lightweight</li>
+                        <li>Contains pages</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <h3>📄 Page</h3>
+                <ul style="font-size: 0.85em;">
+                    <li>A single tab/window</li>
+                    <li>Where you interact with content</li>
+                    <li>Belongs to a context</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Browser Hierarchy -->
+        <div class="slide">
+            <h2>Browser → Context → Page</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    <span class="comment"># 1. Launch Browser</span>
+    browser = p.chromium.launch(headless=False)
+
+    <span class="comment"># 2. Create Context (automatic with new_page)</span>
+    page = browser.new_page()  <span class="comment"># Creates default context + page</span>
+
+    <span class="comment"># 3. Use Page</span>
+    page.goto("https://example.com")
+
+    browser.close()
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <strong>Hierarchy:</strong>
+                <pre style="margin-top: 10px; background: #f5f5f5; padding: 15px; border-radius: 5px;">
+Browser (Chrome)
+└── Context 1 (Isolated session)
+    ├── Page 1 (Tab 1)
+    ├── Page 2 (Tab 2)
+    └── Page 3 (Tab 3)
+└── Context 2 (Different session)
+    └── Page 4 (Tab 1)</pre>
+            </div>
+        </div>
+
+        <!-- Slide 12: Creating Multiple Contexts -->
+        <div class="slide">
+            <h2>Multiple Browser Contexts</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+
+    <span class="comment"># Context 1: User A</span>
+    context1 = browser.new_context()
+    page1 = context1.new_page()
+    page1.goto("https://example.com")
+
+    <span class="comment"># Context 2: User B (separate session)</span>
+    context2 = browser.new_context()
+    page2 = context2.new_page()
+    page2.goto("https://example.com")
+
+    <span class="comment"># Each context has isolated cookies/storage!</span>
+
+    context1.close()
+    context2.close()
+    browser.close()
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>Use Case:</strong> Testing multi-user scenarios, different login states, or isolated test environments.
+            </div>
+        </div>
+
+        <!-- Slide 13: Multiple Pages (Tabs) -->
+        <div class="slide">
+            <h2>Multiple Pages in One Context</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    context = browser.new_context()
+
+    <span class="comment"># Create multiple pages (tabs)</span>
+    page1 = context.new_page()
+    page1.goto("https://example.com")
+    print(f"Page 1: {page1.title()}")
+
+    page2 = context.new_page()
+    page2.goto("https://playwright.dev")
+    print(f"Page 2: {page2.title()}")
+
+    page3 = context.new_page()
+    page3.goto("https://github.com")
+    print(f"Page 3: {page3.title()}")
+
+    <span class="comment"># All pages share same context (cookies, storage)</span>
+
+    print(f"Total pages: {len(context.pages)}")  <span class="comment"># 3</span>
+
+    browser.close()
+            </div>
+        </div>
+
+        <!-- Slide 14: Working with Multiple Pages -->
+        <div class="slide">
+            <h2>Managing Multiple Pages</h2>
+
+            <div class="code-block">
+<span class="comment"># Get all pages in context</span>
+all_pages = context.pages
+print(f"Total pages: {len(all_pages)}")
+
+<span class="comment"># Iterate through pages</span>
+for i, page in enumerate(all_pages):
+    print(f"Page {i+1}: {page.url}")
+
+<span class="comment"># Switch between pages</span>
+page1.bring_to_front()  <span class="comment"># Bring to front (focus)</span>
+
+<span class="comment"># Close specific page</span>
+page2.close()
+
+<span class="comment"># Get current page</span>
+current_page = context.pages[0]
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>Important:</strong> When you close a context, ALL pages in that context are automatically closed.
+            </div>
+        </div>
+
+        <!-- Slide 15: Context Options -->
+        <div class="slide">
+            <h2>Browser Context Options</h2>
+
+            <div class="code-block">
+<span class="comment"># Create context with options</span>
+context = browser.new_context(
+    viewport={'width': 1920, 'height': 1080},
+    user_agent='Custom User Agent',
+    locale='en-US',
+    timezone_id='America/New_York',
+    permissions=['geolocation'],
+    geolocation={'latitude': 40.7128, 'longitude': -74.0060},
+    ignore_https_errors=True,
+    java_script_enabled=True
+)
+            </div>
+
+            <h3 style="margin-top: 30px;">Common Options:</h3>
+            <ul style="font-size: 0.9em;">
+                <li><strong>viewport</strong> - Browser window size</li>
+                <li><strong>user_agent</strong> - Custom user agent string</li>
+                <li><strong>locale</strong> - Language/region (en-US, fr-FR, etc.)</li>
+                <li><strong>timezone_id</strong> - Timezone</li>
+                <li><strong>permissions</strong> - Grant permissions (notifications, geolocation)</li>
+                <li><strong>ignore_https_errors</strong> - Ignore SSL errors</li>
+            </ul>
+        </div>
+
+        <!-- PART 3: BASIC ACTIONS -->
+
+        <!-- Slide 16: Basic Actions Overview -->
+        <div class="slide">
+            <h2>Part 3: Basic Actions</h2>
+
+            <div class="highlight-box">
+                <p><strong>Actions</strong> are how you interact with elements on the page - clicking buttons, filling forms, typing text.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Three Core Actions:</h3>
+            <table style="width: 100%; font-size: 0.85em; margin-top: 20px;">
+                <tr style="background: #667eea; color: white;">
+                    <th style="padding: 10px;">Action</th>
+                    <th style="padding: 10px;">Purpose</th>
+                    <th style="padding: 10px;">When to Use</th>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>click()</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Click an element</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Buttons, links, checkboxes</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>fill()</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Fill input fast</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Forms (fast, no events)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>type()</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Type character by character</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">When you need keyboard events</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 17: click() Method -->
+        <div class="slide">
+            <h2>page.click() - Click Elements</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic click</span>
+page.click("button")
+
+<span class="comment"># Click with selector</span>
+page.click("#submit-btn")
+page.click(".login-button")
+page.click("text=Sign In")
+
+<span class="comment"># Click with options</span>
+page.click("button",
+          button="right",     <span class="comment"># Right-click</span>
+          click_count=2,      <span class="comment"># Double-click</span>
+          timeout=5000)       <span class="comment"># 5 second timeout</span>
+            </div>
+
+            <h3 style="margin-top: 30px;">Click Options:</h3>
+            <ul style="font-size: 0.9em;">
+                <li><strong>button</strong> - "left" (default), "right", "middle"</li>
+                <li><strong>click_count</strong> - Number of clicks (1=single, 2=double)</li>
+                <li><strong>delay</strong> - Delay between mousedown and mouseup (ms)</li>
+                <li><strong>force</strong> - Skip actionability checks (use carefully!)</li>
+                <li><strong>timeout</strong> - Maximum wait time</li>
+            </ul>
+        </div>
+
+        <!-- Slide 18: click() Examples -->
+        <div class="slide">
+            <h2>Click Examples</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+
+    page.goto("https://example.com")
+
+    <span class="comment"># Click by different selectors</span>
+    page.click("button#submit")           <span class="comment"># ID</span>
+    page.click("button.primary")          <span class="comment"># Class</span>
+    page.click("text=Click Me")           <span class="comment"># Text content</span>
+    page.click("button:has-text('Save')")  <span class="comment"># Contains text</span>
+
+    <span class="comment"># Double-click</span>
+    page.click("button", click_count=2)
+
+    <span class="comment"># Right-click</span>
+    page.click("button", button="right")
+
+    browser.close()
+            </div>
+        </div>
+
+        <!-- Slide 19: fill() Method -->
+        <div class="slide">
+            <h2>page.fill() - Fill Input Fields</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic fill</span>
+page.fill("input[name='username']", "john_doe")
+page.fill("#email", "john@example.com")
+page.fill(".password-input", "SecurePass123")
+
+<span class="comment"># Fill clears existing value first</span>
+page.fill("input", "New Value")  <span class="comment"># Old value is cleared</span>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <strong>How fill() works:</strong>
+                <ol style="margin-top: 10px;">
+                    <li>Focuses the input element</li>
+                    <li>Clears existing value</li>
+                    <li>Sets the new value instantly</li>
+                    <li>Does NOT trigger keyboard events</li>
+                </ol>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>Use fill() when:</strong> You want to quickly fill forms without triggering keyboard events. It's faster than type().
+            </div>
+        </div>
+
+        <!-- Slide 20: type() Method -->
+        <div class="slide">
+            <h2>page.type() - Type Text Character by Character</h2>
+
+            <div class="code-block">
+<span class="comment"># Basic type</span>
+page.type("input[name='search']", "Playwright")
+
+<span class="comment"># Type with delay</span>
+page.type("input", "Hello World", delay=100)  <span class="comment"># 100ms between chars</span>
+
+<span class="comment"># Type triggers keyboard events</span>
+page.type("input", "Test")  <span class="comment"># Fires keydown, keypress, keyup</span>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <strong>How type() works:</strong>
+                <ol style="margin-top: 10px;">
+                    <li>Focuses the input element</li>
+                    <li>Types each character one by one</li>
+                    <li>Triggers keyboard events (keydown, keypress, keyup)</li>
+                    <li>Slower but more realistic</li>
+                </ol>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>Use type() when:</strong> Your application listens to keyboard events or you need to simulate human typing.
+            </div>
+        </div>
+
+        <!-- Slide 21: fill() vs type() -->
+        <div class="slide">
+            <h2>fill() vs type() - Key Differences</h2>
+
+            <table style="width: 100%; font-size: 0.85em; margin-top: 20px;">
+                <thead>
+                    <tr style="background: #667eea; color: white;">
+                        <th style="padding: 10px;">Feature</th>
+                        <th style="padding: 10px;">fill()</th>
+                        <th style="padding: 10px;">type()</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Speed</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">⚡ Very Fast</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">🐢 Slower</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Clears First</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">✅ Yes</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">❌ No (appends)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Keyboard Events</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">❌ No</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Use Case</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Forms, inputs</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Search boxes, autocomplete</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Recommended</strong></td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">✅ Default choice</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">⚠️ Special cases</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="code-block" style="margin-top: 30px;">
+<span class="comment"># Choose fill() for most cases</span>
+page.fill("input[name='email']", "user@example.com")  <span class="comment"># Fast ✓</span>
+
+<span class="comment"># Use type() for autocomplete/search</span>
+page.type("input[name='search']", "Python", delay=50)  <span class="comment"># Triggers events ✓</span>
+            </div>
+        </div>
+
+        <!-- Slide 22: Complete Form Example -->
+        <div class="slide">
+            <h2>Complete Form Interaction Example</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+
+    page.goto("https://example.com/login")
+
+    <span class="comment"># Fill form fields</span>
+    page.fill("input[name='username']", "john_doe")
+    page.fill("input[name='password']", "SecurePass123")
+    page.fill("input[name='email']", "john@example.com")
+
+    <span class="comment"># Check checkbox</span>
+    page.check("input[type='checkbox']")
+
+    <span class="comment"># Click submit button</span>
+    page.click("button[type='submit']")
+
+    <span class="comment"># Wait for navigation</span>
+    page.wait_for_url("**/dashboard")
+
+    print("Login successful!")
+
+    browser.close()
+            </div>
+        </div>
+
+        <!-- PART 4: PAGE INFO & CLEANUP -->
+
+        <!-- Slide 23: Getting Page Information -->
+        <div class="slide">
+            <h2>Part 4: Getting Page Information</h2>
+
+            <div class="highlight-box">
+                <p><strong>Page Information:</strong> Extract useful data from the current page like title, URL, and content.</p>
+            </div>
+
+            <div class="code-block" style="margin-top: 30px;">
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page()
+
+    page.goto("https://example.com")
+
+    <span class="comment"># Get page title</span>
+    title = page.title()
+    print(f"Title: {title}")
+
+    <span class="comment"># Get current URL</span>
+    url = page.url
+    print(f"URL: {url}")
+
+    <span class="comment"># Get page HTML content</span>
+    html = page.content()
+    print(f"HTML length: {len(html)}")
+
+    browser.close()
+            </div>
+        </div>
+
+        <!-- Slide 24: page.title() -->
+        <div class="slide">
+            <h2>page.title() - Get Page Title</h2>
+
+            <div class="code-block">
+<span class="comment"># Get page title</span>
+title = page.title()
+print(title)  <span class="comment"># "Example Domain"</span>
+
+<span class="comment"># Use in assertions</span>
+assert page.title() == "Example Domain"
+assert "Example" in page.title()
+
+<span class="comment"># Check title across pages</span>
+page.goto("https://example.com")
+title1 = page.title()
+
+page.goto("https://playwright.dev")
+title2 = page.title()
+
+print(f"Title 1: {title1}")
+print(f"Title 2: {title2}")
+            </div>
+
+            <div class="success-box" style="margin-top: 30px;">
+                <strong>Common Use Case:</strong> Verify navigation was successful by checking if the page title matches expectations.
+            </div>
+        </div>
+
+        <!-- Slide 25: page.url -->
+        <div class="slide">
+            <h2>page.url - Get Current URL</h2>
+
+            <div class="code-block">
+<span class="comment"># Get current URL</span>
+current_url = page.url
+print(current_url)  <span class="comment"># "https://example.com/"</span>
+
+<span class="comment"># Check URL after navigation</span>
+page.goto("https://example.com/login")
+print(page.url)  <span class="comment"># "https://example.com/login"</span>
+
+<span class="comment"># Use in assertions</span>
+assert "login" in page.url
+assert page.url.startswith("https://")
+
+<span class="comment"># Track URL changes</span>
+page.goto("https://example.com")
+url_before = page.url
+
+page.click("a[href='/about']")
+url_after = page.url
+
+print(f"Before: {url_before}")
+print(f"After: {url_after}")
+            </div>
+        </div>
+
+        <!-- Slide 26: page.content() -->
+        <div class="slide">
+            <h2>page.content() - Get Page HTML</h2>
+
+            <div class="code-block">
+<span class="comment"># Get full page HTML</span>
+html = page.content()
+print(html[:100])  <span class="comment"># Print first 100 chars</span>
+
+<span class="comment"># Check if text exists in HTML</span>
+if "Welcome" in html:
+    print("Welcome message found!")
+
+<span class="comment"># Save HTML to file</span>
+with open("page.html", "w", encoding="utf-8") as f:
+    f.write(page.content())
+
+<span class="comment"># Get HTML length</span>
+print(f"Page size: {len(html)} characters")
+            </div>
+
+            <div class="warning-box" style="margin-top: 30px;">
+                <strong>Note:</strong> page.content() returns the full HTML including dynamically loaded content. It's the entire DOM state at that moment.
+            </div>
+        </div>
+
+        <!-- Slide 27: Complete Info Example -->
+        <div class="slide">
+            <h2>Complete Page Info Example</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+def get_page_info(url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+
+        <span class="comment"># Navigate</span>
+        response = page.goto(url)
+
+        <span class="comment"># Collect info</span>
+        info = {
+            'url': page.url,
+            'title': page.title(),
+            'status': response.status,
+            'ok': response.ok,
+            'content_length': len(page.content()),
+            'viewport': page.viewport_size
+        }
+
+        browser.close()
+        return info
+
+<span class="comment"># Usage</span>
+page_info = get_page_info("https://playwright.dev")
+print(f"Title: {page_info['title']}")
+print(f"URL: {page_info['url']}")
+print(f"Status: {page_info['status']}")
+print(f"Content: {page_info['content_length']} chars")
+            </div>
+        </div>
+
+        <!-- Slide 28: Closing Pages Properly -->
+        <div class="slide">
+            <h2>Closing Browsers & Pages</h2>
+
+            <div class="highlight-box">
+                <p><strong>Proper Cleanup:</strong> Always close pages, contexts, and browsers to free resources and prevent memory leaks.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Closing Hierarchy:</h3>
+            <div class="code-block">
+<span class="comment"># Close page only</span>
+page.close()
+
+<span class="comment"># Close context (closes all its pages)</span>
+context.close()
+
+<span class="comment"># Close browser (closes all contexts and pages)</span>
+browser.close()
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <strong>Remember:</strong>
+                <ul>
+                    <li>browser.close() → Closes everything</li>
+                    <li>context.close() → Closes all pages in that context</li>
+                    <li>page.close() → Closes only that specific page</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 29: Closing Examples -->
+        <div class="slide">
+            <h2>Closing Examples</h2>
+
+            <div class="code-block">
+<span class="comment"># Example 1: Close individual page</span>
+page1 = browser.new_page()
+page2 = browser.new_page()
+
+page1.close()  <span class="comment"># Close only page1</span>
+page2.close()  <span class="comment"># Close only page2</span>
+browser.close()  <span class="comment"># Close browser</span>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Example 2: Close context (closes all pages)</span>
+context = browser.new_context()
+page1 = context.new_page()
+page2 = context.new_page()
+
+context.close()  <span class="comment"># Closes both page1 and page2</span>
+browser.close()
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Example 3: Close browser (closes everything)</span>
+browser = p.chromium.launch()
+page1 = browser.new_page()
+page2 = browser.new_page()
+
+browser.close()  <span class="comment"># Closes all contexts and pages</span>
+            </div>
+        </div>
+
+        <!-- Slide 30: Using Context Managers -->
+        <div class="slide">
+            <h2>Context Managers - Automatic Cleanup</h2>
+
+            <div class="code-block">
+<span class="comment"># Recommended: Use 'with' statement</span>
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page()
+
+    page.goto("https://example.com")
+    print(page.title())
+
+    <span class="comment"># browser.close() called automatically!</span>
+            </div>
+
+            <div class="success-box" style="margin-top: 30px;">
+                <strong>Why use 'with'?</strong>
+                <ul style="margin-top: 10px;">
+                    <li>✅ Automatic cleanup even if errors occur</li>
+                    <li>✅ Cleaner code</li>
+                    <li>✅ Prevents resource leaks</li>
+                    <li>✅ Best practice for production code</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 31: Error Handling with Cleanup -->
+        <div class="slide">
+            <h2>Error Handling with Proper Cleanup</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+<span class="comment"># Bad: Browser might not close on error</span>
+p = sync_playwright().start()
+browser = p.chromium.launch()
+page = browser.new_page()
+page.goto("https://invalid-url")  <span class="comment"># Error! Browser not closed</span>
+browser.close()
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Good: Browser always closes</span>
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page()
+
+    try:
+        page.goto("https://invalid-url")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        browser.close()  <span class="comment"># Always closes</span>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Best: Context manager handles everything</span>
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page()
+
+    try:
+        page.goto("https://invalid-url")
+    except Exception as e:
+        print(f"Error: {e}")
+    <span class="comment"># Automatic cleanup!</span>
+            </div>
+        </div>
+
+        <!-- Slide 32: Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+
+            <div class="success-box">
+                <h3>✅ DO:</h3>
+                <ul>
+                    <li>Use <code>with sync_playwright()</code> for automatic cleanup</li>
+                    <li>Use fill() for forms (faster)</li>
+                    <li>Use type() only when keyboard events are needed</li>
+                    <li>Check page.url or page.title() after navigation</li>
+                    <li>Close pages/contexts when done</li>
+                    <li>Use meaningful timeouts</li>
+                    <li>Handle navigation errors with try/except</li>
+                </ul>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>❌ DON'T:</h3>
+                <ul>
+                    <li>Forget to close browsers (memory leaks!)</li>
+                    <li>Use type() everywhere (slower)</li>
+                    <li>Ignore navigation failures</li>
+                    <li>Use force=True unless necessary</li>
+                    <li>Create too many contexts (resource intensive)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 33: Common Patterns -->
+        <div class="slide">
+            <h2>Common Navigation & Interaction Patterns</h2>
+
+            <div class="code-block">
+<span class="comment"># Pattern 1: Login flow</span>
+def login(page, username, password):
+    page.goto("https://example.com/login")
+    page.fill("input[name='username']", username)
+    page.fill("input[name='password']", password)
+    page.click("button[type='submit']")
+    page.wait_for_url("**/dashboard")
+    return page.title() == "Dashboard"
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Pattern 2: Search and verify</span>
+def search(page, query):
+    page.goto("https://example.com")
+    page.type("input[name='search']", query)
+    page.click("button[type='submit']")
+    page.wait_for_load_state("networkidle")
+    return page.url
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Pattern 3: Multi-page workflow</span>
+def checkout(page):
+    page.goto("https://example.com/cart")
+    page.click("text=Proceed to Checkout")
+    page.fill("input[name='address']", "123 Main St")
+    page.click("text=Continue")
+    page.click("text=Place Order")
+    return "order" in page.url
+            </div>
+        </div>
+
+        <!-- Slide 34: Complete Practical Example -->
+        <div class="slide">
+            <h2>Complete Practical Example</h2>
+
+            <div class="code-block">
+from playwright.sync_api import sync_playwright
+
+def test_login_and_navigate():
+    with sync_playwright() as p:
+        <span class="comment"># Setup</span>
+        browser = p.chromium.launch(headless=False, slow_mo=500)
+        context = browser.new_context(
+            viewport={'width': 1280, 'height': 720}
+        )
+        page = context.new_page()
+
+        try:
+            <span class="comment"># Navigate to login</span>
+            page.goto("https://example.com/login")
+            print(f"1. Navigated to: {page.title()}")
+
+            <span class="comment"># Fill form</span>
+            page.fill("input[name='username']", "testuser")
+            page.fill("input[name='password']", "password123")
+
+            <span class="comment"># Submit</span>
+            page.click("button[type='submit']")
+            page.wait_for_url("**/dashboard")
+            print(f"2. After login: {page.title()}")
+
+            <span class="comment"># Navigate to profile</span>
+            page.click("text=Profile")
+            print(f"3. Profile page: {page.url}")
+
+            <span class="comment"># Go back and reload</span>
+            page.go_back()
+            page.reload()
+            print(f"4. Back to: {page.title()}")
+
+            return True
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return False
+        finally:
+            browser.close()
+
+<span class="comment"># Run test</span>
+test_login_and_navigate()
+            </div>
+        </div>
+
+        <!-- Slide 35: pytest Integration -->
+        <div class="slide">
+            <h2>Using with pytest</h2>
+
+            <div class="code-block">
+<span class="comment"># test_navigation.py</span>
+import pytest
+from playwright.sync_api import Page, expect
+
+def test_basic_navigation(page: Page):
+    """Test basic navigation functionality."""
+    <span class="comment"># Navigate</span>
+    page.goto("https://example.com")
+
+    <span class="comment"># Verify</span>
+    expect(page).to_have_title("Example Domain")
+    expect(page).to_have_url("https://example.com/")
+
+def test_form_interaction(page: Page):
+    """Test form filling and submission."""
+    page.goto("https://example.com/form")
+
+    <span class="comment"># Fill form</span>
+    page.fill("input[name='name']", "John Doe")
+    page.fill("input[name='email']", "john@example.com")
+
+    <span class="comment"># Submit</span>
+    page.click("button[type='submit']")
+
+    <span class="comment"># Verify</span>
+    expect(page).to_have_url("**/success")
+    expect(page.locator("text=Thank you")).to_be_visible()
+
+def test_navigation_history(page: Page):
+    """Test browser history navigation."""
+    <span class="comment"># Visit pages</span>
+    page.goto("https://example.com")
+    page.goto("https://playwright.dev")
+
+    <span class="comment"># Go back</span>
+    page.go_back()
+    expect(page).to_have_url("https://example.com/")
+
+    <span class="comment"># Go forward</span>
+    page.go_forward()
+    expect(page).to_have_url("https://playwright.dev/")
+            </div>
+        </div>
+
+        <!-- Slide 36: Debugging Tips -->
+        <div class="slide">
+            <h2>Debugging Navigation & Interactions</h2>
+
+            <div class="code-block">
+<span class="comment"># 1. Use headed mode</span>
+browser = p.chromium.launch(headless=False)
+
+<span class="comment"># 2. Add slow motion</span>
+browser = p.chromium.launch(headless=False, slow_mo=1000)
+
+<span class="comment"># 3. Use page.pause() for inspection</span>
+page.goto("https://example.com")
+page.pause()  <span class="comment"># Opens Playwright Inspector</span>
+
+<span class="comment"># 4. Print page info</span>
+print(f"Current URL: {page.url}")
+print(f"Title: {page.title()}")
+
+<span class="comment"># 5. Take screenshots</span>
+page.screenshot(path="debug.png")
+
+<span class="comment"># 6. Check response status</span>
+response = page.goto("https://example.com")
+print(f"Status: {response.status}")
+
+<span class="comment"># 7. Wait for specific state</span>
+page.wait_for_load_state("networkidle")
+            </div>
+        </div>
+
+        <!-- Slide 37: Common Errors -->
+        <div class="slide">
+            <h2>Common Errors & Solutions</h2>
+
+            <table style="width: 100%; font-size: 0.8em;">
+                <tr style="background: #667eea; color: white;">
+                    <th style="padding: 8px;">Error</th>
+                    <th style="padding: 8px;">Cause</th>
+                    <th style="padding: 8px;">Solution</th>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">TimeoutError</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Element not found/visible</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Check selector, increase timeout</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Navigation failed</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Invalid URL or network issue</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Verify URL, check network</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Element not clickable</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Element covered or disabled</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Wait for visibility, check CSS</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">fill() doesn't work</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Not an input element</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Use correct selector, verify element type</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Browser not closing</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Exception before close()</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Use context manager or try/finally</td>
+                </tr>
+            </table>
+
+            <div class="code-block" style="margin-top: 20px; font-size: 0.8em;">
+<span class="comment"># Error handling example</span>
+try:
+    page.goto("https://example.com", timeout=5000)
+    page.click("button", timeout=3000)
+except TimeoutError:
+    print("Element took too long to appear")
+    page.screenshot(path="error.png")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+            </div>
+        </div>
+
+        <!-- Slide 38: Performance Tips -->
+        <div class="slide">
+            <h2>Performance Tips</h2>
+
+            <div class="success-box">
+                <h3>Speed Up Your Tests:</h3>
+                <ul>
+                    <li>✅ Use fill() instead of type() when possible</li>
+                    <li>✅ Use "domcontentloaded" instead of "load" for faster navigation</li>
+                    <li>✅ Reuse browser contexts when possible</li>
+                    <li>✅ Run in headless mode for CI/CD</li>
+                    <li>✅ Don't use unnecessary waits</li>
+                </ul>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Fast navigation</span>
+page.goto("https://example.com", wait_until="domcontentloaded")
+
+<span class="comment"># Fast form filling</span>
+page.fill("input", "value")  <span class="comment"># Not type()</span>
+
+<span class="comment"># Reuse context</span>
+context = browser.new_context()
+page1 = context.new_page()
+page2 = context.new_page()  <span class="comment"># Share context</span>
+
+<span class="comment"># Headless for speed</span>
+browser = p.chromium.launch(headless=True)
+            </div>
+        </div>
+
+        <!-- Slide 39: Real-World Scenarios -->
+        <div class="slide">
+            <h2>Real-World Scenarios</h2>
+
+            <h3>Scenario 1: E-commerce Checkout</h3>
+            <div class="code-block">
+page.goto("https://shop.example.com")
+page.click("text=Add to Cart")
+page.click("text=Checkout")
+page.fill("input[name='email']", "user@example.com")
+page.fill("input[name='address']", "123 Main St")
+page.click("button:has-text('Place Order')")
+expect(page).to_have_url("**/confirmation")
+            </div>
+
+            <h3 style="margin-top: 20px;">Scenario 2: Social Media Post</h3>
+            <div class="code-block">
+page.goto("https://social.example.com")
+page.fill("input[name='username']", "user")
+page.fill("input[name='password']", "pass")
+page.click("button[type='submit']")
+page.click("text=Create Post")
+page.type("textarea", "Hello World!")
+page.click("button:has-text('Publish')")
+            </div>
+
+            <h3 style="margin-top: 20px;">Scenario 3: Search & Filter</h3>
+            <div class="code-block">
+page.goto("https://jobs.example.com")
+page.type("input[placeholder='Search jobs']", "Python Developer")
+page.click("button:has-text('Search')")
+page.click("text=Remote Only")
+expect(page.locator(".job-card")).to_have_count(10)
+            </div>
+        </div>
+
+        <!-- Slide 40: Waiting Strategies -->
+        <div class="slide">
+            <h2>Waiting Strategies</h2>
+
+            <div class="highlight-box">
+                <p><strong>Playwright Auto-waits:</strong> Most actions automatically wait for elements to be actionable (visible, enabled, stable).</p>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Automatic waiting (recommended)</span>
+page.click("button")  <span class="comment"># Waits for button to be clickable</span>
+page.fill("input", "text")  <span class="comment"># Waits for input to be fillable</span>
+
+<span class="comment"># Explicit waiting (when needed)</span>
+page.wait_for_selector("div.content")
+page.wait_for_url("**/dashboard")
+page.wait_for_load_state("networkidle")
+
+<span class="comment"># Wait for specific condition</span>
+page.wait_for_function("() => document.readyState === 'complete'")
+
+<span class="comment"># Timeout options</span>
+page.click("button", timeout=5000)  <span class="comment"># 5 seconds</span>
+page.wait_for_selector(".element", timeout=10000)  <span class="comment"># 10 seconds</span>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <strong>Best Practice:</strong> Trust Playwright's auto-waiting. Only add explicit waits when necessary.
+            </div>
+        </div>
+
+        <!-- Slide 41: Summary -->
+        <div class="slide">
+            <h2>Lecture 14 Summary</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="info-box">
+                    <h3>Navigation</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>page.goto(url)</li>
+                        <li>page.go_back()</li>
+                        <li>page.go_forward()</li>
+                        <li>page.reload()</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Pages & Contexts</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>Browser → Context → Page</li>
+                        <li>Isolated sessions</li>
+                        <li>Multiple pages/tabs</li>
+                        <li>context.new_page()</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Basic Actions</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>page.click() - Click elements</li>
+                        <li>page.fill() - Fast form filling</li>
+                        <li>page.type() - Realistic typing</li>
+                        <li>Auto-waiting built-in</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Page Info & Cleanup</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>page.title() - Get title</li>
+                        <li>page.url - Get URL</li>
+                        <li>page.content() - Get HTML</li>
+                        <li>Always close resources</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 42: Key Takeaways -->
+        <div class="slide">
+            <h2>Key Takeaways</h2>
+
+            <div class="success-box">
+                <h3>✅ Remember:</h3>
+                <ol style="margin-top: 15px; line-height: 1.8;">
+                    <li><strong>Navigation is simple:</strong> goto(), go_back(), go_forward(), reload()</li>
+                    <li><strong>Hierarchy matters:</strong> Browser → Context → Page</li>
+                    <li><strong>Use fill() by default:</strong> It's faster than type()</li>
+                    <li><strong>Auto-waiting works:</strong> Trust Playwright's built-in waits</li>
+                    <li><strong>Always cleanup:</strong> Use context managers (with statement)</li>
+                    <li><strong>Get page info:</strong> title(), url, content() for verification</li>
+                    <li><strong>Debug with tools:</strong> headed mode, slow_mo, pause()</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 43: Practice Exercises -->
+        <div class="slide">
+            <h2>Practice Exercises</h2>
+
+            <div class="info-box">
+                <h3>Exercise 1: Navigation Practice</h3>
+                <p>Navigate between 3 different websites, print their titles, go back and forward through history.</p>
+            </div>
+
+            <div class="info-box" style="margin-top: 15px;">
+                <h3>Exercise 2: Form Automation</h3>
+                <p>Create a script that fills a login form, submits it, and verifies successful navigation.</p>
+            </div>
+
+            <div class="info-box" style="margin-top: 15px;">
+                <h3>Exercise 3: Multiple Pages</h3>
+                <p>Open 3 different pages in the same context, print info from each, then close them properly.</p>
+            </div>
+
+            <div class="info-box" style="margin-top: 15px;">
+                <h3>Exercise 4: Complete Workflow</h3>
+                <p>Build a complete test: navigate → fill form → click submit → verify result → extract data.</p>
+            </div>
+        </div>
+
+        <!-- Slide 44: Next Lecture Preview -->
+        <div class="slide">
+            <h2>Next Lecture Preview</h2>
+
+            <div class="highlight-box">
+                <h3>Lecture 15: Locators & Element Selection</h3>
+                <p style="margin-top: 10px;">We'll dive deep into finding elements on the page:</p>
+                <ul style="margin-top: 15px; line-height: 1.8;">
+                    <li>📌 CSS Selectors vs XPath</li>
+                    <li>📌 Text-based locators</li>
+                    <li>📌 Role-based locators (ARIA)</li>
+                    <li>📌 data-testid best practices</li>
+                    <li>📌 Locator strategies and resilience</li>
+                    <li>📌 Chaining and filtering locators</li>
+                </ul>
+            </div>
+
+            <p style="margin-top: 30px; font-size: 1.2em; text-align: center;">
+                <strong>Complete today's exercises to prepare! 🚀</strong>
+            </p>
+        </div>
+
+        <!-- Slide 45: Resources -->
+        <div class="slide">
+            <h2>Resources & References</h2>
+
+            <div class="info-box">
+                <h3>📚 Official Documentation</h3>
+                <ul>
+                    <li><strong>Navigation:</strong> playwright.dev/python/docs/api/class-page#page-goto</li>
+                    <li><strong>Actions:</strong> playwright.dev/python/docs/api/class-page#page-click</li>
+                    <li><strong>Context:</strong> playwright.dev/python/docs/api/class-browsercontext</li>
+                </ul>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <h3>🔧 Practice Resources</h3>
+                <ul>
+                    <li><strong>Examples:</strong> See examples/ folder in this lecture</li>
+                    <li><strong>Exercises:</strong> Complete exercises in exercises/ folder</li>
+                    <li><strong>Solutions:</strong> Check SOLUTIONS.md after attempting exercises</li>
+                </ul>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <h3>💡 Pro Tip</h3>
+                <p>Practice with real websites like example.com, playwright.dev, and your favorite sites to build confidence!</p>
+            </div>
+        </div>
+
+        <!-- Slide 46: Questions & End -->
+        <div class="slide">
+            <h1>Thank You!</h1>
+            <h2>Questions?</h2>
+
+            <div style="margin-top: 50px;">
+                <p style="font-size: 1.2em;">📧 Contact: your-email@example.com</p>
+                <p style="font-size: 1.2em;">💬 Discord: Course Community Server</p>
+                <p style="font-size: 1.2em;">🐙 GitHub: github.com/your-repo</p>
+            </div>
+
+            <div style="margin-top: 50px;">
+                <p style="font-size: 1.5em;"><strong>Next: Lecture 15 - Locators & Element Selection</strong></p>
+            </div>
+
+            <div class="navigation" style="margin-top: 50px;">
+                <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+                <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'">🏠 Home</button>
+                <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+    <script src="../assets/js/presentation.js"></script>
+</body>
+</html>
