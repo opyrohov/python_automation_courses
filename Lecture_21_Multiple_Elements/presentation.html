@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 21: Working with Multiple Elements</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 21</h1>
+            <div class="subtitle">Working with Multiple Elements</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Find and work with multiple elements</li>
+                <li>✓ Use locator.all() effectively</li>
+                <li>✓ Iterate through element collections</li>
+                <li>✓ Count elements dynamically</li>
+                <li>✓ Handle tables (rows, cells)</li>
+                <li>✓ Work with dynamic lists</li>
+                <li>✓ Filter and find specific elements</li>
+            </ul>
+        </div>
+
+        <!-- Why Multiple Elements Matter -->
+        <div class="slide">
+            <h2>Why Working with Multiple Elements Matters</h2>
+            <div class="highlight-box">
+                <p>Real applications have lists, tables, grids - you need to handle collections of elements efficiently.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Common Use Cases:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>📋 Verifying list contents</li>
+                <li>🔍 Finding specific items in collections</li>
+                <li>📊 Processing table data</li>
+                <li>✅ Validating search results</li>
+                <li>🎯 Selecting items from dropdowns</li>
+                <li>📈 Handling dynamic content</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: FINDING MULTIPLE ELEMENTS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Finding Multiple Elements</h2>
+            <p>Getting element collections</p>
+        </div>
+
+        <div class="slide">
+            <h2>locator.all() - Get All Matching Elements</h2>
+            <div class="code-block">
+<span class="comment"># Get all elements matching a locator</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+
+<span class="comment"># Returns a list of Locator objects</span>
+<span class="function">print</span>(f<span class="string">"Found {len(items)} items"</span>)
+
+<span class="comment"># Each item is a Locator</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    <span class="function">print</span>(item.<span class="function">text_content</span>())
+
+<span class="comment"># Empty list if no matches</span>
+no_items = page.<span class="function">locator</span>(<span class="string">".nonexistent"</span>).<span class="function">all</span>()
+<span class="function">print</span>(<span class="function">len</span>(no_items))  <span class="comment"># <span class="number">0</span></span></div>
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Important:</strong> all() returns a list - evaluated immediately (not lazy)</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>count() - Get Element Count</h2>
+            <div class="code-block">
+<span class="comment"># Count matching elements</span>
+count = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">count</span>()
+<span class="function">print</span>(f<span class="string">"Found {count} products"</span>)
+
+<span class="comment"># Use with assertions</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> expect
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".product"</span>)).<span class="function">to_have_count</span>(<span class="number">10</span>)
+
+<span class="comment"># Count without loading all elements</span>
+<span class="comment"># More efficient than len(locator.all())</span>
+total = page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">count</span>()
+<span class="function">print</span>(f<span class="string">"Total items: {total}"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>all() vs count()</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="info-box">
+                    <h4>all() - Returns List</h4>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># Get all elements</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+
+<span class="comment"># Use when you need:</span>
+<span class="comment"># - Iterate through elements</span>
+<span class="comment"># - Access element properties</span>
+<span class="comment"># - Perform actions on each</span>
+
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    <span class="function">print</span>(item.<span class="function">text_content</span>())
+                    </div>
+                </div>
+                <div class="success-box">
+                    <h4>count() - Returns Number</h4>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># Get count only</span>
+count = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">count</span>()
+
+<span class="comment"># Use when you only need:</span>
+<span class="comment"># - Number of elements</span>
+<span class="comment"># - Verification</span>
+<span class="comment"># - More efficient</span>
+
+<span class="keyword">if</span> count > <span class="number">10</span>:
+    <span class="function">print</span>(<span class="string">"Many items"</span>)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2: ITERATING ELEMENTS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Iterating Through Elements</h2>
+            <p>Processing element collections</p>
+        </div>
+
+        <div class="slide">
+            <h2>Basic Iteration</h2>
+            <div class="code-block">
+<span class="comment"># Method 1: Using all()</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    text = item.<span class="function">text_content</span>()
+    <span class="function">print</span>(f<span class="string">"Item: {text}"</span>)
+
+<span class="comment"># Method 2: Using count() and nth()</span>
+count = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">count</span>()
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(count):
+    item = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">nth</span>(i)
+    text = item.<span class="function">text_content</span>()
+    <span class="function">print</span>(f<span class="string">"Item {i}: {text}"</span>)
+
+<span class="comment"># Method 3: Using enumerate</span>
+<span class="keyword">for</span> i, item <span class="keyword">in</span> <span class="function">enumerate</span>(page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()):
+    <span class="function">print</span>(f<span class="string">"Position {i}: {item.text_content()}"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Extracting Data from Elements</h2>
+            <div class="code-block">
+<span class="comment"># Extract text from all elements</span>
+products = page.<span class="function">locator</span>(<span class="string">".product-name"</span>).<span class="function">all</span>()
+names = [p.<span class="function">text_content</span>() <span class="keyword">for</span> p <span class="keyword">in</span> products]
+<span class="function">print</span>(names)  <span class="comment"># [<span class="string">'Product 1'</span>, <span class="string">'Product 2'</span>, ...]</span>
+
+<span class="comment"># Extract attributes</span>
+links = page.<span class="function">locator</span>(<span class="string">"a"</span>).<span class="function">all</span>()
+urls = [link.<span class="function">get_attribute</span>(<span class="string">"href"</span>) <span class="keyword">for</span> link <span class="keyword">in</span> links]
+
+<span class="comment"># Extract multiple properties</span>
+items = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">all</span>()
+data = []
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    data.<span class="function">append</span>({
+        <span class="string">'name'</span>: item.<span class="function">locator</span>(<span class="string">".name"</span>).<span class="function">text_content</span>(),
+        <span class="string">'price'</span>: item.<span class="function">locator</span>(<span class="string">".price"</span>).<span class="function">text_content</span>(),
+        <span class="string">'id'</span>: item.<span class="function">get_attribute</span>(<span class="string">"data-id"</span>)
+    })
+<span class="function">print</span>(data)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Filtering While Iterating</h2>
+            <div class="code-block">
+<span class="comment"># Find items matching condition</span>
+items = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">all</span>()
+expensive_items = []
+
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    price_text = item.<span class="function">locator</span>(<span class="string">".price"</span>).<span class="function">text_content</span>()
+    price = <span class="function">float</span>(price_text.<span class="function">replace</span>(<span class="string">"$"</span>, <span class="string">""</span>))
+    <span class="keyword">if</span> price > <span class="number">100</span>:
+        expensive_items.<span class="function">append</span>(item)
+
+<span class="function">print</span>(f<span class="string">"Found {len(expensive_items)} expensive items"</span>)
+
+<span class="comment"># Using list comprehension</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+visible_items = [item <span class="keyword">for</span> item <span class="keyword">in</span> items <span class="keyword">if</span> item.<span class="function">is_visible</span>()]
+<span class="function">print</span>(f<span class="string">"Visible: {len(visible_items)}"</span>)</div>
+        </div>
+
+        <!-- PART 3: WORKING WITH TABLES -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Working with Tables</h2>
+            <p>Handle rows and cells</p>
+        </div>
+
+        <div class="slide">
+            <h2>Table Basics</h2>
+            <div class="code-block">
+<span class="comment"># Get all rows</span>
+rows = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).<span class="function">all</span>()
+<span class="function">print</span>(f<span class="string">"Table has {len(rows)} rows"</span>)
+
+<span class="comment"># Get cells in first row</span>
+first_row = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).first
+cells = first_row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">all</span>()
+<span class="function">print</span>(f<span class="string">"Row has {len(cells)} cells"</span>)
+
+<span class="comment"># Get all cells in table</span>
+all_cells = page.<span class="function">locator</span>(<span class="string">"table tbody tr td"</span>).<span class="function">all</span>()
+
+<span class="comment"># Get specific cell (row 2, column 3)</span>
+cell = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).<span class="function">nth</span>(<span class="number">1</span>).<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">nth</span>(<span class="number">2</span>)
+<span class="function">print</span>(cell.<span class="function">text_content</span>())</div>
+        </div>
+
+        <div class="slide">
+            <h2>Extracting Table Data</h2>
+            <div class="code-block">
+<span class="comment"># Extract entire table as list of lists</span>
+rows = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).<span class="function">all</span>()
+table_data = []
+
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    cells = row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">all</span>()
+    row_data = [cell.<span class="function">text_content</span>() <span class="keyword">for</span> cell <span class="keyword">in</span> cells]
+    table_data.<span class="function">append</span>(row_data)
+
+<span class="function">print</span>(table_data)
+<span class="comment"># [['John', 'Doe', '30'], ['Jane', 'Smith', '25'], ...]</span>
+
+<span class="comment"># Extract as list of dictionaries (with headers)</span>
+headers = [h.<span class="function">text_content</span>() <span class="keyword">for</span> h <span class="keyword">in</span> page.<span class="function">locator</span>(<span class="string">"table th"</span>).<span class="function">all</span>()]
+rows = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).<span class="function">all</span>()
+table_data = []
+
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    cells = row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">all</span>()
+    row_dict = {headers[i]: cells[i].<span class="function">text_content</span>() <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(headers))}
+    table_data.<span class="function">append</span>(row_dict)
+
+<span class="function">print</span>(table_data)
+<span class="comment"># [{'Name': 'John', 'Age': '30'}, ...]</span></div>
+        </div>
+
+        <div class="slide">
+            <h2>Finding Rows by Content</h2>
+            <div class="code-block">
+<span class="comment"># Find row containing specific text</span>
+rows = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    <span class="keyword">if</span> <span class="string">"John"</span> <span class="keyword">in</span> row.<span class="function">text_content</span>():
+        <span class="function">print</span>(<span class="string">"Found John'</span>s row!")
+<span class="comment">        # Click button in that row</span>
+        row.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+        <span class="keyword">break</span>
+
+<span class="comment"># Find row by cell value</span>
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    cells = row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">all</span>()
+    <span class="keyword">if</span> cells[<span class="number">0</span>].<span class="function">text_content</span>() == <span class="string">"John"</span>:
+<span class="comment">        # Get other data from row</span>
+        age = cells[<span class="number">2</span>].<span class="function">text_content</span>()
+        <span class="function">print</span>(f<span class="string">"John'</span>s age: {age}")
+
+<span class="comment"># Using filter</span>
+row = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).<span class="function">filter</span>(has_text=<span class="string">"John"</span>)
+row.<span class="function">locator</span>(<span class="string">".edit-btn"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <div class="slide">
+            <h2>Sorting and Searching Tables</h2>
+            <div class="code-block">
+<span class="comment"># Extract and sort data</span>
+rows = page.<span class="function">locator</span>(<span class="string">"table tbody tr"</span>).<span class="function">all</span>()
+data = []
+
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    cells = row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">all</span>()
+    data.<span class="function">append</span>({
+        <span class="string">'name'</span>: cells[<span class="number">0</span>].<span class="function">text_content</span>(),
+        <span class="string">'age'</span>: <span class="function">int</span>(cells[<span class="number">1</span>].<span class="function">text_content</span>()),
+        <span class="string">'city'</span>: cells[<span class="number">2</span>].<span class="function">text_content</span>()
+    })
+
+<span class="comment"># Sort by age</span>
+sorted_data = <span class="function">sorted</span>(data, key=<span class="keyword">lambda</span> x: x[<span class="string">'age'</span>])
+<span class="function">print</span>(sorted_data)
+
+<span class="comment"># Find specific entry</span>
+result = <span class="function">next</span>((item <span class="keyword">for</span> item <span class="keyword">in</span> data <span class="keyword">if</span> item[<span class="string">'name'</span>] == <span class="string">'John'</span>), <span class="keyword">None</span>)
+<span class="keyword">if</span> result:
+    <span class="function">print</span>(f<span class="string">"Found: {result}"</span>)</div>
+        </div>
+
+        <!-- PART 4: DYNAMIC CONTENT -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Dynamic Content</h2>
+            <p>Handle changing element lists</p>
+        </div>
+
+        <div class="slide">
+            <h2>Handling Dynamic Lists</h2>
+            <div class="code-block">
+<span class="comment"># Wait for specific count</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> expect
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".product"</span>)).<span class="function">to_have_count</span>(<span class="number">10</span>)
+
+<span class="comment"># Wait for at least one element</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">".product"</span>)
+products = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">all</span>()
+
+<span class="comment"># Handle infinite scroll</span>
+previous_count = <span class="number">0</span>
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    current_count = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">count</span>()
+    <span class="keyword">if</span> current_count == previous_count:
+        <span class="keyword">break</span>  <span class="comment"># No more items loaded</span>
+    previous_count = current_count
+    page.mouse.<span class="function">wheel</span>(<span class="number">0</span>, <span class="number">1000</span>)  <span class="comment"># Scroll down</span>
+    page.<span class="function">wait_for_timeout</span>(<span class="number">1000</span>)  <span class="comment"># Wait <span class="keyword">for</span> load</span></div>
+        </div>
+
+        <div class="slide">
+            <h2>Adding/Removing Elements</h2>
+            <div class="code-block">
+<span class="comment"># Check initial count</span>
+initial_count = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">count</span>()
+
+<span class="comment"># Add new item</span>
+page.<span class="function">locator</span>(<span class="string">"#add-btn"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify count increased</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".item"</span>)).<span class="function">to_have_count</span>(initial_count + <span class="number">1</span>)
+
+<span class="comment"># Get the new item (last one)</span>
+new_item = page.<span class="function">locator</span>(<span class="string">".item"</span>).last
+
+<span class="comment"># Remove an item</span>
+page.<span class="function">locator</span>(<span class="string">".item"</span>).first.<span class="function">locator</span>(<span class="string">".delete-btn"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify count decreased</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".item"</span>)).<span class="function">to_have_count</span>(initial_count)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Refreshing Element Lists</h2>
+            <div class="code-block">
+<span class="comment"># DON'T do this - stale reference</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+page.<span class="function">locator</span>(<span class="string">"#add-btn"</span>).<span class="function">click</span>()
+<span class="comment"># items is now stale!</span>
+
+<span class="comment"># DO this - re-query when needed</span>
+<span class="keyword">def</span> <span class="function">get_items</span>():
+    <span class="keyword">return</span> page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+
+items = <span class="function">get_items</span>()
+<span class="function">print</span>(f<span class="string">"Initial: {len(items)}"</span>)
+
+page.<span class="function">locator</span>(<span class="string">"#add-btn"</span>).<span class="function">click</span>()
+items = <span class="function">get_items</span>()  <span class="comment"># Refresh list</span>
+<span class="function">print</span>(f<span class="string">"After add: {len(items)}"</span>)
+
+<span class="comment"># Or use count() which always gets current value</span>
+<span class="function">print</span>(f<span class="string">"Current count: {page.locator('</span>.item<span class="string">').count()}"</span>)</div>
+        </div>
+
+        <!-- PART 5: FILTERING AND FINDING -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Filtering Elements</h2>
+            <p>Find specific items in collections</p>
+        </div>
+
+        <div class="slide">
+            <h2>Using filter() with has_text</h2>
+            <div class="code-block">
+<span class="comment"># Filter by text content</span>
+products = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
+<span class="function">print</span>(f<span class="string">"Laptops: {products.count()}"</span>)
+
+<span class="comment"># Chain filters</span>
+expensive_laptops = (
+    page.<span class="function">locator</span>(<span class="string">".product"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"$1000"</span>)
+)
+
+<span class="comment"># Get all filtered elements</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">filter</span>(has_text=<span class="string">"Active"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    <span class="function">print</span>(item.<span class="function">text_content</span>())</div>
+        </div>
+
+        <div class="slide">
+            <h2>Using filter() with has</h2>
+            <div class="code-block">
+<span class="comment"># Filter by child element</span>
+cards_with_button = page.<span class="function">locator</span>(<span class="string">".card"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">locator</span>(<span class="string">"button"</span>)
+)
+
+<span class="comment"># Filter by specific child</span>
+products_on_sale = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">locator</span>(<span class="string">".sale-badge"</span>)
+)
+
+<span class="comment"># Multiple conditions</span>
+special_products = (
+    page.<span class="function">locator</span>(<span class="string">".product"</span>)
+    .<span class="function">filter</span>(has=page.<span class="function">locator</span>(<span class="string">".sale-badge"</span>))
+    .<span class="function">filter</span>(has_text=<span class="string">"Featured"</span>)
+)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Finding Specific Elements</h2>
+            <div class="code-block">
+<span class="comment"># Find first matching element</span>
+first_laptop = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>).first
+first_laptop.<span class="function">click</span>()
+
+<span class="comment"># Find last matching element</span>
+last_item = page.<span class="function">locator</span>(<span class="string">".item"</span>).last
+
+<span class="comment"># Find by position</span>
+third_product = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">nth</span>(<span class="number">2</span>)
+
+<span class="comment"># Find and verify</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+found = <span class="keyword">None</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    <span class="keyword">if</span> item.<span class="function">get_attribute</span>(<span class="string">"data-id"</span>) == <span class="string">"123"</span>:
+        found = item
+        <span class="keyword">break</span>
+
+<span class="keyword">if</span> found:
+    found.<span class="function">click</span>()</div>
+        </div>
+
+        <div class="slide">
+            <h2>Complex Filtering Examples</h2>
+            <div class="code-block">
+<span class="comment"># Find products in specific price range</span>
+products = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">all</span>()
+in_range = []
+
+<span class="keyword">for</span> product <span class="keyword">in</span> products:
+    price_text = product.<span class="function">locator</span>(<span class="string">".price"</span>).<span class="function">text_content</span>()
+    price = <span class="function">float</span>(price_text.<span class="function">replace</span>(<span class="string">"$"</span>, <span class="string">""</span>))
+    <span class="keyword">if</span> <span class="number">100</span> <= price <= <span class="number">500</span>:
+        in_range.<span class="function">append</span>(product)
+
+<span class="function">print</span>(f<span class="string">"Found {len(in_range)} products in range"</span>)
+
+<span class="comment"># Find items with specific attributes</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+red_items = [
+    item <span class="keyword">for</span> item <span class="keyword">in</span> items
+    <span class="keyword">if</span> item.<span class="function">get_attribute</span>(<span class="string">"data-color"</span>) == <span class="string">"red"</span>
+]
+
+<span class="comment"># Find visible items only</span>
+all_items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+visible_items = [item <span class="keyword">for</span> item <span class="keyword">in</span> all_items <span class="keyword">if</span> item.<span class="function">is_visible</span>()]</div>
+        </div>
+
+        <!-- PART 6: PRACTICAL PATTERNS -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Practical Patterns</h2>
+            <p>Real-world examples</p>
+        </div>
+
+        <div class="slide">
+            <h2>Pattern 1: Search Results Validation</h2>
+            <div class="code-block">
+<span class="comment"># Search for products</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">fill</span>(<span class="string">"laptop"</span>)
+page.<span class="function">locator</span>(<span class="string">"#search-btn"</span>).<span class="function">click</span>()
+
+<span class="comment"># Wait for results</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".search-result"</span>)).<span class="function">to_have_count</span>(<span class="number">10</span>)
+
+<span class="comment"># Verify all results contain search term</span>
+results = page.<span class="function">locator</span>(<span class="string">".search-result"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> result <span class="keyword">in</span> results:
+    text = result.<span class="function">text_content</span>().<span class="function">lower</span>()
+    assert <span class="string">"laptop"</span> <span class="keyword">in</span> text, f<span class="string">"Result doesn'</span>t match: {text}"
+
+<span class="function">print</span>(<span class="string">"✓ All results match search term"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Pattern 2: Shopping Cart Operations</h2>
+            <div class="code-block">
+<span class="comment"># Add items to cart</span>
+products = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">all</span>()[:<span class="number">3</span>]  <span class="comment"># First <span class="number">3</span> products</span>
+<span class="keyword">for</span> product <span class="keyword">in</span> products:
+    product.<span class="function">locator</span>(<span class="string">".add-to-cart"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify cart</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".cart-item"</span>)).<span class="function">to_have_count</span>(<span class="number">3</span>)
+
+<span class="comment"># Calculate total</span>
+cart_items = page.<span class="function">locator</span>(<span class="string">".cart-item"</span>).<span class="function">all</span>()
+total = <span class="number">0</span>
+<span class="keyword">for</span> item <span class="keyword">in</span> cart_items:
+    price_text = item.<span class="function">locator</span>(<span class="string">".price"</span>).<span class="function">text_content</span>()
+    price = <span class="function">float</span>(price_text.<span class="function">replace</span>(<span class="string">"$"</span>, <span class="string">""</span>))
+    total += price
+
+<span class="function">print</span>(f<span class="string">"Cart total: ${total}"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Pattern 3: Form Validation</h2>
+            <div class="code-block">
+<span class="comment"># Check all required fields</span>
+required_fields = page.<span class="function">locator</span>(<span class="string">"input[required]"</span>).<span class="function">all</span>()
+<span class="function">print</span>(f<span class="string">"Found {len(required_fields)} required fields"</span>)
+
+<span class="comment"># Verify each has label</span>
+<span class="keyword">for</span> field <span class="keyword">in</span> required_fields:
+    field_id = field.<span class="function">get_attribute</span>(<span class="string">"id"</span>)
+    label = page.<span class="function">locator</span>(f<span class="string">"label[for='</span>{field_id}<span class="string">']"</span>)
+    <span class="function">expect</span>(label).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Fill all text inputs</span>
+text_inputs = page.<span class="function">locator</span>(<span class="string">"input[type='</span>text<span class="string">']"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> i, input_field <span class="keyword">in</span> <span class="function">enumerate</span>(text_inputs):
+    input_field.<span class="function">fill</span>(f<span class="string">"Test value {i}"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Pattern 4: List Sorting Verification</h2>
+            <div class="code-block">
+<span class="comment"># Click sort button</span>
+page.<span class="function">locator</span>(<span class="string">"#sort-by-price"</span>).<span class="function">click</span>()
+
+<span class="comment"># Extract prices</span>
+products = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">all</span>()
+prices = []
+<span class="keyword">for</span> product <span class="keyword">in</span> products:
+    price_text = product.<span class="function">locator</span>(<span class="string">".price"</span>).<span class="function">text_content</span>()
+    price = <span class="function">float</span>(price_text.<span class="function">replace</span>(<span class="string">"$"</span>, <span class="string">""</span>))
+    prices.<span class="function">append</span>(price)
+
+<span class="comment"># Verify sorted</span>
+is_sorted = <span class="function">all</span>(prices[i] <= prices[i+<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(prices)-<span class="number">1</span>))
+assert is_sorted, <span class="string">"Products not sorted by price"</span>
+<span class="function">print</span>(<span class="string">"✓ Products correctly sorted"</span>)</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use count() for length checks</li>
+                        <li>Use all() when you need to iterate</li>
+                        <li>Re-query after page changes</li>
+                        <li>Use filter() for cleaner code</li>
+                        <li>Wait for expected count</li>
+                        <li>Extract data to variables</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Store element references long-term</li>
+                        <li>Use len(all()) instead of count()</li>
+                        <li>Assume element order</li>
+                        <li>Forget to handle empty lists</li>
+                        <li>Iterate without checking count</li>
+                        <li>Hardcode indices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Pitfalls -->
+        <div class="slide">
+            <h2>Common Pitfalls</h2>
+            <div class="warning-box">
+                <h4>⚠️ Stale Element References</h4>
+                <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># BAD - elements become stale after page changes</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+page.<span class="function">locator</span>(<span class="string">"#refresh-btn"</span>).<span class="function">click</span>()
+items[<span class="number">0</span>].<span class="function">click</span>()  <span class="comment"># May fail!</span>
+
+<span class="comment"># GOOD - re-query after changes</span>
+page.<span class="function">locator</span>(<span class="string">"#refresh-btn"</span>).<span class="function">click</span>()
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+items[<span class="number">0</span>].<span class="function">click</span>()
+                </div>
+            </div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <h4>⚠️ Empty List Handling</h4>
+                <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># BAD - may cause IndexError</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+items[<span class="number">0</span>].<span class="function">click</span>()  <span class="comment"># Fails <span class="keyword">if</span> no items!</span>
+
+<span class="comment"># GOOD - check first</span>
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()
+<span class="keyword">if</span> items:
+    items[<span class="number">0</span>].<span class="function">click</span>()
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <ul style="font-size: 1.05em; line-height: 1.8;">
+                <li>✅ **all()** - Get list of all matching elements</li>
+                <li>✅ **count()** - Get number of elements (more efficient)</li>
+                <li>✅ **nth(i)** - Get element at specific index</li>
+                <li>✅ **first/last** - Get first/last element</li>
+                <li>✅ **filter()** - Filter elements by criteria</li>
+                <li>✅ Tables - Extract data from rows and cells</li>
+                <li>✅ Dynamic content - Handle changing lists</li>
+            </ul>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Screenshots & Videos</li>
+                    <li>Network Interception</li>
+                    <li>API Testing</li>
+                    <li>Test Organization with Pytest</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete exercises</li>
+                <li>Review examples</li>
+                <li>Work with real tables and lists</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered working with multiple elements!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Collections are powerful!</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

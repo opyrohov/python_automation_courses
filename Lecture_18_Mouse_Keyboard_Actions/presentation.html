@@ -61,19 +61,18 @@
 
         <div class="slide">
             <h2>hover() - Mouse Over Elements</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Basic hover
-page.locator("#menu-item").hover()
+            <div class="code-block">
+<span class="comment"># Basic hover</span>
+page.<span class="function">locator</span>(<span class="string">"#menu-item"</span>).<span class="function">hover</span>()
 
-# Hover to reveal dropdown
-page.locator(".dropdown-trigger").hover()
-page.locator(".dropdown-menu").is_visible()  # Now visible
+<span class="comment"># Hover to reveal dropdown</span>
+page.<span class="function">locator</span>(<span class="string">".dropdown-trigger"</span>).<span class="function">hover</span>()
+page.<span class="function">locator</span>(<span class="string">".dropdown-menu"</span>).<span class="function">is_visible</span>()  <span class="comment"># Now visible</span>
 
-# Hover to reveal tooltip
-page.locator("#info-icon").hover()
-tooltip = page.locator(".tooltip")
-assert tooltip.is_visible()</code></pre>
-            </div>
+<span class="comment"># Hover to reveal tooltip</span>
+page.<span class="function">locator</span>(<span class="string">"#info-icon"</span>).<span class="function">hover</span>()
+tooltip = page.<span class="function">locator</span>(<span class="string">".tooltip"</span>)
+assert tooltip.<span class="function">is_visible</span>()</div>
             <div class="success-box" style="margin-top: 20px;">
                 <p>✅ Always hover before interacting with elements that appear on hover!</p>
             </div>
@@ -88,23 +87,21 @@ assert tooltip.is_visible()</code></pre>
 
         <div class="slide">
             <h2>dblclick() - Double Click</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Double click to select text/word
-page.locator("p").first.dblclick()
+            <div class="code-block">
+<span class="comment"># Double click to select text/word</span>
+page.<span class="function">locator</span>(<span class="string">"p"</span>).first.<span class="function">dblclick</span>()
 
-# Double click to open item
-page.locator(".file-item").dblclick()</code></pre>
-            </div>
+<span class="comment"># Double click to open item</span>
+page.<span class="function">locator</span>(<span class="string">".file-item"</span>).<span class="function">dblclick</span>()</div>
 
             <h3 style="margin-top: 20px;">Right Click</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Right click for context menu
-page.locator("#item").click(button="right")
+            <div class="code-block">
+<span class="comment"># Right click for context menu</span>
+page.<span class="function">locator</span>(<span class="string">"#item"</span>).<span class="function">click</span>(button=<span class="string">"right"</span>)
 
-# Click with modifiers
-page.locator("a").click(modifiers=["Control"])  # Ctrl+Click
-page.locator("a").click(modifiers=["Shift"])    # Shift+Click</code></pre>
-            </div>
+<span class="comment"># Click with modifiers</span>
+page.<span class="function">locator</span>(<span class="string">"a"</span>).<span class="function">click</span>(modifiers=[<span class="string">"Control"</span>])  <span class="comment"># Ctrl+Click</span>
+page.<span class="function">locator</span>(<span class="string">"a"</span>).<span class="function">click</span>(modifiers=[<span class="string">"Shift"</span>])    <span class="comment"># Shift+Click</span></div>
         </div>
 
         <!-- PART 3: DRAG AND DROP -->
@@ -116,26 +113,24 @@ page.locator("a").click(modifiers=["Shift"])    # Shift+Click</code></pre>
 
         <div class="slide">
             <h2>drag_to() - Simple Drag and Drop</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Drag source to target
-source = page.locator("#draggable")
-target = page.locator("#droppable")
-source.drag_to(target)
+            <div class="code-block">
+<span class="comment"># Drag source to target</span>
+source = page.<span class="function">locator</span>(<span class="string">"#draggable"</span>)
+target = page.<span class="function">locator</span>(<span class="string">"#droppable"</span>)
+source.<span class="function">drag_to</span>(target)
 
-# Drag file to upload area
-file_element = page.locator(".file-item")
-drop_zone = page.locator(".upload-zone")
-file_element.drag_to(drop_zone)</code></pre>
-            </div>
+<span class="comment"># Drag file to upload area</span>
+file_element = page.<span class="function">locator</span>(<span class="string">".file-item"</span>)
+drop_zone = page.<span class="function">locator</span>(<span class="string">".upload-zone"</span>)
+file_element.<span class="function">drag_to</span>(drop_zone)</div>
 
             <h3 style="margin-top: 20px;">Manual Drag and Drop</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># More control over drag process
-page.locator("#draggable").hover()
-page.mouse.down()
-page.locator("#droppable").hover()
-page.mouse.up()</code></pre>
-            </div>
+            <div class="code-block">
+<span class="comment"># More control over drag process</span>
+page.<span class="function">locator</span>(<span class="string">"#draggable"</span>).<span class="function">hover</span>()
+page.mouse.<span class="function">down</span>()
+page.<span class="function">locator</span>(<span class="string">"#droppable"</span>).<span class="function">hover</span>()
+page.mouse.<span class="function">up</span>()</div>
         </div>
 
         <!-- PART 4: KEYBOARD ACTIONS -->
@@ -147,47 +142,45 @@ page.mouse.up()</code></pre>
 
         <div class="slide">
             <h2>Keyboard Methods</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Press single key
-page.keyboard.press("Enter")
-page.keyboard.press("Escape")
-page.keyboard.press("Tab")
+            <div class="code-block">
+<span class="comment"># Press single key</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Enter"</span>)
+page.keyboard.<span class="function">press</span>(<span class="string">"Escape"</span>)
+page.keyboard.<span class="function">press</span>(<span class="string">"Tab"</span>)
 
-# Type character by character
-page.keyboard.press_sequentially("Hello World", delay=100)
+<span class="comment"># Type character by character</span>
+page.keyboard.<span class="function">press_sequentially</span>(<span class="string">"Hello World"</span>, delay=<span class="number">100</span>)
 
-# Keyboard shortcuts
-page.keyboard.press("Control+A")  # Select all
-page.keyboard.press("Control+C")  # Copy
-page.keyboard.press("Control+V")  # Paste
-page.keyboard.press("Control+Z")  # Undo
+<span class="comment"># Keyboard shortcuts</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+A"</span>)  <span class="comment"># Select all</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+C"</span>)  <span class="comment"># Copy</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+V"</span>)  <span class="comment"># Paste</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+Z"</span>)  <span class="comment"># Undo</span>
 
-# Press key in specific element
-page.locator("#input").press("Enter")</code></pre>
-            </div>
+<span class="comment"># Press key in specific element</span>
+page.<span class="function">locator</span>(<span class="string">"#input"</span>).<span class="function">press</span>(<span class="string">"Enter"</span>)</div>
         </div>
 
         <div class="slide">
             <h2>Common Keyboard Shortcuts</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Text editing
-page.keyboard.press("Control+A")      # Select all
-page.keyboard.press("Control+X")      # Cut
-page.keyboard.press("Control+C")      # Copy
-page.keyboard.press("Control+V")      # Paste
-page.keyboard.press("Control+Z")      # Undo
-page.keyboard.press("Control+Y")      # Redo
+            <div class="code-block">
+<span class="comment"># Text editing</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+A"</span>)      <span class="comment"># Select all</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+X"</span>)      <span class="comment"># Cut</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+C"</span>)      <span class="comment"># Copy</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+V"</span>)      <span class="comment"># Paste</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+Z"</span>)      <span class="comment"># Undo</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+Y"</span>)      <span class="comment"># Redo</span>
 
-# Navigation
-page.keyboard.press("Home")           # Start of line
-page.keyboard.press("End")            # End of line
-page.keyboard.press("PageUp")         # Page up
-page.keyboard.press("PageDown")       # Page down
+<span class="comment"># Navigation</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Home"</span>)           <span class="comment"># Start of line</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"End"</span>)            <span class="comment"># End of line</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"PageUp"</span>)         <span class="comment"># Page up</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"PageDown"</span>)       <span class="comment"># Page down</span>
 
-# Other
-page.keyboard.press("F5")             # Refresh
-page.keyboard.press("Control+F")      # Find</code></pre>
-            </div>
+<span class="comment"># Other</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"F5"</span>)             <span class="comment"># Refresh</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Control+F"</span>)      <span class="comment"># Find</span></div>
         </div>
 
         <!-- PART 5: SCROLL ACTIONS -->
@@ -199,23 +192,22 @@ page.keyboard.press("Control+F")      # Find</code></pre>
 
         <div class="slide">
             <h2>Scrolling Methods</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Scroll element into view
-page.locator("#bottom-element").scroll_into_view_if_needed()
+            <div class="code-block">
+<span class="comment"># Scroll element into view</span>
+page.<span class="function">locator</span>(<span class="string">"#bottom-element"</span>).<span class="function">scroll_into_view_if_needed</span>()
 
-# Scroll to position
-page.evaluate("window.scrollTo(0, 500)")
+<span class="comment"># Scroll to position</span>
+page.<span class="function">evaluate</span>(<span class="string">"window.scrollTo(0, 500)"</span>)
 
-# Scroll by amount
-page.evaluate("window.scrollBy(0, 500)")
+<span class="comment"># Scroll by amount</span>
+page.<span class="function">evaluate</span>(<span class="string">"window.scrollBy(0, 500)"</span>)
 
-# Scroll to top
-page.evaluate("window.scrollTo(0, 0)")
+<span class="comment"># Scroll to top</span>
+page.<span class="function">evaluate</span>(<span class="string">"window.scrollTo(0, 0)"</span>)
 
-# Mouse wheel scrolling
-page.mouse.wheel(0, 500)  # Scroll down 500px
-page.mouse.wheel(0, -500) # Scroll up 500px</code></pre>
-            </div>
+<span class="comment"># Mouse wheel scrolling</span>
+page.mouse.<span class="function">wheel</span>(<span class="number">0</span>, <span class="number">500</span>)  <span class="comment"># Scroll down 500px</span>
+page.mouse.<span class="function">wheel</span>(<span class="number">0</span>, -<span class="number">500</span>) <span class="comment"># Scroll up 500px</span></div>
         </div>
 
         <!-- Best Practices -->

@@ -100,13 +100,12 @@
             </div>
 
             <h3 style="margin-top: 30px;">In Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># ❌ Vague
-page.locator("button").click()  # Which button?
+            <div class="code-block">
+<span class="comment"># ❌ Vague</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()  <span class="comment"># Which button?</span>
 
-# ✅ Specific through chaining
-page.locator(".navbar").locator("button.login").click()</code></pre>
-            </div>
+<span class="comment"># ✅ Specific through chaining</span>
+page.<span class="function">locator</span>(<span class="string">".navbar"</span>).<span class="function">locator</span>(<span class="string">"button.login"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 5: Basic Chaining Syntax -->
@@ -114,16 +113,15 @@ page.locator(".navbar").locator("button.login").click()</code></pre>
             <h2>Basic Chaining Syntax</h2>
             <p>Chain locators with multiple .locator() calls</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Start broad, then narrow down
-page.locator(".container").locator(".form").locator("button")
+            <div class="code-block">
+<span class="comment"># Start broad, then narrow down</span>
+page.<span class="function">locator</span>(<span class="string">".container"</span>).<span class="function">locator</span>(<span class="string">".form"</span>).<span class="function">locator</span>(<span class="string">"button"</span>)
 
-# Can also use modern locators in chain
-page.locator(".sidebar").get_by_role("link", name="Settings")
+<span class="comment"># Can also use modern locators in chain</span>
+page.<span class="function">locator</span>(<span class="string">".sidebar"</span>).<span class="function">get_by_role</span>(<span class="string">"link"</span>, name=<span class="string">"Settings"</span>)
 
-# Mix CSS and modern locators
-page.get_by_role("navigation").locator("a.active")</code></pre>
-            </div>
+<span class="comment"># Mix CSS and modern locators</span>
+page.<span class="function">get_by_role</span>(<span class="string">"navigation"</span>).<span class="function">locator</span>(<span class="string">"a.active"</span>)</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Key Point:</strong> Each .locator() or modern locator call searches within the previous locator's results!</p>
@@ -134,8 +132,8 @@ page.get_by_role("navigation").locator("a.active")</code></pre>
         <div class="slide">
             <h2>Chaining Example: E-commerce Site</h2>
             <h3>HTML Structure:</h3>
-            <div class="code-box">
-                <pre><code>&lt;div class="product-grid"&gt;
+            <div class="code-block">
+&lt;div class="product-grid"&gt;
   &lt;div class="product-card"&gt;
     &lt;h3&gt;Laptop&lt;/h3&gt;
     &lt;button class="add-to-cart"&gt;Add to Cart&lt;/button&gt;
@@ -144,20 +142,17 @@ page.get_by_role("navigation").locator("a.active")</code></pre>
     &lt;h3&gt;Mouse&lt;/h3&gt;
     &lt;button class="add-to-cart"&gt;Add to Cart&lt;/button&gt;
   &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-            </div>
+&lt;/div&gt;</div>
 
             <h3>Without Chaining (Ambiguous):</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># ❌ Clicks first "Add to Cart" button (might be wrong product!)
-page.locator(".add-to-cart").click()</code></pre>
-            </div>
+            <div class="code-block">
+<span class="comment"># ❌ Clicks first "Add to Cart" button (might be wrong product!)</span>
+page.<span class="function">locator</span>(<span class="string">".add-to-cart"</span>).<span class="function">click</span>()</div>
 
             <h3>With Chaining (Precise):</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># ✅ Click "Add to Cart" for the Laptop specifically
-page.locator(".product-card").filter(has_text="Laptop").locator(".add-to-cart").click()</code></pre>
-            </div>
+            <div class="code-block">
+<span class="comment"># ✅ Click "Add to Cart" for the Laptop specifically</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>).<span class="function">locator</span>(<span class="string">".add-to-cart"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 7: Chaining Best Practices -->
@@ -172,11 +167,10 @@ page.locator(".product-card").filter(has_text="Laptop").locator(".add-to-cart").
                         <li>Use semantic containers</li>
                         <li>Mix CSS with modern locators</li>
                     </ul>
-                    <div class="code-box" style="margin-top: 10px;">
-                        <pre><code class="language-python"># Good!
-page.get_by_role("navigation")
-    .get_by_role("link", name="Home")</code></pre>
-                    </div>
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Good!</span>
+page.<span class="function">get_by_role</span>(<span class="string">"navigation"</span>)
+    .<span class="function">get_by_role</span>(<span class="string">"link"</span>, name=<span class="string">"Home"</span>)</div>
                 </div>
                 <div class="warning-box">
                     <h4>❌ DON'T</h4>
@@ -186,11 +180,10 @@ page.get_by_role("navigation")
                         <li>Use position-based chaining</li>
                         <li>Chain absolute paths</li>
                     </ul>
-                    <div class="code-box" style="margin-top: 10px;">
-                        <pre><code class="language-python"># Bad!
-page.locator("div").locator("div")
-    .locator("div").locator("span")</code></pre>
-                    </div>
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Bad!</span>
+page.<span class="function">locator</span>(<span class="string">"div"</span>).<span class="function">locator</span>(<span class="string">"div"</span>)
+    .<span class="function">locator</span>(<span class="string">"div"</span>).<span class="function">locator</span>(<span class="string">"span"</span>)</div>
                 </div>
             </div>
         </div>
@@ -210,12 +203,11 @@ page.locator("div").locator("div")
             </div>
 
             <h3 style="margin-top: 30px;">Example Scenario:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># This might match 20 buttons!
-page.locator("button").count()  # 20
+            <div class="code-block">
+<span class="comment"># This might match 20 buttons!</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">count</span>()  <span class="comment"># <span class="number">20</span></span>
 
-# How do we click the RIGHT button?</code></pre>
-            </div>
+<span class="comment"># How do we click the RIGHT button?</span></div>
 
             <h3 style="margin-top: 30px;">Solutions:</h3>
             <ul style="font-size: 1.1em;">
@@ -231,27 +223,25 @@ page.locator("button").count()  # 20
             <h2>filter(has_text="...") - Filter by Text</h2>
             <p>Select elements containing specific text</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Find all product cards, then filter for "Laptop"
-page.locator(".product-card").filter(has_text="Laptop")
+            <div class="code-block">
+<span class="comment"># Find all product cards, then filter for "Laptop"</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
 
-# Find list items containing "Active"
-page.locator("li").filter(has_text="Active")
+<span class="comment"># Find list items containing "Active"</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(has_text=<span class="string">"Active"</span>)
 
-# Can chain after filtering
-page.locator(".product-card").filter(has_text="Laptop").locator("button").click()</code></pre>
-            </div>
+<span class="comment"># Can chain after filtering</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>).<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
 
             <h3 style="margin-top: 20px;">Real Example:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># HTML: Multiple todo items
-# &lt;li&gt;Buy groceries&lt;/li&gt;
-# &lt;li&gt;Walk the dog&lt;/li&gt;
-# &lt;li&gt;Read a book&lt;/li&gt;
+            <div class="code-block">
+<span class="comment"># HTML: Multiple todo items</span>
+<span class="comment"># <li>Buy groceries</li></span>
+<span class="comment"># <li>Walk the dog</li></span>
+<span class="comment"># <li>Read a book</li></span>
 
-# Find the "Walk the dog" todo
-page.locator("li").filter(has_text="Walk the dog").click()</code></pre>
-            </div>
+<span class="comment"># Find the "Walk the dog" todo</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(has_text=<span class="string">"Walk the dog"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 10: filter(has=) -->
@@ -259,22 +249,21 @@ page.locator("li").filter(has_text="Walk the dog").click()</code></pre>
             <h2>filter(has=locator) - Filter by Nested Element</h2>
             <p>Select elements that contain a specific nested element</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Find product cards that have a "Sale" badge
-page.locator(".product-card").filter(
-    has=page.locator(".badge-sale")
+            <div class="code-block">
+<span class="comment"># Find product cards that have a "Sale" badge</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">locator</span>(<span class="string">".badge-sale"</span>)
 )
 
-# Find list items that contain a checkbox
-page.locator("li").filter(
-    has=page.get_by_role("checkbox")
+<span class="comment"># Find list items that contain a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">get_by_role</span>(<span class="string">"checkbox"</span>)
 )
 
-# Find rows that have a "Delete" button
-page.locator("tr").filter(
-    has=page.get_by_role("button", name="Delete")
-).click()</code></pre>
-            </div>
+<span class="comment"># Find rows that have a "Delete" button</span>
+page.<span class="function">locator</span>(<span class="string">"tr"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Delete"</span>)
+).<span class="function">click</span>()</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Use Case:</strong> Great for finding complex parent elements based on what they contain!</p>
@@ -286,19 +275,18 @@ page.locator("tr").filter(
             <h2>Combining Multiple Filters</h2>
             <p>Stack filters for very precise targeting</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Find product cards with text "Laptop" AND a "Sale" badge
-page.locator(".product-card")
-    .filter(has_text="Laptop")
-    .filter(has=page.locator(".badge-sale"))
-    .click()
+            <div class="code-block">
+<span class="comment"># Find product cards with text "Laptop" AND a "Sale" badge</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
+    .<span class="function">filter</span>(has=page.<span class="function">locator</span>(<span class="string">".badge-sale"</span>))
+    .<span class="function">click</span>()
 
-# Find active list items that contain a checkbox
-page.locator("li")
-    .filter(has_text="Active")
-    .filter(has=page.get_by_role("checkbox"))
-    .count()</code></pre>
-            </div>
+<span class="comment"># Find active list items that contain a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Active"</span>)
+    .<span class="function">filter</span>(has=page.<span class="function">get_by_role</span>(<span class="string">"checkbox"</span>))
+    .<span class="function">count</span>()</div>
 
             <h3 style="margin-top: 20px;">Order Matters!</h3>
             <div class="warning-box">
@@ -311,20 +299,19 @@ page.locator("li")
             <h2>Excluding Elements: has_not_text & has_not</h2>
             <p>Filter OUT elements you don't want</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Find all products EXCEPT the ones containing "Sold Out"
-page.locator(".product-card").filter(has_not_text="Sold Out")
+            <div class="code-block">
+<span class="comment"># Find all products EXCEPT the ones containing "Sold Out"</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_not_text=<span class="string">"Sold Out"</span>)
 
-# Find list items that DON'T have a checkbox
-page.locator("li").filter(
-    has_not=page.get_by_role("checkbox")
+<span class="comment"># Find list items that DON'T have a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(
+    has_not=page.<span class="function">get_by_role</span>(<span class="string">"checkbox"</span>)
 )
 
-# Find products without a sale badge
-page.locator(".product-card").filter(
-    has_not=page.locator(".badge-sale")
-)</code></pre>
-            </div>
+<span class="comment"># Find products without a sale badge</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(
+    has_not=page.<span class="function">locator</span>(<span class="string">".badge-sale"</span>)
+)</div>
 
             <div class="success-box" style="margin-top: 20px;">
                 <p><strong>Pro Tip:</strong> Negative filters are great for excluding disabled, inactive, or unavailable elements!</p>
@@ -360,17 +347,16 @@ page.locator(".product-card").filter(
             <h2>.first - Select First Element</h2>
             <p>Get the first element from multiple matches</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Click the first button
-page.locator("button").first.click()
+            <div class="code-block">
+<span class="comment"># Click the first button</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).first.<span class="function">click</span>()
 
-# Get text from first list item
-first_text = page.locator("li").first.text_content()
-print(first_text)
+<span class="comment"># Get text from first list item</span>
+first_text = page.<span class="function">locator</span>(<span class="string">"li"</span>).first.<span class="function">text_content</span>()
+<span class="function">print</span>(first_text)
 
-# Chain with other methods
-page.locator(".product-card").first.get_by_role("button").click()</code></pre>
-            </div>
+<span class="comment"># Chain with other methods</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).first.<span class="function">get_by_role</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Use Case:</strong> When you want the first occurrence, like the first search result or the first item in a list.</p>
@@ -386,17 +372,16 @@ page.locator(".product-card").first.get_by_role("button").click()</code></pre>
             <h2>.last - Select Last Element</h2>
             <p>Get the last element from multiple matches</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Click the last button
-page.locator("button").last.click()
+            <div class="code-block">
+<span class="comment"># Click the last button</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).last.<span class="function">click</span>()
 
-# Get text from last list item
-last_text = page.locator("li").last.text_content()
-print(last_text)
+<span class="comment"># Get text from last list item</span>
+last_text = page.<span class="function">locator</span>(<span class="string">"li"</span>).last.<span class="function">text_content</span>()
+<span class="function">print</span>(last_text)
 
-# Get the most recent notification
-recent_notification = page.locator(".notification").last.text_content()</code></pre>
-            </div>
+<span class="comment"># Get the most recent notification</span>
+recent_notification = page.<span class="function">locator</span>(<span class="string">".notification"</span>).last.<span class="function">text_content</span>()</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Use Case:</strong> Great for getting the most recent item, like latest notification or newest comment.</p>
@@ -408,19 +393,18 @@ recent_notification = page.locator(".notification").last.text_content()</code></
             <h2>.nth(index) - Select by Index</h2>
             <p>Get element at a specific position (0-indexed)</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Get first item (index 0)
-page.locator("li").nth(0).click()
+            <div class="code-block">
+<span class="comment"># Get first item (index 0)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(<span class="number">0</span>).<span class="function">click</span>()
 
-# Get second item (index 1)
-page.locator("li").nth(1).click()
+<span class="comment"># Get second item (index 1)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(<span class="number">1</span>).<span class="function">click</span>()
 
-# Get third item (index 2)
-page.locator("li").nth(2).click()
+<span class="comment"># Get third item (index 2)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(<span class="number">2</span>).<span class="function">click</span>()
 
-# Negative indices work too! (-1 = last)
-page.locator("li").nth(-1).click()  # Same as .last</code></pre>
-            </div>
+<span class="comment"># Negative indices work too! (-1 = last)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(-<span class="number">1</span>).<span class="function">click</span>()  <span class="comment"># Same <span class="keyword">as</span> .last</span></div>
 
             <div class="warning-box" style="margin-top: 20px;">
                 <p><strong>Warning:</strong> Position-based selection is fragile! Only use when:</p>
@@ -437,19 +421,18 @@ page.locator("li").nth(-1).click()  # Same as .last</code></pre>
             <h2>.count() - Count Matching Elements</h2>
             <p>Get the total number of matching elements</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># How many buttons on the page?
-button_count = page.locator("button").count()
-print(f"Found {button_count} buttons")
+            <div class="code-block">
+<span class="comment"># How many buttons on the page?</span>
+button_count = page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">count</span>()
+<span class="function">print</span>(f<span class="string">"Found {button_count} buttons"</span>)
 
-# Check if element exists
-if page.locator(".error-message").count() > 0:
-    print("Error message is present!")
+<span class="comment"># Check if element exists</span>
+<span class="keyword">if</span> page.<span class="function">locator</span>(<span class="string">".error-message"</span>).<span class="function">count</span>() > <span class="number">0</span>:
+    <span class="function">print</span>(<span class="string">"Error message is present!"</span>)
 
-# Verify exact count
-product_count = page.locator(".product-card").count()
-assert product_count == 10, f"Expected 10 products, found {product_count}"</code></pre>
-            </div>
+<span class="comment"># Verify exact count</span>
+product_count = page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">count</span>()
+assert product_count == <span class="number">10</span>, f<span class="string">"Expected 10 products, found {product_count}"</span></div>
 
             <div class="success-box" style="margin-top: 20px;">
                 <p><strong>Pro Tip:</strong> Use .count() > 0 to check if an element exists without throwing an error!</p>
@@ -461,26 +444,24 @@ assert product_count == 10, f"Expected 10 products, found {product_count}"</code
             <h2>.all() - Get All Matching Elements</h2>
             <p>Returns a list of all matching locators</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Get all buttons as a list
-all_buttons = page.locator("button").all()
+            <div class="code-block">
+<span class="comment"># Get all buttons as a list</span>
+all_buttons = page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">all</span>()
 
-# Iterate through all elements
-for button in all_buttons:
-    print(button.text_content())
+<span class="comment"># Iterate through all elements</span>
+<span class="keyword">for</span> button <span class="keyword">in</span> all_buttons:
+    <span class="function">print</span>(button.<span class="function">text_content</span>())
 
-# Get all product names
-products = page.locator(".product-name").all()
-for product in products:
-    print(f"Product: {product.text_content()}")</code></pre>
-            </div>
+<span class="comment"># Get all product names</span>
+products = page.<span class="function">locator</span>(<span class="string">".product-name"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> product <span class="keyword">in</span> products:
+    <span class="function">print</span>(f<span class="string">"Product: {product.text_content()}"</span>)</div>
 
-            <div class="code-box" style="margin-top: 20px;">
-                <pre><code class="language-python"># Practical example: Verify all checkboxes are checked
-checkboxes = page.locator("input[type='checkbox']").all()
-for checkbox in checkboxes:
-    assert checkbox.is_checked(), "All checkboxes should be checked!"</code></pre>
-            </div>
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Practical example: Verify all checkboxes are checked</span>
+checkboxes = page.<span class="function">locator</span>(<span class="string">"input[type='</span>checkbox<span class="string">']"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> checkbox <span class="keyword">in</span> checkboxes:
+    assert checkbox.<span class="function">is_checked</span>(), <span class="string">"All checkboxes should be checked!"</span></div>
         </div>
 
         <!-- Slide 19: Combining Selection with Filtering -->
@@ -488,25 +469,24 @@ for checkbox in checkboxes:
             <h2>Combining Selection with Filtering</h2>
             <p>Use filtering and selection together for maximum precision</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Get the first product that's on sale
-page.locator(".product-card")
-    .filter(has_text="Sale")
+            <div class="code-block">
+<span class="comment"># Get the first product that's on sale</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Sale"</span>)
     .first
-    .click()
+    .<span class="function">click</span>()
 
-# Get the last active todo item
-page.locator("li")
-    .filter(has_text="Active")
+<span class="comment"># Get the last active todo item</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Active"</span>)
     .last
-    .text_content()
+    .<span class="function">text_content</span>()
 
-# Get the 3rd product in the "Electronics" category
-page.locator(".product-card")
-    .filter(has_text="Electronics")
-    .nth(2)
-    .click()</code></pre>
-            </div>
+<span class="comment"># Get the 3rd product in the "Electronics" category</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Electronics"</span>)
+    .<span class="function">nth</span>(<span class="number">2</span>)
+    .<span class="function">click</span>()</div>
 
             <div class="highlight-box" style="margin-top: 20px;">
                 <p><strong>Remember:</strong> Filter first to narrow down, then select the specific one you need!</p>
@@ -546,33 +526,31 @@ page.locator(".product-card")
         <div class="slide">
             <h2>How to Launch Playwright Inspector</h2>
             <h3>Method 1: Environment Variable</h3>
-            <div class="code-box">
-                <pre><code class="language-bash"># Windows (CMD)
-set PWDEBUG=1
+            <div class="code-block">
+<span class="comment"># Windows (CMD)</span>
+set PWDEBUG=<span class="number">1</span>
 python my_test.py
 
-# Windows (PowerShell)
-$env:PWDEBUG=1
+<span class="comment"># Windows (PowerShell)</span>
+$env:PWDEBUG=<span class="number">1</span>
 python my_test.py
 
-# Mac/Linux
-PWDEBUG=1 python my_test.py</code></pre>
-            </div>
+<span class="comment"># Mac/Linux</span>
+PWDEBUG=<span class="number">1</span> python my_test.py</div>
 
             <h3 style="margin-top: 20px;">Method 2: page.pause()</h3>
-            <div class="code-box">
-                <pre><code class="language-python">from playwright.sync_api import sync_playwright
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
-    page = browser.new_page()
-    page.goto("https://example.com")
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
 
-    page.pause()  # Pauses here and opens Inspector
+    page.<span class="function">pause</span>()  <span class="comment"># Pauses here <span class="keyword">and</span> opens Inspector</span>
 
-    page.locator("button").click()
-    browser.close()</code></pre>
-            </div>
+    page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+    browser.<span class="function">close</span>()</div>
         </div>
 
         <!-- Slide 22: Using the Inspector -->
@@ -609,30 +587,27 @@ with sync_playwright() as p:
             <h2>Inspector Tips & Tricks</h2>
             <div style="font-size: 0.95em;">
                 <h3>1. Test Locator Suggestions</h3>
-                <div class="code-box">
-                    <pre><code># Inspector shows multiple options:
-# - get_by_role("button", name="Submit")
-# - get_by_text("Submit")
-# - #submit-btn
-# Try each to find the most reliable one!</code></pre>
-                </div>
+                <div class="code-block">
+<span class="comment"># Inspector shows multiple options:</span>
+<span class="comment"># - get_by_role("button", name="Submit")</span>
+<span class="comment"># - get_by_text("Submit")</span>
+<span class="comment"># - #submit-btn</span>
+<span class="comment"># Try each to find the most reliable one!</span></div>
 
                 <h3 style="margin-top: 20px;">2. Check Element Count</h3>
-                <div class="code-box">
-                    <pre><code># Type in locator playground:
-page.locator("button")
+                <div class="code-block">
+<span class="comment"># Type in locator playground:</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>)
 
-# Inspector shows: "23 elements matched"
-# Means you need to be more specific!</code></pre>
-                </div>
+<span class="comment"># Inspector shows: "23 elements matched"</span>
+<span class="comment"># Means you need to be more specific!</span></div>
 
                 <h3 style="margin-top: 20px;">3. Test Filters</h3>
-                <div class="code-box">
-                    <pre><code># Test filtering in real-time:
-page.locator("button").filter(has_text="Login")
+                <div class="code-block">
+<span class="comment"># Test filtering in real-time:</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">filter</span>(has_text=<span class="string">"Login"</span>)
 
-# Inspector shows exactly which button matches</code></pre>
-                </div>
+<span class="comment"># Inspector shows exactly which button matches</span></div>
             </div>
         </div>
 
@@ -678,17 +653,16 @@ page.locator("button").filter(has_text="Login")
             </ul>
 
             <h3 style="margin-top: 20px;">Hints:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Step 1: Find product card by text
-# Step 2: Within that card, find the button
-# Step 3: Click the button
-# Step 4: Verify cart count
+            <div class="code-block">
+<span class="comment"># Step 1: Find product card by text</span>
+<span class="comment"># Step 2: Within that card, find the button</span>
+<span class="comment"># Step 3: Click the button</span>
+<span class="comment"># Step 4: Verify cart count</span>
 
-page.locator(".product-card")
-    .filter(has_text="Laptop")
-    .locator(".add-to-cart")
-    .click()</code></pre>
-            </div>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
+    .<span class="function">locator</span>(<span class="string">".add-to-cart"</span>)
+    .<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 26: Exercise 2 - Todo List -->
@@ -707,16 +681,15 @@ page.locator(".product-card")
             </ul>
 
             <h3 style="margin-top: 20px;">Hints:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Mark first as complete
-page.locator(".todo-item").first.locator(".checkbox").check()
+            <div class="code-block">
+<span class="comment"># Mark first as complete</span>
+page.<span class="function">locator</span>(<span class="string">".todo-item"</span>).first.<span class="function">locator</span>(<span class="string">".checkbox"</span>).<span class="function">check</span>()
 
-# Delete last todo
-page.locator(".todo-item").last.locator(".delete-btn").click()
+<span class="comment"># Delete last todo</span>
+page.<span class="function">locator</span>(<span class="string">".todo-item"</span>).last.<span class="function">locator</span>(<span class="string">".delete-btn"</span>).<span class="function">click</span>()
 
-# Count active
-active_count = page.locator(".todo-item").filter(has_text="Active").count()</code></pre>
-            </div>
+<span class="comment"># Count active</span>
+active_count = page.<span class="function">locator</span>(<span class="string">".todo-item"</span>).<span class="function">filter</span>(has_text=<span class="string">"Active"</span>).<span class="function">count</span>()</div>
         </div>
 
         <!-- Slide 27: Exercise 3 - Data Table -->
@@ -735,43 +708,39 @@ active_count = page.locator(".todo-item").filter(has_text="Active").count()</cod
             </ul>
 
             <h3 style="margin-top: 20px;">Hints:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Find row by text
-row = page.locator("tr").filter(has_text="John Doe")
+            <div class="code-block">
+<span class="comment"># Find row by text</span>
+row = page.<span class="function">locator</span>(<span class="string">"tr"</span>).<span class="function">filter</span>(has_text=<span class="string">"John Doe"</span>)
 
-# Get email from that row
-email = row.locator("td").nth(2).text_content()
+<span class="comment"># Get email from that row</span>
+email = row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">nth</span>(<span class="number">2</span>).<span class="function">text_content</span>()
 
-# Click edit in that row
-row.locator("button").filter(has_text="Edit").click()</code></pre>
-            </div>
+<span class="comment"># Click edit in that row</span>
+row.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">filter</span>(has_text=<span class="string">"Edit"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 28: Common Patterns -->
         <div class="slide">
             <h2>Common Real-World Patterns</h2>
             <h3>Pattern 1: Find Card, Click Button Inside</h3>
-            <div class="code-box">
-                <pre><code class="language-python">page.locator(".card")
-    .filter(has_text="Target Card")
-    .get_by_role("button", name="Action")
-    .click()</code></pre>
-            </div>
+            <div class="code-block">
+page.<span class="function">locator</span>(<span class="string">".card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Target Card"</span>)
+    .<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Action"</span>)
+    .<span class="function">click</span>()</div>
 
             <h3 style="margin-top: 20px;">Pattern 2: Get nth Item from Filtered List</h3>
-            <div class="code-box">
-                <pre><code class="language-python">page.locator(".item")
-    .filter(has_text="Category")
-    .nth(2)
-    .click()</code></pre>
-            </div>
+            <div class="code-block">
+page.<span class="function">locator</span>(<span class="string">".item"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Category"</span>)
+    .<span class="function">nth</span>(<span class="number">2</span>)
+    .<span class="function">click</span>()</div>
 
             <h3 style="margin-top: 20px;">Pattern 3: Verify All Items Meet Condition</h3>
-            <div class="code-box">
-                <pre><code class="language-python">items = page.locator(".item").filter(has_text="Active").all()
-for item in items:
-    assert "active" in item.get_attribute("class")</code></pre>
-            </div>
+            <div class="code-block">
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">filter</span>(has_text=<span class="string">"Active"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    assert <span class="string">"active"</span> <span class="keyword">in</span> item.<span class="function">get_attribute</span>(<span class="string">"class"</span>)</div>
         </div>
 
         <!-- Slide 29: Summary -->

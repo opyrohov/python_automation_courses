@@ -96,17 +96,16 @@
                 <p><strong>fill()</strong> sets the input value instantly - the recommended way for most scenarios.</p>
             </div>
 
-            <div class="code-box" style="margin-top: 20px;">
-                <pre><code class="language-python"># Basic usage
-page.locator("#email").fill("user@example.com")
-page.locator("#password").fill("SecurePass123")
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Basic usage</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SecurePass123"</span>)
 
-# Clears existing value first
-page.locator("#search").fill("new search term")
+<span class="comment"># Clears existing value first</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">fill</span>(<span class="string">"new search term"</span>)
 
-# Works with get_by_* locators
-page.get_by_label("Username").fill("john_doe")</code></pre>
-            </div>
+<span class="comment"># Works with get_by_* locators</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Username"</span>).<span class="function">fill</span>(<span class="string">"john_doe"</span>)</div>
 
             <div class="success-box" style="margin-top: 20px;">
                 <p><strong>✅ Use fill() when:</strong> You want fast, reliable input (99% of cases)</p>
@@ -120,18 +119,17 @@ page.get_by_label("Username").fill("john_doe")</code></pre>
                 <p><strong>type()</strong> simulates typing each character one by one - use for special cases.</p>
             </div>
 
-            <div class="code-box" style="margin-top: 20px;">
-                <pre><code class="language-python"># Types character by character
-page.locator("#search").type("Python automation")
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Types character by character</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">type</span>(<span class="string">"Python automation"</span>)
 
-# With delay between keystrokes (in milliseconds)
-page.locator("#search").type("slow typing", delay=100)
+<span class="comment"># With delay between keystrokes (in milliseconds)</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">type</span>(<span class="string">"slow typing"</span>, delay=<span class="number">100</span>)
 
-# Useful for testing autocomplete
-page.locator("#autocomplete").type("Pla")
-# Wait for suggestions to appear
-page.get_by_text("Playwright").click()</code></pre>
-            </div>
+<span class="comment"># Useful for testing autocomplete</span>
+page.<span class="function">locator</span>(<span class="string">"#autocomplete"</span>).<span class="function">type</span>(<span class="string">"Pla"</span>)
+<span class="comment"># Wait for suggestions to appear</span>
+page.<span class="function">get_by_text</span>(<span class="string">"Playwright"</span>).<span class="function">click</span>()</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>⚠️ Use type() when:</strong> Testing autocomplete, keystroke events, or rate-limited inputs</p>
@@ -150,10 +148,9 @@ page.get_by_text("Playwright").click()</code></pre>
                         <li><strong>Clears first</strong> - Replaces existing value</li>
                         <li><strong>Use for:</strong> Login forms, registration, data entry</li>
                     </ul>
-                    <div class="code-box" style="margin-top: 10px;">
-                        <pre><code class="language-python">page.locator("#email")
-    .fill("user@example.com")</code></pre>
-                    </div>
+                    <div class="code-block" style="margin-top: 10px;">
+page.<span class="function">locator</span>(<span class="string">"#email"</span>)
+    .<span class="function">fill</span>(<span class="string">"user@example.com"</span>)</div>
                 </div>
                 <div class="info-box">
                     <h4>⚠️ type() - Special Cases</h4>
@@ -163,10 +160,9 @@ page.get_by_text("Playwright").click()</code></pre>
                         <li><strong>Customizable</strong> - Can add delays</li>
                         <li><strong>Use for:</strong> Autocomplete, character validation</li>
                     </ul>
-                    <div class="code-box" style="margin-top: 10px;">
-                        <pre><code class="language-python">page.locator("#search")
-    .type("query", delay=50)</code></pre>
-                    </div>
+                    <div class="code-block" style="margin-top: 10px;">
+page.<span class="function">locator</span>(<span class="string">"#search"</span>)
+    .<span class="function">type</span>(<span class="string">"query"</span>, delay=<span class="number">50</span>)</div>
                 </div>
             </div>
         </div>
@@ -174,23 +170,22 @@ page.get_by_text("Playwright").click()</code></pre>
         <!-- Slide 7: Input Field Best Practices -->
         <div class="slide">
             <h2>Text Input Best Practices</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># ✅ GOOD: Clear and fill
-page.locator("#email").fill("user@example.com")
+            <div class="code-block">
+<span class="comment"># ✅ GOOD: Clear and fill</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
 
-# ✅ GOOD: Use labels when available
-page.get_by_label("Email Address").fill("user@example.com")
+<span class="comment"># ✅ GOOD: Use labels when available</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email Address"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
 
-# ✅ GOOD: Use placeholders
-page.get_by_placeholder("Enter your email").fill("user@example.com")
+<span class="comment"># ✅ GOOD: Use placeholders</span>
+page.<span class="function">get_by_placeholder</span>(<span class="string">"Enter your email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
 
-# ❌ BAD: Don't use complex selectors
-page.locator("div > div > input:nth-child(3)").fill("text")
+<span class="comment"># ❌ BAD: Don't use complex selectors</span>
+page.<span class="function">locator</span>(<span class="string">"div > div > input:nth-child(3)"</span>).<span class="function">fill</span>(<span class="string">"text"</span>)
 
-# ✅ GOOD: Verify the value was set
-page.locator("#email").fill("user@example.com")
-assert page.locator("#email").input_value() == "user@example.com"</code></pre>
-            </div>
+<span class="comment"># ✅ GOOD: Verify the value was set</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+assert page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">input_value</span>() == <span class="string">"user@example.com"</span></div>
         </div>
 
         <!-- PART 2: CHECKBOXES & RADIO BUTTONS -->
@@ -205,22 +200,21 @@ assert page.locator("#email").input_value() == "user@example.com"</code></pre>
             <h2>Working with Checkboxes</h2>
             <p>Three methods for checkbox interaction</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Method 1: check() - Check a checkbox
-page.locator("#terms").check()
-page.get_by_label("I accept the terms").check()
+            <div class="code-block">
+<span class="comment"># Method 1: check() - Check a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"#terms"</span>).<span class="function">check</span>()
+page.<span class="function">get_by_label</span>(<span class="string">"I accept the terms"</span>).<span class="function">check</span>()
 
-# Method 2: uncheck() - Uncheck a checkbox
-page.locator("#newsletter").uncheck()
+<span class="comment"># Method 2: uncheck() - Uncheck a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"#newsletter"</span>).<span class="function">uncheck</span>()
 
-# Method 3: set_checked(boolean) - Set to specific state
-page.locator("#remember-me").set_checked(True)
-page.locator("#remember-me").set_checked(False)
+<span class="comment"># Method 3: set_checked(boolean) - Set to specific state</span>
+page.<span class="function">locator</span>(<span class="string">"#remember-me"</span>).<span class="function">set_checked</span>(<span class="keyword">True</span>)
+page.<span class="function">locator</span>(<span class="string">"#remember-me"</span>).<span class="function">set_checked</span>(<span class="keyword">False</span>)
 
-# Check current state
-is_checked = page.locator("#terms").is_checked()
-print(f"Terms accepted: {is_checked}")</code></pre>
-            </div>
+<span class="comment"># Check current state</span>
+is_checked = page.<span class="function">locator</span>(<span class="string">"#terms"</span>).<span class="function">is_checked</span>()
+<span class="function">print</span>(f<span class="string">"Terms accepted: {is_checked}"</span>)</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Tip:</strong> check() and uncheck() are idempotent - safe to call even if already in that state!</p>
@@ -232,20 +226,19 @@ print(f"Terms accepted: {is_checked}")</code></pre>
             <h2>Working with Radio Buttons</h2>
             <p>Select options from a radio group</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Select by value
-page.locator("input[name='payment'][value='credit-card']").check()
+            <div class="code-block">
+<span class="comment"># Select by value</span>
+page.<span class="function">locator</span>(<span class="string">"input[name='</span>payment<span class="string">'][value='</span>credit-card<span class="string">']"</span>).<span class="function">check</span>()
 
-# Select by label
-page.get_by_label("Credit Card").check()
+<span class="comment"># Select by label</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Credit Card"</span>).<span class="function">check</span>()
 
-# Select by role
-page.get_by_role("radio", name="PayPal").check()
+<span class="comment"># Select by role</span>
+page.<span class="function">get_by_role</span>(<span class="string">"radio"</span>, name=<span class="string">"PayPal"</span>).<span class="function">check</span>()
 
-# Verify selection
-selected = page.locator("input[name='payment']:checked").input_value()
-print(f"Selected payment method: {selected}")</code></pre>
-            </div>
+<span class="comment"># Verify selection</span>
+selected = page.<span class="function">locator</span>(<span class="string">"input[name='</span>payment<span class="string">']:checked"</span>).<span class="function">input_value</span>()
+<span class="function">print</span>(f<span class="string">"Selected payment method: {selected}"</span>)</div>
 
             <div class="success-box" style="margin-top: 20px;">
                 <p><strong>Best Practice:</strong> Use get_by_label() or get_by_role() for better accessibility!</p>
@@ -256,28 +249,26 @@ print(f"Selected payment method: {selected}")</code></pre>
         <div class="slide">
             <h2>Real-World Example</h2>
             <h3>HTML:</h3>
-            <div class="code-box">
-                <pre><code>&lt;input type="checkbox" id="newsletter" /&gt;
+            <div class="code-block">
+&lt;input type="checkbox" id="newsletter" /&gt;
 &lt;label for="newsletter"&gt;Subscribe to newsletter&lt;/label&gt;
 
 &lt;input type="radio" name="gender" value="male" id="male" /&gt;
 &lt;label for="male"&gt;Male&lt;/label&gt;
 &lt;input type="radio" name="gender" value="female" id="female" /&gt;
-&lt;label for="female"&gt;Female&lt;/label&gt;</code></pre>
-            </div>
+&lt;label for="female"&gt;Female&lt;/label&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Checkbox
-page.get_by_label("Subscribe to newsletter").check()
+            <div class="code-block">
+<span class="comment"># Checkbox</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Subscribe to newsletter"</span>).<span class="function">check</span>()
 
-# Radio button
-page.get_by_label("Female").check()
+<span class="comment"># Radio button</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Female"</span>).<span class="function">check</span>()
 
-# Verify
-assert page.locator("#newsletter").is_checked()
-assert page.locator("#female").is_checked()</code></pre>
-            </div>
+<span class="comment"># Verify</span>
+assert page.<span class="function">locator</span>(<span class="string">"#newsletter"</span>).<span class="function">is_checked</span>()
+assert page.<span class="function">locator</span>(<span class="string">"#female"</span>).<span class="function">is_checked</span>()</div>
         </div>
 
         <!-- PART 3: DROPDOWNS -->
@@ -292,19 +283,18 @@ assert page.locator("#female").is_checked()</code></pre>
             <h2>select_option() - Dropdown Selection</h2>
             <p>Multiple ways to select dropdown options</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Select by value
-page.locator("#country").select_option("us")
+            <div class="code-block">
+<span class="comment"># Select by value</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(<span class="string">"us"</span>)
 
-# Select by label (visible text)
-page.locator("#country").select_option(label="United States")
+<span class="comment"># Select by label (visible text)</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(label=<span class="string">"United States"</span>)
 
-# Select by index (0-based)
-page.locator("#country").select_option(index=2)
+<span class="comment"># Select by index (0-based)</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(index=<span class="number">2</span>)
 
-# Select multiple options (for multi-select)
-page.locator("#interests").select_option(["sports", "music", "travel"])</code></pre>
-            </div>
+<span class="comment"># Select multiple options (for multi-select)</span>
+page.<span class="function">locator</span>(<span class="string">"#interests"</span>).<span class="function">select_option</span>([<span class="string">"sports"</span>, <span class="string">"music"</span>, <span class="string">"travel"</span>])</div>
 
             <div class="highlight-box" style="margin-top: 20px;">
                 <p><strong>Recommended:</strong> Use label (visible text) for better readability and maintainability!</p>
@@ -314,27 +304,26 @@ page.locator("#interests").select_option(["sports", "music", "travel"])</code></
         <!-- Slide 12: Dropdown Examples -->
         <div class="slide">
             <h2>Dropdown Selection Examples</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Example 1: Single select
-page.locator("#country").select_option(label="Canada")
+            <div class="code-block">
+<span class="comment"># Example 1: Single select</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(label=<span class="string">"Canada"</span>)
 
-# Example 2: Multiple select
-page.locator("#skills").select_option([
-    label="Python",
-    label="JavaScript",
-    label="Playwright"
+<span class="comment"># Example 2: Multiple select</span>
+page.<span class="function">locator</span>(<span class="string">"#skills"</span>).<span class="function">select_option</span>([
+    label=<span class="string">"Python"</span>,
+    label=<span class="string">"JavaScript"</span>,
+    label=<span class="string">"Playwright"</span>
 ])
 
-# Example 3: Dynamic option
-# Get all options first
-options = page.locator("#country option").all_text_contents()
-# Select the second one
-page.locator("#country").select_option(index=1)
+<span class="comment"># Example 3: Dynamic option</span>
+<span class="comment"># Get all options first</span>
+options = page.<span class="function">locator</span>(<span class="string">"#country option"</span>).<span class="function">all_text_contents</span>()
+<span class="comment"># Select the second one</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(index=<span class="number">1</span>)
 
-# Example 4: Verify selection
-selected = page.locator("#country").input_value()
-assert selected == "ca", f"Expected 'ca', got '{selected}'"</code></pre>
-            </div>
+<span class="comment"># Example 4: Verify selection</span>
+selected = page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">input_value</span>()
+assert selected == <span class="string">"ca"</span>, f<span class="string">"Expected '</span>ca<span class="string">', got '</span>{selected}<span class="string">'"</span></div>
         </div>
 
         <!-- Slide 13: Alternative to Dropdowns -->
@@ -342,18 +331,17 @@ assert selected == "ca", f"Expected 'ca', got '{selected}'"</code></pre>
             <h2>Custom Dropdowns (Non-Select)</h2>
             <p>Many modern sites use div-based dropdowns instead of &lt;select&gt;</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># For custom dropdowns built with divs/buttons
-# Step 1: Click to open dropdown
-page.locator(".dropdown-trigger").click()
+            <div class="code-block">
+<span class="comment"># For custom dropdowns built with divs/buttons</span>
+<span class="comment"># Step 1: Click to open dropdown</span>
+page.<span class="function">locator</span>(<span class="string">".dropdown-trigger"</span>).<span class="function">click</span>()
 
-# Step 2: Click the desired option
-page.get_by_text("Option 2").click()
+<span class="comment"># Step 2: Click the desired option</span>
+page.<span class="function">get_by_text</span>(<span class="string">"Option 2"</span>).<span class="function">click</span>()
 
-# Or with roles
-page.get_by_role("button", name="Select Country").click()
-page.get_by_role("option", name="United States").click()</code></pre>
-            </div>
+<span class="comment"># Or with roles</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Select Country"</span>).<span class="function">click</span>()
+page.<span class="function">get_by_role</span>(<span class="string">"option"</span>, name=<span class="string">"United States"</span>).<span class="function">click</span>()</div>
 
             <div class="warning-box" style="margin-top: 20px;">
                 <p><strong>Note:</strong> select_option() only works with native &lt;select&gt; elements!</p>
@@ -372,55 +360,53 @@ page.get_by_role("option", name="United States").click()</code></pre>
             <h2>set_input_files() - Upload Files</h2>
             <p>Programmatically select files for upload</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Upload single file
-page.locator("input[type='file']").set_input_files("document.pdf")
+            <div class="code-block">
+<span class="comment"># Upload single file</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>(<span class="string">"document.pdf"</span>)
 
-# Upload multiple files
-page.locator("input[type='file']").set_input_files([
-    "file1.jpg",
-    "file2.png",
-    "file3.pdf"
+<span class="comment"># Upload multiple files</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>([
+    <span class="string">"file1.jpg"</span>,
+    <span class="string">"file2.png"</span>,
+    <span class="string">"file3.pdf"</span>
 ])
 
-# Upload with absolute path
-import os
-file_path = os.path.abspath("files/upload.pdf")
-page.locator("#file-upload").set_input_files(file_path)
+<span class="comment"># Upload with absolute path</span>
+<span class="keyword">import</span> os
+file_path = os.path.<span class="function">abspath</span>(<span class="string">"files/upload.pdf"</span>)
+page.<span class="function">locator</span>(<span class="string">"#file-upload"</span>).<span class="function">set_input_files</span>(file_path)
 
-# Clear file selection
-page.locator("input[type='file']").set_input_files([])</code></pre>
-            </div>
+<span class="comment"># Clear file selection</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>([])</div>
         </div>
 
         <!-- Slide 15: File Upload with Waiting -->
         <div class="slide">
             <h2>File Upload Best Practices</h2>
-            <div class="code-box">
-                <pre><code class="language-python">from playwright.sync_api import sync_playwright
-import os
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+<span class="keyword">import</span> os
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
-    page = browser.new_page()
-    page.goto("https://example.com/upload")
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/upload"</span>)
 
-    # Upload file
-    file_path = os.path.abspath("document.pdf")
-    page.locator("input[type='file']").set_input_files(file_path)
+<span class="comment">    # Upload file</span>
+    file_path = os.path.<span class="function">abspath</span>(<span class="string">"document.pdf"</span>)
+    page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>(file_path)
 
-    # Click upload button
-    page.get_by_role("button", name="Upload").click()
+<span class="comment">    # Click upload button</span>
+    page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Upload"</span>).<span class="function">click</span>()
 
-    # Wait for success message
-    page.wait_for_selector(".upload-success")
+<span class="comment">    # Wait for success message</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">".upload-success"</span>)
 
-    # Verify
-    success_msg = page.locator(".upload-success").text_content()
-    assert "uploaded successfully" in success_msg.lower()
+<span class="comment">    # Verify</span>
+    success_msg = page.<span class="function">locator</span>(<span class="string">".upload-success"</span>).<span class="function">text_content</span>()
+    assert <span class="string">"uploaded successfully"</span> <span class="keyword">in</span> success_msg.<span class="function">lower</span>()
 
-    browser.close()</code></pre>
-            </div>
+    browser.<span class="function">close</span>()</div>
         </div>
 
         <!-- PART 5: FORM SUBMISSION -->
@@ -433,20 +419,19 @@ with sync_playwright() as p:
         <!-- Slide 16: Submitting Forms -->
         <div class="slide">
             <h2>Form Submission Methods</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Method 1: Click submit button (recommended)
-page.get_by_role("button", name="Submit").click()
+            <div class="code-block">
+<span class="comment"># Method 1: Click submit button (recommended)</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
 
-# Method 2: Press Enter in input field
-page.locator("#email").fill("user@example.com")
-page.locator("#email").press("Enter")
+<span class="comment"># Method 2: Press Enter in input field</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">press</span>(<span class="string">"Enter"</span>)
 
-# Method 3: Call form.submit() (JavaScript)
-page.locator("form#login").evaluate("form => form.submit()")
+<span class="comment"># Method 3: Call form.submit() (JavaScript)</span>
+page.<span class="function">locator</span>(<span class="string">"form#login"</span>).<span class="function">evaluate</span>(<span class="string">"form => form.submit()"</span>)
 
-# Method 4: Use keyboard shortcut
-page.keyboard.press("Enter")</code></pre>
-            </div>
+<span class="comment"># Method 4: Use keyboard shortcut</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Enter"</span>)</div>
 
             <div class="success-box" style="margin-top: 20px;">
                 <p><strong>Best Practice:</strong> Click the submit button - it's most realistic and tests button functionality!</p>
@@ -456,98 +441,95 @@ page.keyboard.press("Enter")</code></pre>
         <!-- Slide 17: Form Validation -->
         <div class="slide">
             <h2>Validating Form Submission</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Fill form
-page.get_by_label("Email").fill("user@example.com")
-page.get_by_label("Password").fill("SecurePass123")
+            <div class="code-block">
+<span class="comment"># Fill form</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"SecurePass123"</span>)
 
-# Submit
-page.get_by_role("button", name="Login").click()
+<span class="comment"># Submit</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Login"</span>).<span class="function">click</span>()
 
-# Verify success (multiple ways)
+<span class="comment"># Verify success (multiple ways)</span>
 
-# 1. Check URL changed
-page.wait_for_url("**/dashboard")
-assert "/dashboard" in page.url
+<span class="comment"># 1. Check URL changed</span>
+page.<span class="function">wait_for_url</span>(<span class="string">"**/dashboard"</span>)
+assert <span class="string">"/dashboard"</span> <span class="keyword">in</span> page.url
 
-# 2. Check for success element
-success_banner = page.locator(".success-message")
-assert success_banner.is_visible()
+<span class="comment"># 2. Check for success element</span>
+success_banner = page.<span class="function">locator</span>(<span class="string">".success-message"</span>)
+assert success_banner.<span class="function">is_visible</span>()
 
-# 3. Check text content
-welcome_msg = page.locator("h1").text_content()
-assert "Welcome" in welcome_msg
+<span class="comment"># 3. Check text content</span>
+welcome_msg = page.<span class="function">locator</span>(<span class="string">"h1"</span>).<span class="function">text_content</span>()
+assert <span class="string">"Welcome"</span> <span class="keyword">in</span> welcome_msg
 
-# 4. Verify error is NOT present
-assert not page.locator(".error-message").is_visible()</code></pre>
-            </div>
+<span class="comment"># 4. Verify error is NOT present</span>
+assert <span class="keyword">not</span> page.<span class="function">locator</span>(<span class="string">".error-message"</span>).<span class="function">is_visible</span>()</div>
         </div>
 
         <!-- Slide 18: Complete Form Example -->
         <div class="slide">
             <h2>Complete Registration Form Example</h2>
-            <div class="code-box">
-                <pre><code class="language-python">from playwright.sync_api import sync_playwright
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
-    page = browser.new_page()
-    page.goto("https://example.com/register")
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/register"</span>)
 
-    # Text inputs
-    page.get_by_label("Full Name").fill("John Doe")
-    page.get_by_label("Email").fill("john@example.com")
-    page.get_by_label("Password").fill("SecurePass123")
+<span class="comment">    # Text inputs</span>
+    page.<span class="function">get_by_label</span>(<span class="string">"Full Name"</span>).<span class="function">fill</span>(<span class="string">"John Doe"</span>)
+    page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>).<span class="function">fill</span>(<span class="string">"john@example.com"</span>)
+    page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"SecurePass123"</span>)
 
-    # Checkbox
-    page.get_by_label("I accept the terms").check()
+<span class="comment">    # Checkbox</span>
+    page.<span class="function">get_by_label</span>(<span class="string">"I accept the terms"</span>).<span class="function">check</span>()
 
-    # Radio button
-    page.get_by_label("Male").check()
+<span class="comment">    # Radio button</span>
+    page.<span class="function">get_by_label</span>(<span class="string">"Male"</span>).<span class="function">check</span>()
 
-    # Dropdown
-    page.locator("#country").select_option(label="United States")
+<span class="comment">    # Dropdown</span>
+    page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(label=<span class="string">"United States"</span>)
 
-    # File upload
-    page.locator("input[type='file']").set_input_files("avatar.jpg")
+<span class="comment">    # File upload</span>
+    page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>(<span class="string">"avatar.jpg"</span>)
 
-    # Submit
-    page.get_by_role("button", name="Register").click()
+<span class="comment">    # Submit</span>
+    page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Register"</span>).<span class="function">click</span>()
 
-    # Validate
-    page.wait_for_selector(".registration-success")
-    assert page.locator(".registration-success").is_visible()
+<span class="comment">    # Validate</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">".registration-success"</span>)
+    assert page.<span class="function">locator</span>(<span class="string">".registration-success"</span>).<span class="function">is_visible</span>()
 
-    browser.close()</code></pre>
-            </div>
+    browser.<span class="function">close</span>()</div>
         </div>
 
         <!-- Slide 19: Error Handling -->
         <div class="slide">
             <h2>Testing Form Validation Errors</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Test 1: Submit empty form
-page.get_by_role("button", name="Submit").click()
+            <div class="code-block">
+<span class="comment"># Test 1: Submit empty form</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
 
-# Verify validation errors appear
-email_error = page.locator(".error-email")
-assert email_error.is_visible()
-assert "required" in email_error.text_content().lower()
+<span class="comment"># Verify validation errors appear</span>
+email_error = page.<span class="function">locator</span>(<span class="string">".error-email"</span>)
+assert email_error.<span class="function">is_visible</span>()
+assert <span class="string">"required"</span> <span class="keyword">in</span> email_error.<span class="function">text_content</span>().<span class="function">lower</span>()
 
-# Test 2: Invalid email format
-page.get_by_label("Email").fill("not-an-email")
-page.get_by_role("button", name="Submit").click()
+<span class="comment"># Test 2: Invalid email format</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>).<span class="function">fill</span>(<span class="string">"not-an-email"</span>)
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
 
-# Verify email validation error
-assert "invalid email" in page.locator(".error-email").text_content().lower()
+<span class="comment"># Verify email validation error</span>
+assert <span class="string">"invalid email"</span> <span class="keyword">in</span> page.<span class="function">locator</span>(<span class="string">".error-email"</span>).<span class="function">text_content</span>().<span class="function">lower</span>()
 
-# Test 3: Password too short
-page.get_by_label("Password").fill("123")
-page.get_by_role("button", name="Submit").click()
+<span class="comment"># Test 3: Password too short</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"123"</span>)
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
 
-# Verify password error
-assert "at least 8 characters" in page.locator(".error-password").text_content().lower()</code></pre>
-            </div>
+<span class="comment"># Verify password error</span>
+assert <span class="string">"at least 8 characters"</span> <span class="keyword">in</span> page.<span class="function">locator</span>(<span class="string">".error-password"</span>).<span class="function">text_content</span>().<span class="function">lower</span>()</div>
         </div>
 
         <!-- Slide 20: Best Practices -->

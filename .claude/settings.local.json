@@ -11,7 +11,16 @@
       "Bash(python:*)",
       "Bash(pip install:*)",
       "Bash(dir:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(NUL)",
+      "Bash(done)",
+      "Bash(powershell -Command:*)",
+      "Bash(git checkout:*)",
+      "Bash(for lecture in Lecture_15_Locator_Strategies_Part1 Lecture_16_Locator_Strategies_Part2 Lecture_17_Form_Handling Lecture_18_Mouse_Keyboard_Actions Lecture_19_Wait_Strategies Lecture_20_Assertions Lecture_21_Multiple_Elements)",
+      "Bash(do echo \"Converting $lecture...\")",
+      "Bash(for lecture in Lecture_15_Locator_Strategies_Part1 Lecture_16_Locator_Strategies_Part2 Lecture_17_Form_Handling Lecture_18_Mouse_Keyboard_Actions Lecture_19_Wait_Strategies Lecture_20_Assertions)",
+      "Bash(do echo \"=== Checking $lecture ===\")",
+      "Bash(do echo -n \"$lecture: \")"
     ],
     "deny": [],
     "ask": []

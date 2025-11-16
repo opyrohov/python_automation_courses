@@ -75,43 +75,41 @@
 
         <div class="slide">
             <h2>Auto-Waiting in Action</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># No explicit wait needed!
-page.locator("#submit-button").click()
+            <div class="code-block">
+<span class="comment"># No explicit wait needed!</span>
+page.<span class="function">locator</span>(<span class="string">"#submit-button"</span>).<span class="function">click</span>()
 
-# Playwright automatically waits for:
-# 1. Element to be in DOM
-# 2. Element to be visible
-# 3. Element to be stable
-# 4. Element to be enabled
-# All in one line!
+<span class="comment"># Playwright automatically waits for:</span>
+<span class="comment"># 1. Element to be in DOM</span>
+<span class="comment"># 2. Element to be visible</span>
+<span class="comment"># 3. Element to be stable</span>
+<span class="comment"># 4. Element to be enabled</span>
+<span class="comment"># All in one line!</span>
 
-# This also auto-waits
-page.locator("#username").fill("user@example.com")
+<span class="comment"># This also auto-waits</span>
+page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
 
-# Even assertions auto-wait
-expect(page.locator("#message")).to_be_visible()</code></pre>
-            </div>
+<span class="comment"># Even assertions auto-wait</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#message"</span>)).<span class="function">to_be_visible</span>()</div>
         </div>
 
         <div class="slide">
             <h2>When Auto-Waiting Happens</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Actions that auto-wait:
-page.locator("#btn").click()          # Waits for actionability
-page.locator("#input").fill("text")   # Waits for enabled + visible
-page.locator("#checkbox").check()     # Waits for actionable
-page.locator("#link").hover()         # Waits for visible + stable
+            <div class="code-block">
+<span class="comment"># Actions that auto-wait:</span>
+page.<span class="function">locator</span>(<span class="string">"#btn"</span>).<span class="function">click</span>()          <span class="comment"># Waits <span class="keyword">for</span> actionability</span>
+page.<span class="function">locator</span>(<span class="string">"#input"</span>).<span class="function">fill</span>(<span class="string">"text"</span>)   <span class="comment"># Waits <span class="keyword">for</span> enabled + visible</span>
+page.<span class="function">locator</span>(<span class="string">"#checkbox"</span>).<span class="function">check</span>()     <span class="comment"># Waits <span class="keyword">for</span> actionable</span>
+page.<span class="function">locator</span>(<span class="string">"#link"</span>).<span class="function">hover</span>()         <span class="comment"># Waits <span class="keyword">for</span> visible + stable</span>
 
-# Assertions that auto-wait:
-expect(page.locator("#el")).to_be_visible()
-expect(page.locator("#el")).to_have_text("Hello")
-expect(page.locator("#el")).to_be_enabled()
+<span class="comment"># Assertions that auto-wait:</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#el"</span>)).<span class="function">to_be_visible</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#el"</span>)).<span class="function">to_have_text</span>(<span class="string">"Hello"</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#el"</span>)).<span class="function">to_be_enabled</span>()
 
-# Getting properties does NOT auto-wait:
-text = page.locator("#el").text_content()  # Immediate
-count = page.locator(".item").count()      # Immediate</code></pre>
-            </div>
+<span class="comment"># Getting properties does NOT auto-wait:</span>
+text = page.<span class="function">locator</span>(<span class="string">"#el"</span>).<span class="function">text_content</span>()  <span class="comment"># Immediate</span>
+count = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">count</span>()      <span class="comment"># Immediate</span></div>
         </div>
 
         <!-- PART 2: WAIT FOR SELECTOR -->
@@ -123,22 +121,21 @@ count = page.locator(".item").count()      # Immediate</code></pre>
 
         <div class="slide">
             <h2>wait_for_selector() - Basic Usage</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Wait for element to appear
-page.wait_for_selector("#dynamic-content")
+            <div class="code-block">
+<span class="comment"># Wait for element to appear</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">"#dynamic-content"</span>)
 
-# Wait with timeout (default is 30 seconds)
-page.wait_for_selector("#slow-element", timeout=10000)  # 10 seconds
+<span class="comment"># Wait with timeout (default is 30 seconds)</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">"#slow-element"</span>, timeout=<span class="number">10000</span>)  <span class="comment"># <span class="number">10</span> seconds</span>
 
-# Wait for element to be visible (default)
-page.wait_for_selector("#element", state="visible")
+<span class="comment"># Wait for element to be visible (default)</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">"#element"</span>, state=<span class="string">"visible"</span>)
 
-# Wait for element to be hidden
-page.wait_for_selector("#loading", state="hidden")
+<span class="comment"># Wait for element to be hidden</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">"#loading"</span>, state=<span class="string">"hidden"</span>)
 
-# Wait for element to be attached (in DOM)
-page.wait_for_selector("#element", state="attached")</code></pre>
-            </div>
+<span class="comment"># Wait for element to be attached (in DOM)</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">"#element"</span>, state=<span class="string">"attached"</span>)</div>
         </div>
 
         <div class="slide">
@@ -147,55 +144,62 @@ page.wait_for_selector("#element", state="attached")</code></pre>
                 <div class="info-box">
                     <h4>attached</h4>
                     <p>Element is in DOM (may not be visible)</p>
-                    <pre><code class="language-python">page.wait_for_selector(
-    "#element",
-    state="attached"
-)</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">wait_for_selector</span>(
+    <span class="string">"#element"</span>,
+    state=<span class="string">"attached"</span>
+)
+                    </div>
                 </div>
                 <div class="info-box">
                     <h4>visible (default)</h4>
                     <p>Element is visible on page</p>
-                    <pre><code class="language-python">page.wait_for_selector(
-    "#element",
-    state="visible"
-)</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">wait_for_selector</span>(
+    <span class="string">"#element"</span>,
+    state=<span class="string">"visible"</span>
+)
+                    </div>
                 </div>
                 <div class="info-box">
                     <h4>hidden</h4>
                     <p>Element is not visible or not in DOM</p>
-                    <pre><code class="language-python">page.wait_for_selector(
-    "#loading",
-    state="hidden"
-)</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">wait_for_selector</span>(
+    <span class="string">"#loading"</span>,
+    state=<span class="string">"hidden"</span>
+)
+                    </div>
                 </div>
                 <div class="info-box">
                     <h4>detached</h4>
                     <p>Element is removed from DOM</p>
-                    <pre><code class="language-python">page.wait_for_selector(
-    "#element",
-    state="detached"
-)</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">wait_for_selector</span>(
+    <span class="string">"#element"</span>,
+    state=<span class="string">"detached"</span>
+)
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="slide">
             <h2>Practical wait_for_selector() Examples</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Wait for loading spinner to disappear
-page.wait_for_selector(".loading-spinner", state="hidden")
+            <div class="code-block">
+<span class="comment"># Wait for loading spinner to disappear</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">".loading-spinner"</span>, state=<span class="string">"hidden"</span>)
 
-# Wait for success message to appear
-page.wait_for_selector(".success-message", state="visible")
+<span class="comment"># Wait for success message to appear</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">".success-message"</span>, state=<span class="string">"visible"</span>)
 
-# Wait for dynamic content after AJAX call
-page.locator("#load-btn").click()
-page.wait_for_selector(".dynamic-content", timeout=5000)
+<span class="comment"># Wait for dynamic content after AJAX call</span>
+page.<span class="function">locator</span>(<span class="string">"#load-btn"</span>).<span class="function">click</span>()
+page.<span class="function">wait_for_selector</span>(<span class="string">".dynamic-content"</span>, timeout=<span class="number">5000</span>)
 
-# Wait for modal to close
-page.locator(".close-modal").click()
-page.wait_for_selector(".modal", state="detached")</code></pre>
-            </div>
+<span class="comment"># Wait for modal to close</span>
+page.<span class="function">locator</span>(<span class="string">".close-modal"</span>).<span class="function">click</span>()
+page.<span class="function">wait_for_selector</span>(<span class="string">".modal"</span>, state=<span class="string">"detached"</span>)</div>
         </div>
 
         <!-- PART 3: LOAD STATES -->
@@ -207,22 +211,21 @@ page.wait_for_selector(".modal", state="detached")</code></pre>
 
         <div class="slide">
             <h2>wait_for_load_state()</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Wait for page to load (default: "load")
-page.goto("https://example.com")
-page.wait_for_load_state()
+            <div class="code-block">
+<span class="comment"># Wait for page to load (default: "load")</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page.<span class="function">wait_for_load_state</span>()
 
-# Wait for DOM to be ready
-page.wait_for_load_state("domcontentloaded")
+<span class="comment"># Wait for DOM to be ready</span>
+page.<span class="function">wait_for_load_state</span>(<span class="string">"domcontentloaded"</span>)
 
-# Wait for network to be idle
-page.wait_for_load_state("networkidle")
+<span class="comment"># Wait for network to be idle</span>
+page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
 
-# Combined example
-page.goto("https://example.com")
-page.wait_for_load_state("networkidle")  # Wait for all network requests
-print("Page fully loaded with all resources")</code></pre>
-            </div>
+<span class="comment"># Combined example</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)  <span class="comment"># Wait <span class="keyword">for</span> all network requests</span>
+<span class="function">print</span>(<span class="string">"Page fully loaded with all resources"</span>)</div>
         </div>
 
         <div class="slide">
@@ -231,17 +234,23 @@ print("Page fully loaded with all resources")</code></pre>
                 <div class="info-box">
                     <h4>load (default)</h4>
                     <p>Waits for the 'load' event - page and resources loaded</p>
-                    <pre><code class="language-python">page.wait_for_load_state("load")</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">wait_for_load_state</span>(<span class="string">"load"</span>)
+                    </div>
                 </div>
                 <div class="info-box">
                     <h4>domcontentloaded</h4>
                     <p>Waits for DOM to be ready - faster, doesn't wait for images/stylesheets</p>
-                    <pre><code class="language-python">page.wait_for_load_state("domcontentloaded")</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">wait_for_load_state</span>(<span class="string">"domcontentloaded"</span>)
+                    </div>
                 </div>
                 <div class="info-box">
                     <h4>networkidle</h4>
                     <p>Waits for no network connections for 500ms - good for SPAs</p>
-                    <pre><code class="language-python">page.wait_for_load_state("networkidle")</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
+                    </div>
                 </div>
             </div>
         </div>
@@ -256,10 +265,12 @@ print("Page fully loaded with all resources")</code></pre>
                         <li>When you don't need images</li>
                         <li>Faster tests</li>
                     </ul>
-                    <pre><code class="language-python">page.goto(url)
-page.wait_for_load_state(
-    "domcontentloaded"
-)</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">goto</span>(url)
+page.<span class="function">wait_for_load_state</span>(
+    <span class="string">"domcontentloaded"</span>
+)
+                    </div>
                 </div>
                 <div class="info-box">
                     <h4>Use networkidle</h4>
@@ -268,10 +279,12 @@ page.wait_for_load_state(
                         <li>AJAX-heavy pages</li>
                         <li>Dynamic content loading</li>
                     </ul>
-                    <pre><code class="language-python">page.goto(url)
-page.wait_for_load_state(
-    "networkidle"
-)</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+page.<span class="function">goto</span>(url)
+page.<span class="function">wait_for_load_state</span>(
+    <span class="string">"networkidle"</span>
+)
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,19 +305,23 @@ page.wait_for_load_state(
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
                 <div class="warning-box">
                     <h4>❌ BAD</h4>
-                    <pre><code class="language-python"># Hard-coded wait
-page.locator("#btn").click()
-page.wait_for_timeout(3000)
-# Hope element is ready...</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># Hard-coded wait</span>
+page.<span class="function">locator</span>(<span class="string">"#btn"</span>).<span class="function">click</span>()
+page.<span class="function">wait_for_timeout</span>(<span class="number">3000</span>)
+<span class="comment"># Hope element is ready...</span>
+                    </div>
                 </div>
                 <div class="success-box">
                     <h4>✅ GOOD</h4>
-                    <pre><code class="language-python"># Wait for condition
-page.locator("#btn").click()
-page.wait_for_selector(
-    "#result",
-    state="visible"
-)</code></pre>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># Wait for condition</span>
+page.<span class="function">locator</span>(<span class="string">"#btn"</span>).<span class="function">click</span>()
+page.<span class="function">wait_for_selector</span>(
+    <span class="string">"#result"</span>,
+    state=<span class="string">"visible"</span>
+)
+                    </div>
                 </div>
             </div>
         </div>
@@ -319,40 +336,38 @@ page.wait_for_selector(
                     <li>⏱️ Testing time-based behavior</li>
                 </ul>
             </div>
-            <div class="code-box" style="margin-top: 20px;">
-                <pre><code class="language-python"># Example: CSS animation must complete
-page.locator("#animate-btn").click()
-page.wait_for_timeout(500)  # Known animation duration
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Example: CSS animation must complete</span>
+page.<span class="function">locator</span>(<span class="string">"#animate-btn"</span>).<span class="function">click</span>()
+page.<span class="function">wait_for_timeout</span>(<span class="number">500</span>)  <span class="comment"># Known animation duration</span>
 
-# Debugging only - REMOVE BEFORE COMMIT
-page.wait_for_timeout(5000)  # TODO: Replace with proper wait
+<span class="comment"># Debugging only - REMOVE BEFORE COMMIT</span>
+page.<span class="function">wait_for_timeout</span>(<span class="number">5000</span>)  <span class="comment"># TODO: Replace <span class="keyword">with</span> proper wait</span>
 
-# Testing time-based feature
-start_time = time.time()
-page.wait_for_timeout(2000)
-elapsed = time.time() - start_time
-assert elapsed >= 2</code></pre>
-            </div>
+<span class="comment"># Testing time-based feature</span>
+start_time = time.<span class="function">time</span>()
+page.<span class="function">wait_for_timeout</span>(<span class="number">2000</span>)
+elapsed = time.<span class="function">time</span>() - start_time
+assert elapsed >= <span class="number">2</span></div>
         </div>
 
         <div class="slide">
             <h2>Configuring Timeouts</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Global timeout for all actions (default: 30 seconds)
-page.set_default_timeout(60000)  # 60 seconds
+            <div class="code-block">
+<span class="comment"># Global timeout for all actions (default: 30 seconds)</span>
+page.<span class="function">set_default_timeout</span>(<span class="number">60000</span>)  <span class="comment"># <span class="number">60</span> seconds</span>
 
-# Per-action timeout
-page.locator("#slow-btn").click(timeout=45000)
+<span class="comment"># Per-action timeout</span>
+page.<span class="function">locator</span>(<span class="string">"#slow-btn"</span>).<span class="function">click</span>(timeout=<span class="number">45000</span>)
 
-# Navigation timeout
-page.goto("https://example.com", timeout=60000)
+<span class="comment"># Navigation timeout</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>, timeout=<span class="number">60000</span>)
 
-# Assertion timeout
-expect(page.locator("#msg")).to_be_visible(timeout=10000)
+<span class="comment"># Assertion timeout</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#msg"</span>)).<span class="function">to_be_visible</span>(timeout=<span class="number">10000</span>)
 
-# Wait for selector with custom timeout
-page.wait_for_selector("#element", timeout=5000)</code></pre>
-            </div>
+<span class="comment"># Wait for selector with custom timeout</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">"#element"</span>, timeout=<span class="number">5000</span>)</div>
         </div>
 
         <!-- PART 5: CUSTOM WAIT CONDITIONS -->
@@ -364,76 +379,73 @@ page.wait_for_selector("#element", timeout=5000)</code></pre>
 
         <div class="slide">
             <h2>wait_for_function() - Custom Conditions</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Wait for custom JavaScript condition
-page.wait_for_function("() => document.readyState === 'complete'")
+            <div class="code-block">
+<span class="comment"># Wait for custom JavaScript condition</span>
+page.<span class="function">wait_for_function</span>(<span class="string">"() => document.readyState === '</span>complete<span class="string">'"</span>)
 
-# Wait for element count
-page.wait_for_function(
-    "() => document.querySelectorAll('.item').length > 10"
+<span class="comment"># Wait for element count</span>
+page.<span class="function">wait_for_function</span>(
+    <span class="string">"() => document.querySelectorAll('</span>.item<span class="string">').length > 10"</span>
 )
 
-# Wait for text content
-page.wait_for_function(
-    "selector => document.querySelector(selector).textContent.includes('Success')",
-    arg="#message"
+<span class="comment"># Wait for text content</span>
+page.<span class="function">wait_for_function</span>(
+    <span class="string">"selector => document.querySelector(selector).textContent.includes('</span>Success<span class="string">')"</span>,
+    arg=<span class="string">"#message"</span>
 )
 
-# Wait for style change
-page.wait_for_function(
-    "el => getComputedStyle(el).opacity === '1'",
-    arg=page.locator("#element").element_handle()
-)</code></pre>
-            </div>
+<span class="comment"># Wait for style change</span>
+page.<span class="function">wait_for_function</span>(
+    <span class="string">"el => getComputedStyle(el).opacity === '</span>1<span class="string">'"</span>,
+    arg=page.<span class="function">locator</span>(<span class="string">"#element"</span>).<span class="function">element_handle</span>()
+)</div>
         </div>
 
         <div class="slide">
             <h2>Advanced Custom Waits</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Wait for URL to change
-page.wait_for_function(
-    "url => window.location.href.includes(url)",
-    arg="dashboard"
+            <div class="code-block">
+<span class="comment"># Wait for URL to change</span>
+page.<span class="function">wait_for_function</span>(
+    <span class="string">"url => window.location.href.includes(url)"</span>,
+    arg=<span class="string">"dashboard"</span>
 )
 
-# Wait for local storage
-page.wait_for_function(
-    "key => localStorage.getItem(key) !== null",
-    arg="user_token"
+<span class="comment"># Wait for local storage</span>
+page.<span class="function">wait_for_function</span>(
+    <span class="string">"key => localStorage.getItem(key) !== null"</span>,
+    arg=<span class="string">"user_token"</span>
 )
 
-# Wait for variable to be defined
-page.wait_for_function("() => typeof myApp !== 'undefined'")
+<span class="comment"># Wait for variable to be defined</span>
+page.<span class="function">wait_for_function</span>(<span class="string">"() => typeof myApp !== '</span>undefined<span class="string">'"</span>)
 
-# Wait for AJAX to complete (jQuery)
-page.wait_for_function("() => jQuery.active === 0")</code></pre>
-            </div>
+<span class="comment"># Wait for AJAX to complete (jQuery)</span>
+page.<span class="function">wait_for_function</span>(<span class="string">"() => jQuery.active === 0"</span>)</div>
         </div>
 
         <div class="slide">
             <h2>Combining Wait Strategies</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Complete example: Form submission
-def submit_form_and_wait(page):
-    # 1. Fill form
-    page.locator("#email").fill("user@example.com")
-    page.locator("#password").fill("password123")
+            <div class="code-block">
+<span class="comment"># Complete example: Form submission</span>
+<span class="keyword">def</span> <span class="function">submit_form_and_wait</span>(page):
+<span class="comment">    # 1. Fill form</span>
+    page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"password123"</span>)
 
-    # 2. Submit
-    page.locator("#submit").click()
+<span class="comment">    # 2. Submit</span>
+    page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
 
-    # 3. Wait for loading to disappear
-    page.wait_for_selector(".loading", state="hidden")
+<span class="comment">    # 3. Wait for loading to disappear</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">".loading"</span>, state=<span class="string">"hidden"</span>)
 
-    # 4. Wait for success message
-    page.wait_for_selector(".success-message", state="visible")
+<span class="comment">    # 4. Wait for success message</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">".success-message"</span>, state=<span class="string">"visible"</span>)
 
-    # 5. Wait for network to settle
-    page.wait_for_load_state("networkidle")
+<span class="comment">    # 5. Wait for network to settle</span>
+    page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
 
-    # 6. Verify URL changed
-    expect(page).to_have_url("*/dashboard")</code></pre>
-            </div>
+<span class="comment">    # 6. Verify URL changed</span>
+    <span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"*/dashboard"</span>)</div>
         </div>
 
         <!-- Best Practices -->
@@ -494,26 +506,25 @@ def submit_form_and_wait(page):
         <!-- Common Patterns -->
         <div class="slide">
             <h2>Common Wait Patterns</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Pattern 1: Wait for loading to finish
-page.wait_for_selector(".spinner", state="hidden")
+            <div class="code-block">
+<span class="comment"># Pattern 1: Wait for loading to finish</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">".spinner"</span>, state=<span class="string">"hidden"</span>)
 
-# Pattern 2: Wait for element before interaction
-page.wait_for_selector("#button", state="visible")
-page.locator("#button").click()
+<span class="comment"># Pattern 2: Wait for element before interaction</span>
+page.<span class="function">wait_for_selector</span>(<span class="string">"#button"</span>, state=<span class="string">"visible"</span>)
+page.<span class="function">locator</span>(<span class="string">"#button"</span>).<span class="function">click</span>()
 
-# Pattern 3: Wait after navigation
-page.goto(url)
-page.wait_for_load_state("networkidle")
+<span class="comment"># Pattern 3: Wait after navigation</span>
+page.<span class="function">goto</span>(url)
+page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
 
-# Pattern 4: Wait for dynamic content
-page.locator("#search").fill("playwright")
-page.wait_for_selector(".search-results", state="visible")
+<span class="comment"># Pattern 4: Wait for dynamic content</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">fill</span>(<span class="string">"playwright"</span>)
+page.<span class="function">wait_for_selector</span>(<span class="string">".search-results"</span>, state=<span class="string">"visible"</span>)
 
-# Pattern 5: Wait for element to disappear
-page.locator("#delete").click()
-page.wait_for_selector(".item", state="detached")</code></pre>
-            </div>
+<span class="comment"># Pattern 5: Wait for element to disappear</span>
+page.<span class="function">locator</span>(<span class="string">"#delete"</span>).<span class="function">click</span>()
+page.<span class="function">wait_for_selector</span>(<span class="string">".item"</span>, state=<span class="string">"detached"</span>)</div>
         </div>
 
         <!-- Troubleshooting -->

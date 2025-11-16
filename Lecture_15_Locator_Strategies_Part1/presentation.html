@@ -142,20 +142,18 @@
             </div>
 
             <h3 style="margin-top: 30px;">HTML Example:</h3>
-            <div class="code-box">
-                <pre><code>&lt;button id="submit-btn"&gt;Submit&lt;/button&gt;
-&lt;input id="username" type="text"&gt;</code></pre>
-            </div>
+            <div class="code-block">
+&lt;button id="submit-btn"&gt;Submit&lt;/button&gt;
+&lt;input id="username" type="text"&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Using CSS selector with ID
-page.locator("#submit-btn").click()
-page.locator("#username").fill("john_doe")
+            <div class="code-block">
+<span class="comment"># Using CSS selector with ID</span>
+page.<span class="function">locator</span>(<span class="string">"#submit-btn"</span>).<span class="function">click</span>()
+page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"john_doe"</span>)
 
-# Alternatively, use get_by_test_id for test IDs
-page.get_by_test_id("submit-button").click()</code></pre>
-            </div>
+<span class="comment"># Alternatively, use get_by_test_id for test IDs</span>
+page.<span class="function">get_by_test_id</span>(<span class="string">"submit-button"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 7: Class Selectors -->
@@ -166,22 +164,20 @@ page.get_by_test_id("submit-button").click()</code></pre>
             </div>
 
             <h3 style="margin-top: 30px;">HTML Example:</h3>
-            <div class="code-box">
-                <pre><code>&lt;button class="btn btn-primary"&gt;Login&lt;/button&gt;
-&lt;button class="btn btn-secondary"&gt;Cancel&lt;/button&gt;</code></pre>
-            </div>
+            <div class="code-block">
+&lt;button class="btn btn-primary"&gt;Login&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;Cancel&lt;/button&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Single class
-page.locator(".btn-primary").click()
+            <div class="code-block">
+<span class="comment"># Single class</span>
+page.<span class="function">locator</span>(<span class="string">".btn-primary"</span>).<span class="function">click</span>()
 
-# Multiple classes (element must have both)
-page.locator(".btn.btn-primary").click()
+<span class="comment"># Multiple classes (element must have both)</span>
+page.<span class="function">locator</span>(<span class="string">".btn.btn-primary"</span>).<span class="function">click</span>()
 
-# Be specific to avoid ambiguity
-page.locator("button.btn-primary").click()</code></pre>
-            </div>
+<span class="comment"># Be specific to avoid ambiguity</span>
+page.<span class="function">locator</span>(<span class="string">"button.btn-primary"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 8: Attribute Selectors -->
@@ -190,48 +186,45 @@ page.locator("button.btn-primary").click()</code></pre>
             <p>Select elements based on any attribute and its value.</p>
 
             <h3 style="margin-top: 20px;">Syntax Variations:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Has attribute (any value)
-page.locator("[data-testid]")
+            <div class="code-block">
+<span class="comment"># Has attribute (any value)</span>
+page.<span class="function">locator</span>(<span class="string">"[data-testid]"</span>)
 
-# Exact match
-page.locator("[type='submit']")
+<span class="comment"># Exact match</span>
+page.<span class="function">locator</span>(<span class="string">"[type='</span>submit<span class="string">']"</span>)
 
-# Contains value
-page.locator("[class*='btn']")
+<span class="comment"># Contains value</span>
+page.<span class="function">locator</span>(<span class="string">"[class*='</span>btn<span class="string">']"</span>)
 
-# Starts with value
-page.locator("[href^='https']")
+<span class="comment"># Starts with value</span>
+page.<span class="function">locator</span>(<span class="string">"[href^='</span>https<span class="string">']"</span>)
 
-# Ends with value
-page.locator("[src$='.png']")</code></pre>
-            </div>
+<span class="comment"># Ends with value</span>
+page.<span class="function">locator</span>(<span class="string">"[src$='</span>.png<span class="string">']"</span>)</div>
         </div>
 
         <!-- Slide 9: Attribute Selectors Example -->
         <div class="slide">
             <h2>Attribute Selectors: Real Example</h2>
             <h3>HTML:</h3>
-            <div class="code-box">
-                <pre><code>&lt;button type="submit" data-action="login"&gt;Login&lt;/button&gt;
+            <div class="code-block">
+&lt;button type="submit" data-action="login"&gt;Login&lt;/button&gt;
 &lt;input type="email" name="userEmail" placeholder="Email"&gt;
-&lt;a href="https://example.com/docs"&gt;Documentation&lt;/a&gt;</code></pre>
-            </div>
+&lt;a href="https://example.com/docs"&gt;Documentation&lt;/a&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Select by type
-page.locator("[type='submit']").click()
+            <div class="code-block">
+<span class="comment"># Select by type</span>
+page.<span class="function">locator</span>(<span class="string">"[type='</span>submit<span class="string">']"</span>).<span class="function">click</span>()
 
-# Select by data attribute
-page.locator("[data-action='login']").click()
+<span class="comment"># Select by data attribute</span>
+page.<span class="function">locator</span>(<span class="string">"[data-action='</span>login<span class="string">']"</span>).<span class="function">click</span>()
 
-# Select by name
-page.locator("[name='userEmail']").fill("user@example.com")
+<span class="comment"># Select by name</span>
+page.<span class="function">locator</span>(<span class="string">"[name='</span>userEmail<span class="string">']"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
 
-# Select links to specific domain
-page.locator("[href^='https://example.com']").click()</code></pre>
-            </div>
+<span class="comment"># Select links to specific domain</span>
+page.<span class="function">locator</span>(<span class="string">"[href^='</span>https://example.com<span class="string">']"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 10: Combining Selectors -->
@@ -240,22 +233,21 @@ page.locator("[href^='https://example.com']").click()</code></pre>
             <p>Combine selectors for more precise targeting</p>
 
             <h3 style="margin-top: 20px;">Common Combinations:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Tag + class
-page.locator("button.btn-primary")
+            <div class="code-block">
+<span class="comment"># Tag + class</span>
+page.<span class="function">locator</span>(<span class="string">"button.btn-primary"</span>)
 
-# Tag + ID
-page.locator("input#username")
+<span class="comment"># Tag + ID</span>
+page.<span class="function">locator</span>(<span class="string">"input#username"</span>)
 
-# Tag + attribute
-page.locator("button[type='submit']")
+<span class="comment"># Tag + attribute</span>
+page.<span class="function">locator</span>(<span class="string">"button[type='</span>submit<span class="string">']"</span>)
 
-# Multiple attributes
-page.locator("input[type='text'][name='search']")
+<span class="comment"># Multiple attributes</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='</span>text<span class="string">'][name='</span>search<span class="string">']"</span>)
 
-# Class + attribute
-page.locator(".form-control[placeholder='Email']")</code></pre>
-            </div>
+<span class="comment"># Class + attribute</span>
+page.<span class="function">locator</span>(<span class="string">".form-control[placeholder='</span>Email<span class="string">']"</span>)</div>
         </div>
 
         <!-- Slide 11: CSS Combinators -->
@@ -264,46 +256,43 @@ page.locator(".form-control[placeholder='Email']")</code></pre>
             <p>Navigate relationships between elements</p>
 
             <h3 style="margin-top: 20px;">Types of Combinators:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Descendant (space) - any level below
-page.locator("div.container button")
+            <div class="code-block">
+<span class="comment"># Descendant (space) - any level below</span>
+page.<span class="function">locator</span>(<span class="string">"div.container button"</span>)
 
-# Direct child (>) - immediate children only
-page.locator("form > button")
+<span class="comment"># Direct child (>) - immediate children only</span>
+page.<span class="function">locator</span>(<span class="string">"form > button"</span>)
 
-# Adjacent sibling (+) - immediately after
-page.locator("label + input")
+<span class="comment"># Adjacent sibling (+) - immediately after</span>
+page.<span class="function">locator</span>(<span class="string">"label + input"</span>)
 
-# General sibling (~) - any sibling after
-page.locator("h2 ~ p")</code></pre>
-            </div>
+<span class="comment"># General sibling (~) - any sibling after</span>
+page.<span class="function">locator</span>(<span class="string">"h2 ~ p"</span>)</div>
         </div>
 
         <!-- Slide 12: Combinator Example -->
         <div class="slide">
             <h2>Combinator Example</h2>
             <h3>HTML Structure:</h3>
-            <div class="code-box">
-                <pre><code>&lt;div class="login-form"&gt;
+            <div class="code-block">
+&lt;div class="login-form"&gt;
   &lt;form&gt;
     &lt;label&gt;Email&lt;/label&gt;
     &lt;input type="email" name="email"&gt;
     &lt;button type="submit"&gt;Login&lt;/button&gt;
   &lt;/form&gt;
-&lt;/div&gt;</code></pre>
-            </div>
+&lt;/div&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Button inside login form
-page.locator(".login-form button").click()
+            <div class="code-block">
+<span class="comment"># Button inside login form</span>
+page.<span class="function">locator</span>(<span class="string">".login-form button"</span>).<span class="function">click</span>()
 
-# Direct child button of form
-page.locator("form > button").click()
+<span class="comment"># Direct child button of form</span>
+page.<span class="function">locator</span>(<span class="string">"form > button"</span>).<span class="function">click</span>()
 
-# Input that follows label
-page.locator("label + input").fill("test@example.com")</code></pre>
-            </div>
+<span class="comment"># Input that follows label</span>
+page.<span class="function">locator</span>(<span class="string">"label + input"</span>).<span class="function">fill</span>(<span class="string">"test@example.com"</span>)</div>
         </div>
 
         <!-- PART 2: XPATH -->
@@ -337,13 +326,12 @@ page.locator("label + input").fill("test@example.com")</code></pre>
         <div class="slide">
             <h2>XPath Syntax Basics</h2>
             <h3>Absolute vs Relative Paths:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Absolute path (starts from root) - AVOID!
-page.locator("xpath=/html/body/div/form/button")
+            <div class="code-block">
+<span class="comment"># Absolute path (starts from root) - AVOID!</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=/html/body/div/form/button"</span>)
 
-# Relative path (starts with //) - PREFERRED
-page.locator("xpath=//button[@type='submit']")</code></pre>
-            </div>
+<span class="comment"># Relative path (starts with //) - PREFERRED</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[@type='</span>submit<span class="string">']"</span>)</div>
 
             <div class="warning-box" style="margin-top: 20px;">
                 <p><strong>Never use absolute paths!</strong> They break with any DOM change.</p>
@@ -353,25 +341,24 @@ page.locator("xpath=//button[@type='submit']")</code></pre>
         <!-- Slide 15: XPath Common Patterns -->
         <div class="slide">
             <h2>Common XPath Patterns</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Select by tag
-page.locator("xpath=//button")
+            <div class="code-block">
+<span class="comment"># Select by tag</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button"</span>)
 
-# Select by attribute
-page.locator("xpath=//button[@type='submit']")
+<span class="comment"># Select by attribute</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[@type='</span>submit<span class="string">']"</span>)
 
-# Select by ID
-page.locator("xpath=//*[@id='submit-btn']")
+<span class="comment"># Select by ID</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//*[@id='</span>submit-btn<span class="string">']"</span>)
 
-# Select by class
-page.locator("xpath=//button[@class='btn-primary']")
+<span class="comment"># Select by class</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[@class='</span>btn-primary<span class="string">']"</span>)
 
-# Contains class (for multiple classes)
-page.locator("xpath=//button[contains(@class, 'btn-primary')]")
+<span class="comment"># Contains class (for multiple classes)</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[contains(@class, '</span>btn-primary<span class="string">')]"</span>)
 
-# Select by text content
-page.locator("xpath=//button[text()='Login']")</code></pre>
-            </div>
+<span class="comment"># Select by text content</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[text()='</span>Login<span class="string">']"</span>)</div>
         </div>
 
         <!-- Slide 16: XPath Text Matching -->
@@ -379,19 +366,18 @@ page.locator("xpath=//button[text()='Login']")</code></pre>
             <h2>XPath: Text Matching</h2>
             <p>XPath excels at finding elements by their text content</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Exact text match
-page.locator("xpath=//button[text()='Login']")
+            <div class="code-block">
+<span class="comment"># Exact text match</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[text()='</span>Login<span class="string">']"</span>)
 
-# Contains text
-page.locator("xpath=//div[contains(text(), 'Welcome')]")
+<span class="comment"># Contains text</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//div[contains(text(), '</span>Welcome<span class="string">')]"</span>)
 
-# Starts with text
-page.locator("xpath=//h1[starts-with(text(), 'Chapter')]")
+<span class="comment"># Starts with text</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//h1[starts-with(text(), '</span>Chapter<span class="string">')]"</span>)
 
-# Case-insensitive (using translate)
-page.locator("xpath=//button[contains(translate(text(), 'LOGIN', 'login'), 'login')]")</code></pre>
-            </div>
+<span class="comment"># Case-insensitive (using translate)</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[contains(translate(text(), '</span>LOGIN<span class="string">', '</span>login<span class="string">'), '</span>login<span class="string">')]"</span>)</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Tip:</strong> Playwright's <code>get_by_text()</code> is usually better than XPath for text matching!</p>
@@ -403,45 +389,42 @@ page.locator("xpath=//button[contains(translate(text(), 'LOGIN', 'login'), 'logi
             <h2>XPath Axes: Navigation</h2>
             <p>Navigate relationships in the DOM tree</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Parent
-page.locator("xpath=//button[@id='submit']/parent::form")
+            <div class="code-block">
+<span class="comment"># Parent</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[@id='</span>submit<span class="string">']/parent::form"</span>)
 
-# Ancestor
-page.locator("xpath=//button[@id='submit']/ancestor::div")
+<span class="comment"># Ancestor</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[@id='</span>submit<span class="string">']/ancestor::div"</span>)
 
-# Following sibling
-page.locator("xpath=//label[text()='Email']/following-sibling::input")
+<span class="comment"># Following sibling</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//label[text()='</span>Email<span class="string">']/following-sibling::input"</span>)
 
-# Preceding sibling
-page.locator("xpath=//input[@name='email']/preceding-sibling::label")
+<span class="comment"># Preceding sibling</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//input[@name='</span>email<span class="string">']/preceding-sibling::label"</span>)
 
-# Child
-page.locator("xpath=//form/child::button")</code></pre>
-            </div>
+<span class="comment"># Child</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//form/child::button"</span>)</div>
         </div>
 
         <!-- Slide 18: XPath Example -->
         <div class="slide">
             <h2>XPath: Real Example</h2>
             <h3>HTML:</h3>
-            <div class="code-box">
-                <pre><code>&lt;div class="product-card"&gt;
+            <div class="code-block">
+&lt;div class="product-card"&gt;
   &lt;h3&gt;Laptop&lt;/h3&gt;
   &lt;p class="price"&gt;$999&lt;/p&gt;
   &lt;button class="add-to-cart"&gt;Add to Cart&lt;/button&gt;
-&lt;/div&gt;</code></pre>
-            </div>
+&lt;/div&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Find button in the product card with specific title
-page.locator("xpath=//div[.//h3[text()='Laptop']]//button[@class='add-to-cart']").click()
+            <div class="code-block">
+<span class="comment"># Find button in the product card with specific title</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//div[.//h3[text()='</span>Laptop<span class="string">']]//button[@class='</span>add-to-cart<span class="string">']"</span>).<span class="function">click</span>()
 
-# Get price of product named Laptop
-price = page.locator("xpath=//div[.//h3[text()='Laptop']]//p[@class='price']").text_content()
-print(price)  # $999</code></pre>
-            </div>
+<span class="comment"># Get price of product named Laptop</span>
+price = page.<span class="function">locator</span>(<span class="string">"xpath=//div[.//h3[text()='</span>Laptop<span class="string">']]//p[@class='</span>price<span class="string">']"</span>).<span class="function">text_content</span>()
+<span class="function">print</span>(price)  <span class="comment"># $<span class="number">999</span></span></div>
         </div>
 
         <!-- PART 3: PLAYWRIGHT MODERN LOCATORS -->
@@ -480,48 +463,46 @@ print(price)  # $999</code></pre>
             </div>
 
             <h3 style="margin-top: 20px;">Common Roles:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Buttons
-page.get_by_role("button", name="Login").click()
+            <div class="code-block">
+<span class="comment"># Buttons</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Login"</span>).<span class="function">click</span>()
 
-# Links
-page.get_by_role("link", name="Contact Us").click()
+<span class="comment"># Links</span>
+page.<span class="function">get_by_role</span>(<span class="string">"link"</span>, name=<span class="string">"Contact Us"</span>).<span class="function">click</span>()
 
-# Textboxes
-page.get_by_role("textbox", name="Email").fill("test@example.com")
+<span class="comment"># Textboxes</span>
+page.<span class="function">get_by_role</span>(<span class="string">"textbox"</span>, name=<span class="string">"Email"</span>).<span class="function">fill</span>(<span class="string">"test@example.com"</span>)
 
-# Checkboxes
-page.get_by_role("checkbox", name="Accept terms").check()
+<span class="comment"># Checkboxes</span>
+page.<span class="function">get_by_role</span>(<span class="string">"checkbox"</span>, name=<span class="string">"Accept terms"</span>).<span class="function">check</span>()
 
-# Headings
-expect(page.get_by_role("heading", name="Welcome")).to_be_visible()</code></pre>
-            </div>
+<span class="comment"># Headings</span>
+<span class="function">expect</span>(page.<span class="function">get_by_role</span>(<span class="string">"heading"</span>, name=<span class="string">"Welcome"</span>)).<span class="function">to_be_visible</span>()</div>
         </div>
 
         <!-- Slide 21: get_by_role() - More Roles -->
         <div class="slide">
             <h2>get_by_role() - Common ARIA Roles</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># Navigation
-page.get_by_role("navigation")
+            <div class="code-block">
+<span class="comment"># Navigation</span>
+page.<span class="function">get_by_role</span>(<span class="string">"navigation"</span>)
 
-# Main content
-page.get_by_role("main")
+<span class="comment"># Main content</span>
+page.<span class="function">get_by_role</span>(<span class="string">"main"</span>)
 
-# Radio buttons
-page.get_by_role("radio", name="Option A").click()
+<span class="comment"># Radio buttons</span>
+page.<span class="function">get_by_role</span>(<span class="string">"radio"</span>, name=<span class="string">"Option A"</span>).<span class="function">click</span>()
 
-# Combobox (dropdown)
-page.get_by_role("combobox").select_option("value")
+<span class="comment"># Combobox (dropdown)</span>
+page.<span class="function">get_by_role</span>(<span class="string">"combobox"</span>).<span class="function">select_option</span>(<span class="string">"value"</span>)
 
-# List items
-page.get_by_role("listitem").filter(has_text="Item 1")
+<span class="comment"># List items</span>
+page.<span class="function">get_by_role</span>(<span class="string">"listitem"</span>).<span class="function">filter</span>(has_text=<span class="string">"Item 1"</span>)
 
-# Tables
-page.get_by_role("table")
-page.get_by_role("row")
-page.get_by_role("cell")</code></pre>
-            </div>
+<span class="comment"># Tables</span>
+page.<span class="function">get_by_role</span>(<span class="string">"table"</span>)
+page.<span class="function">get_by_role</span>(<span class="string">"row"</span>)
+page.<span class="function">get_by_role</span>(<span class="string">"cell"</span>)</div>
         </div>
 
         <!-- Slide 22: get_by_text() -->
@@ -529,19 +510,18 @@ page.get_by_role("cell")</code></pre>
             <h2>get_by_text() - Find by Visible Text</h2>
             <p>Locate elements by their text content</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Exact match (default)
-page.get_by_text("Login").click()
+            <div class="code-block">
+<span class="comment"># Exact match (default)</span>
+page.<span class="function">get_by_text</span>(<span class="string">"Login"</span>).<span class="function">click</span>()
 
-# Substring match
-page.get_by_text("Welcome", exact=False).is_visible()
+<span class="comment"># Substring match</span>
+page.<span class="function">get_by_text</span>(<span class="string">"Welcome"</span>, exact=<span class="keyword">False</span>).<span class="function">is_visible</span>()
 
-# Case sensitive by default
-page.get_by_text("LOGIN")  # Won't match "Login"
+<span class="comment"># Case sensitive by default</span>
+page.<span class="function">get_by_text</span>(<span class="string">"LOGIN"</span>)  <span class="comment"># Won<span class="string">'t match "</span>Login"</span>
 
-# Find in specific container
-page.locator(".sidebar").get_by_text("Settings").click()</code></pre>
-            </div>
+<span class="comment"># Find in specific container</span>
+page.<span class="function">locator</span>(<span class="string">".sidebar"</span>).<span class="function">get_by_text</span>(<span class="string">"Settings"</span>).<span class="function">click</span>()</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Use Case:</strong> Great for clicking links, finding headings, or verifying text content!</p>
@@ -554,25 +534,23 @@ page.locator(".sidebar").get_by_text("Settings").click()</code></pre>
             <p>Locate form inputs by their associated label text</p>
 
             <h3>HTML Example:</h3>
-            <div class="code-box">
-                <pre><code>&lt;label for="email"&gt;Email Address&lt;/label&gt;
+            <div class="code-block">
+&lt;label for="email"&gt;Email Address&lt;/label&gt;
 &lt;input id="email" type="email"&gt;
 
 &lt;label&gt;
   Password
   &lt;input type="password"&gt;
-&lt;/label&gt;</code></pre>
-            </div>
+&lt;/label&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Works with both explicit and implicit labels
-page.get_by_label("Email Address").fill("user@example.com")
-page.get_by_label("Password").fill("secret123")
+            <div class="code-block">
+<span class="comment"># Works with both explicit and implicit labels</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email Address"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"secret123"</span>)
 
-# Partial match
-page.get_by_label("Email", exact=False).fill("user@example.com")</code></pre>
-            </div>
+<span class="comment"># Partial match</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>, exact=<span class="keyword">False</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)</div>
         </div>
 
         <!-- Slide 24: get_by_placeholder() -->
@@ -581,19 +559,17 @@ page.get_by_label("Email", exact=False).fill("user@example.com")</code></pre>
             <p>Locate inputs by their placeholder text</p>
 
             <h3>HTML Example:</h3>
-            <div class="code-box">
-                <pre><code>&lt;input type="text" placeholder="Search products..."&gt;
-&lt;input type="email" placeholder="Enter your email"&gt;</code></pre>
-            </div>
+            <div class="code-block">
+&lt;input type="text" placeholder="Search products..."&gt;
+&lt;input type="email" placeholder="Enter your email"&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Exact match
-page.get_by_placeholder("Search products...").fill("laptop")
+            <div class="code-block">
+<span class="comment"># Exact match</span>
+page.<span class="function">get_by_placeholder</span>(<span class="string">"Search products..."</span>).<span class="function">fill</span>(<span class="string">"laptop"</span>)
 
-# Partial match
-page.get_by_placeholder("email", exact=False).fill("user@example.com")</code></pre>
-            </div>
+<span class="comment"># Partial match</span>
+page.<span class="function">get_by_placeholder</span>(<span class="string">"email"</span>, exact=<span class="keyword">False</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)</div>
 
             <div class="warning-box" style="margin-top: 20px;">
                 <p><strong>Note:</strong> Prefer <code>get_by_label()</code> over placeholder when possible - it's more accessible!</p>
@@ -606,22 +582,20 @@ page.get_by_placeholder("email", exact=False).fill("user@example.com")</code></p
             <p>Locate images by their alt text</p>
 
             <h3>HTML Example:</h3>
-            <div class="code-box">
-                <pre><code>&lt;img src="logo.png" alt="Company Logo"&gt;
-&lt;img src="profile.jpg" alt="User profile picture"&gt;</code></pre>
-            </div>
+            <div class="code-block">
+&lt;img src="logo.png" alt="Company Logo"&gt;
+&lt;img src="profile.jpg" alt="User profile picture"&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Click on an image (if it's clickable)
-page.get_by_alt_text("Company Logo").click()
+            <div class="code-block">
+<span class="comment"># Click on an image (if it's clickable)</span>
+page.<span class="function">get_by_alt_text</span>(<span class="string">"Company Logo"</span>).<span class="function">click</span>()
 
-# Verify image is visible
-expect(page.get_by_alt_text("User profile picture")).to_be_visible()
+<span class="comment"># Verify image is visible</span>
+<span class="function">expect</span>(page.<span class="function">get_by_alt_text</span>(<span class="string">"User profile picture"</span>)).<span class="function">to_be_visible</span>()
 
-# Partial match
-page.get_by_alt_text("profile", exact=False)</code></pre>
-            </div>
+<span class="comment"># Partial match</span>
+page.<span class="function">get_by_alt_text</span>(<span class="string">"profile"</span>, exact=<span class="keyword">False</span>)</div>
         </div>
 
         <!-- Slide 26: get_by_title() -->
@@ -630,20 +604,18 @@ page.get_by_alt_text("profile", exact=False)</code></pre>
             <p>Locate elements by their title attribute (tooltip text)</p>
 
             <h3>HTML Example:</h3>
-            <div class="code-box">
-                <pre><code>&lt;button title="Close dialog"&gt;X&lt;/button&gt;
-&lt;a href="/help" title="Get help"&gt;?&lt;/a&gt;</code></pre>
-            </div>
+            <div class="code-block">
+&lt;button title="Close dialog"&gt;X&lt;/button&gt;
+&lt;a href="/help" title="Get help"&gt;?&lt;/a&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Click by title
-page.get_by_title("Close dialog").click()
-page.get_by_title("Get help").click()
+            <div class="code-block">
+<span class="comment"># Click by title</span>
+page.<span class="function">get_by_title</span>(<span class="string">"Close dialog"</span>).<span class="function">click</span>()
+page.<span class="function">get_by_title</span>(<span class="string">"Get help"</span>).<span class="function">click</span>()
 
-# Partial match
-page.get_by_title("help", exact=False).click()</code></pre>
-            </div>
+<span class="comment"># Partial match</span>
+page.<span class="function">get_by_title</span>(<span class="string">"help"</span>, exact=<span class="keyword">False</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 27: get_by_test_id() -->
@@ -654,19 +626,17 @@ page.get_by_title("help", exact=False).click()</code></pre>
             </div>
 
             <h3 style="margin-top: 20px;">HTML Example:</h3>
-            <div class="code-box">
-                <pre><code>&lt;button data-testid="submit-button"&gt;Submit&lt;/button&gt;
-&lt;div data-testid="error-message"&gt;Invalid input&lt;/div&gt;</code></pre>
-            </div>
+            <div class="code-block">
+&lt;button data-testid="submit-button"&gt;Submit&lt;/button&gt;
+&lt;div data-testid="error-message"&gt;Invalid input&lt;/div&gt;</div>
 
             <h3>Playwright Code:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Using data-testid (default attribute)
-page.get_by_test_id("submit-button").click()
+            <div class="code-block">
+<span class="comment"># Using data-testid (default attribute)</span>
+page.<span class="function">get_by_test_id</span>(<span class="string">"submit-button"</span>).<span class="function">click</span>()
 
-# Verify error message
-expect(page.get_by_test_id("error-message")).to_contain_text("Invalid")</code></pre>
-            </div>
+<span class="comment"># Verify error message</span>
+<span class="function">expect</span>(page.<span class="function">get_by_test_id</span>(<span class="string">"error-message"</span>)).<span class="function">to_contain_text</span>(<span class="string">"Invalid"</span>)</div>
         </div>
 
         <!-- Slide 28: Chaining Locators -->
@@ -674,21 +644,20 @@ expect(page.get_by_test_id("error-message")).to_contain_text("Invalid")</code></
             <h2>Chaining and Filtering Locators</h2>
             <p>Combine locators for precise targeting</p>
 
-            <div class="code-box">
-                <pre><code class="language-python"># Chain modern locators
-page.get_by_role("navigation").get_by_role("link", name="Home").click()
+            <div class="code-block">
+<span class="comment"># Chain modern locators</span>
+page.<span class="function">get_by_role</span>(<span class="string">"navigation"</span>).<span class="function">get_by_role</span>(<span class="string">"link"</span>, name=<span class="string">"Home"</span>).<span class="function">click</span>()
 
-# Filter by text
-page.get_by_role("listitem").filter(has_text="Product A").click()
+<span class="comment"># Filter by text</span>
+page.<span class="function">get_by_role</span>(<span class="string">"listitem"</span>).<span class="function">filter</span>(has_text=<span class="string">"Product A"</span>).<span class="function">click</span>()
 
-# Filter by nested element
-page.get_by_role("listitem").filter(
-    has=page.get_by_role("button", name="Buy")
-).click()
+<span class="comment"># Filter by nested element</span>
+page.<span class="function">get_by_role</span>(<span class="string">"listitem"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Buy"</span>)
+).<span class="function">click</span>()
 
-# Combine with CSS
-page.locator(".product-card").get_by_role("button", name="Add to Cart").click()</code></pre>
-            </div>
+<span class="comment"># Combine with CSS</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Add to Cart"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- PART 4: BEST PRACTICES -->
@@ -723,35 +692,33 @@ page.locator(".product-card").get_by_role("button", name="Add to Cart").click()<
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="warning-box">
                     <h4>❌ BAD Locators</h4>
-                    <div class="code-box" style="margin-top: 10px;">
-                        <pre><code class="language-python"># Absolute XPath
-page.locator("xpath=/html/body/div[2]/form/button")
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Absolute XPath</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=/html/body/div[2]/form/button"</span>)
 
-# Generic classes
-page.locator(".btn.btn-1")
+<span class="comment"># Generic classes</span>
+page.<span class="function">locator</span>(<span class="string">".btn.btn-1"</span>)
 
-# Position-based
-page.locator("button:nth-child(3)")
+<span class="comment"># Position-based</span>
+page.<span class="function">locator</span>(<span class="string">"button:nth-child(3)"</span>)
 
-# Implementation details
-page.locator("[ng-click='submit()']")</code></pre>
-                    </div>
+<span class="comment"># Implementation details</span>
+page.<span class="function">locator</span>(<span class="function">___PLACEHOLDER_0___submit</span>()<span class="string">']"</span>)</div>
                 </div>
                 <div class="success-box">
                     <h4>✅ GOOD Locators</h4>
-                    <div class="code-box" style="margin-top: 10px;">
-                        <pre><code class="language-python"># Role-based
-page.get_by_role("button", name="Submit")
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Role-based</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>)
 
-# Label-based
-page.get_by_label("Email")
+<span class="comment"># Label-based</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>)
 
-# Test ID
-page.get_by_test_id("submit-form")
+<span class="comment"># Test ID</span>
+page.<span class="function">get_by_test_id</span>(<span class="string">"submit-form"</span>)
 
-# Semantic CSS
-page.locator("#login-form button[type='submit']")</code></pre>
-                    </div>
+<span class="comment"># Semantic CSS</span>
+page.<span class="function">locator</span>(<span class="string">"#login-form button[type='</span>submit<span class="string">']"</span>)</div>
                 </div>
             </div>
         </div>
@@ -780,16 +747,15 @@ page.locator("#login-form button[type='submit']")</code></pre>
         <!-- Slide 32: Keep Selectors Simple -->
         <div class="slide">
             <h2>Keep Selectors Simple</h2>
-            <div class="code-box">
-                <pre><code class="language-python"># ❌ TOO COMPLEX
-page.locator("div.container > div.row > div.col-md-6 > form > div:nth-child(2) > input")
+            <div class="code-block">
+<span class="comment"># ❌ TOO COMPLEX</span>
+page.<span class="function">locator</span>(<span class="string">"div.container > div.row > div.col-md-6 > form > div:nth-child(2) > input"</span>)
 
-# ✅ BETTER - Use unique attribute
-page.locator("[name='email']")
+<span class="comment"># ✅ BETTER - Use unique attribute</span>
+page.<span class="function">locator</span>(<span class="string">"[name='</span>email<span class="string">']"</span>)
 
-# ✅ BEST - Use label
-page.get_by_label("Email")</code></pre>
-            </div>
+<span class="comment"># ✅ BEST - Use label</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>)</div>
 
             <div class="highlight-box" style="margin-top: 20px;">
                 <p><strong>Rule of Thumb:</strong> If you can't explain your selector in one sentence, it's too complex!</p>
@@ -810,15 +776,14 @@ page.get_by_label("Email")</code></pre>
             </ul>
 
             <h3>Example:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># HTML
-&lt;button data-testid="checkout-submit" class="btn-xyz123"&gt;
+            <div class="code-block">
+<span class="comment"># HTML</span>
+<button data-testid=<span class="string">"checkout-submit"</span> <span class="keyword">class</span>=<span class="string">"btn-xyz123"</span>>
   {{ translatedText }}
-&lt;/button&gt;
+</button>
 
-# Playwright - stable across translations and redesigns
-page.get_by_test_id("checkout-submit").click()</code></pre>
-            </div>
+<span class="comment"># Playwright - stable across translations and redesigns</span>
+page.<span class="function">get_by_test_id</span>(<span class="string">"checkout-submit"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 34: Debugging Locators -->
@@ -827,21 +792,20 @@ page.get_by_test_id("checkout-submit").click()</code></pre>
             <p>Tools to help you find and test locators</p>
 
             <h3 style="margin-top: 20px;">Debugging Techniques:</h3>
-            <div class="code-box">
-                <pre><code class="language-python"># Count matching elements
-count = page.locator(".btn").count()
-print(f"Found {count} buttons")
+            <div class="code-block">
+<span class="comment"># Count matching elements</span>
+count = page.<span class="function">locator</span>(<span class="string">".btn"</span>).<span class="function">count</span>()
+<span class="function">print</span>(f<span class="string">"Found {count} buttons"</span>)
 
-# Get all text contents
-buttons = page.locator("button").all_text_contents()
-print(buttons)
+<span class="comment"># Get all text contents</span>
+buttons = page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">all_text_contents</span>()
+<span class="function">print</span>(buttons)
 
-# Highlight element
-page.locator("#submit").highlight()
+<span class="comment"># Highlight element</span>
+page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">highlight</span>()
 
-# Take screenshot with bounding box
-page.locator("#submit").screenshot(path="button.png")</code></pre>
-            </div>
+<span class="comment"># Take screenshot with bounding box</span>
+page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">screenshot</span>(path=<span class="string">"button.png"</span>)</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Tip:</strong> Use Playwright Inspector (<code>PWDEBUG=1</code>) to test locators interactively!</p>
@@ -854,8 +818,8 @@ page.locator("#submit").screenshot(path="button.png")</code></pre>
             <p>Test selectors in the browser console</p>
 
             <h3 style="margin-top: 20px;">In Browser Console:</h3>
-            <div class="code-box">
-                <pre><code class="language-javascript">// Test CSS selector
+            <div class="code-block">
+// Test CSS selector
 document.querySelector("#submit-btn")
 document.querySelectorAll(".btn")
 
@@ -865,8 +829,7 @@ $x("//button[text()='Login']")
 
 // Count matches
 document.querySelectorAll(".btn").length
-$x("//button").length</code></pre>
-            </div>
+$x("//button").length</div>
 
             <div class="info-box" style="margin-top: 20px;">
                 <p><strong>Shortcut:</strong> Right-click element → Inspect → Copy Selector/XPath (but don't blindly use it!)</p>
@@ -900,8 +863,8 @@ $x("//button").length</code></pre>
         <div class="slide">
             <h2>Real-World Example: Login Form</h2>
             <h3>HTML:</h3>
-            <div class="code-box">
-                <pre><code>&lt;form id="login-form"&gt;
+            <div class="code-block">
+&lt;form id="login-form"&gt;
   &lt;label for="email"&gt;Email Address&lt;/label&gt;
   &lt;input id="email" type="email" placeholder="you@example.com"&gt;
 
@@ -910,43 +873,40 @@ $x("//button").length</code></pre>
 
   &lt;button type="submit"&gt;Sign In&lt;/button&gt;
   &lt;a href="/forgot"&gt;Forgot Password?&lt;/a&gt;
-&lt;/form&gt;</code></pre>
-            </div>
+&lt;/form&gt;</div>
 
             <h3>Best Approach:</h3>
-            <div class="code-box">
-                <pre><code class="language-python">page.get_by_label("Email Address").fill("user@example.com")
-page.get_by_label("Password").fill("secret123")
-page.get_by_role("button", name="Sign In").click()
-page.get_by_role("link", name="Forgot Password?").click()</code></pre>
-            </div>
+            <div class="code-block">
+page.<span class="function">get_by_label</span>(<span class="string">"Email Address"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"secret123"</span>)
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Sign In"</span>).<span class="function">click</span>()
+page.<span class="function">get_by_role</span>(<span class="string">"link"</span>, name=<span class="string">"Forgot Password?"</span>).<span class="function">click</span>()</div>
         </div>
 
         <!-- Slide 38: Quick Reference -->
         <div class="slide">
             <h2>Quick Reference Cheat Sheet</h2>
             <div style="font-size: 0.85em;">
-                <div class="code-box">
-                    <pre><code class="language-python"># Modern Locators (Preferred)
-page.get_by_role("button", name="Submit")
-page.get_by_label("Email")
-page.get_by_placeholder("Search...")
-page.get_by_text("Welcome")
-page.get_by_test_id("submit-btn")
+                <div class="code-block">
+<span class="comment"># Modern Locators (Preferred)</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>)
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>)
+page.<span class="function">get_by_placeholder</span>(<span class="string">"Search..."</span>)
+page.<span class="function">get_by_text</span>(<span class="string">"Welcome"</span>)
+page.<span class="function">get_by_test_id</span>(<span class="string">"submit-btn"</span>)
 
-# CSS Selectors
-page.locator("#id")           # ID
-page.locator(".class")        # Class
-page.locator("[attr='value']") # Attribute
-page.locator("tag.class")    # Combination
+<span class="comment"># CSS Selectors</span>
+page.<span class="function">locator</span>(<span class="string">"#id"</span>)           <span class="comment"># ID</span>
+page.<span class="function">locator</span>(<span class="string">".class"</span>)        <span class="comment"># Class</span>
+page.<span class="function">locator</span>(<span class="string">"[attr='</span>value<span class="string">']"</span>) <span class="comment"># Attribute</span>
+page.<span class="function">locator</span>(<span class="string">"tag.class"</span>)    <span class="comment"># Combination</span>
 
-# XPath (use sparingly)
-page.locator("xpath=//button[@type='submit']")
-page.locator("xpath=//button[text()='Login']")
+<span class="comment"># XPath (use sparingly)</span>
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[@type='</span>submit<span class="string">']"</span>)
+page.<span class="function">locator</span>(<span class="string">"xpath=//button[text()='</span>Login<span class="string">']"</span>)
 
-# Chaining
-page.locator(".container").get_by_role("button").click()</code></pre>
-                </div>
+<span class="comment"># Chaining</span>
+page.<span class="function">locator</span>(<span class="string">".container"</span>).<span class="function">get_by_role</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
             </div>
         </div>
 
