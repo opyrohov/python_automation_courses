@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 19: Wait Strategies</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 19</h1>
+            <div class="subtitle">Wait Strategies</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Understand Playwright's auto-waiting</li>
+                <li>✓ Use wait_for_selector() variants</li>
+                <li>✓ Wait for page load states</li>
+                <li>✓ Avoid wait_for_timeout() pitfalls</li>
+                <li>✓ Create custom wait conditions</li>
+                <li>✓ Configure timeouts properly</li>
+                <li>✓ Handle dynamic content</li>
+            </ul>
+        </div>
+
+        <!-- Why Wait Strategies Matter -->
+        <div class="slide">
+            <h2>Why Wait Strategies Matter</h2>
+            <div class="highlight-box">
+                <p>Modern web apps load content dynamically - waiting correctly prevents flaky tests and false failures.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Common Issues Without Proper Waits:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>❌ Element not found errors</li>
+                <li>❌ Tests that pass sometimes, fail others</li>
+                <li>❌ Clicking on elements before they're ready</li>
+                <li>❌ Reading stale data</li>
+                <li>❌ Race conditions</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: AUTO-WAITING -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Auto-Waiting</h2>
+            <p>Playwright's built-in intelligence</p>
+        </div>
+
+        <div class="slide">
+            <h2>Playwright's Auto-Waiting</h2>
+            <div class="success-box">
+                <p>✅ Playwright automatically waits for elements before actions!</p>
+            </div>
+            <h3 style="margin-top: 20px;">What Playwright Waits For:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>✓ Element is attached to DOM</li>
+                <li>✓ Element is visible</li>
+                <li>✓ Element is stable (not animating)</li>
+                <li>✓ Element receives events (not obscured)</li>
+                <li>✓ Element is enabled (for inputs)</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <h2>Auto-Waiting in Action</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># No explicit wait needed!
+page.locator("#submit-button").click()
+
+# Playwright automatically waits for:
+# 1. Element to be in DOM
+# 2. Element to be visible
+# 3. Element to be stable
+# 4. Element to be enabled
+# All in one line!
+
+# This also auto-waits
+page.locator("#username").fill("user@example.com")
+
+# Even assertions auto-wait
+expect(page.locator("#message")).to_be_visible()</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>When Auto-Waiting Happens</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Actions that auto-wait:
+page.locator("#btn").click()          # Waits for actionability
+page.locator("#input").fill("text")   # Waits for enabled + visible
+page.locator("#checkbox").check()     # Waits for actionable
+page.locator("#link").hover()         # Waits for visible + stable
+
+# Assertions that auto-wait:
+expect(page.locator("#el")).to_be_visible()
+expect(page.locator("#el")).to_have_text("Hello")
+expect(page.locator("#el")).to_be_enabled()
+
+# Getting properties does NOT auto-wait:
+text = page.locator("#el").text_content()  # Immediate
+count = page.locator(".item").count()      # Immediate</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 2: WAIT FOR SELECTOR -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>wait_for_selector()</h2>
+            <p>Explicit element waiting</p>
+        </div>
+
+        <div class="slide">
+            <h2>wait_for_selector() - Basic Usage</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Wait for element to appear
+page.wait_for_selector("#dynamic-content")
+
+# Wait with timeout (default is 30 seconds)
+page.wait_for_selector("#slow-element", timeout=10000)  # 10 seconds
+
+# Wait for element to be visible (default)
+page.wait_for_selector("#element", state="visible")
+
+# Wait for element to be hidden
+page.wait_for_selector("#loading", state="hidden")
+
+# Wait for element to be attached (in DOM)
+page.wait_for_selector("#element", state="attached")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>wait_for_selector() States</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.9em;">
+                <div class="info-box">
+                    <h4>attached</h4>
+                    <p>Element is in DOM (may not be visible)</p>
+                    <pre><code class="language-python">page.wait_for_selector(
+    "#element",
+    state="attached"
+)</code></pre>
+                </div>
+                <div class="info-box">
+                    <h4>visible (default)</h4>
+                    <p>Element is visible on page</p>
+                    <pre><code class="language-python">page.wait_for_selector(
+    "#element",
+    state="visible"
+)</code></pre>
+                </div>
+                <div class="info-box">
+                    <h4>hidden</h4>
+                    <p>Element is not visible or not in DOM</p>
+                    <pre><code class="language-python">page.wait_for_selector(
+    "#loading",
+    state="hidden"
+)</code></pre>
+                </div>
+                <div class="info-box">
+                    <h4>detached</h4>
+                    <p>Element is removed from DOM</p>
+                    <pre><code class="language-python">page.wait_for_selector(
+    "#element",
+    state="detached"
+)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Practical wait_for_selector() Examples</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Wait for loading spinner to disappear
+page.wait_for_selector(".loading-spinner", state="hidden")
+
+# Wait for success message to appear
+page.wait_for_selector(".success-message", state="visible")
+
+# Wait for dynamic content after AJAX call
+page.locator("#load-btn").click()
+page.wait_for_selector(".dynamic-content", timeout=5000)
+
+# Wait for modal to close
+page.locator(".close-modal").click()
+page.wait_for_selector(".modal", state="detached")</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 3: LOAD STATES -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Load States</h2>
+            <p>Waiting for page readiness</p>
+        </div>
+
+        <div class="slide">
+            <h2>wait_for_load_state()</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Wait for page to load (default: "load")
+page.goto("https://example.com")
+page.wait_for_load_state()
+
+# Wait for DOM to be ready
+page.wait_for_load_state("domcontentloaded")
+
+# Wait for network to be idle
+page.wait_for_load_state("networkidle")
+
+# Combined example
+page.goto("https://example.com")
+page.wait_for_load_state("networkidle")  # Wait for all network requests
+print("Page fully loaded with all resources")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Load State Types</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; font-size: 0.9em;">
+                <div class="info-box">
+                    <h4>load (default)</h4>
+                    <p>Waits for the 'load' event - page and resources loaded</p>
+                    <pre><code class="language-python">page.wait_for_load_state("load")</code></pre>
+                </div>
+                <div class="info-box">
+                    <h4>domcontentloaded</h4>
+                    <p>Waits for DOM to be ready - faster, doesn't wait for images/stylesheets</p>
+                    <pre><code class="language-python">page.wait_for_load_state("domcontentloaded")</code></pre>
+                </div>
+                <div class="info-box">
+                    <h4>networkidle</h4>
+                    <p>Waits for no network connections for 500ms - good for SPAs</p>
+                    <pre><code class="language-python">page.wait_for_load_state("networkidle")</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>When to Use Each Load State</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>Use domcontentloaded</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Simple pages</li>
+                        <li>When you don't need images</li>
+                        <li>Faster tests</li>
+                    </ul>
+                    <pre><code class="language-python">page.goto(url)
+page.wait_for_load_state(
+    "domcontentloaded"
+)</code></pre>
+                </div>
+                <div class="info-box">
+                    <h4>Use networkidle</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Single Page Apps (SPAs)</li>
+                        <li>AJAX-heavy pages</li>
+                        <li>Dynamic content loading</li>
+                    </ul>
+                    <pre><code class="language-python">page.goto(url)
+page.wait_for_load_state(
+    "networkidle"
+)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 4: TIMEOUT -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Timeouts</h2>
+            <p>When and when NOT to use them</p>
+        </div>
+
+        <div class="slide">
+            <h2>wait_for_timeout() - The Anti-Pattern</h2>
+            <div class="warning-box">
+                <h4>⚠️ Avoid wait_for_timeout() When Possible!</h4>
+                <p>Using fixed sleeps makes tests slow and unreliable</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="warning-box">
+                    <h4>❌ BAD</h4>
+                    <pre><code class="language-python"># Hard-coded wait
+page.locator("#btn").click()
+page.wait_for_timeout(3000)
+# Hope element is ready...</code></pre>
+                </div>
+                <div class="success-box">
+                    <h4>✅ GOOD</h4>
+                    <pre><code class="language-python"># Wait for condition
+page.locator("#btn").click()
+page.wait_for_selector(
+    "#result",
+    state="visible"
+)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>When wait_for_timeout() Is Acceptable</h2>
+            <div class="info-box">
+                <h4>Rare Valid Use Cases:</h4>
+                <ul style="font-size: 0.95em;">
+                    <li>🎬 Animation needs to complete (no other way to detect)</li>
+                    <li>🐛 Debugging (temporary only!)</li>
+                    <li>⏱️ Testing time-based behavior</li>
+                </ul>
+            </div>
+            <div class="code-box" style="margin-top: 20px;">
+                <pre><code class="language-python"># Example: CSS animation must complete
+page.locator("#animate-btn").click()
+page.wait_for_timeout(500)  # Known animation duration
+
+# Debugging only - REMOVE BEFORE COMMIT
+page.wait_for_timeout(5000)  # TODO: Replace with proper wait
+
+# Testing time-based feature
+start_time = time.time()
+page.wait_for_timeout(2000)
+elapsed = time.time() - start_time
+assert elapsed >= 2</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Configuring Timeouts</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Global timeout for all actions (default: 30 seconds)
+page.set_default_timeout(60000)  # 60 seconds
+
+# Per-action timeout
+page.locator("#slow-btn").click(timeout=45000)
+
+# Navigation timeout
+page.goto("https://example.com", timeout=60000)
+
+# Assertion timeout
+expect(page.locator("#msg")).to_be_visible(timeout=10000)
+
+# Wait for selector with custom timeout
+page.wait_for_selector("#element", timeout=5000)</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 5: CUSTOM WAIT CONDITIONS -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Custom Wait Conditions</h2>
+            <p>Wait for anything</p>
+        </div>
+
+        <div class="slide">
+            <h2>wait_for_function() - Custom Conditions</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Wait for custom JavaScript condition
+page.wait_for_function("() => document.readyState === 'complete'")
+
+# Wait for element count
+page.wait_for_function(
+    "() => document.querySelectorAll('.item').length > 10"
+)
+
+# Wait for text content
+page.wait_for_function(
+    "selector => document.querySelector(selector).textContent.includes('Success')",
+    arg="#message"
+)
+
+# Wait for style change
+page.wait_for_function(
+    "el => getComputedStyle(el).opacity === '1'",
+    arg=page.locator("#element").element_handle()
+)</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Advanced Custom Waits</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Wait for URL to change
+page.wait_for_function(
+    "url => window.location.href.includes(url)",
+    arg="dashboard"
+)
+
+# Wait for local storage
+page.wait_for_function(
+    "key => localStorage.getItem(key) !== null",
+    arg="user_token"
+)
+
+# Wait for variable to be defined
+page.wait_for_function("() => typeof myApp !== 'undefined'")
+
+# Wait for AJAX to complete (jQuery)
+page.wait_for_function("() => jQuery.active === 0")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Combining Wait Strategies</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Complete example: Form submission
+def submit_form_and_wait(page):
+    # 1. Fill form
+    page.locator("#email").fill("user@example.com")
+    page.locator("#password").fill("password123")
+
+    # 2. Submit
+    page.locator("#submit").click()
+
+    # 3. Wait for loading to disappear
+    page.wait_for_selector(".loading", state="hidden")
+
+    # 4. Wait for success message
+    page.wait_for_selector(".success-message", state="visible")
+
+    # 5. Wait for network to settle
+    page.wait_for_load_state("networkidle")
+
+    # 6. Verify URL changed
+    expect(page).to_have_url("*/dashboard")</code></pre>
+            </div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Wait Strategy Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Trust auto-waiting for actions</li>
+                        <li>Use expect() for assertions</li>
+                        <li>Wait for specific conditions</li>
+                        <li>Use wait_for_selector() states</li>
+                        <li>Choose appropriate load states</li>
+                        <li>Set reasonable timeouts</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use wait_for_timeout() by default</li>
+                        <li>Add unnecessary waits</li>
+                        <li>Use tiny timeouts (< 1s)</li>
+                        <li>Ignore timeout errors</li>
+                        <li>Mix sync/async incorrectly</li>
+                        <li>Wait when auto-wait works</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Decision Tree: Which Wait to Use?</h2>
+            <div style="font-size: 0.85em; line-height: 1.8;">
+                <div class="info-box">
+                    <p><strong>Need to interact with element?</strong></p>
+                    <p>→ Use auto-waiting (just click/fill/check)</p>
+                </div>
+                <div class="info-box">
+                    <p><strong>Need to verify element state?</strong></p>
+                    <p>→ Use expect() assertions</p>
+                </div>
+                <div class="info-box">
+                    <p><strong>Waiting for element to appear/disappear?</strong></p>
+                    <p>→ Use wait_for_selector() with state</p>
+                </div>
+                <div class="info-box">
+                    <p><strong>Waiting for page to load?</strong></p>
+                    <p>→ Use wait_for_load_state()</p>
+                </div>
+                <div class="info-box">
+                    <p><strong>Need custom condition?</strong></p>
+                    <p>→ Use wait_for_function()</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Patterns -->
+        <div class="slide">
+            <h2>Common Wait Patterns</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Pattern 1: Wait for loading to finish
+page.wait_for_selector(".spinner", state="hidden")
+
+# Pattern 2: Wait for element before interaction
+page.wait_for_selector("#button", state="visible")
+page.locator("#button").click()
+
+# Pattern 3: Wait after navigation
+page.goto(url)
+page.wait_for_load_state("networkidle")
+
+# Pattern 4: Wait for dynamic content
+page.locator("#search").fill("playwright")
+page.wait_for_selector(".search-results", state="visible")
+
+# Pattern 5: Wait for element to disappear
+page.locator("#delete").click()
+page.wait_for_selector(".item", state="detached")</code></pre>
+            </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="slide">
+            <h2>Troubleshooting Wait Issues</h2>
+            <div style="font-size: 0.9em;">
+                <div class="warning-box">
+                    <h4>TimeoutError: Timeout 30000ms exceeded</h4>
+                    <p><strong>Solutions:</strong></p>
+                    <ul style="font-size: 0.9em;">
+                        <li>Check selector is correct</li>
+                        <li>Verify element actually appears</li>
+                        <li>Increase timeout if legitimately slow</li>
+                        <li>Use correct wait state</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="margin-top: 15px;">
+                    <h4>Element not visible/clickable</h4>
+                    <p><strong>Solutions:</strong></p>
+                    <ul style="font-size: 0.9em;">
+                        <li>Wait for element to be visible first</li>
+                        <li>Scroll element into view</li>
+                        <li>Wait for animations to complete</li>
+                        <li>Check for overlapping elements</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <ul style="font-size: 1.05em; line-height: 1.8;">
+                <li>✅ Playwright has smart auto-waiting for actions</li>
+                <li>✅ **expect()** assertions auto-wait and retry</li>
+                <li>✅ **wait_for_selector()** - Wait for element states</li>
+                <li>✅ **wait_for_load_state()** - Wait for page readiness</li>
+                <li>✅ **wait_for_function()** - Custom wait conditions</li>
+                <li>✅ Avoid **wait_for_timeout()** when possible</li>
+                <li>✅ Configure timeouts appropriately</li>
+            </ul>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Assertions & Expectations</li>
+                    <li>Screenshots & Videos</li>
+                    <li>Network Interception</li>
+                    <li>API Testing</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete exercises</li>
+                <li>Review examples</li>
+                <li>Test on dynamic websites</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered wait strategies!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Reliable tests start with proper waits</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

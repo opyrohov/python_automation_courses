@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 17: Form Handling</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 17</h1>
+            <div class="subtitle">Form Handling</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Fill input fields (fill vs type)</li>
+                <li>✓ Work with checkboxes and radio buttons</li>
+                <li>✓ Handle dropdown selections</li>
+                <li>✓ Upload files programmatically</li>
+                <li>✓ Submit forms and validate results</li>
+                <li>✓ Handle complex form scenarios</li>
+                <li>✓ Apply best practices for form testing</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Why Form Handling Matters -->
+        <div class="slide">
+            <h2>Why Form Handling is Critical</h2>
+            <div class="highlight-box">
+                <p>Forms are everywhere! Login, registration, checkout, search, settings - mastering form automation is essential.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Common Form Elements:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="info-box">
+                    <h4>Text Inputs</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Text fields</li>
+                        <li>Email, password</li>
+                        <li>Numbers, dates</li>
+                        <li>Textareas</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>Selection</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Checkboxes</li>
+                        <li>Radio buttons</li>
+                        <li>Dropdowns</li>
+                        <li>Multi-select</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>Actions</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Submit buttons</li>
+                        <li>Reset buttons</li>
+                        <li>Cancel/Close</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>Special</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>File uploads</li>
+                        <li>Color pickers</li>
+                        <li>Range sliders</li>
+                        <li>Date pickers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: TEXT INPUTS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Text Input Fields</h2>
+            <p>fill() vs type()</p>
+        </div>
+
+        <!-- Slide 4: fill() Method -->
+        <div class="slide">
+            <h2>fill() - Fast Text Input</h2>
+            <div class="highlight-box">
+                <p><strong>fill()</strong> sets the input value instantly - the recommended way for most scenarios.</p>
+            </div>
+
+            <div class="code-box" style="margin-top: 20px;">
+                <pre><code class="language-python"># Basic usage
+page.locator("#email").fill("user@example.com")
+page.locator("#password").fill("SecurePass123")
+
+# Clears existing value first
+page.locator("#search").fill("new search term")
+
+# Works with get_by_* locators
+page.get_by_label("Username").fill("john_doe")</code></pre>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>✅ Use fill() when:</strong> You want fast, reliable input (99% of cases)</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: type() Method -->
+        <div class="slide">
+            <h2>type() - Character-by-Character Input</h2>
+            <div class="highlight-box">
+                <p><strong>type()</strong> simulates typing each character one by one - use for special cases.</p>
+            </div>
+
+            <div class="code-box" style="margin-top: 20px;">
+                <pre><code class="language-python"># Types character by character
+page.locator("#search").type("Python automation")
+
+# With delay between keystrokes (in milliseconds)
+page.locator("#search").type("slow typing", delay=100)
+
+# Useful for testing autocomplete
+page.locator("#autocomplete").type("Pla")
+# Wait for suggestions to appear
+page.get_by_text("Playwright").click()</code></pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>⚠️ Use type() when:</strong> Testing autocomplete, keystroke events, or rate-limited inputs</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: fill() vs type() Comparison -->
+        <div class="slide">
+            <h2>fill() vs type() - When to Use Which?</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="success-box">
+                    <h4>✅ fill() - Recommended</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li><strong>Fast</strong> - Instant value set</li>
+                        <li><strong>Reliable</strong> - Works consistently</li>
+                        <li><strong>Clears first</strong> - Replaces existing value</li>
+                        <li><strong>Use for:</strong> Login forms, registration, data entry</li>
+                    </ul>
+                    <div class="code-box" style="margin-top: 10px;">
+                        <pre><code class="language-python">page.locator("#email")
+    .fill("user@example.com")</code></pre>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <h4>⚠️ type() - Special Cases</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li><strong>Slow</strong> - Types each character</li>
+                        <li><strong>Real simulation</strong> - Triggers keystroke events</li>
+                        <li><strong>Customizable</strong> - Can add delays</li>
+                        <li><strong>Use for:</strong> Autocomplete, character validation</li>
+                    </ul>
+                    <div class="code-box" style="margin-top: 10px;">
+                        <pre><code class="language-python">page.locator("#search")
+    .type("query", delay=50)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Input Field Best Practices -->
+        <div class="slide">
+            <h2>Text Input Best Practices</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># ✅ GOOD: Clear and fill
+page.locator("#email").fill("user@example.com")
+
+# ✅ GOOD: Use labels when available
+page.get_by_label("Email Address").fill("user@example.com")
+
+# ✅ GOOD: Use placeholders
+page.get_by_placeholder("Enter your email").fill("user@example.com")
+
+# ❌ BAD: Don't use complex selectors
+page.locator("div > div > input:nth-child(3)").fill("text")
+
+# ✅ GOOD: Verify the value was set
+page.locator("#email").fill("user@example.com")
+assert page.locator("#email").input_value() == "user@example.com"</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 2: CHECKBOXES & RADIO BUTTONS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Checkboxes & Radio Buttons</h2>
+            <p>check(), uncheck(), set_checked()</p>
+        </div>
+
+        <!-- Slide 8: Checkboxes -->
+        <div class="slide">
+            <h2>Working with Checkboxes</h2>
+            <p>Three methods for checkbox interaction</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Method 1: check() - Check a checkbox
+page.locator("#terms").check()
+page.get_by_label("I accept the terms").check()
+
+# Method 2: uncheck() - Uncheck a checkbox
+page.locator("#newsletter").uncheck()
+
+# Method 3: set_checked(boolean) - Set to specific state
+page.locator("#remember-me").set_checked(True)
+page.locator("#remember-me").set_checked(False)
+
+# Check current state
+is_checked = page.locator("#terms").is_checked()
+print(f"Terms accepted: {is_checked}")</code></pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Tip:</strong> check() and uncheck() are idempotent - safe to call even if already in that state!</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Radio Buttons -->
+        <div class="slide">
+            <h2>Working with Radio Buttons</h2>
+            <p>Select options from a radio group</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Select by value
+page.locator("input[name='payment'][value='credit-card']").check()
+
+# Select by label
+page.get_by_label("Credit Card").check()
+
+# Select by role
+page.get_by_role("radio", name="PayPal").check()
+
+# Verify selection
+selected = page.locator("input[name='payment']:checked").input_value()
+print(f"Selected payment method: {selected}")</code></pre>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>Best Practice:</strong> Use get_by_label() or get_by_role() for better accessibility!</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Checkbox & Radio Examples -->
+        <div class="slide">
+            <h2>Real-World Example</h2>
+            <h3>HTML:</h3>
+            <div class="code-box">
+                <pre><code>&lt;input type="checkbox" id="newsletter" /&gt;
+&lt;label for="newsletter"&gt;Subscribe to newsletter&lt;/label&gt;
+
+&lt;input type="radio" name="gender" value="male" id="male" /&gt;
+&lt;label for="male"&gt;Male&lt;/label&gt;
+&lt;input type="radio" name="gender" value="female" id="female" /&gt;
+&lt;label for="female"&gt;Female&lt;/label&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Checkbox
+page.get_by_label("Subscribe to newsletter").check()
+
+# Radio button
+page.get_by_label("Female").check()
+
+# Verify
+assert page.locator("#newsletter").is_checked()
+assert page.locator("#female").is_checked()</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 3: DROPDOWNS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Dropdown Selections</h2>
+            <p>select_option() for &lt;select&gt; elements</p>
+        </div>
+
+        <!-- Slide 11: select_option() Basics -->
+        <div class="slide">
+            <h2>select_option() - Dropdown Selection</h2>
+            <p>Multiple ways to select dropdown options</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Select by value
+page.locator("#country").select_option("us")
+
+# Select by label (visible text)
+page.locator("#country").select_option(label="United States")
+
+# Select by index (0-based)
+page.locator("#country").select_option(index=2)
+
+# Select multiple options (for multi-select)
+page.locator("#interests").select_option(["sports", "music", "travel"])</code></pre>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 20px;">
+                <p><strong>Recommended:</strong> Use label (visible text) for better readability and maintainability!</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Dropdown Examples -->
+        <div class="slide">
+            <h2>Dropdown Selection Examples</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Example 1: Single select
+page.locator("#country").select_option(label="Canada")
+
+# Example 2: Multiple select
+page.locator("#skills").select_option([
+    label="Python",
+    label="JavaScript",
+    label="Playwright"
+])
+
+# Example 3: Dynamic option
+# Get all options first
+options = page.locator("#country option").all_text_contents()
+# Select the second one
+page.locator("#country").select_option(index=1)
+
+# Example 4: Verify selection
+selected = page.locator("#country").input_value()
+assert selected == "ca", f"Expected 'ca', got '{selected}'"</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 13: Alternative to Dropdowns -->
+        <div class="slide">
+            <h2>Custom Dropdowns (Non-Select)</h2>
+            <p>Many modern sites use div-based dropdowns instead of &lt;select&gt;</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># For custom dropdowns built with divs/buttons
+# Step 1: Click to open dropdown
+page.locator(".dropdown-trigger").click()
+
+# Step 2: Click the desired option
+page.get_by_text("Option 2").click()
+
+# Or with roles
+page.get_by_role("button", name="Select Country").click()
+page.get_by_role("option", name="United States").click()</code></pre>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Note:</strong> select_option() only works with native &lt;select&gt; elements!</p>
+            </div>
+        </div>
+
+        <!-- PART 4: FILE UPLOADS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>File Uploads</h2>
+            <p>set_input_files() for file selection</p>
+        </div>
+
+        <!-- Slide 14: File Upload Basics -->
+        <div class="slide">
+            <h2>set_input_files() - Upload Files</h2>
+            <p>Programmatically select files for upload</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Upload single file
+page.locator("input[type='file']").set_input_files("document.pdf")
+
+# Upload multiple files
+page.locator("input[type='file']").set_input_files([
+    "file1.jpg",
+    "file2.png",
+    "file3.pdf"
+])
+
+# Upload with absolute path
+import os
+file_path = os.path.abspath("files/upload.pdf")
+page.locator("#file-upload").set_input_files(file_path)
+
+# Clear file selection
+page.locator("input[type='file']").set_input_files([])</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 15: File Upload with Waiting -->
+        <div class="slide">
+            <h2>File Upload Best Practices</h2>
+            <div class="code-box">
+                <pre><code class="language-python">from playwright.sync_api import sync_playwright
+import os
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+    page.goto("https://example.com/upload")
+
+    # Upload file
+    file_path = os.path.abspath("document.pdf")
+    page.locator("input[type='file']").set_input_files(file_path)
+
+    # Click upload button
+    page.get_by_role("button", name="Upload").click()
+
+    # Wait for success message
+    page.wait_for_selector(".upload-success")
+
+    # Verify
+    success_msg = page.locator(".upload-success").text_content()
+    assert "uploaded successfully" in success_msg.lower()
+
+    browser.close()</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 5: FORM SUBMISSION -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Form Submission & Validation</h2>
+            <p>Submit forms and verify results</p>
+        </div>
+
+        <!-- Slide 16: Submitting Forms -->
+        <div class="slide">
+            <h2>Form Submission Methods</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Method 1: Click submit button (recommended)
+page.get_by_role("button", name="Submit").click()
+
+# Method 2: Press Enter in input field
+page.locator("#email").fill("user@example.com")
+page.locator("#email").press("Enter")
+
+# Method 3: Call form.submit() (JavaScript)
+page.locator("form#login").evaluate("form => form.submit()")
+
+# Method 4: Use keyboard shortcut
+page.keyboard.press("Enter")</code></pre>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>Best Practice:</strong> Click the submit button - it's most realistic and tests button functionality!</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Form Validation -->
+        <div class="slide">
+            <h2>Validating Form Submission</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Fill form
+page.get_by_label("Email").fill("user@example.com")
+page.get_by_label("Password").fill("SecurePass123")
+
+# Submit
+page.get_by_role("button", name="Login").click()
+
+# Verify success (multiple ways)
+
+# 1. Check URL changed
+page.wait_for_url("**/dashboard")
+assert "/dashboard" in page.url
+
+# 2. Check for success element
+success_banner = page.locator(".success-message")
+assert success_banner.is_visible()
+
+# 3. Check text content
+welcome_msg = page.locator("h1").text_content()
+assert "Welcome" in welcome_msg
+
+# 4. Verify error is NOT present
+assert not page.locator(".error-message").is_visible()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 18: Complete Form Example -->
+        <div class="slide">
+            <h2>Complete Registration Form Example</h2>
+            <div class="code-box">
+                <pre><code class="language-python">from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+    page.goto("https://example.com/register")
+
+    # Text inputs
+    page.get_by_label("Full Name").fill("John Doe")
+    page.get_by_label("Email").fill("john@example.com")
+    page.get_by_label("Password").fill("SecurePass123")
+
+    # Checkbox
+    page.get_by_label("I accept the terms").check()
+
+    # Radio button
+    page.get_by_label("Male").check()
+
+    # Dropdown
+    page.locator("#country").select_option(label="United States")
+
+    # File upload
+    page.locator("input[type='file']").set_input_files("avatar.jpg")
+
+    # Submit
+    page.get_by_role("button", name="Register").click()
+
+    # Validate
+    page.wait_for_selector(".registration-success")
+    assert page.locator(".registration-success").is_visible()
+
+    browser.close()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 19: Error Handling -->
+        <div class="slide">
+            <h2>Testing Form Validation Errors</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Test 1: Submit empty form
+page.get_by_role("button", name="Submit").click()
+
+# Verify validation errors appear
+email_error = page.locator(".error-email")
+assert email_error.is_visible()
+assert "required" in email_error.text_content().lower()
+
+# Test 2: Invalid email format
+page.get_by_label("Email").fill("not-an-email")
+page.get_by_role("button", name="Submit").click()
+
+# Verify email validation error
+assert "invalid email" in page.locator(".error-email").text_content().lower()
+
+# Test 3: Password too short
+page.get_by_label("Password").fill("123")
+page.get_by_role("button", name="Submit").click()
+
+# Verify password error
+assert "at least 8 characters" in page.locator(".error-password").text_content().lower()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 20: Best Practices -->
+        <div class="slide">
+            <h2>Form Handling Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use fill() for speed</li>
+                        <li>Use get_by_label() when possible</li>
+                        <li>Verify form submission</li>
+                        <li>Test both success and error cases</li>
+                        <li>Wait for elements to be ready</li>
+                        <li>Clear forms between tests</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use type() unless necessary</li>
+                        <li>Rely on brittle selectors</li>
+                        <li>Skip validation checks</li>
+                        <li>Forget to wait for responses</li>
+                        <li>Test only happy path</li>
+                        <li>Hardcode file paths</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div class="highlight-box">
+                <h3>Key Takeaways:</h3>
+            </div>
+            <ul style="margin-top: 20px; font-size: 1.05em; line-height: 1.8;">
+                <li>✅ Use <strong>fill()</strong> for fast text input (most cases)</li>
+                <li>✅ Use <strong>type()</strong> only for autocomplete or special cases</li>
+                <li>✅ Use <strong>check()/uncheck()</strong> for checkboxes</li>
+                <li>✅ Use <strong>select_option()</strong> for dropdowns</li>
+                <li>✅ Use <strong>set_input_files()</strong> for file uploads</li>
+                <li>✅ Always <strong>validate</strong> form submission results</li>
+                <li>✅ Test both <strong>success and error</strong> scenarios</li>
+                <li>✅ Use modern locators (<strong>get_by_label</strong>, <strong>get_by_role</strong>)</li>
+            </ul>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Advanced Interactions (Hover, Drag & Drop)</li>
+                    <li>Waiting Strategies & Timeouts</li>
+                    <li>Assertions & Expectations</li>
+                    <li>Screenshots & Videos</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises in the <code>exercises/</code> folder</li>
+                <li>Review the examples in the <code>examples/</code> folder</li>
+                <li>Read the detailed README.md</li>
+                <li>Practice on real registration/login forms</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Great Work!</h1>
+            <div class="subtitle">You've mastered form handling!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Practice with different forms to build confidence</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

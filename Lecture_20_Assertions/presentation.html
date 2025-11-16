@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 20: Assertions in Playwright</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">55</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 20</h1>
+            <div class="subtitle">Assertions in Playwright</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Use expect() for powerful assertions</li>
+                <li>✓ Check element visibility states</li>
+                <li>✓ Verify text content accurately</li>
+                <li>✓ Assert element attributes</li>
+                <li>✓ Count elements on the page</li>
+                <li>✓ Validate URLs and page titles</li>
+                <li>✓ Combine multiple assertions</li>
+            </ul>
+        </div>
+
+        <!-- Why Assertions Matter -->
+        <div class="slide">
+            <h2>Why Assertions Matter</h2>
+            <div class="highlight-box">
+                <p>Assertions are the verification layer of your tests - they tell you if your application is working correctly.</p>
+            </div>
+            <h3 style="margin-top: 30px;">What Makes Playwright Assertions Special:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🔄 **Auto-waiting** - Retries until condition is met</li>
+                <li>⏱️ **Built-in timeout** - No manual waits needed</li>
+                <li>📝 **Readable syntax** - Clear and expressive</li>
+                <li>🎯 **Precise errors** - Helpful failure messages</li>
+                <li>✅ **Async support** - Works with async operations</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: INTRODUCTION TO EXPECT -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Introduction to expect()</h2>
+            <p>The foundation of assertions</p>
+        </div>
+
+        <div class="slide">
+            <h2>The expect() Function</h2>
+            <div class="code-box">
+                <pre><code class="language-python">from playwright.sync_api import expect
+
+# Basic structure
+expect(locator).assertion()
+
+# Examples
+expect(page.locator("#button")).to_be_visible()
+expect(page.locator("#title")).to_have_text("Welcome")
+expect(page).to_have_url("https://example.com/dashboard")</code></pre>
+            </div>
+            <div class="success-box" style="margin-top: 20px;">
+                <p>✅ expect() automatically waits and retries until condition is met or timeout!</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>How expect() Works</h2>
+            <div style="font-size: 0.95em;">
+                <div class="info-box">
+                    <h4>1. Initial Check</h4>
+                    <p>Evaluates the assertion immediately</p>
+                </div>
+                <div class="info-box">
+                    <h4>2. Auto-Retry</h4>
+                    <p>If false, waits and retries automatically</p>
+                </div>
+                <div class="info-box">
+                    <h4>3. Success or Timeout</h4>
+                    <p>Either passes when true or fails after timeout (default: 5 seconds)</p>
+                </div>
+            </div>
+            <div class="code-box" style="margin-top: 20px;">
+                <pre><code class="language-python"># This will retry for up to 5 seconds
+expect(page.locator("#message")).to_be_visible()
+
+# Custom timeout
+expect(page.locator("#slow-element")).to_be_visible(timeout=10000)</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Positive vs Negative Assertions</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>Positive Assertions</h4>
+                    <pre><code class="language-python"># Element should be visible
+expect(page.locator("#btn"))
+    .to_be_visible()
+
+# Should have text
+expect(page.locator("h1"))
+    .to_have_text("Title")
+
+# Should be enabled
+expect(page.locator("#input"))
+    .to_be_enabled()</code></pre>
+                </div>
+                <div class="info-box">
+                    <h4>Negative Assertions</h4>
+                    <pre><code class="language-python"># Element should NOT be visible
+expect(page.locator("#btn"))
+    .not_to_be_visible()
+
+# Should NOT have text
+expect(page.locator("h1"))
+    .not_to_have_text("Error")
+
+# Should be disabled
+expect(page.locator("#input"))
+    .to_be_disabled()</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2: VISIBILITY ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Visibility Assertions</h2>
+            <p>Check if elements are visible or hidden</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_be_visible() & to_be_hidden()</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check element is visible
+expect(page.locator("#welcome-message")).to_be_visible()
+
+# Check element is hidden
+expect(page.locator("#error-message")).to_be_hidden()
+
+# With custom timeout
+expect(page.locator("#loading")).to_be_hidden(timeout=10000)
+
+# Negative assertions
+expect(page.locator("#modal")).not_to_be_visible()
+expect(page.locator("#success")).not_to_be_hidden()</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>More Visibility Assertions</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check element is attached to DOM
+expect(page.locator("#element")).to_be_attached()
+
+# Check element is in viewport (visible in current scroll position)
+expect(page.locator("#footer")).to_be_in_viewport()
+
+# Check element is enabled
+expect(page.locator("#submit-btn")).to_be_enabled()
+
+# Check element is disabled
+expect(page.locator("#disabled-input")).to_be_disabled()
+
+# Check element is editable
+expect(page.locator("#text-field")).to_be_editable()
+
+# Check checkbox is checked
+expect(page.locator("#terms")).to_be_checked()</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 3: TEXT ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Text Assertions</h2>
+            <p>Verify element text content</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_text() - Exact Match</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Exact text match (including whitespace normalization)
+expect(page.locator("h1")).to_have_text("Welcome to Dashboard")
+
+# Multiple elements with text array
+expect(page.locator("li")).to_have_text([
+    "Item 1",
+    "Item 2",
+    "Item 3"
+])
+
+# Regex pattern
+import re
+expect(page.locator("#price")).to_have_text(re.compile(r"\$\d+\.\d{2}"))
+
+# Negative assertion
+expect(page.locator("#error")).not_to_have_text("Failed")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>to_contain_text() - Partial Match</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check if text contains substring
+expect(page.locator(".message")).to_contain_text("Success")
+
+# Case-sensitive by default
+expect(page.locator("p")).to_contain_text("Hello")
+
+# Using regex for flexible matching
+import re
+expect(page.locator(".status")).to_contain_text(re.compile(r"complete", re.IGNORECASE))
+
+# Negative assertion
+expect(page.locator(".notification")).not_to_contain_text("Error")</code></pre>
+            </div>
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Difference:</strong> to_have_text() requires exact match, to_contain_text() allows partial match</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_value() - Input Values</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check input field value
+expect(page.locator("#username")).to_have_value("john.doe")
+
+# Check textarea value
+expect(page.locator("#description")).to_have_value("Product description")
+
+# Regex pattern
+import re
+expect(page.locator("#email")).to_have_value(re.compile(r".*@example\.com"))
+
+# Empty value
+expect(page.locator("#optional-field")).to_have_value("")
+
+# Negative assertion
+expect(page.locator("#password")).not_to_have_value("")</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 4: ATTRIBUTE ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Attribute Assertions</h2>
+            <p>Verify element attributes</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_attribute() - Check Attributes</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check attribute exists and has specific value
+expect(page.locator("#link")).to_have_attribute("href", "/dashboard")
+
+# Check attribute exists (any value)
+expect(page.locator("#input")).to_have_attribute("required")
+
+# Check class attribute
+expect(page.locator("#button")).to_have_attribute("class", "btn btn-primary")
+
+# Using regex
+import re
+expect(page.locator("img")).to_have_attribute(
+    "src",
+    re.compile(r".*\.png$")
+)
+
+# Negative assertion
+expect(page.locator("#link")).not_to_have_attribute("target", "_blank")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_class() - Class Assertions</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check element has specific class
+expect(page.locator("#alert")).to_have_class("alert-success")
+
+# Check for class containing pattern
+expect(page.locator("#button")).to_have_class(re.compile(r"btn-.*"))
+
+# Check for multiple classes (array)
+expect(page.locator("#card")).to_have_class(["card", "shadow", "mb-3"])
+
+# Negative assertion
+expect(page.locator("#element")).not_to_have_class("hidden")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_id() & to_have_css()</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check element ID
+expect(page.locator("div").first).to_have_id("main-container")
+
+# Check CSS property
+expect(page.locator("#button")).to_have_css("background-color", "rgb(0, 123, 255)")
+
+# Check multiple CSS properties
+expect(page.locator("h1")).to_have_css("font-size", "32px")
+expect(page.locator("h1")).to_have_css("font-weight", "700")
+
+# Color can be in different formats
+expect(page.locator("#error")).to_have_css("color", "rgb(220, 53, 69)")</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 5: COUNT ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Count Assertions</h2>
+            <p>Verify number of elements</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_count() - Element Count</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Check exact count
+expect(page.locator(".product-card")).to_have_count(12)
+
+# Check no elements
+expect(page.locator(".error-message")).to_have_count(0)
+
+# Check at least one element
+expect(page.locator("li")).to_have_count(5)
+
+# With custom timeout (waiting for elements to appear)
+expect(page.locator(".search-result")).to_have_count(10, timeout=10000)
+
+# Negative assertion
+expect(page.locator(".alert")).not_to_have_count(0)  # At least one alert exists</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Practical Count Examples</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Shopping cart items
+expect(page.locator(".cart-item")).to_have_count(3)
+
+# Table rows (excluding header)
+expect(page.locator("tbody tr")).to_have_count(20)
+
+# Navigation menu items
+expect(page.locator("nav a")).to_have_count(5)
+
+# After filtering
+page.locator("#search").fill("laptop")
+page.locator("#filter-btn").click()
+expect(page.locator(".product")).to_have_count(15)
+
+# After deletion
+page.locator(".delete-btn").first.click()
+expect(page.locator(".item")).to_have_count(4)  # Was 5, now 4</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 6: URL AND TITLE ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>URL & Title Assertions</h2>
+            <p>Verify page properties</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_url() - URL Verification</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Exact URL match
+expect(page).to_have_url("https://example.com/dashboard")
+
+# URL pattern with wildcard
+expect(page).to_have_url("**/dashboard")
+
+# Regex pattern
+import re
+expect(page).to_have_url(re.compile(r".*\/user\/\d+"))
+
+# Check URL contains substring
+expect(page).to_have_url(re.compile(r".*dashboard.*"))
+
+# With custom timeout (waiting for navigation)
+expect(page).to_have_url("**/success", timeout=10000)
+
+# Negative assertion
+expect(page).not_to_have_url("**/error")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_title() - Page Title</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Exact title match
+expect(page).to_have_title("Dashboard - My App")
+
+# Regex pattern
+import re
+expect(page).to_have_title(re.compile(r"Dashboard.*"))
+
+# Check title contains text
+expect(page).to_have_title(re.compile(r".*Dashboard.*"))
+
+# With custom timeout
+expect(page).to_have_title("Login - My App", timeout=5000)
+
+# Negative assertion
+expect(page).not_to_have_title("Error Page")</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 7: COMBINING ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 7</h1>
+            <h2>Combining Assertions</h2>
+            <p>Multiple checks for robust tests</p>
+        </div>
+
+        <div class="slide">
+            <h2>Multiple Assertions Pattern</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Verify complete element state
+button = page.locator("#submit-btn")
+expect(button).to_be_visible()
+expect(button).to_be_enabled()
+expect(button).to_have_text("Submit")
+expect(button).to_have_class("btn-primary")
+
+# Verify form submission result
+page.locator("#submit").click()
+expect(page).to_have_url("**/success")
+expect(page.locator(".alert")).to_be_visible()
+expect(page.locator(".alert")).to_have_class("alert-success")
+expect(page.locator(".alert")).to_contain_text("Success")</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Assertion Helper Functions</h2>
+            <div class="code-box">
+                <pre><code class="language-python">def verify_login_success(page):
+    """Verify successful login"""
+    expect(page).to_have_url("**/dashboard")
+    expect(page).to_have_title(re.compile(r".*Dashboard.*"))
+    expect(page.locator(".user-name")).to_be_visible()
+    expect(page.locator(".logout-btn")).to_be_enabled()
+
+def verify_error_message(page, message):
+    """Verify error appears with specific message"""
+    error = page.locator(".error-message")
+    expect(error).to_be_visible()
+    expect(error).to_have_class("alert-danger")
+    expect(error).to_contain_text(message)
+
+# Usage
+verify_login_success(page)
+verify_error_message(page, "Invalid credentials")</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 8: ADVANCED ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 8</h1>
+            <h2>Advanced Assertions</h2>
+            <p>Special use cases</p>
+        </div>
+
+        <div class="slide">
+            <h2>Soft Assertions</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Regular assertions stop on first failure
+# Soft assertions collect all failures and report at end
+
+# NOT directly supported in Playwright Python
+# But can be implemented with try/except
+
+errors = []
+
+try:
+    expect(page.locator("#element1")).to_be_visible()
+except AssertionError as e:
+    errors.append(str(e))
+
+try:
+    expect(page.locator("#element2")).to_have_text("Expected")
+except AssertionError as e:
+    errors.append(str(e))
+
+if errors:
+    raise AssertionError(f"Multiple failures:\n" + "\n".join(errors))</code></pre>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Custom Timeout for Assertions</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Default timeout is 5 seconds
+expect(page.locator("#element")).to_be_visible()
+
+# Custom timeout for slow operations
+expect(page.locator("#slow-element")).to_be_visible(timeout=15000)
+
+# Very short timeout for elements that should appear immediately
+expect(page.locator("#cached-data")).to_be_visible(timeout=1000)
+
+# Different timeouts for different assertions
+expect(page).to_have_url("**/dashboard", timeout=10000)
+expect(page.locator(".welcome")).to_be_visible(timeout=5000)
+expect(page.locator(".data")).to_have_count(10, timeout=8000)</code></pre>
+            </div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Assertion Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use expect() for all assertions</li>
+                        <li>Be specific in assertions</li>
+                        <li>Use meaningful error messages</li>
+                        <li>Assert the right thing at right time</li>
+                        <li>Combine related assertions</li>
+                        <li>Use regex for flexible matching</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use Python assert for element checks</li>
+                        <li>Over-assert trivial things</li>
+                        <li>Assert implementation details</li>
+                        <li>Use very long timeouts</li>
+                        <li>Skip negative test assertions</li>
+                        <li>Ignore assertion failures</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Common Assertion Patterns</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Pattern 1: Verify action result
+page.locator("#submit").click()
+expect(page.locator(".success-message")).to_be_visible()
+
+# Pattern 2: Verify navigation
+page.locator("#dashboard-link").click()
+expect(page).to_have_url("**/dashboard")
+expect(page).to_have_title(re.compile(r".*Dashboard.*"))
+
+# Pattern 3: Verify element state change
+expect(page.locator("#button")).to_be_disabled()
+page.locator("#enable-checkbox").check()
+expect(page.locator("#button")).to_be_enabled()
+
+# Pattern 4: Verify list/collection
+expect(page.locator(".item")).to_have_count(5)
+expect(page.locator(".item").first).to_contain_text("Item 1")
+
+# Pattern 5: Verify form validation
+page.locator("#submit").click()
+expect(page.locator(".error")).to_be_visible()
+expect(page.locator(".error")).to_contain_text("Required field")</code></pre>
+            </div>
+        </div>
+
+        <!-- Complete Example -->
+        <div class="slide">
+            <h2>Complete Test Example</h2>
+            <div class="code-box">
+                <pre><code class="language-python">from playwright.sync_api import sync_playwright, expect
+import re
+
+def test_login_and_dashboard():
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+
+        # Navigate and verify login page
+        page.goto("https://example.com/login")
+        expect(page).to_have_title("Login")
+        expect(page.locator("#login-form")).to_be_visible()
+
+        # Fill and submit form
+        page.locator("#username").fill("testuser")
+        page.locator("#password").fill("password123")
+        page.locator("#submit").click()
+
+        # Verify successful login
+        expect(page).to_have_url(re.compile(r".*/dashboard"))
+        expect(page).to_have_title(re.compile(r".*Dashboard.*"))
+
+        # Verify dashboard elements
+        expect(page.locator(".welcome-message")).to_be_visible()
+        expect(page.locator(".welcome-message")).to_contain_text("Welcome")
+        expect(page.locator(".nav-item")).to_have_count(5)
+        expect(page.locator(".user-avatar")).to_be_visible()
+
+        browser.close()</code></pre>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary - All Assertion Types</h2>
+            <div style="font-size: 0.9em; line-height: 1.6;">
+                <p><strong>Visibility:</strong> to_be_visible(), to_be_hidden(), to_be_attached()</p>
+                <p><strong>State:</strong> to_be_enabled(), to_be_disabled(), to_be_checked(), to_be_editable()</p>
+                <p><strong>Text:</strong> to_have_text(), to_contain_text(), to_have_value()</p>
+                <p><strong>Attributes:</strong> to_have_attribute(), to_have_class(), to_have_id(), to_have_css()</p>
+                <p><strong>Count:</strong> to_have_count()</p>
+                <p><strong>Page:</strong> to_have_url(), to_have_title()</p>
+                <p><strong>Modifiers:</strong> not_to_be_visible(), not_to_have_text(), etc.</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Screenshots & Videos</li>
+                    <li>Network Interception</li>
+                    <li>API Testing</li>
+                    <li>Test Organization & Fixtures</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete exercises</li>
+                <li>Review examples</li>
+                <li>Write comprehensive assertions</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Playwright assertions!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Reliable assertions = Reliable tests</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

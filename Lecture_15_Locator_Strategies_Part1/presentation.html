@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 15: Locator Strategies (Part 1)</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">60</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 15</h1>
+            <div class="subtitle">Locator Strategies (Part 1)</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Master CSS selectors (id, class, attributes)</li>
+                <li>✓ Understand XPath basics and when to use them</li>
+                <li>✓ Use Playwright's modern text-based locators</li>
+                <li>✓ Leverage role-based and label-based locators</li>
+                <li>✓ Apply best practices for choosing locators</li>
+                <li>✓ Build resilient and maintainable test selectors</li>
+                <li>✓ Avoid common locator pitfalls</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Why Locators Matter -->
+        <div class="slide">
+            <h2>Why Locators Are Critical</h2>
+            <div class="highlight-box">
+                <p><strong>Locators</strong> are how you find elements on a web page. They're the foundation of all browser automation!</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">The Impact of Good vs Bad Locators:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="success-box">
+                    <h4>✅ Good Locators</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Tests run reliably</li>
+                        <li>Easy to maintain</li>
+                        <li>Clear and readable</li>
+                        <li>Resilient to changes</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ Bad Locators</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Flaky test failures</li>
+                        <li>Hard to debug</li>
+                        <li>Break with UI changes</li>
+                        <li>Difficult to understand</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Locator Strategy Overview -->
+        <div class="slide">
+            <h2>Locator Strategies Overview</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div class="info-box">
+                    <h3>CSS Selectors</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>ID selectors</li>
+                        <li>Class selectors</li>
+                        <li>Attribute selectors</li>
+                        <li>Combinators</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>XPath</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>Absolute paths</li>
+                        <li>Relative paths</li>
+                        <li>Text-based XPath</li>
+                        <li>Axes navigation</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Playwright Modern Locators</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>get_by_role</li>
+                        <li>get_by_text</li>
+                        <li>get_by_label</li>
+                        <li>get_by_placeholder</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Best Practices</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>Prefer user-facing attributes</li>
+                        <li>Avoid brittle selectors</li>
+                        <li>Use test IDs when needed</li>
+                        <li>Keep selectors simple</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: CSS SELECTORS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>CSS Selectors</h2>
+            <p>The most common way to locate elements</p>
+        </div>
+
+        <!-- Slide 5: CSS Selector Basics -->
+        <div class="slide">
+            <h2>CSS Selectors: The Basics</h2>
+            <div class="highlight-box">
+                <p><strong>CSS Selectors</strong> are the same selectors you use in CSS stylesheets. They're fast, readable, and widely supported.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Common CSS Selector Types:</h3>
+            <ul>
+                <li><strong>#id</strong> - Select by ID</li>
+                <li><strong>.class</strong> - Select by class name</li>
+                <li><strong>tag</strong> - Select by HTML tag</li>
+                <li><strong>[attribute]</strong> - Select by attribute</li>
+                <li><strong>parent > child</strong> - Direct child combinator</li>
+                <li><strong>ancestor descendant</strong> - Descendant combinator</li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: ID Selectors -->
+        <div class="slide">
+            <h2>ID Selectors - #id</h2>
+            <div class="success-box">
+                <p><strong>Best Practice:</strong> IDs should be unique on a page, making them the most reliable selector!</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">HTML Example:</h3>
+            <div class="code-box">
+                <pre><code>&lt;button id="submit-btn"&gt;Submit&lt;/button&gt;
+&lt;input id="username" type="text"&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Using CSS selector with ID
+page.locator("#submit-btn").click()
+page.locator("#username").fill("john_doe")
+
+# Alternatively, use get_by_test_id for test IDs
+page.get_by_test_id("submit-button").click()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 7: Class Selectors -->
+        <div class="slide">
+            <h2>Class Selectors - .class</h2>
+            <div class="warning-box">
+                <p><strong>Caution:</strong> Classes can appear multiple times on a page. Be specific!</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">HTML Example:</h3>
+            <div class="code-box">
+                <pre><code>&lt;button class="btn btn-primary"&gt;Login&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;Cancel&lt;/button&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Single class
+page.locator(".btn-primary").click()
+
+# Multiple classes (element must have both)
+page.locator(".btn.btn-primary").click()
+
+# Be specific to avoid ambiguity
+page.locator("button.btn-primary").click()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 8: Attribute Selectors -->
+        <div class="slide">
+            <h2>Attribute Selectors - [attribute]</h2>
+            <p>Select elements based on any attribute and its value.</p>
+
+            <h3 style="margin-top: 20px;">Syntax Variations:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Has attribute (any value)
+page.locator("[data-testid]")
+
+# Exact match
+page.locator("[type='submit']")
+
+# Contains value
+page.locator("[class*='btn']")
+
+# Starts with value
+page.locator("[href^='https']")
+
+# Ends with value
+page.locator("[src$='.png']")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 9: Attribute Selectors Example -->
+        <div class="slide">
+            <h2>Attribute Selectors: Real Example</h2>
+            <h3>HTML:</h3>
+            <div class="code-box">
+                <pre><code>&lt;button type="submit" data-action="login"&gt;Login&lt;/button&gt;
+&lt;input type="email" name="userEmail" placeholder="Email"&gt;
+&lt;a href="https://example.com/docs"&gt;Documentation&lt;/a&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Select by type
+page.locator("[type='submit']").click()
+
+# Select by data attribute
+page.locator("[data-action='login']").click()
+
+# Select by name
+page.locator("[name='userEmail']").fill("user@example.com")
+
+# Select links to specific domain
+page.locator("[href^='https://example.com']").click()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 10: Combining Selectors -->
+        <div class="slide">
+            <h2>Combining CSS Selectors</h2>
+            <p>Combine selectors for more precise targeting</p>
+
+            <h3 style="margin-top: 20px;">Common Combinations:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Tag + class
+page.locator("button.btn-primary")
+
+# Tag + ID
+page.locator("input#username")
+
+# Tag + attribute
+page.locator("button[type='submit']")
+
+# Multiple attributes
+page.locator("input[type='text'][name='search']")
+
+# Class + attribute
+page.locator(".form-control[placeholder='Email']")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 11: CSS Combinators -->
+        <div class="slide">
+            <h2>CSS Combinators</h2>
+            <p>Navigate relationships between elements</p>
+
+            <h3 style="margin-top: 20px;">Types of Combinators:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Descendant (space) - any level below
+page.locator("div.container button")
+
+# Direct child (>) - immediate children only
+page.locator("form > button")
+
+# Adjacent sibling (+) - immediately after
+page.locator("label + input")
+
+# General sibling (~) - any sibling after
+page.locator("h2 ~ p")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 12: Combinator Example -->
+        <div class="slide">
+            <h2>Combinator Example</h2>
+            <h3>HTML Structure:</h3>
+            <div class="code-box">
+                <pre><code>&lt;div class="login-form"&gt;
+  &lt;form&gt;
+    &lt;label&gt;Email&lt;/label&gt;
+    &lt;input type="email" name="email"&gt;
+    &lt;button type="submit"&gt;Login&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Button inside login form
+page.locator(".login-form button").click()
+
+# Direct child button of form
+page.locator("form > button").click()
+
+# Input that follows label
+page.locator("label + input").fill("test@example.com")</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 2: XPATH -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>XPath Basics</h2>
+            <p>Powerful but use sparingly</p>
+        </div>
+
+        <!-- Slide 13: XPath Introduction -->
+        <div class="slide">
+            <h2>What is XPath?</h2>
+            <div class="highlight-box">
+                <p><strong>XPath</strong> (XML Path Language) is a query language for selecting nodes in an XML/HTML document.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">When to Use XPath:</h3>
+            <ul>
+                <li>✅ When CSS selectors can't express the relationship</li>
+                <li>✅ Navigating up the DOM tree (to parent)</li>
+                <li>✅ Complex text matching</li>
+                <li>✅ Selecting by position</li>
+            </ul>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Note:</strong> XPath can be slower than CSS and harder to read. Use it when necessary, but prefer CSS and Playwright's modern locators when possible.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: XPath Syntax -->
+        <div class="slide">
+            <h2>XPath Syntax Basics</h2>
+            <h3>Absolute vs Relative Paths:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Absolute path (starts from root) - AVOID!
+page.locator("xpath=/html/body/div/form/button")
+
+# Relative path (starts with //) - PREFERRED
+page.locator("xpath=//button[@type='submit']")</code></pre>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Never use absolute paths!</strong> They break with any DOM change.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: XPath Common Patterns -->
+        <div class="slide">
+            <h2>Common XPath Patterns</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Select by tag
+page.locator("xpath=//button")
+
+# Select by attribute
+page.locator("xpath=//button[@type='submit']")
+
+# Select by ID
+page.locator("xpath=//*[@id='submit-btn']")
+
+# Select by class
+page.locator("xpath=//button[@class='btn-primary']")
+
+# Contains class (for multiple classes)
+page.locator("xpath=//button[contains(@class, 'btn-primary')]")
+
+# Select by text content
+page.locator("xpath=//button[text()='Login']")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 16: XPath Text Matching -->
+        <div class="slide">
+            <h2>XPath: Text Matching</h2>
+            <p>XPath excels at finding elements by their text content</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Exact text match
+page.locator("xpath=//button[text()='Login']")
+
+# Contains text
+page.locator("xpath=//div[contains(text(), 'Welcome')]")
+
+# Starts with text
+page.locator("xpath=//h1[starts-with(text(), 'Chapter')]")
+
+# Case-insensitive (using translate)
+page.locator("xpath=//button[contains(translate(text(), 'LOGIN', 'login'), 'login')]")</code></pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Tip:</strong> Playwright's <code>get_by_text()</code> is usually better than XPath for text matching!</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: XPath Axes -->
+        <div class="slide">
+            <h2>XPath Axes: Navigation</h2>
+            <p>Navigate relationships in the DOM tree</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Parent
+page.locator("xpath=//button[@id='submit']/parent::form")
+
+# Ancestor
+page.locator("xpath=//button[@id='submit']/ancestor::div")
+
+# Following sibling
+page.locator("xpath=//label[text()='Email']/following-sibling::input")
+
+# Preceding sibling
+page.locator("xpath=//input[@name='email']/preceding-sibling::label")
+
+# Child
+page.locator("xpath=//form/child::button")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 18: XPath Example -->
+        <div class="slide">
+            <h2>XPath: Real Example</h2>
+            <h3>HTML:</h3>
+            <div class="code-box">
+                <pre><code>&lt;div class="product-card"&gt;
+  &lt;h3&gt;Laptop&lt;/h3&gt;
+  &lt;p class="price"&gt;$999&lt;/p&gt;
+  &lt;button class="add-to-cart"&gt;Add to Cart&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Find button in the product card with specific title
+page.locator("xpath=//div[.//h3[text()='Laptop']]//button[@class='add-to-cart']").click()
+
+# Get price of product named Laptop
+price = page.locator("xpath=//div[.//h3[text()='Laptop']]//p[@class='price']").text_content()
+print(price)  # $999</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 3: PLAYWRIGHT MODERN LOCATORS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Playwright Modern Locators</h2>
+            <p>The recommended way to locate elements</p>
+        </div>
+
+        <!-- Slide 19: Why Modern Locators? -->
+        <div class="slide">
+            <h2>Why Use Playwright's Modern Locators?</h2>
+            <div class="success-box">
+                <p><strong>Modern locators</strong> are user-facing and accessible - they work the way users interact with your app!</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Benefits:</h3>
+            <ul>
+                <li>✅ More resilient to DOM changes</li>
+                <li>✅ Better accessibility testing</li>
+                <li>✅ Self-documenting code</li>
+                <li>✅ Auto-waiting and auto-retrying</li>
+                <li>✅ Better error messages</li>
+            </ul>
+
+            <div class="highlight-box" style="margin-top: 20px;">
+                <p><strong>Playwright Recommendation:</strong> Always prefer modern locators over CSS/XPath when possible!</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: get_by_role() -->
+        <div class="slide">
+            <h2>get_by_role() - The Best Locator</h2>
+            <div class="success-box">
+                <p><strong>Recommended:</strong> This is Playwright's #1 recommended locator strategy!</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">Common Roles:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Buttons
+page.get_by_role("button", name="Login").click()
+
+# Links
+page.get_by_role("link", name="Contact Us").click()
+
+# Textboxes
+page.get_by_role("textbox", name="Email").fill("test@example.com")
+
+# Checkboxes
+page.get_by_role("checkbox", name="Accept terms").check()
+
+# Headings
+expect(page.get_by_role("heading", name="Welcome")).to_be_visible()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 21: get_by_role() - More Roles -->
+        <div class="slide">
+            <h2>get_by_role() - Common ARIA Roles</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># Navigation
+page.get_by_role("navigation")
+
+# Main content
+page.get_by_role("main")
+
+# Radio buttons
+page.get_by_role("radio", name="Option A").click()
+
+# Combobox (dropdown)
+page.get_by_role("combobox").select_option("value")
+
+# List items
+page.get_by_role("listitem").filter(has_text="Item 1")
+
+# Tables
+page.get_by_role("table")
+page.get_by_role("row")
+page.get_by_role("cell")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 22: get_by_text() -->
+        <div class="slide">
+            <h2>get_by_text() - Find by Visible Text</h2>
+            <p>Locate elements by their text content</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Exact match (default)
+page.get_by_text("Login").click()
+
+# Substring match
+page.get_by_text("Welcome", exact=False).is_visible()
+
+# Case sensitive by default
+page.get_by_text("LOGIN")  # Won't match "Login"
+
+# Find in specific container
+page.locator(".sidebar").get_by_text("Settings").click()</code></pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Use Case:</strong> Great for clicking links, finding headings, or verifying text content!</p>
+            </div>
+        </div>
+
+        <!-- Slide 23: get_by_label() -->
+        <div class="slide">
+            <h2>get_by_label() - Find Form Inputs by Label</h2>
+            <p>Locate form inputs by their associated label text</p>
+
+            <h3>HTML Example:</h3>
+            <div class="code-box">
+                <pre><code>&lt;label for="email"&gt;Email Address&lt;/label&gt;
+&lt;input id="email" type="email"&gt;
+
+&lt;label&gt;
+  Password
+  &lt;input type="password"&gt;
+&lt;/label&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Works with both explicit and implicit labels
+page.get_by_label("Email Address").fill("user@example.com")
+page.get_by_label("Password").fill("secret123")
+
+# Partial match
+page.get_by_label("Email", exact=False).fill("user@example.com")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 24: get_by_placeholder() -->
+        <div class="slide">
+            <h2>get_by_placeholder() - Find by Placeholder</h2>
+            <p>Locate inputs by their placeholder text</p>
+
+            <h3>HTML Example:</h3>
+            <div class="code-box">
+                <pre><code>&lt;input type="text" placeholder="Search products..."&gt;
+&lt;input type="email" placeholder="Enter your email"&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Exact match
+page.get_by_placeholder("Search products...").fill("laptop")
+
+# Partial match
+page.get_by_placeholder("email", exact=False).fill("user@example.com")</code></pre>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Note:</strong> Prefer <code>get_by_label()</code> over placeholder when possible - it's more accessible!</p>
+            </div>
+        </div>
+
+        <!-- Slide 25: get_by_alt_text() -->
+        <div class="slide">
+            <h2>get_by_alt_text() - Find Images</h2>
+            <p>Locate images by their alt text</p>
+
+            <h3>HTML Example:</h3>
+            <div class="code-box">
+                <pre><code>&lt;img src="logo.png" alt="Company Logo"&gt;
+&lt;img src="profile.jpg" alt="User profile picture"&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Click on an image (if it's clickable)
+page.get_by_alt_text("Company Logo").click()
+
+# Verify image is visible
+expect(page.get_by_alt_text("User profile picture")).to_be_visible()
+
+# Partial match
+page.get_by_alt_text("profile", exact=False)</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 26: get_by_title() -->
+        <div class="slide">
+            <h2>get_by_title() - Find by Title Attribute</h2>
+            <p>Locate elements by their title attribute (tooltip text)</p>
+
+            <h3>HTML Example:</h3>
+            <div class="code-box">
+                <pre><code>&lt;button title="Close dialog"&gt;X&lt;/button&gt;
+&lt;a href="/help" title="Get help"&gt;?&lt;/a&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Click by title
+page.get_by_title("Close dialog").click()
+page.get_by_title("Get help").click()
+
+# Partial match
+page.get_by_title("help", exact=False).click()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 27: get_by_test_id() -->
+        <div class="slide">
+            <h2>get_by_test_id() - Test-Specific IDs</h2>
+            <div class="highlight-box">
+                <p><strong>Test IDs</strong> are attributes added specifically for testing. Use them when user-facing attributes aren't stable.</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">HTML Example:</h3>
+            <div class="code-box">
+                <pre><code>&lt;button data-testid="submit-button"&gt;Submit&lt;/button&gt;
+&lt;div data-testid="error-message"&gt;Invalid input&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Using data-testid (default attribute)
+page.get_by_test_id("submit-button").click()
+
+# Verify error message
+expect(page.get_by_test_id("error-message")).to_contain_text("Invalid")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 28: Chaining Locators -->
+        <div class="slide">
+            <h2>Chaining and Filtering Locators</h2>
+            <p>Combine locators for precise targeting</p>
+
+            <div class="code-box">
+                <pre><code class="language-python"># Chain modern locators
+page.get_by_role("navigation").get_by_role("link", name="Home").click()
+
+# Filter by text
+page.get_by_role("listitem").filter(has_text="Product A").click()
+
+# Filter by nested element
+page.get_by_role("listitem").filter(
+    has=page.get_by_role("button", name="Buy")
+).click()
+
+# Combine with CSS
+page.locator(".product-card").get_by_role("button", name="Add to Cart").click()</code></pre>
+            </div>
+        </div>
+
+        <!-- PART 4: BEST PRACTICES -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Best Practices</h2>
+            <p>How to choose the right locator</p>
+        </div>
+
+        <!-- Slide 29: Locator Priority -->
+        <div class="slide">
+            <h2>Locator Priority: What to Use First</h2>
+            <div class="highlight-box">
+                <p><strong>Playwright's Recommended Priority (Best to Worst):</strong></p>
+            </div>
+
+            <h3 style="margin-top: 20px;">Priority Order:</h3>
+            <ol style="font-size: 1.1em; line-height: 1.8;">
+                <li><strong>get_by_role()</strong> - ARIA roles & accessible names</li>
+                <li><strong>get_by_label()</strong> - Form fields with labels</li>
+                <li><strong>get_by_placeholder()</strong> - Form fields with placeholders</li>
+                <li><strong>get_by_text()</strong> - Text content</li>
+                <li><strong>get_by_test_id()</strong> - Test-specific data attributes</li>
+                <li><strong>CSS selectors</strong> - When above don't work</li>
+                <li><strong>XPath</strong> - Last resort for complex cases</li>
+            </ol>
+        </div>
+
+        <!-- Slide 30: Good vs Bad Locators -->
+        <div class="slide">
+            <h2>Good vs Bad Locators</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="warning-box">
+                    <h4>❌ BAD Locators</h4>
+                    <div class="code-box" style="margin-top: 10px;">
+                        <pre><code class="language-python"># Absolute XPath
+page.locator("xpath=/html/body/div[2]/form/button")
+
+# Generic classes
+page.locator(".btn.btn-1")
+
+# Position-based
+page.locator("button:nth-child(3)")
+
+# Implementation details
+page.locator("[ng-click='submit()']")</code></pre>
+                    </div>
+                </div>
+                <div class="success-box">
+                    <h4>✅ GOOD Locators</h4>
+                    <div class="code-box" style="margin-top: 10px;">
+                        <pre><code class="language-python"># Role-based
+page.get_by_role("button", name="Submit")
+
+# Label-based
+page.get_by_label("Email")
+
+# Test ID
+page.get_by_test_id("submit-form")
+
+# Semantic CSS
+page.locator("#login-form button[type='submit']")</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 31: Avoid Brittle Selectors -->
+        <div class="slide">
+            <h2>Avoid Brittle Selectors</h2>
+            <div class="warning-box">
+                <p><strong>Brittle selectors</strong> break easily when the UI changes!</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">What Makes a Selector Brittle?</h3>
+            <ul>
+                <li>❌ Position-dependent (nth-child, nth-of-type)</li>
+                <li>❌ Absolute paths</li>
+                <li>❌ Auto-generated class names (e.g., css-abc123)</li>
+                <li>❌ Too specific (long chains of classes)</li>
+                <li>❌ Implementation details (framework-specific attributes)</li>
+            </ul>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>Instead:</strong> Use semantic, user-facing attributes that survive refactoring!</p>
+            </div>
+        </div>
+
+        <!-- Slide 32: Keep Selectors Simple -->
+        <div class="slide">
+            <h2>Keep Selectors Simple</h2>
+            <div class="code-box">
+                <pre><code class="language-python"># ❌ TOO COMPLEX
+page.locator("div.container > div.row > div.col-md-6 > form > div:nth-child(2) > input")
+
+# ✅ BETTER - Use unique attribute
+page.locator("[name='email']")
+
+# ✅ BEST - Use label
+page.get_by_label("Email")</code></pre>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 20px;">
+                <p><strong>Rule of Thumb:</strong> If you can't explain your selector in one sentence, it's too complex!</p>
+            </div>
+        </div>
+
+        <!-- Slide 33: Use Test IDs When Needed -->
+        <div class="slide">
+            <h2>When to Add Test IDs</h2>
+            <p>Sometimes adding a test-specific attribute is the best option</p>
+
+            <h3 style="margin-top: 20px;">Add Test IDs When:</h3>
+            <ul>
+                <li>✅ No stable user-facing attributes exist</li>
+                <li>✅ Text content changes frequently (translations, A/B tests)</li>
+                <li>✅ Multiple similar elements need distinction</li>
+                <li>✅ Complex dynamic components</li>
+            </ul>
+
+            <h3>Example:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># HTML
+&lt;button data-testid="checkout-submit" class="btn-xyz123"&gt;
+  {{ translatedText }}
+&lt;/button&gt;
+
+# Playwright - stable across translations and redesigns
+page.get_by_test_id("checkout-submit").click()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 34: Debugging Locators -->
+        <div class="slide">
+            <h2>Debugging Locators</h2>
+            <p>Tools to help you find and test locators</p>
+
+            <h3 style="margin-top: 20px;">Debugging Techniques:</h3>
+            <div class="code-box">
+                <pre><code class="language-python"># Count matching elements
+count = page.locator(".btn").count()
+print(f"Found {count} buttons")
+
+# Get all text contents
+buttons = page.locator("button").all_text_contents()
+print(buttons)
+
+# Highlight element
+page.locator("#submit").highlight()
+
+# Take screenshot with bounding box
+page.locator("#submit").screenshot(path="button.png")</code></pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Tip:</strong> Use Playwright Inspector (<code>PWDEBUG=1</code>) to test locators interactively!</p>
+            </div>
+        </div>
+
+        <!-- Slide 35: Browser DevTools -->
+        <div class="slide">
+            <h2>Using Browser DevTools</h2>
+            <p>Test selectors in the browser console</p>
+
+            <h3 style="margin-top: 20px;">In Browser Console:</h3>
+            <div class="code-box">
+                <pre><code class="language-javascript">// Test CSS selector
+document.querySelector("#submit-btn")
+document.querySelectorAll(".btn")
+
+// Test XPath (more verbose)
+$x("//button[@type='submit']")
+$x("//button[text()='Login']")
+
+// Count matches
+document.querySelectorAll(".btn").length
+$x("//button").length</code></pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Shortcut:</strong> Right-click element → Inspect → Copy Selector/XPath (but don't blindly use it!)</p>
+            </div>
+        </div>
+
+        <!-- Slide 36: Common Pitfalls -->
+        <div class="slide">
+            <h2>Common Locator Pitfalls</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px;">
+                <div class="warning-box">
+                    <h4>❌ Pitfall #1: Relying on Order</h4>
+                    <code>page.locator("button").nth(2)</code> breaks if buttons are reordered
+                </div>
+                <div class="warning-box">
+                    <h4>❌ Pitfall #2: Generated Class Names</h4>
+                    <code>page.locator(".css-1dbjc4n-x9f619")</code> changes on every build
+                </div>
+                <div class="warning-box">
+                    <h4>❌ Pitfall #3: Overly Specific</h4>
+                    <code>page.locator("div > div > div > button.btn")</code> too fragile
+                </div>
+                <div class="warning-box">
+                    <h4>❌ Pitfall #4: Ignoring Accessibility</h4>
+                    Missing the chance to improve both tests AND user experience
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 37: Real-World Example -->
+        <div class="slide">
+            <h2>Real-World Example: Login Form</h2>
+            <h3>HTML:</h3>
+            <div class="code-box">
+                <pre><code>&lt;form id="login-form"&gt;
+  &lt;label for="email"&gt;Email Address&lt;/label&gt;
+  &lt;input id="email" type="email" placeholder="you@example.com"&gt;
+
+  &lt;label for="password"&gt;Password&lt;/label&gt;
+  &lt;input id="password" type="password"&gt;
+
+  &lt;button type="submit"&gt;Sign In&lt;/button&gt;
+  &lt;a href="/forgot"&gt;Forgot Password?&lt;/a&gt;
+&lt;/form&gt;</code></pre>
+            </div>
+
+            <h3>Best Approach:</h3>
+            <div class="code-box">
+                <pre><code class="language-python">page.get_by_label("Email Address").fill("user@example.com")
+page.get_by_label("Password").fill("secret123")
+page.get_by_role("button", name="Sign In").click()
+page.get_by_role("link", name="Forgot Password?").click()</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 38: Quick Reference -->
+        <div class="slide">
+            <h2>Quick Reference Cheat Sheet</h2>
+            <div style="font-size: 0.85em;">
+                <div class="code-box">
+                    <pre><code class="language-python"># Modern Locators (Preferred)
+page.get_by_role("button", name="Submit")
+page.get_by_label("Email")
+page.get_by_placeholder("Search...")
+page.get_by_text("Welcome")
+page.get_by_test_id("submit-btn")
+
+# CSS Selectors
+page.locator("#id")           # ID
+page.locator(".class")        # Class
+page.locator("[attr='value']") # Attribute
+page.locator("tag.class")    # Combination
+
+# XPath (use sparingly)
+page.locator("xpath=//button[@type='submit']")
+page.locator("xpath=//button[text()='Login']")
+
+# Chaining
+page.locator(".container").get_by_role("button").click()</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 39: Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div class="highlight-box">
+                <h3>Key Takeaways:</h3>
+            </div>
+            <ul style="margin-top: 20px; font-size: 1.1em; line-height: 1.8;">
+                <li>✅ Prefer Playwright's modern locators (<code>get_by_role</code>, <code>get_by_label</code>)</li>
+                <li>✅ Use CSS selectors for stable attributes (ID, name)</li>
+                <li>✅ Use XPath only when necessary (parent navigation, complex text)</li>
+                <li>✅ Avoid brittle selectors (position, generated classes)</li>
+                <li>✅ Keep selectors simple and readable</li>
+                <li>✅ Add test IDs when user-facing attributes aren't stable</li>
+                <li>✅ Test your selectors in browser DevTools</li>
+            </ul>
+        </div>
+
+        <!-- Slide 40: What's Next? -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up in Future Lectures:</h3>
+                <ul>
+                    <li>Locator Strategies Part 2 (Advanced Filtering & Chaining)</li>
+                    <li>Advanced Interactions (Hover, Drag & Drop)</li>
+                    <li>Waiting Strategies & Timeouts</li>
+                    <li>Assertions & Expectations</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises in the <code>exercises/</code> folder</li>
+                <li>Review the examples in the <code>examples/</code> folder</li>
+                <li>Read the detailed README.md</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Great Job!</h1>
+            <div class="subtitle">You now understand locator strategies!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Practice with the exercises to master these concepts</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <!-- Global presentation JavaScript shared across all lectures -->
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
