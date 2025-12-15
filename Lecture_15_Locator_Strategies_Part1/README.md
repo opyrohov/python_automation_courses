@@ -2,6 +2,10 @@
 
 Welcome to Lecture 15! In this lecture, we'll dive deep into locator strategies - one of the most critical skills for browser automation. Choosing the right locators makes your tests reliable, maintainable, and resilient to changes.
 
+## Video Recording
+
+Watch the lecture recording: [Loom Video](https://www.loom.com/share/80fd24bc06804178aec928bb54f9c03f)
+
 ## Table of Contents
 1. [Introduction to Locators](#introduction-to-locators)
 2. [CSS Selectors](#css-selectors)

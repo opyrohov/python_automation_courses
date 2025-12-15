@@ -2,6 +2,10 @@
 
 Welcome to Lecture 16! Building on Part 1's fundamentals, we'll now explore advanced locator techniques that will make your tests more precise, powerful, and maintainable.
 
+## Video Recording
+
+Watch the lecture recording: [Loom Video](https://www.loom.com/share/3f747309314142629b19a29982e190ba)
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Chaining Locators](#chaining-locators)
