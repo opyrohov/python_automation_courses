@@ -10,7 +10,7 @@
 <body>
     <div class="presentation">
         <div class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+            <span id="currentSlide">1</span> / <span id="totalSlides">40</span>
         </div>
 
         <!-- Slide 1: Title -->
@@ -574,6 +574,104 @@ assert is_sorted, <span class="string">"Products not sorted by price"</span>
 <span class="function">print</span>(<span class="string">"✓ Products correctly sorted"</span>)</div>
         </div>
 
+        <!-- Fast Text Extraction -->
+        <div class="slide">
+            <h2>all_text_contents() & all_inner_texts()</h2>
+            <div class="code-block">
+<span class="comment"># all_text_contents() - returns list of all texts</span>
+texts = page.<span class="function">locator</span>(<span class="string">".product-name"</span>).<span class="function">all_text_contents</span>()
+<span class="function">print</span>(texts)  <span class="comment"># ['Laptop', 'Phone', 'Tablet', ...]</span>
+
+<span class="comment"># all_inner_texts() - returns only visible text</span>
+visible_texts = page.<span class="function">locator</span>(<span class="string">".product-name"</span>).<span class="function">all_inner_texts</span>()
+
+<span class="comment"># Performance comparison</span>
+<span class="comment"># SLOW - creates list of locators, then iterates</span>
+names = [el.<span class="function">text_content</span>() <span class="keyword">for</span> el <span class="keyword">in</span> page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all</span>()]
+
+<span class="comment"># FAST - single call to browser</span>
+names = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all_text_contents</span>()
+
+<span class="comment"># Check if text exists in list</span>
+all_names = page.<span class="function">locator</span>(<span class="string">".user-name"</span>).<span class="function">all_text_contents</span>()
+assert <span class="string">"John"</span> <span class="keyword">in</span> all_names, <span class="string">"John not found"</span></div>
+        </div>
+
+        <!-- Negative Filtering -->
+        <div class="slide">
+            <h2>Negative Filtering: has_not & has_not_text</h2>
+            <div class="code-block">
+<span class="comment"># has_not - elements WITHOUT specific child</span>
+<span class="comment"># Find cards without "Delete" button</span>
+editable_cards = page.<span class="function">locator</span>(<span class="string">".card"</span>).<span class="function">filter</span>(
+    has_not=page.<span class="function">locator</span>(<span class="string">".delete-btn"</span>)
+)
+
+<span class="comment"># Find products without "Sold Out" badge</span>
+available = page.<span class="function">locator</span>(<span class="string">".product"</span>).<span class="function">filter</span>(
+    has_not=page.<span class="function">locator</span>(<span class="string">".sold-out-badge"</span>)
+)
+
+<span class="comment"># has_not_text - elements WITHOUT specific text</span>
+active_items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">filter</span>(has_not_text=<span class="string">"Archived"</span>)
+
+<span class="comment"># Combine positive and negative filters</span>
+special = (page.<span class="function">locator</span>(<span class="string">".product"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Premium"</span>)
+    .<span class="function">filter</span>(has_not_text=<span class="string">"Discontinued"</span>))</div>
+        </div>
+
+        <!-- Pagination Handling -->
+        <div class="slide">
+            <h2>Working with Pagination</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Pattern 1: "Load More" button</span>
+all_items = []
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    current = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">all_text_contents</span>()
+    all_items.<span class="function">extend</span>(current)
+
+    load_more = page.<span class="function">locator</span>(<span class="string">"#load-more"</span>)
+    <span class="keyword">if</span> load_more.<span class="function">is_visible</span>():
+        load_more.<span class="function">click</span>()
+        page.<span class="function">wait_for_timeout</span>(<span class="number">1000</span>)
+    <span class="keyword">else</span>:
+        <span class="keyword">break</span>
+
+<span class="comment"># Pattern 2: Numeric pagination</span>
+total_pages = <span class="function">int</span>(page.<span class="function">locator</span>(<span class="string">".total-pages"</span>).<span class="function">text_content</span>())
+<span class="keyword">for</span> page_num <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, total_pages + <span class="number">1</span>):
+    page.<span class="function">locator</span>(f<span class="string">"[data-page='{page_num}']"</span>).<span class="function">click</span>()
+    page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
+    <span class="comment"># Process items...</span></div>
+        </div>
+
+        <!-- Table Helper Function -->
+        <div class="slide">
+            <h2>Reusable Table Helper Function</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">def</span> <span class="function">extract_table</span>(page, selector=<span class="string">"table"</span>):
+    <span class="string">"""Extract table as list of dictionaries."""</span>
+    <span class="comment"># Get headers</span>
+    headers = page.<span class="function">locator</span>(f<span class="string">"{selector} th"</span>).<span class="function">all_text_contents</span>()
+
+    <span class="comment"># Get all rows</span>
+    rows = page.<span class="function">locator</span>(f<span class="string">"{selector} tbody tr"</span>).<span class="function">all</span>()
+
+    <span class="comment"># Build data</span>
+    data = []
+    <span class="keyword">for</span> row <span class="keyword">in</span> rows:
+        cells = row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">all_text_contents</span>()
+        row_dict = {headers[i]: cells[i].<span class="function">strip</span>()
+                    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">min</span>(<span class="function">len</span>(headers), <span class="function">len</span>(cells)))}
+        data.<span class="function">append</span>(row_dict)
+    <span class="keyword">return</span> data
+
+<span class="comment"># Usage</span>
+table_data = <span class="function">extract_table</span>(page, <span class="string">"#users-table"</span>)
+active = [r <span class="keyword">for</span> r <span class="keyword">in</span> table_data <span class="keyword">if</span> r[<span class="string">'Status'</span>] == <span class="string">'Active'</span>]</div>
+        </div>
+
         <!-- Best Practices -->
         <div class="slide">
             <h2>Best Practices</h2>
@@ -638,14 +736,15 @@ items = page.<span class="function">locator</span>(<span class="string">".item"<
         <!-- Summary -->
         <div class="slide">
             <h2>Summary</h2>
-            <ul style="font-size: 1.05em; line-height: 1.8;">
-                <li>✅ **all()** - Get list of all matching elements</li>
-                <li>✅ **count()** - Get number of elements (more efficient)</li>
-                <li>✅ **nth(i)** - Get element at specific index</li>
-                <li>✅ **first/last** - Get first/last element</li>
-                <li>✅ **filter()** - Filter elements by criteria</li>
-                <li>✅ Tables - Extract data from rows and cells</li>
-                <li>✅ Dynamic content - Handle changing lists</li>
+            <ul style="font-size: 0.95em; line-height: 1.7;">
+                <li>✅ <strong>all()</strong> - Get list of all matching elements</li>
+                <li>✅ <strong>count()</strong> - Get number of elements (more efficient)</li>
+                <li>✅ <strong>nth(i) / first / last</strong> - Access by position</li>
+                <li>✅ <strong>filter()</strong> - Filter by text or child elements</li>
+                <li>✅ <strong>has_not / has_not_text</strong> - Negative filtering</li>
+                <li>✅ <strong>all_text_contents()</strong> - Fast text extraction</li>
+                <li>✅ <strong>Tables</strong> - Extract data from rows and cells</li>
+                <li>✅ <strong>Dynamic content</strong> - Handle changing lists</li>
             </ul>
         </div>
 
