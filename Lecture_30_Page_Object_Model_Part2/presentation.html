@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 30: Page Object Model (Part 2)</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">26</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 30</h1>
+            <div class="subtitle">Page Object Model (Part 2)</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Create BasePage class for shared functionality</li>
+                <li>✓ Use inheritance with page objects</li>
+                <li>✓ Implement page transitions</li>
+                <li>✓ Organize project structure</li>
+                <li>✓ Apply best practices</li>
+            </ul>
+        </div>
+
+        <!-- Recap -->
+        <div class="slide">
+            <h2>Recap: Part 1</h2>
+            <div class="info-box">
+                <p>In Part 1 we learned:</p>
+            </div>
+            <ul style="font-size: 1.1em; margin-top: 20px;">
+                <li>What is Page Object Model</li>
+                <li>Creating page object classes</li>
+                <li>Locators in <code>__init__</code></li>
+                <li>Action methods</li>
+                <li>Method chaining (<code>return self</code>)</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: BASEPAGE -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>BasePage Class</h2>
+            <p>Shared functionality for all pages</p>
+        </div>
+
+        <!-- Why BasePage -->
+        <div class="slide">
+            <h2>Why BasePage?</h2>
+            <div class="highlight-box">
+                <p>Without BasePage, you duplicate code in every page object!</p>
+            </div>
+            <div class="code-block">
+<span class="comment"># Without BasePage - REPETITION!</span>
+<span class="keyword">class</span> <span class="class-name">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">get_title</span>(<span class="variable">self</span>):
+        <span class="keyword">return</span> <span class="variable">self</span>.page.<span class="function">title</span>()
+
+<span class="keyword">class</span> <span class="class-name">HomePage</span>:
+    <span class="keyword">def</span> <span class="function">get_title</span>(<span class="variable">self</span>):  <span class="comment"># Same code!</span>
+        <span class="keyword">return</span> <span class="variable">self</span>.page.<span class="function">title</span>()</div>
+        </div>
+
+        <!-- BasePage Structure -->
+        <div class="slide">
+            <h2>BasePage Structure</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="class-name">BasePage</span>:
+    <span class="string">"""Base class for all page objects."""</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="variable">self</span>, page):
+        <span class="variable">self</span>.page = page
+
+    <span class="keyword">def</span> <span class="function">get_url</span>(<span class="variable">self</span>):
+        <span class="keyword">return</span> <span class="variable">self</span>.page.url
+
+    <span class="keyword">def</span> <span class="function">get_title</span>(<span class="variable">self</span>):
+        <span class="keyword">return</span> <span class="variable">self</span>.page.<span class="function">title</span>()
+
+    <span class="keyword">def</span> <span class="function">wait_for_load</span>(<span class="variable">self</span>):
+        <span class="variable">self</span>.page.<span class="function">wait_for_load_state</span>(<span class="string">"networkidle"</span>)
+        <span class="keyword">return</span> <span class="variable">self</span></div>
+        </div>
+
+        <!-- PART 2: INHERITANCE -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Inheritance</h2>
+            <p>Extending BasePage</p>
+        </div>
+
+        <!-- Inheritance Syntax -->
+        <div class="slide">
+            <h2>Inheriting from BasePage</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="class-name">LoginPage</span>(<span class="class-name">BasePage</span>):
+    <span class="string">"""Login page inherits from BasePage."""</span>
+
+    URL = <span class="string">"https://example.com/login"</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="variable">self</span>, page):
+        <span class="comment"># Call parent __init__ first!</span>
+        <span class="builtin">super</span>().<span class="function">__init__</span>(page)
+
+        <span class="comment"># Page-specific locators</span>
+        <span class="variable">self</span>.username = page.<span class="function">locator</span>(<span class="string">"#username"</span>)
+        <span class="variable">self</span>.password = page.<span class="function">locator</span>(<span class="string">"#password"</span>)</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ Always call <code>super().__init__(page)</code>!</p>
+            </div>
+        </div>
+
+        <!-- super() Explained -->
+        <div class="slide">
+            <h2>What Does super() Do?</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="class-name">BasePage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="variable">self</span>, page):
+        <span class="variable">self</span>.page = page  <span class="comment"># Stores page</span>
+
+<span class="keyword">class</span> <span class="class-name">LoginPage</span>(<span class="class-name">BasePage</span>):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="variable">self</span>, page):
+        <span class="builtin">super</span>().<span class="function">__init__</span>(page)  <span class="comment"># Calls BasePage.__init__</span>
+        <span class="comment"># Now self.page exists!</span>
+        <span class="variable">self</span>.username = page.<span class="function">locator</span>(<span class="string">"#user"</span>)</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ <code>super().__init__(page)</code> = call parent's __init__</p>
+            </div>
+        </div>
+
+        <!-- Using Inherited Methods -->
+        <div class="slide">
+            <h2>Using Inherited Methods</h2>
+            <div class="code-block">
+<span class="comment"># LoginPage inherits from BasePage</span>
+login = <span class="class-name">LoginPage</span>(page)
+login.<span class="function">navigate</span>()
+
+<span class="comment"># Methods from BasePage</span>
+title = login.<span class="function">get_title</span>()      <span class="comment"># From BasePage</span>
+url = login.<span class="function">get_url</span>()          <span class="comment"># From BasePage</span>
+login.<span class="function">wait_for_load</span>()          <span class="comment"># From BasePage</span>
+
+<span class="comment"># Methods from LoginPage</span>
+login.<span class="function">enter_username</span>(<span class="string">"user"</span>)   <span class="comment"># Own method</span>
+login.<span class="function">click_login</span>()            <span class="comment"># Own method</span></div>
+        </div>
+
+        <!-- PART 3: PAGE TRANSITIONS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Page Transitions</h2>
+            <p>Returning different page objects</p>
+        </div>
+
+        <!-- Transitions Concept -->
+        <div class="slide">
+            <h2>Page Transitions Concept</h2>
+            <div class="highlight-box">
+                <p style="font-size: 1.2em;">
+                    <code>LoginPage</code>
+                    <span style="color: #4CAF50;"> → login() → </span>
+                    <code>SecurePage</code>
+                    <span style="color: #f44336;"> → logout() → </span>
+                    <code>LoginPage</code>
+                </p>
+            </div>
+            <div class="info-box" style="margin-top: 30px;">
+                <p><strong>Key Idea:</strong> Methods can return a <em>different</em> page object!</p>
+            </div>
+        </div>
+
+        <!-- Transition Implementation -->
+        <div class="slide">
+            <h2>Implementing Transitions</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="class-name">LoginPage</span>(<span class="class-name">BasePage</span>):
+
+    <span class="keyword">def</span> <span class="function">login</span>(<span class="variable">self</span>, username, password):
+        <span class="variable">self</span>.username_input.<span class="function">fill</span>(username)
+        <span class="variable">self</span>.password_input.<span class="function">fill</span>(password)
+        <span class="variable">self</span>.login_button.<span class="function">click</span>()
+
+        <span class="comment"># Check result and return appropriate page</span>
+        <span class="keyword">if</span> <span class="string">"/secure"</span> <span class="keyword">in</span> <span class="variable">self</span>.page.url:
+            <span class="keyword">return</span> <span class="class-name">SecurePage</span>(<span class="variable">self</span>.page)  <span class="comment"># New page!</span>
+        <span class="keyword">return</span> <span class="variable">self</span>  <span class="comment"># Stay here (error)</span></div>
+        </div>
+
+        <!-- SecurePage Transition -->
+        <div class="slide">
+            <h2>Logout Transition</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="class-name">SecurePage</span>(<span class="class-name">BasePage</span>):
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="variable">self</span>, page):
+        <span class="builtin">super</span>().<span class="function">__init__</span>(page)
+        <span class="variable">self</span>.logout_button = page.<span class="function">locator</span>(<span class="string">"a[href='/logout']"</span>)
+
+    <span class="keyword">def</span> <span class="function">is_logged_in</span>(<span class="variable">self</span>):
+        <span class="keyword">return</span> <span class="variable">self</span>.logout_button.<span class="function">is_visible</span>()
+
+    <span class="keyword">def</span> <span class="function">logout</span>(<span class="variable">self</span>):
+        <span class="variable">self</span>.logout_button.<span class="function">click</span>()
+        <span class="keyword">return</span> <span class="class-name">LoginPage</span>(<span class="variable">self</span>.page)  <span class="comment"># Back to login</span></div>
+        </div>
+
+        <!-- Using Transitions -->
+        <div class="slide">
+            <h2>Using Transitions</h2>
+            <div class="code-block">
+<span class="comment"># Start on LoginPage</span>
+login_page = <span class="class-name">LoginPage</span>(page)
+login_page.<span class="function">navigate</span>()
+
+<span class="comment"># login() returns SecurePage</span>
+secure_page = login_page.<span class="function">login</span>(<span class="string">"tomsmith"</span>, <span class="string">"SuperSecretPassword!"</span>)
+
+<span class="comment"># Now we have SecurePage object!</span>
+<span class="builtin">print</span>(secure_page.<span class="function">is_logged_in</span>())  <span class="comment"># True</span>
+
+<span class="comment"># logout() returns LoginPage</span>
+login_page = secure_page.<span class="function">logout</span>()</div>
+        </div>
+
+        <!-- Type Checking -->
+        <div class="slide">
+            <h2>Type Checking in Tests</h2>
+            <div class="code-block">
+<span class="comment"># Successful login - returns SecurePage</span>
+result = login_page.<span class="function">login</span>(<span class="string">"tomsmith"</span>, <span class="string">"SuperSecretPassword!"</span>)
+<span class="keyword">assert</span> <span class="builtin">isinstance</span>(result, <span class="class-name">SecurePage</span>)
+
+<span class="comment"># Failed login - returns LoginPage (stays)</span>
+result = login_page.<span class="function">login</span>(<span class="string">"wrong"</span>, <span class="string">"wrong"</span>)
+<span class="keyword">assert</span> <span class="builtin">isinstance</span>(result, <span class="class-name">LoginPage</span>)
+<span class="keyword">assert</span> result.<span class="function">has_error</span>()</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ <code>isinstance(obj, ClassName)</code> checks object type</p>
+            </div>
+        </div>
+
+        <!-- PART 4: PROJECT STRUCTURE -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Project Structure</h2>
+            <p>Organizing your POM project</p>
+        </div>
+
+        <!-- Folder Structure -->
+        <div class="slide">
+            <h2>Recommended Structure</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+project/
+├── pages/                  <span class="comment"># All page objects</span>
+│   ├── __init__.py        <span class="comment"># Export pages</span>
+│   ├── base_page.py       <span class="comment"># BasePage</span>
+│   ├── login_page.py      <span class="comment"># LoginPage</span>
+│   └── secure_page.py     <span class="comment"># SecurePage</span>
+│
+├── tests/                  <span class="comment"># All tests</span>
+│   ├── conftest.py        <span class="comment"># Fixtures</span>
+│   ├── test_login.py
+│   └── test_secure.py
+│
+└── pytest.ini</div>
+        </div>
+
+        <!-- Imports -->
+        <div class="slide">
+            <h2>Import Strategy</h2>
+            <div class="code-block">
+<span class="comment"># pages/__init__.py</span>
+<span class="keyword">from</span> pages.base_page <span class="keyword">import</span> BasePage
+<span class="keyword">from</span> pages.login_page <span class="keyword">import</span> LoginPage
+<span class="keyword">from</span> pages.secure_page <span class="keyword">import</span> SecurePage</div>
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># In tests - clean imports!</span>
+<span class="keyword">from</span> pages <span class="keyword">import</span> LoginPage, SecurePage
+
+<span class="keyword">def</span> <span class="function">test_login</span>(page):
+    login = <span class="class-name">LoginPage</span>(page)
+    login.<span class="function">navigate</span>()
+    secure = login.<span class="function">login</span>(<span class="string">"user"</span>, <span class="string">"pass"</span>)
+    <span class="keyword">assert</span> secure.<span class="function">is_logged_in</span>()</div>
+        </div>
+
+        <!-- PART 5: BEST PRACTICES -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Best Practices</h2>
+            <p>Do's and Don'ts</p>
+        </div>
+
+        <!-- Best Practice 1 -->
+        <div class="slide">
+            <h2>1. Locators in __init__</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Bad:</strong> Locators in methods</p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">click_login</span>(<span class="variable">self</span>):
+    <span class="variable">self</span>.page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 15px;">
+                <p style="color: #2e7d32;"><strong>✅ Good:</strong> Locators in __init__</p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">__init__</span>(<span class="variable">self</span>, page):
+    <span class="variable">self</span>.login_btn = page.<span class="function">locator</span>(<span class="string">"button"</span>)
+
+<span class="keyword">def</span> <span class="function">click_login</span>(<span class="variable">self</span>):
+    <span class="variable">self</span>.login_btn.<span class="function">click</span>()</div>
+            </div>
+        </div>
+
+        <!-- Best Practice 2 -->
+        <div class="slide">
+            <h2>2. No Assertions in Page Objects</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Bad:</strong> Assert in page object</p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">login</span>(<span class="variable">self</span>, user, pwd):
+    <span class="variable">self</span>.<span class="function">fill_form</span>(user, pwd)
+    <span class="keyword">assert</span> <span class="variable">self</span>.<span class="function">has_success</span>()  <span class="comment"># Don't!</span></div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 15px;">
+                <p style="color: #2e7d32;"><strong>✅ Good:</strong> Return data, assert in test</p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">has_success</span>(<span class="variable">self</span>):
+    <span class="keyword">return</span> <span class="variable">self</span>.flash.<span class="function">is_visible</span>()
+
+<span class="comment"># In test:</span>
+<span class="keyword">assert</span> login.<span class="function">has_success</span>()</div>
+            </div>
+        </div>
+
+        <!-- Best Practice 3 -->
+        <div class="slide">
+            <h2>3. Return self for Chaining</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Bad:</strong> No return value</p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">fill_username</span>(<span class="variable">self</span>, user):
+    <span class="variable">self</span>.username.<span class="function">fill</span>(user)
+    <span class="comment"># Nothing returned</span></div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 15px;">
+                <p style="color: #2e7d32;"><strong>✅ Good:</strong> Return self</p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">fill_username</span>(<span class="variable">self</span>, user):
+    <span class="variable">self</span>.username.<span class="function">fill</span>(user)
+    <span class="keyword">return</span> <span class="variable">self</span>  <span class="comment"># Enables chaining!</span>
+
+<span class="comment"># Can chain: page.fill_username("u").fill_password("p")</span></div>
+            </div>
+        </div>
+
+        <!-- Best Practice 4 -->
+        <div class="slide">
+            <h2>4. Descriptive Method Names</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Bad:</strong> Generic names</p>
+                <div class="code-block" style="font-size: 0.9em;">
+<span class="keyword">def</span> <span class="function">click1</span>(<span class="variable">self</span>): ...
+<span class="keyword">def</span> <span class="function">fill</span>(<span class="variable">self</span>): ...
+<span class="keyword">def</span> <span class="function">check</span>(<span class="variable">self</span>): ...</div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 15px;">
+                <p style="color: #2e7d32;"><strong>✅ Good:</strong> Descriptive names</p>
+                <div class="code-block" style="font-size: 0.9em;">
+<span class="keyword">def</span> <span class="function">click_login_button</span>(<span class="variable">self</span>): ...
+<span class="keyword">def</span> <span class="function">fill_username</span>(<span class="variable">self</span>): ...
+<span class="keyword">def</span> <span class="function">is_logged_in</span>(<span class="variable">self</span>): ...</div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <table style="width: 100%; font-size: 0.9em;">
+                <tr>
+                    <th>Concept</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td><code>BasePage</code></td>
+                    <td>Shared methods for all pages</td>
+                </tr>
+                <tr>
+                    <td><code>super().__init__()</code></td>
+                    <td>Call parent constructor</td>
+                </tr>
+                <tr>
+                    <td>Page Transitions</td>
+                    <td>Return different page objects</td>
+                </tr>
+                <tr>
+                    <td>Project Structure</td>
+                    <td>Organize code in folders</td>
+                </tr>
+                <tr>
+                    <td>Best Practices</td>
+                    <td>Clean, maintainable code</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Homework -->
+        <div class="slide">
+            <h2>Homework</h2>
+            <div class="info-box">
+                <h3>Tasks:</h3>
+                <ol style="font-size: 1em;">
+                    <li>Create <code>BasePage</code> with methods:
+                        <ul>
+                            <li><code>get_url()</code>, <code>get_title()</code></li>
+                            <li><code>wait_for_load()</code></li>
+                            <li><code>take_screenshot(name)</code></li>
+                        </ul>
+                    </li>
+                    <li>Create <code>LoginPage</code> and <code>SecurePage</code>:
+                        <ul>
+                            <li>Inherit from BasePage</li>
+                            <li>Implement page transitions</li>
+                        </ul>
+                    </li>
+                    <li>Write test with full flow:
+                        <ul>
+                            <li>Login → Verify → Logout → Verify</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Next Lecture -->
+        <div class="slide">
+            <h2>Next Lecture</h2>
+            <h3 style="color: #4CAF50;">Lecture 31: Introduction to Pytest</h3>
+            <ul style="font-size: 1.1em; margin-top: 30px;">
+                <li>What is pytest</li>
+                <li>Writing tests</li>
+                <li>Fixtures</li>
+                <li>Assertions</li>
+                <li>Running tests</li>
+            </ul>
+            <div class="success-box" style="margin-top: 30px;">
+                <p>Prepare: <code>pip install pytest pytest-playwright</code></p>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Page Object Model!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">BasePage, inheritance, transitions, best practices</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

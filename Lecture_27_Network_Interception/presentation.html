@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 27: Network Interception</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 27</h1>
+            <div class="subtitle">Network Interception</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Monitor network requests and responses</li>
+                <li>✓ Block unwanted requests (images, ads)</li>
+                <li>✓ Modify request headers and data</li>
+                <li>✓ Mock API responses</li>
+                <li>✓ Wait for network events</li>
+                <li>✓ Test error handling scenarios</li>
+            </ul>
+        </div>
+
+        <!-- Why Network Interception -->
+        <div class="slide">
+            <h2>Why Network Interception?</h2>
+            <div class="highlight-box">
+                <p>Control network traffic to make tests faster, more reliable, and independent of external services.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Use Cases:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🚀 **Speed up tests** - Block images, fonts, analytics</li>
+                <li>🔧 **Mock APIs** - Test without real backend</li>
+                <li>❌ **Test errors** - Simulate 500, 404, timeouts</li>
+                <li>🔍 **Debug** - Log all network activity</li>
+                <li>🔒 **Security** - Add auth headers automatically</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: MONITORING -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Monitoring Requests</h2>
+            <p>Listen to network traffic</p>
+        </div>
+
+        <!-- Event Listeners -->
+        <div class="slide">
+            <h2>Network Event Listeners</h2>
+            <div class="code-block">
+<span class="comment"># Listen to all requests</span>
+page.<span class="function">on</span>(<span class="string">"request"</span>, <span class="keyword">lambda</span> req: <span class="function">print</span>(f<span class="string">">> {req.method} {req.url}"</span>))
+
+<span class="comment"># Listen to all responses</span>
+page.<span class="function">on</span>(<span class="string">"response"</span>, <span class="keyword">lambda</span> res: <span class="function">print</span>(f<span class="string">"<< {res.status} {res.url}"</span>))
+
+<span class="comment"># Listen to failed requests</span>
+page.<span class="function">on</span>(<span class="string">"requestfailed"</span>, <span class="keyword">lambda</span> req: <span class="function">print</span>(f<span class="string">"!! {req.url}"</span>))
+
+<span class="comment"># Listen to finished requests</span>
+page.<span class="function">on</span>(<span class="string">"requestfinished"</span>, <span class="keyword">lambda</span> req: <span class="function">print</span>(f<span class="string">"✓ {req.url}"</span>))</div>
+        </div>
+
+        <!-- Request Properties -->
+        <div class="slide">
+            <h2>Request Properties</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">log_request</span>(request):
+    <span class="function">print</span>(f<span class="string">"URL: {request.url}"</span>)
+    <span class="function">print</span>(f<span class="string">"Method: {request.method}"</span>)
+    <span class="function">print</span>(f<span class="string">"Headers: {request.headers}"</span>)
+    <span class="function">print</span>(f<span class="string">"Post Data: {request.post_data}"</span>)
+    <span class="function">print</span>(f<span class="string">"Type: {request.resource_type}"</span>)
+
+page.<span class="function">on</span>(<span class="string">"request"</span>, log_request)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>Resource types: document, stylesheet, image, script, xhr, fetch, font, etc.</p>
+            </div>
+        </div>
+
+        <!-- Response Properties -->
+        <div class="slide">
+            <h2>Response Properties</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">log_response</span>(response):
+    <span class="function">print</span>(f<span class="string">"URL: {response.url}"</span>)
+    <span class="function">print</span>(f<span class="string">"Status: {response.status}"</span>)
+    <span class="function">print</span>(f<span class="string">"Headers: {response.headers}"</span>)
+
+    <span class="comment"># Get response body</span>
+    <span class="keyword">if</span> <span class="string">"json"</span> <span class="keyword">in</span> response.headers.<span class="function">get</span>(<span class="string">"content-type"</span>, <span class="string">""</span>):
+        body = response.<span class="function">json</span>()
+        <span class="function">print</span>(f<span class="string">"Body: {body}"</span>)
+
+page.<span class="function">on</span>(<span class="string">"response"</span>, log_response)</div>
+        </div>
+
+        <!-- PART 2: ROUTE INTERCEPTION -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Route Interception</h2>
+            <p>Intercept and control requests</p>
+        </div>
+
+        <!-- Basic Routing -->
+        <div class="slide">
+            <h2>Basic Route Interception</h2>
+            <div class="code-block">
+<span class="comment"># Intercept ALL requests</span>
+<span class="keyword">def</span> <span class="function">handle_route</span>(route):
+    <span class="function">print</span>(f<span class="string">"Intercepted: {route.request.url}"</span>)
+    route.<span class="function">continue_</span>()  <span class="comment"># Let it through</span>
+
+page.<span class="function">route</span>(<span class="string">"**/*"</span>, handle_route)
+
+<span class="comment"># Intercept specific URLs</span>
+page.<span class="function">route</span>(<span class="string">"**/api/**"</span>, handle_api)
+page.<span class="function">route</span>(<span class="string">"**/*.png"</span>, handle_images)</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ Always call continue_(), abort(), or fulfill() - or request hangs!</p>
+            </div>
+        </div>
+
+        <!-- Route Actions -->
+        <div class="slide">
+            <h2>Route Handler Actions</h2>
+            <div class="code-block">
+<span class="comment"># 1. Let request through (unchanged)</span>
+route.<span class="function">continue_</span>()
+
+<span class="comment"># 2. Let through with modifications</span>
+route.<span class="function">continue_</span>(headers={<span class="string">"X-Custom"</span>: <span class="string">"value"</span>})
+
+<span class="comment"># 3. Block the request</span>
+route.<span class="function">abort</span>()
+
+<span class="comment"># 4. Simulate network error</span>
+route.<span class="function">abort</span>(<span class="string">"failed"</span>)
+
+<span class="comment"># 5. Return mock response</span>
+route.<span class="function">fulfill</span>(status=<span class="number">200</span>, body=<span class="string">"mock data"</span>)</div>
+        </div>
+
+        <!-- PART 3: BLOCKING REQUESTS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Blocking Requests</h2>
+            <p>Speed up tests, block unwanted content</p>
+        </div>
+
+        <!-- Block Images -->
+        <div class="slide">
+            <h2>Block Images</h2>
+            <div class="code-block">
+<span class="comment"># Block all images</span>
+page.<span class="function">route</span>(<span class="string">"**/*.{png,jpg,jpeg,gif,svg,ico}"</span>, <span class="keyword">lambda</span> r: r.<span class="function">abort</span>())
+
+<span class="comment"># Block with logging</span>
+<span class="keyword">def</span> <span class="function">block_images</span>(route):
+    <span class="function">print</span>(f<span class="string">"Blocked: {route.request.url}"</span>)
+    route.<span class="function">abort</span>()
+
+page.<span class="function">route</span>(<span class="string">"**/*.{png,jpg,jpeg,gif,svg}"</span>, block_images)</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Blocking images can make tests 2-3x faster!</p>
+            </div>
+        </div>
+
+        <!-- Block by Resource Type -->
+        <div class="slide">
+            <h2>Block by Resource Type</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">selective_block</span>(route):
+    block_types = [<span class="string">"image"</span>, <span class="string">"stylesheet"</span>, <span class="string">"font"</span>]
+
+    <span class="keyword">if</span> route.request.resource_type <span class="keyword">in</span> block_types:
+        route.<span class="function">abort</span>()
+    <span class="keyword">else</span>:
+        route.<span class="function">continue_</span>()
+
+page.<span class="function">route</span>(<span class="string">"**/*"</span>, selective_block)
+
+<span class="comment"># Block analytics/tracking</span>
+page.<span class="function">route</span>(<span class="string">"**/google-analytics.com/**"</span>, <span class="keyword">lambda</span> r: r.<span class="function">abort</span>())
+page.<span class="function">route</span>(<span class="string">"**/analytics.js"</span>, <span class="keyword">lambda</span> r: r.<span class="function">abort</span>())</div>
+        </div>
+
+        <!-- PART 4: MODIFYING REQUESTS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Modifying Requests</h2>
+            <p>Change headers, URLs, data</p>
+        </div>
+
+        <!-- Add Headers -->
+        <div class="slide">
+            <h2>Adding Custom Headers</h2>
+            <div class="code-block">
+<span class="comment"># Add authorization header</span>
+<span class="keyword">def</span> <span class="function">add_auth</span>(route):
+    headers = route.request.headers.<span class="function">copy</span>()
+    headers[<span class="string">"Authorization"</span>] = <span class="string">"Bearer token123"</span>
+    route.<span class="function">continue_</span>(headers=headers)
+
+page.<span class="function">route</span>(<span class="string">"**/api/**"</span>, add_auth)
+
+<span class="comment"># Add multiple headers</span>
+<span class="keyword">def</span> <span class="function">add_headers</span>(route):
+    headers = route.request.headers.<span class="function">copy</span>()
+    headers[<span class="string">"X-Test-Mode"</span>] = <span class="string">"true"</span>
+    headers[<span class="string">"X-Request-ID"</span>] = <span class="string">"test-123"</span>
+    route.<span class="function">continue_</span>(headers=headers)
+
+page.<span class="function">route</span>(<span class="string">"**/*"</span>, add_headers)</div>
+        </div>
+
+        <!-- Modify POST Data -->
+        <div class="slide">
+            <h2>Modifying POST Data</h2>
+            <div class="code-block">
+<span class="keyword">import</span> json
+
+<span class="keyword">def</span> <span class="function">modify_post</span>(route):
+    <span class="keyword">if</span> route.request.method == <span class="string">"POST"</span>:
+        <span class="comment"># Parse original data</span>
+        data = json.<span class="function">loads</span>(route.request.post_data)
+
+        <span class="comment"># Modify</span>
+        data[<span class="string">"modified"</span>] = <span class="keyword">True</span>
+        data[<span class="string">"timestamp"</span>] = <span class="string">"2024-01-01"</span>
+
+        <span class="comment"># Continue with modified data</span>
+        route.<span class="function">continue_</span>(post_data=json.<span class="function">dumps</span>(data))
+    <span class="keyword">else</span>:
+        route.<span class="function">continue_</span>()
+
+page.<span class="function">route</span>(<span class="string">"**/api/submit"</span>, modify_post)</div>
+        </div>
+
+        <!-- PART 5: MOCKING RESPONSES -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Mocking Responses</h2>
+            <p>Return fake data, test without backend</p>
+        </div>
+
+        <!-- Mock JSON Response -->
+        <div class="slide">
+            <h2>Mock JSON Response</h2>
+            <div class="code-block">
+<span class="comment"># Return mock user data</span>
+<span class="keyword">def</span> <span class="function">mock_user</span>(route):
+    route.<span class="function">fulfill</span>(
+        status=<span class="number">200</span>,
+        content_type=<span class="string">"application/json"</span>,
+        body=<span class="string">'{"id": 1, "name": "Test User", "role": "admin"}'</span>
+    )
+
+page.<span class="function">route</span>(<span class="string">"**/api/user"</span>, mock_user)
+
+<span class="comment"># Now any request to /api/user returns our mock!</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com/dashboard"</span>)
+<span class="comment"># App shows "Test User" even without real API</span></div>
+        </div>
+
+        <!-- Mock Error Responses -->
+        <div class="slide">
+            <h2>Simulate Errors</h2>
+            <div class="code-block">
+<span class="comment"># 404 Not Found</span>
+page.<span class="function">route</span>(<span class="string">"**/api/missing"</span>, <span class="keyword">lambda</span> r: r.<span class="function">fulfill</span>(
+    status=<span class="number">404</span>,
+    body=<span class="string">'{"error": "Not Found"}'</span>
+))
+
+<span class="comment"># 500 Server Error</span>
+page.<span class="function">route</span>(<span class="string">"**/api/broken"</span>, <span class="keyword">lambda</span> r: r.<span class="function">fulfill</span>(
+    status=<span class="number">500</span>,
+    body=<span class="string">'{"error": "Internal Server Error"}'</span>
+))
+
+<span class="comment"># 401 Unauthorized</span>
+page.<span class="function">route</span>(<span class="string">"**/api/protected"</span>, <span class="keyword">lambda</span> r: r.<span class="function">fulfill</span>(
+    status=<span class="number">401</span>,
+    body=<span class="string">'{"error": "Unauthorized"}'</span>
+))</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>💡 Great for testing error handling in your app!</p>
+            </div>
+        </div>
+
+        <!-- Delayed Response -->
+        <div class="slide">
+            <h2>Simulate Slow Server</h2>
+            <div class="code-block">
+<span class="keyword">import</span> time
+
+<span class="keyword">def</span> <span class="function">slow_response</span>(route):
+    time.<span class="function">sleep</span>(<span class="number">3</span>)  <span class="comment"># 3 second delay</span>
+    route.<span class="function">fulfill</span>(
+        status=<span class="number">200</span>,
+        body=<span class="string">'{"data": "finally!"}'</span>
+    )
+
+page.<span class="function">route</span>(<span class="string">"**/api/slow"</span>, slow_response)
+
+<span class="comment"># Test loading states</span>
+page.<span class="function">click</span>(<span class="string">"#load-btn"</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".spinner"</span>)).<span class="function">to_be_visible</span>()
+<span class="comment"># Spinner shows while waiting...</span></div>
+        </div>
+
+        <!-- PART 6: WAITING FOR NETWORK -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Waiting for Network</h2>
+            <p>Capture specific requests/responses</p>
+        </div>
+
+        <!-- Wait for Request -->
+        <div class="slide">
+            <h2>Wait for Request</h2>
+            <div class="code-block">
+<span class="comment"># Wait for specific request</span>
+<span class="keyword">with</span> page.<span class="function">expect_request</span>(<span class="string">"**/api/login"</span>) <span class="keyword">as</span> req_info:
+    page.<span class="function">click</span>(<span class="string">"#login-btn"</span>)
+
+request = req_info.value
+<span class="function">print</span>(f<span class="string">"Method: {request.method}"</span>)
+<span class="function">print</span>(f<span class="string">"Data: {request.post_data}"</span>)</div>
+        </div>
+
+        <!-- Wait for Response -->
+        <div class="slide">
+            <h2>Wait for Response</h2>
+            <div class="code-block">
+<span class="comment"># Wait for specific response</span>
+<span class="keyword">with</span> page.<span class="function">expect_response</span>(<span class="string">"**/api/data"</span>) <span class="keyword">as</span> res_info:
+    page.<span class="function">click</span>(<span class="string">"#load-btn"</span>)
+
+response = res_info.value
+<span class="function">print</span>(f<span class="string">"Status: {response.status}"</span>)
+data = response.<span class="function">json</span>()
+
+<span class="comment"># Wait with condition</span>
+<span class="keyword">with</span> page.<span class="function">expect_response</span>(
+    <span class="keyword">lambda</span> r: <span class="string">"/api/"</span> <span class="keyword">in</span> r.url <span class="keyword">and</span> r.status == <span class="number">200</span>
+) <span class="keyword">as</span> res_info:
+    page.<span class="function">click</span>(<span class="string">"#submit"</span>)</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Block images/fonts for speed</li>
+                        <li>Mock unstable external APIs</li>
+                        <li>Test error scenarios</li>
+                        <li>Use patterns like **/api/**</li>
+                        <li>Remove routes with unroute()</li>
+                        <li>Always handle the route</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Block the main document</li>
+                        <li>Forget continue_/abort/fulfill</li>
+                        <li>Over-mock (test real APIs too)</li>
+                        <li>Leave routes between tests</li>
+                        <li>Block critical resources</li>
+                        <li>Use wrong pattern syntax</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Pitfalls -->
+        <div class="slide">
+            <h2>Common Pitfalls</h2>
+            <div class="code-block">
+<span class="comment"># ❌ WRONG - Request hangs forever</span>
+<span class="keyword">def</span> <span class="function">handler</span>(route):
+    <span class="function">print</span>(<span class="string">"intercepted"</span>)
+    <span class="comment"># Forgot continue_()!</span>
+
+<span class="comment"># ✅ CORRECT - Always complete the route</span>
+<span class="keyword">def</span> <span class="function">handler</span>(route):
+    <span class="function">print</span>(<span class="string">"intercepted"</span>)
+    route.<span class="function">continue_</span>()
+
+<span class="comment"># ❌ WRONG - Missing ** prefix</span>
+page.<span class="function">route</span>(<span class="string">"/api/user"</span>, handler)  <span class="comment"># Won't match!</span>
+
+<span class="comment"># ✅ CORRECT - Use ** for any path</span>
+page.<span class="function">route</span>(<span class="string">"**/api/user"</span>, handler)</div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>Monitor:</strong> page.on("request/response", handler)</p>
+                <p><strong>Intercept:</strong> page.route(pattern, handler)</p>
+                <p><strong>Block:</strong> route.abort()</p>
+                <p><strong>Modify:</strong> route.continue_(headers=..., post_data=...)</p>
+                <p><strong>Mock:</strong> route.fulfill(status, body, content_type)</p>
+                <p><strong>Wait:</strong> expect_request() / expect_response()</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>API Testing with Playwright</li>
+                    <li>Page Object Model (Part 1)</li>
+                    <li>Page Object Model (Part 2)</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Block images and measure speed difference</li>
+                <li>Mock an API endpoint</li>
+                <li>Test error handling with mock errors</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Network Interception!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can control all network traffic in your tests</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

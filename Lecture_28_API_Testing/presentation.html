@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 28: API Testing with Playwright</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 28</h1>
+            <div class="subtitle">API Testing with Playwright</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Create API request contexts</li>
+                <li>✓ Make GET, POST, PUT, DELETE requests</li>
+                <li>✓ Handle authentication (Bearer, Basic, API Key)</li>
+                <li>✓ Parse and validate responses</li>
+                <li>✓ Combine UI and API tests</li>
+                <li>✓ Understand when to use API vs UI testing</li>
+            </ul>
+        </div>
+
+        <!-- Why API Testing -->
+        <div class="slide">
+            <h2>Why API Testing with Playwright?</h2>
+            <div class="highlight-box">
+                <p>Playwright can make HTTP requests directly - no browser needed!</p>
+            </div>
+            <div class="info-box" style="margin-top: 20px;">
+                <table style="width: 100%; font-size: 0.9em;">
+                    <tr><th>Aspect</th><th>UI Testing</th><th>API Testing</th></tr>
+                    <tr><td>Speed</td><td>Slow (browser)</td><td>Fast (no browser)</td></tr>
+                    <tr><td>Stability</td><td>Flaky</td><td>Stable</td></tr>
+                    <tr><td>Best for</td><td>User flows</td><td>Data setup/verify</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PART 1: BASICS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>API Request Basics</h2>
+            <p>Create context and make requests</p>
+        </div>
+
+        <!-- Create Context -->
+        <div class="slide">
+            <h2>Creating API Context</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    <span class="comment"># Create API context (no browser!)</span>
+    api = p.request.<span class="function">new_context</span>(
+        base_url=<span class="string">"https://api.example.com"</span>
+    )
+
+    <span class="comment"># Make requests...</span>
+    response = api.<span class="function">get</span>(<span class="string">"/users"</span>)
+
+    <span class="comment"># Don't forget to dispose</span>
+    api.<span class="function">dispose</span>()</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ No browser = much faster tests!</p>
+            </div>
+        </div>
+
+        <!-- GET Request -->
+        <div class="slide">
+            <h2>GET Requests</h2>
+            <div class="code-block">
+<span class="comment"># Simple GET</span>
+response = api.<span class="function">get</span>(<span class="string">"/users"</span>)
+users = response.<span class="function">json</span>()
+
+<span class="comment"># GET with query parameters</span>
+response = api.<span class="function">get</span>(<span class="string">"/users"</span>, params={
+    <span class="string">"page"</span>: <span class="number">1</span>,
+    <span class="string">"limit"</span>: <span class="number">10</span>,
+    <span class="string">"sort"</span>: <span class="string">"name"</span>
+})
+
+<span class="comment"># GET single item</span>
+response = api.<span class="function">get</span>(<span class="string">"/users/1"</span>)
+user = response.<span class="function">json</span>()</div>
+        </div>
+
+        <!-- POST Request -->
+        <div class="slide">
+            <h2>POST Requests</h2>
+            <div class="code-block">
+<span class="comment"># POST JSON data</span>
+response = api.<span class="function">post</span>(<span class="string">"/users"</span>, data={
+    <span class="string">"name"</span>: <span class="string">"John Doe"</span>,
+    <span class="string">"email"</span>: <span class="string">"john@example.com"</span>
+})
+created = response.<span class="function">json</span>()
+<span class="function">print</span>(f<span class="string">"Created ID: {created['id']}"</span>)
+
+<span class="comment"># POST form data</span>
+response = api.<span class="function">post</span>(<span class="string">"/login"</span>, form={
+    <span class="string">"username"</span>: <span class="string">"admin"</span>,
+    <span class="string">"password"</span>: <span class="string">"secret"</span>
+})</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>💡 Use <code>data={}</code> for JSON, <code>form={}</code> for form data</p>
+            </div>
+        </div>
+
+        <!-- PUT/PATCH/DELETE -->
+        <div class="slide">
+            <h2>PUT, PATCH, DELETE</h2>
+            <div class="code-block">
+<span class="comment"># PUT - full update</span>
+response = api.<span class="function">put</span>(<span class="string">"/users/1"</span>, data={
+    <span class="string">"name"</span>: <span class="string">"John Updated"</span>,
+    <span class="string">"email"</span>: <span class="string">"john.new@example.com"</span>
+})
+
+<span class="comment"># PATCH - partial update</span>
+response = api.<span class="function">patch</span>(<span class="string">"/users/1"</span>, data={
+    <span class="string">"name"</span>: <span class="string">"Only Name Changed"</span>
+})
+
+<span class="comment"># DELETE</span>
+response = api.<span class="function">delete</span>(<span class="string">"/users/1"</span>)
+<span class="function">print</span>(f<span class="string">"Deleted: {response.status}"</span>)  <span class="comment"># 200 or 204</span></div>
+        </div>
+
+        <!-- PART 2: RESPONSES -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Response Handling</h2>
+            <p>Status, headers, body</p>
+        </div>
+
+        <!-- Response Properties -->
+        <div class="slide">
+            <h2>Response Properties</h2>
+            <div class="code-block">
+response = api.<span class="function">get</span>(<span class="string">"/users/1"</span>)
+
+<span class="comment"># Status</span>
+<span class="function">print</span>(response.status)        <span class="comment"># 200</span>
+<span class="function">print</span>(response.status_text)   <span class="comment"># "OK"</span>
+<span class="function">print</span>(response.ok)            <span class="comment"># True (if 200-299)</span>
+
+<span class="comment"># Headers</span>
+<span class="function">print</span>(response.headers)       <span class="comment"># dict</span>
+content_type = response.headers.<span class="function">get</span>(<span class="string">"content-type"</span>)
+
+<span class="comment"># Body</span>
+data = response.<span class="function">json</span>()        <span class="comment"># Parse JSON</span>
+text = response.<span class="function">text</span>()        <span class="comment"># Raw text</span>
+body = response.<span class="function">body</span>()        <span class="comment"># Raw bytes</span></div>
+        </div>
+
+        <!-- Assertions -->
+        <div class="slide">
+            <h2>Response Assertions</h2>
+            <div class="code-block">
+response = api.<span class="function">get</span>(<span class="string">"/users/1"</span>)
+
+<span class="comment"># Status assertions</span>
+<span class="keyword">assert</span> response.status == <span class="number">200</span>
+<span class="keyword">assert</span> response.ok
+
+<span class="comment"># JSON structure assertions</span>
+data = response.<span class="function">json</span>()
+<span class="keyword">assert</span> <span class="string">"id"</span> <span class="keyword">in</span> data
+<span class="keyword">assert</span> <span class="string">"name"</span> <span class="keyword">in</span> data
+<span class="keyword">assert</span> data[<span class="string">"id"</span>] == <span class="number">1</span>
+
+<span class="comment"># Type assertions</span>
+<span class="keyword">assert</span> <span class="function">isinstance</span>(data[<span class="string">"name"</span>], <span class="function">str</span>)
+<span class="keyword">assert</span> <span class="function">len</span>(data[<span class="string">"name"</span>]) > <span class="number">0</span></div>
+        </div>
+
+        <!-- PART 3: AUTHENTICATION -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Authentication</h2>
+            <p>Tokens, Basic Auth, API Keys</p>
+        </div>
+
+        <!-- Bearer Token -->
+        <div class="slide">
+            <h2>Bearer Token</h2>
+            <div class="code-block">
+<span class="comment"># Create context with Bearer token</span>
+api = p.request.<span class="function">new_context</span>(
+    base_url=<span class="string">"https://api.example.com"</span>,
+    extra_http_headers={
+        <span class="string">"Authorization"</span>: <span class="string">"Bearer your-token-here"</span>
+    }
+)
+
+<span class="comment"># All requests now include the token!</span>
+response = api.<span class="function">get</span>(<span class="string">"/protected/data"</span>)
+
+<span class="comment"># Per-request header override</span>
+response = api.<span class="function">get</span>(<span class="string">"/other"</span>, headers={
+    <span class="string">"Authorization"</span>: <span class="string">"Bearer different-token"</span>
+})</div>
+        </div>
+
+        <!-- Basic Auth & API Key -->
+        <div class="slide">
+            <h2>Basic Auth & API Key</h2>
+            <div class="code-block">
+<span class="keyword">import</span> base64
+
+<span class="comment"># Basic Authentication</span>
+credentials = base64.<span class="function">b64encode</span>(b<span class="string">"user:pass"</span>).<span class="function">decode</span>()
+api = p.request.<span class="function">new_context</span>(
+    extra_http_headers={
+        <span class="string">"Authorization"</span>: f<span class="string">"Basic {credentials}"</span>
+    }
+)
+
+<span class="comment"># API Key in header</span>
+api = p.request.<span class="function">new_context</span>(
+    extra_http_headers={
+        <span class="string">"X-API-Key"</span>: <span class="string">"your-api-key"</span>
+    }
+)
+
+<span class="comment"># API Key in query</span>
+response = api.<span class="function">get</span>(<span class="string">"/data"</span>, params={<span class="string">"api_key"</span>: <span class="string">"key"</span>})</div>
+        </div>
+
+        <!-- PART 4: COMBINED TESTING -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>UI + API Combined</h2>
+            <p>Best of both worlds</p>
+        </div>
+
+        <!-- Why Combine -->
+        <div class="slide">
+            <h2>Why Combine UI and API?</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>API for:</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Fast test data setup</li>
+                        <li>Backend verification</li>
+                        <li>Quick cleanup</li>
+                        <li>Auth token retrieval</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>UI for:</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Real user flow testing</li>
+                        <li>Visual verification</li>
+                        <li>Browser-specific bugs</li>
+                        <li>E2E validation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup via API -->
+        <div class="slide">
+            <h2>Pattern: API Setup → UI Test</h2>
+            <div class="code-block">
+<span class="comment"># 1. Create test data via API (fast!)</span>
+response = api.<span class="function">post</span>(<span class="string">"/users"</span>, data={
+    <span class="string">"name"</span>: <span class="string">"Test User"</span>
+})
+user_id = response.<span class="function">json</span>()[<span class="string">"id"</span>]
+
+<span class="comment"># 2. Test in UI (real user flow)</span>
+page.<span class="function">goto</span>(f<span class="string">"/users/{user_id}"</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".name"</span>)).<span class="function">to_have_text</span>(<span class="string">"Test User"</span>)
+
+<span class="comment"># 3. Cleanup via API (fast!)</span>
+api.<span class="function">delete</span>(f<span class="string">"/users/{user_id}"</span>)</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>💡 API setup + UI test + API cleanup = Fast & Reliable!</p>
+            </div>
+        </div>
+
+        <!-- UI Action, API Verify -->
+        <div class="slide">
+            <h2>Pattern: UI Action → API Verify</h2>
+            <div class="code-block">
+<span class="comment"># 1. Perform UI action</span>
+page.<span class="function">goto</span>(<span class="string">"/profile/edit"</span>)
+page.<span class="function">fill</span>(<span class="string">"#name"</span>, <span class="string">"New Name"</span>)
+page.<span class="function">click</span>(<span class="string">"#save"</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".success"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># 2. Verify via API (reliable!)</span>
+response = api.<span class="function">get</span>(f<span class="string">"/users/{user_id}"</span>)
+<span class="keyword">assert</span> response.<span class="function">json</span>()[<span class="string">"name"</span>] == <span class="string">"New Name"</span></div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ API verification is more reliable than UI checks!</p>
+            </div>
+        </div>
+
+        <!-- Share Auth -->
+        <div class="slide">
+            <h2>Pattern: API Auth → Browser</h2>
+            <div class="code-block">
+<span class="comment"># 1. Get token via API</span>
+response = api.<span class="function">post</span>(<span class="string">"/auth/login"</span>, data={
+    <span class="string">"email"</span>: <span class="string">"user@test.com"</span>,
+    <span class="string">"password"</span>: <span class="string">"secret"</span>
+})
+token = response.<span class="function">json</span>()[<span class="string">"token"</span>]
+
+<span class="comment"># 2. Use token in browser</span>
+context = browser.<span class="function">new_context</span>(
+    extra_http_headers={
+        <span class="string">"Authorization"</span>: f<span class="string">"Bearer {token}"</span>
+    }
+)
+page = context.<span class="function">new_page</span>()
+page.<span class="function">goto</span>(<span class="string">"/dashboard"</span>)  <span class="comment"># Already authenticated!</span></div>
+        </div>
+
+        <!-- PART 5: BEST PRACTICES -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Best Practices</h2>
+            <p>Tips and common mistakes</p>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Check response.ok before .json()</li>
+                        <li>Use base_url for cleaner code</li>
+                        <li>Dispose context when done</li>
+                        <li>Use API for setup/cleanup</li>
+                        <li>Validate response structure</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Assume requests succeed</li>
+                        <li>Forget to dispose context</li>
+                        <li>Hardcode auth tokens</li>
+                        <li>Skip error handling</li>
+                        <li>Over-rely on API tests</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Mistakes -->
+        <div class="slide">
+            <h2>Common Mistakes</h2>
+            <div class="code-block">
+<span class="comment"># ❌ WRONG - Assuming success</span>
+response = api.<span class="function">get</span>(<span class="string">"/users/999"</span>)
+user = response.<span class="function">json</span>()  <span class="comment"># Might fail!</span>
+
+<span class="comment"># ✅ CORRECT - Check first</span>
+response = api.<span class="function">get</span>(<span class="string">"/users/999"</span>)
+<span class="keyword">if</span> response.ok:
+    user = response.<span class="function">json</span>()
+<span class="keyword">else</span>:
+    <span class="function">print</span>(f<span class="string">"Error: {response.status}"</span>)
+
+<span class="comment"># ❌ WRONG - Forgetting dispose</span>
+api = p.request.<span class="function">new_context</span>()
+<span class="comment"># ... use api ... </span>
+<span class="comment"># Memory leak!</span>
+
+<span class="comment"># ✅ CORRECT - Always dispose</span>
+api.<span class="function">dispose</span>()</div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>Create:</strong> p.request.new_context(base_url="...")</p>
+                <p><strong>Methods:</strong> api.get(), post(), put(), patch(), delete()</p>
+                <p><strong>Response:</strong> response.status, ok, json(), text()</p>
+                <p><strong>Auth:</strong> extra_http_headers={"Authorization": "..."}</p>
+                <p><strong>Combine:</strong> API setup → UI test → API verify → API cleanup</p>
+                <p><strong>Cleanup:</strong> api.dispose()</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Page Object Model (Part 1)</li>
+                    <li>Page Object Model (Part 2)</li>
+                    <li>Pytest Integration</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Test a real API (jsonplaceholder.typicode.com)</li>
+                <li>Create test data via API</li>
+                <li>Combine API + UI in one test</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered API Testing!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can test APIs and combine them with UI tests</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

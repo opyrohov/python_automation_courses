@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 29: Page Object Model (Part 1)</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 29</h1>
+            <div class="subtitle">Page Object Model (Part 1)</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ What is Page Object Model (POM)</li>
+                <li>✓ Why use POM for test automation</li>
+                <li>✓ Creating page object classes</li>
+                <li>✓ Organizing locators in classes</li>
+                <li>✓ Creating action methods</li>
+                <li>✓ Method chaining pattern</li>
+            </ul>
+        </div>
+
+        <!-- What is POM -->
+        <div class="slide">
+            <h2>What is Page Object Model?</h2>
+            <div class="highlight-box">
+                <p>A design pattern where each web page has a corresponding class that encapsulates the page's elements and behaviors.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Key Principles:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>📄 Each page = One class</li>
+                <li>🎯 Locators = Class attributes</li>
+                <li>⚡ Actions = Class methods</li>
+                <li>🧪 Tests use page objects, not raw commands</li>
+            </ul>
+        </div>
+
+        <!-- Why POM - Problems -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>The Problem</h2>
+            <p>Tests without POM</p>
+        </div>
+
+        <!-- Without POM -->
+        <div class="slide">
+            <h2>Without POM (The Problem)</h2>
+            <div class="code-block">
+<span class="comment"># Test 1</span>
+page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"user"</span>)
+page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"pass"</span>)
+page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+
+<span class="comment"># Test 2 - same locators repeated!</span>
+page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"admin"</span>)
+page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"admin"</span>)
+page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+
+<span class="comment"># Test 3 - and again...</span></div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ Same locators in every test! What if selector changes?</p>
+            </div>
+        </div>
+
+        <!-- Problems List -->
+        <div class="slide">
+            <h2>Problems Without POM</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="warning-box">
+                    <h4>❌ Issues</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Locators scattered everywhere</li>
+                        <li>Duplicate code</li>
+                        <li>Hard to maintain</li>
+                        <li>Tests are verbose</li>
+                        <li>No reusability</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>🔧 If selector changes:</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Find all occurrences</li>
+                        <li>Update each one</li>
+                        <li>Hope you didn't miss any</li>
+                        <li>100 tests = 100 updates!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solution: POM -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>The Solution: POM</h2>
+            <p>Page Object Model</p>
+        </div>
+
+        <!-- Basic POM Structure -->
+        <div class="slide">
+            <h2>Basic Page Object Structure</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, page):
+        self.page = page
+        <span class="comment"># Locators defined ONCE</span>
+        self.username = page.<span class="function">locator</span>(<span class="string">"#username"</span>)
+        self.password = page.<span class="function">locator</span>(<span class="string">"#password"</span>)
+        self.login_btn = page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>)
+
+    <span class="keyword">def</span> <span class="function">login</span>(self, user, pwd):
+        self.username.<span class="function">fill</span>(user)
+        self.password.<span class="function">fill</span>(pwd)
+        self.login_btn.<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Using Page Object -->
+        <div class="slide">
+            <h2>Using Page Objects in Tests</h2>
+            <div class="code-block">
+<span class="comment"># Create page object</span>
+login_page = <span class="function">LoginPage</span>(page)
+
+<span class="comment"># Test 1 - clean!</span>
+login_page.<span class="function">login</span>(<span class="string">"user"</span>, <span class="string">"pass"</span>)
+
+<span class="comment"># Test 2 - same clean code!</span>
+login_page.<span class="function">login</span>(<span class="string">"admin"</span>, <span class="string">"admin"</span>)
+
+<span class="comment"># Test 3 - beautiful!</span>
+login_page.<span class="function">login</span>(<span class="string">"guest"</span>, <span class="string">"guest"</span>)</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ If selector changes, update ONE place: LoginPage class!</p>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="slide">
+            <h2>Benefits of POM</h2>
+            <div class="info-box">
+                <table style="width: 100%; font-size: 0.95em;">
+                    <tr><th>Benefit</th><th>Description</th></tr>
+                    <tr><td>🎯 Single Source</td><td>Locators in one place</td></tr>
+                    <tr><td>♻️ Reusability</td><td>Same page object for all tests</td></tr>
+                    <tr><td>📖 Readability</td><td>login_page.login() is clear</td></tr>
+                    <tr><td>🔧 Maintainability</td><td>Change once, affects all</td></tr>
+                    <tr><td>📦 Encapsulation</td><td>Tests don't know HOW, only WHAT</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Part 3: Creating Page Objects -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Creating Page Objects</h2>
+            <p>Step by step</p>
+        </div>
+
+        <!-- Step 1: Class and Init -->
+        <div class="slide">
+            <h2>Step 1: Class and __init__</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    <span class="comment"># Page URL (optional but useful)</span>
+    URL = <span class="string">"https://example.com/login"</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, page):
+        <span class="string">"""Initialize with Playwright page."""</span>
+        self.page = page
+
+        <span class="comment"># Define ALL locators here</span>
+        self.username = page.<span class="function">locator</span>(<span class="string">"#username"</span>)
+        self.password = page.<span class="function">locator</span>(<span class="string">"#password"</span>)
+        self.submit_btn = page.<span class="function">locator</span>(<span class="string">"#submit"</span>)
+        self.error_msg = page.<span class="function">locator</span>(<span class="string">".error"</span>)</div>
+        </div>
+
+        <!-- Step 2: Navigation -->
+        <div class="slide">
+            <h2>Step 2: Navigation Methods</h2>
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">LoginPage</span>:
+    URL = <span class="string">"https://example.com/login"</span>
+
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, page):
+        self.page = page
+        <span class="comment"># ... locators ...</span>
+
+    <span class="keyword">def</span> <span class="function">navigate</span>(self):
+        <span class="string">"""Navigate to login page."""</span>
+        self.page.<span class="function">goto</span>(self.URL)
+
+    <span class="keyword">def</span> <span class="function">is_loaded</span>(self):
+        <span class="string">"""Check if page is loaded."""</span>
+        <span class="keyword">return</span> self.submit_btn.<span class="function">is_visible</span>()</div>
+        </div>
+
+        <!-- Step 3: Action Methods -->
+        <div class="slide">
+            <h2>Step 3: Action Methods</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">enter_username</span>(self, username):
+    <span class="string">"""Enter username."""</span>
+    self.username.<span class="function">fill</span>(username)
+
+<span class="keyword">def</span> <span class="function">enter_password</span>(self, password):
+    <span class="string">"""Enter password."""</span>
+    self.password.<span class="function">fill</span>(password)
+
+<span class="keyword">def</span> <span class="function">click_submit</span>(self):
+    <span class="string">"""Click submit button."""</span>
+    self.submit_btn.<span class="function">click</span>()
+
+<span class="comment"># Combined convenience method</span>
+<span class="keyword">def</span> <span class="function">login</span>(self, username, password):
+    <span class="string">"""Perform complete login."""</span>
+    self.<span class="function">enter_username</span>(username)
+    self.<span class="function">enter_password</span>(password)
+    self.<span class="function">click_submit</span>()</div>
+        </div>
+
+        <!-- Step 4: Getter Methods -->
+        <div class="slide">
+            <h2>Step 4: Getter Methods</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">get_error_message</span>(self):
+    <span class="string">"""Get error message text."""</span>
+    <span class="keyword">return</span> self.error_msg.<span class="function">text_content</span>()
+
+<span class="keyword">def</span> <span class="function">get_username_value</span>(self):
+    <span class="string">"""Get current username value."""</span>
+    <span class="keyword">return</span> self.username.<span class="function">input_value</span>()
+
+<span class="keyword">def</span> <span class="function">is_error_visible</span>(self):
+    <span class="string">"""Check if error is displayed."""</span>
+    <span class="keyword">return</span> self.error_msg.<span class="function">is_visible</span>()
+
+<span class="keyword">def</span> <span class="function">has_error_containing</span>(self, text):
+    <span class="string">"""Check if error contains text."""</span>
+    <span class="keyword">if not</span> self.<span class="function">is_error_visible</span>():
+        <span class="keyword">return False</span>
+    <span class="keyword">return</span> text <span class="keyword">in</span> self.<span class="function">get_error_message</span>()</div>
+        </div>
+
+        <!-- Part 4: Method Chaining -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Method Chaining</h2>
+            <p>Fluent interface pattern</p>
+        </div>
+
+        <!-- Method Chaining Concept -->
+        <div class="slide">
+            <h2>Method Chaining</h2>
+            <div class="code-block">
+<span class="comment"># Return self to enable chaining</span>
+<span class="keyword">def</span> <span class="function">navigate</span>(self):
+    self.page.<span class="function">goto</span>(self.URL)
+    <span class="keyword">return</span> self  <span class="comment"># Key!</span>
+
+<span class="keyword">def</span> <span class="function">enter_username</span>(self, username):
+    self.username.<span class="function">fill</span>(username)
+    <span class="keyword">return</span> self  <span class="comment"># Key!</span>
+
+<span class="keyword">def</span> <span class="function">enter_password</span>(self, password):
+    self.password.<span class="function">fill</span>(password)
+    <span class="keyword">return</span> self  <span class="comment"># Key!</span>
+
+<span class="comment"># Now you can chain!</span>
+login_page.<span class="function">navigate</span>().<span class="function">enter_username</span>(<span class="string">"user"</span>).<span class="function">enter_password</span>(<span class="string">"pass"</span>)</div>
+        </div>
+
+        <!-- Multi-line Chaining -->
+        <div class="slide">
+            <h2>Multi-line Chaining</h2>
+            <div class="code-block">
+<span class="comment"># Single line (can be long)</span>
+login_page.<span class="function">navigate</span>().<span class="function">enter_username</span>(<span class="string">"user"</span>).<span class="function">enter_password</span>(<span class="string">"pass"</span>).<span class="function">click_submit</span>()
+
+<span class="comment"># Multi-line (more readable)</span>
+(login_page
+    .<span class="function">navigate</span>()
+    .<span class="function">enter_username</span>(<span class="string">"user"</span>)
+    .<span class="function">enter_password</span>(<span class="string">"pass"</span>)
+    .<span class="function">click_submit</span>())
+
+<span class="comment"># Or use backslash</span>
+login_page \
+    .<span class="function">navigate</span>() \
+    .<span class="function">enter_username</span>(<span class="string">"user"</span>) \
+    .<span class="function">click_submit</span>()</div>
+        </div>
+
+        <!-- Part 5: Best Practices -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Best Practices</h2>
+            <p>Tips for clean POM</p>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Define locators in __init__</li>
+                        <li>Return self for chaining</li>
+                        <li>Use descriptive method names</li>
+                        <li>Group related locators</li>
+                        <li>Keep pages focused</li>
+                        <li>Use docstrings</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Put assertions in page objects</li>
+                        <li>Define locators as class attrs</li>
+                        <li>Make pages too large</li>
+                        <li>Duplicate logic</li>
+                        <li>Forget to return self</li>
+                        <li>Mix page objects</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Mistake -->
+        <div class="slide">
+            <h2>Common Mistake: Assertions</h2>
+            <div class="code-block">
+<span class="comment"># ❌ WRONG - assertions in page object</span>
+<span class="keyword">def</span> <span class="function">login</span>(self, user, pwd):
+    self.<span class="function">fill_form</span>(user, pwd)
+    <span class="keyword">assert</span> self.success.<span class="function">is_visible</span>()  <span class="comment"># Don't!</span>
+
+<span class="comment"># ✅ CORRECT - assertions in TEST</span>
+<span class="keyword">def</span> <span class="function">login</span>(self, user, pwd):
+    self.<span class="function">fill_form</span>(user, pwd)
+    <span class="keyword">return</span> self
+
+<span class="keyword">def</span> <span class="function">is_success_visible</span>(self):
+    <span class="keyword">return</span> self.success.<span class="function">is_visible</span>()
+
+<span class="comment"># In test:</span>
+login_page.<span class="function">login</span>(<span class="string">"user"</span>, <span class="string">"pass"</span>)
+<span class="keyword">assert</span> login_page.<span class="function">is_success_visible</span>()</div>
+        </div>
+
+        <!-- Project Structure -->
+        <div class="slide">
+            <h2>Project Structure</h2>
+            <div class="code-block">
+project/
+├── pages/
+│   ├── __init__.py
+│   ├── base_page.py       <span class="comment"># Common methods</span>
+│   ├── login_page.py      <span class="comment"># LoginPage class</span>
+│   ├── home_page.py       <span class="comment"># HomePage class</span>
+│   └── secure_page.py     <span class="comment"># SecurePage class</span>
+├── tests/
+│   ├── __init__.py
+│   ├── test_login.py      <span class="comment"># Login tests</span>
+│   └── test_navigation.py <span class="comment"># Nav tests</span>
+└── conftest.py            <span class="comment"># Pytest fixtures</span></div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>POM:</strong> Each page = One class with locators & methods</p>
+                <p><strong>Benefits:</strong> Maintainable, reusable, readable tests</p>
+                <p><strong>Locators:</strong> Define in __init__, use throughout class</p>
+                <p><strong>Methods:</strong> Navigation, actions, getters, validation</p>
+                <p><strong>Chaining:</strong> Return self for fluent interface</p>
+                <p><strong>Key rule:</strong> Assertions belong in TESTS, not page objects</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up in Part 2:</h3>
+                <ul>
+                    <li>Base page class and inheritance</li>
+                    <li>Component objects</li>
+                    <li>Advanced POM patterns</li>
+                    <li>Real-world examples</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Create a page object for any page</li>
+                <li>Refactor existing tests to use POM</li>
+                <li>Add method chaining</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've learned Page Object Model basics!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can write cleaner, more maintainable tests</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
