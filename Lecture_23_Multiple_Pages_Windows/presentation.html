@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 23: Multiple Pages & Windows</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 23</h1>
+            <div class="subtitle">Multiple Pages & Windows</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Open and manage multiple pages/tabs</li>
+                <li>✓ Handle popups with expect_popup()</li>
+                <li>✓ Work with multiple pages simultaneously</li>
+                <li>✓ Use page events (on load, on close)</li>
+                <li>✓ Understand context isolation</li>
+                <li>✓ Test multi-user scenarios</li>
+            </ul>
+        </div>
+
+        <!-- Why Multiple Pages -->
+        <div class="slide">
+            <h2>Why Multiple Pages Matter</h2>
+            <div class="highlight-box">
+                <p>Modern web apps often open new tabs, popups, or require testing multiple user interactions simultaneously.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Common Scenarios:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🔐 **OAuth login popups** - Google, Facebook, GitHub</li>
+                <li>📄 **Documents in new tabs** - PDFs, reports</li>
+                <li>💬 **Multi-user testing** - Chat, collaboration apps</li>
+                <li>🔗 **External links** - target="_blank"</li>
+                <li>📊 **Dashboard comparisons** - Side-by-side views</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: BROWSER HIERARCHY -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Browser Hierarchy</h2>
+            <p>Browser → Context → Page</p>
+        </div>
+
+        <!-- Browser Hierarchy -->
+        <div class="slide">
+            <h2>Understanding the Hierarchy</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    <span class="comment"># Level 1: Browser (Chromium, Firefox, WebKit)</span>
+    browser = p.chromium.<span class="function">launch</span>()
+
+    <span class="comment"># Level 2: Context (like incognito window)</span>
+    context = browser.<span class="function">new_context</span>()
+
+    <span class="comment"># Level 3: Page (single tab)</span>
+    page = context.<span class="function">new_page</span>()</div>
+            <div class="info-box" style="margin-top: 20px;">
+                <table style="width: 100%; font-size: 0.9em;">
+                    <tr><th>Level</th><th>What it is</th><th>Isolation</th></tr>
+                    <tr><td>Browser</td><td>Browser instance</td><td>Complete</td></tr>
+                    <tr><td>Context</td><td>Session container</td><td>Cookies, storage</td></tr>
+                    <tr><td>Page</td><td>Single tab/window</td><td>DOM only</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Why Context Matters -->
+        <div class="slide">
+            <h2>Context Isolation</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="warning-box">
+                    <h4>Same Context = Shared Session</h4>
+                    <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Pages share cookies!</span>
+page1 = context.<span class="function">new_page</span>()
+page2 = context.<span class="function">new_page</span>()
+
+<span class="comment"># Login on page1...</span>
+page1.<span class="function">goto</span>(<span class="string">"/login"</span>)
+page1.<span class="function">fill</span>(<span class="string">"#user"</span>, <span class="string">"alice"</span>)
+
+<span class="comment"># page2 is also logged in!</span></div>
+                </div>
+                <div class="success-box">
+                    <h4>Different Contexts = Isolated</h4>
+                    <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Separate sessions</span>
+ctx1 = browser.<span class="function">new_context</span>()
+ctx2 = browser.<span class="function">new_context</span>()
+
+page1 = ctx1.<span class="function">new_page</span>()
+page2 = ctx2.<span class="function">new_page</span>()
+
+<span class="comment"># Completely independent!</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2: OPENING NEW PAGES -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Opening New Pages</h2>
+            <p>Creating and managing tabs</p>
+        </div>
+
+        <!-- Opening New Pages -->
+        <div class="slide">
+            <h2>Creating New Pages</h2>
+            <div class="code-block">
+<span class="comment"># Method 1: Create new page in context</span>
+page1 = context.<span class="function">new_page</span>()
+page2 = context.<span class="function">new_page</span>()
+
+<span class="comment"># Navigate each page</span>
+page1.<span class="function">goto</span>(<span class="string">"https://example.com/page1"</span>)
+page2.<span class="function">goto</span>(<span class="string">"https://example.com/page2"</span>)
+
+<span class="comment"># Work with both</span>
+page1.<span class="function">locator</span>(<span class="string">"#btn1"</span>).<span class="function">click</span>()
+page2.<span class="function">locator</span>(<span class="string">"#btn2"</span>).<span class="function">click</span>()
+
+<span class="comment"># Get all pages in context</span>
+all_pages = context.pages
+<span class="function">print</span>(f<span class="string">"Total pages: {len(all_pages)}"</span>)</div>
+        </div>
+
+        <!-- Working with Multiple Pages -->
+        <div class="slide">
+            <h2>Managing Multiple Pages</h2>
+            <div class="code-block">
+<span class="comment"># Get all pages</span>
+all_pages = context.pages
+
+<span class="comment"># Find page by URL</span>
+<span class="keyword">for</span> p <span class="keyword">in</span> context.pages:
+    <span class="keyword">if</span> <span class="string">"dashboard"</span> <span class="keyword">in</span> p.url:
+        dashboard = p
+        <span class="keyword">break</span>
+
+<span class="comment"># Find page by title</span>
+<span class="keyword">for</span> p <span class="keyword">in</span> context.pages:
+    <span class="keyword">if</span> p.<span class="function">title</span>() == <span class="string">"Settings"</span>:
+        settings = p
+        <span class="keyword">break</span>
+
+<span class="comment"># Close a specific page</span>
+page2.<span class="function">close</span>()
+
+<span class="comment"># Close all pages except main</span>
+<span class="keyword">for</span> p <span class="keyword">in</span> context.pages[<span class="number">1</span>:]:
+    p.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- PART 3: HANDLING POPUPS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Handling Popups</h2>
+            <p>expect_popup() magic</p>
+        </div>
+
+        <!-- expect_popup() -->
+        <div class="slide">
+            <h2>The expect_popup() Method</h2>
+            <div class="code-block">
+<span class="comment"># Click opens a popup window</span>
+<span class="keyword">with</span> page.<span class="function">expect_popup</span>() <span class="keyword">as</span> popup_info:
+    page.<span class="function">locator</span>(<span class="string">"#open-popup"</span>).<span class="function">click</span>()
+
+<span class="comment"># Get the popup page</span>
+popup = popup_info.value
+
+<span class="comment"># Wait for it to load</span>
+popup.<span class="function">wait_for_load_state</span>()
+
+<span class="comment"># Work with popup</span>
+<span class="function">print</span>(popup.<span class="function">title</span>())
+popup.<span class="function">locator</span>(<span class="string">"#popup-btn"</span>).<span class="function">click</span>()
+
+<span class="comment"># Close popup when done</span>
+popup.<span class="function">close</span>()</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ expect_popup() waits for and captures the new window reference!</p>
+            </div>
+        </div>
+
+        <!-- target="_blank" Links -->
+        <div class="slide">
+            <h2>Handling target="_blank" Links</h2>
+            <div class="code-block">
+<span class="comment"># Link that opens in new tab</span>
+<span class="comment"># &lt;a href="/docs" target="_blank"&gt;Documentation&lt;/a&gt;</span>
+
+<span class="keyword">with</span> page.<span class="function">expect_popup</span>() <span class="keyword">as</span> new_tab_info:
+    page.<span class="function">locator</span>(<span class="string">"a[target='_blank']"</span>).<span class="function">click</span>()
+
+new_tab = new_tab_info.value
+new_tab.<span class="function">wait_for_load_state</span>()
+
+<span class="comment"># Verify new tab URL</span>
+<span class="function">expect</span>(new_tab).<span class="function">to_have_url</span>(<span class="string">"**/docs"</span>)
+
+<span class="comment"># Work with new tab</span>
+content = new_tab.<span class="function">locator</span>(<span class="string">"#content"</span>).<span class="function">text_content</span>()
+
+<span class="comment"># Close and return to main page</span>
+new_tab.<span class="function">close</span>()
+page.<span class="function">locator</span>(<span class="string">"#continue"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- OAuth Popup Example -->
+        <div class="slide">
+            <h2>Example: OAuth Login Popup</h2>
+            <div class="code-block">
+<span class="comment"># Click "Login with Google"</span>
+<span class="keyword">with</span> page.<span class="function">expect_popup</span>() <span class="keyword">as</span> popup_info:
+    page.<span class="function">locator</span>(<span class="string">"#google-login"</span>).<span class="function">click</span>()
+
+popup = popup_info.value
+popup.<span class="function">wait_for_load_state</span>()
+
+<span class="comment"># Fill Google login form in popup</span>
+popup.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@gmail.com"</span>)
+popup.<span class="function">locator</span>(<span class="string">"#next"</span>).<span class="function">click</span>()
+
+popup.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"password123"</span>)
+popup.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+
+<span class="comment"># Popup closes automatically after login</span>
+<span class="comment"># Wait for main page to update</span>
+page.<span class="function">wait_for_load_state</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".user-profile"</span>)).<span class="function">to_be_visible</span>()</div>
+        </div>
+
+        <!-- Multiple Popups -->
+        <div class="slide">
+            <h2>Handling Multiple Popups</h2>
+            <div class="code-block">
+<span class="comment"># When action opens multiple popups</span>
+popups = []
+
+<span class="keyword">def</span> <span class="function">capture_popup</span>(popup):
+    popups.<span class="function">append</span>(popup)
+
+<span class="comment"># Register event handler</span>
+page.<span class="function">on</span>(<span class="string">"popup"</span>, capture_popup)
+
+<span class="comment"># Trigger action that opens popups</span>
+page.<span class="function">locator</span>(<span class="string">"#multi-popup"</span>).<span class="function">click</span>()
+
+<span class="comment"># Wait a moment for popups</span>
+page.<span class="function">wait_for_timeout</span>(<span class="number">1000</span>)
+
+<span class="comment"># Process all captured popups</span>
+<span class="keyword">for</span> popup <span class="keyword">in</span> popups:
+    popup.<span class="function">wait_for_load_state</span>()
+    <span class="function">print</span>(f<span class="string">"Popup: {popup.url}"</span>)
+    popup.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- PART 4: PAGE EVENTS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Page Events</h2>
+            <p>Listening and responding</p>
+        </div>
+
+        <!-- Page Event Listeners -->
+        <div class="slide">
+            <h2>Page Event Listeners</h2>
+            <div class="code-block">
+<span class="comment"># Listen for new pages in context</span>
+<span class="keyword">def</span> <span class="function">on_new_page</span>(page):
+    <span class="function">print</span>(f<span class="string">"New page opened: {page.url}"</span>)
+
+context.<span class="function">on</span>(<span class="string">"page"</span>, on_new_page)
+
+<span class="comment"># Listen for page close</span>
+<span class="keyword">def</span> <span class="function">on_page_close</span>():
+    <span class="function">print</span>(<span class="string">"Page was closed!"</span>)
+
+page.<span class="function">on</span>(<span class="string">"close"</span>, on_page_close)
+
+<span class="comment"># Listen for console messages</span>
+<span class="keyword">def</span> <span class="function">on_console</span>(msg):
+    <span class="function">print</span>(f<span class="string">"Console [{msg.type}]: {msg.text}"</span>)
+
+page.<span class="function">on</span>(<span class="string">"console"</span>, on_console)</div>
+        </div>
+
+        <!-- Waiting for Events -->
+        <div class="slide">
+            <h2>Waiting for Page Events</h2>
+            <div class="code-block">
+<span class="comment"># Wait for new page to open</span>
+<span class="keyword">with</span> context.<span class="function">expect_page</span>() <span class="keyword">as</span> new_page_info:
+    page.<span class="function">locator</span>(<span class="string">"#open-new"</span>).<span class="function">click</span>()
+new_page = new_page_info.value
+
+<span class="comment"># Wait for download</span>
+<span class="keyword">with</span> page.<span class="function">expect_download</span>() <span class="keyword">as</span> download_info:
+    page.<span class="function">locator</span>(<span class="string">"#download-btn"</span>).<span class="function">click</span>()
+download = download_info.value
+download.<span class="function">save_as</span>(<span class="string">"file.pdf"</span>)
+
+<span class="comment"># Wait for page to close itself</span>
+<span class="keyword">with</span> page.<span class="function">expect_close</span>():
+    page.<span class="function">locator</span>(<span class="string">"#self-close-btn"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- PART 5: MULTI-USER TESTING -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Multi-User Testing</h2>
+            <p>Real-world scenarios</p>
+        </div>
+
+        <!-- Multi-User Chat Example -->
+        <div class="slide">
+            <h2>Example: Testing Chat Application</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Create separate contexts for each user</span>
+user1_ctx = browser.<span class="function">new_context</span>()
+user2_ctx = browser.<span class="function">new_context</span>()
+
+user1 = user1_ctx.<span class="function">new_page</span>()
+user2 = user2_ctx.<span class="function">new_page</span>()
+
+<span class="comment"># Both users join chat</span>
+user1.<span class="function">goto</span>(<span class="string">"https://chat.example.com"</span>)
+user1.<span class="function">locator</span>(<span class="string">"#name"</span>).<span class="function">fill</span>(<span class="string">"Alice"</span>)
+user1.<span class="function">locator</span>(<span class="string">"#join"</span>).<span class="function">click</span>()
+
+user2.<span class="function">goto</span>(<span class="string">"https://chat.example.com"</span>)
+user2.<span class="function">locator</span>(<span class="string">"#name"</span>).<span class="function">fill</span>(<span class="string">"Bob"</span>)
+user2.<span class="function">locator</span>(<span class="string">"#join"</span>).<span class="function">click</span>()
+
+<span class="comment"># Alice sends message</span>
+user1.<span class="function">locator</span>(<span class="string">"#message"</span>).<span class="function">fill</span>(<span class="string">"Hello Bob!"</span>)
+user1.<span class="function">locator</span>(<span class="string">"#send"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify Bob receives it</span>
+<span class="function">expect</span>(user2.<span class="function">locator</span>(<span class="string">".message"</span>)).<span class="function">to_contain_text</span>(<span class="string">"Hello Bob!"</span>)</div>
+        </div>
+
+        <!-- Comparing Pages -->
+        <div class="slide">
+            <h2>Example: Comparing Two Pages</h2>
+            <div class="code-block">
+<span class="comment"># Compare product prices on two stores</span>
+page1 = context.<span class="function">new_page</span>()
+page2 = context.<span class="function">new_page</span>()
+
+page1.<span class="function">goto</span>(<span class="string">"https://store1.com/product/123"</span>)
+page2.<span class="function">goto</span>(<span class="string">"https://store2.com/product/123"</span>)
+
+<span class="comment"># Extract prices</span>
+price1 = page1.<span class="function">locator</span>(<span class="string">".price"</span>).<span class="function">text_content</span>()
+price2 = page2.<span class="function">locator</span>(<span class="string">".price"</span>).<span class="function">text_content</span>()
+
+<span class="function">print</span>(f<span class="string">"Store 1: {price1}"</span>)
+<span class="function">print</span>(f<span class="string">"Store 2: {price2}"</span>)
+
+<span class="comment"># Compare availability</span>
+avail1 = page1.<span class="function">locator</span>(<span class="string">".stock"</span>).<span class="function">text_content</span>()
+avail2 = page2.<span class="function">locator</span>(<span class="string">".stock"</span>).<span class="function">text_content</span>()
+
+<span class="function">print</span>(f<span class="string">"Availability: {avail1} vs {avail2}"</span>)</div>
+        </div>
+
+        <!-- Admin + User Testing -->
+        <div class="slide">
+            <h2>Example: Admin + User Verification</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Test admin action reflects for user</span>
+admin_ctx = browser.<span class="function">new_context</span>()
+user_ctx = browser.<span class="function">new_context</span>()
+
+admin = admin_ctx.<span class="function">new_page</span>()
+user = user_ctx.<span class="function">new_page</span>()
+
+<span class="comment"># Admin creates announcement</span>
+admin.<span class="function">goto</span>(<span class="string">"https://app.com/admin"</span>)
+admin.<span class="function">locator</span>(<span class="string">"#new-announcement"</span>).<span class="function">fill</span>(<span class="string">"Site maintenance tonight"</span>)
+admin.<span class="function">locator</span>(<span class="string">"#publish"</span>).<span class="function">click</span>()
+
+<span class="comment"># User sees the announcement</span>
+user.<span class="function">goto</span>(<span class="string">"https://app.com"</span>)
+<span class="function">expect</span>(user.<span class="function">locator</span>(<span class="string">".announcement"</span>)).<span class="function">to_contain_text</span>(<span class="string">"maintenance"</span>)</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use expect_popup() for popups</li>
+                        <li>Wait for load state on new pages</li>
+                        <li>Close pages when done</li>
+                        <li>Use separate contexts for isolation</li>
+                        <li>Handle popup blockers</li>
+                        <li>Clean up resources</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Assume popup opens instantly</li>
+                        <li>Leave orphaned pages open</li>
+                        <li>Mix users in same context</li>
+                        <li>Forget about closed pages</li>
+                        <li>Ignore page reference after close</li>
+                        <li>Skip wait_for_load_state()</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Pitfalls -->
+        <div class="slide">
+            <h2>Common Pitfalls</h2>
+            <div class="code-block">
+<span class="comment"># ❌ WRONG - Popup not captured</span>
+page.<span class="function">locator</span>(<span class="string">"#popup-btn"</span>).<span class="function">click</span>()
+<span class="comment"># How to access the popup?</span>
+
+<span class="comment"># ✅ CORRECT - Use expect_popup()</span>
+<span class="keyword">with</span> page.<span class="function">expect_popup</span>() <span class="keyword">as</span> popup_info:
+    page.<span class="function">locator</span>(<span class="string">"#popup-btn"</span>).<span class="function">click</span>()
+popup = popup_info.value
+
+
+<span class="comment"># ❌ WRONG - Working with closed page</span>
+popup.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()  <span class="comment"># closes popup</span>
+popup.<span class="function">locator</span>(<span class="string">"#next"</span>).<span class="function">click</span>()  <span class="comment"># Error!</span>
+
+<span class="comment"># ✅ CORRECT - Switch to main page</span>
+popup.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()  <span class="comment"># closes popup</span>
+page.<span class="function">locator</span>(<span class="string">"#next"</span>).<span class="function">click</span>()  <span class="comment"># continue on main</span></div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>Hierarchy:</strong> Browser → Context → Page</p>
+                <p><strong>New pages:</strong> context.new_page() creates tabs</p>
+                <p><strong>Popups:</strong> expect_popup() captures new windows</p>
+                <p><strong>Events:</strong> page.on() / context.on() for listeners</p>
+                <p><strong>Isolation:</strong> Different contexts = separate sessions</p>
+                <p><strong>Multi-user:</strong> Use separate contexts per user</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Screenshots & Videos</li>
+                    <li>Authentication & Storage State</li>
+                    <li>Network Interception</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises</li>
+                <li>Try multi-user scenarios</li>
+                <li>Experiment with popups</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Multiple Pages & Windows!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can test complex multi-page scenarios</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

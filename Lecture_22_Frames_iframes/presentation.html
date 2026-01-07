@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 22: Frames & iframes</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 22</h1>
+            <div class="subtitle">Frames & iframes</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Understand frames vs iframes</li>
+                <li>✓ Access iframe content with frame_locator()</li>
+                <li>✓ Work with nested iframes</li>
+                <li>✓ Handle multiple iframes on a page</li>
+                <li>✓ Wait for iframe content to load</li>
+                <li>✓ Handle real-world scenarios (payments, editors, ads)</li>
+            </ul>
+        </div>
+
+        <!-- What are iframes -->
+        <div class="slide">
+            <h2>What are Frames & iframes?</h2>
+            <div class="highlight-box">
+                <p>An iframe (inline frame) is an HTML element that embeds another HTML document inside the current page - like a window within a window.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Common Use Cases:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>💳 **Payment forms** - Stripe, PayPal embedded forms</li>
+                <li>📝 **Rich text editors** - TinyMCE, CKEditor</li>
+                <li>📺 **Embedded videos** - YouTube, Vimeo players</li>
+                <li>📢 **Advertisements** - Google Ads, banner ads</li>
+                <li>🗺️ **Maps** - Google Maps embeds</li>
+                <li>🔐 **CAPTCHA** - reCAPTCHA widgets</li>
+            </ul>
+        </div>
+
+        <!-- iframe Structure -->
+        <div class="slide">
+            <h2>iframe HTML Structure</h2>
+            <div class="code-block">
+<span class="comment">&lt;!-- Parent page --&gt;</span>
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Main Page Content&lt;/h1&gt;
+
+    <span class="comment">&lt;!-- iframe - separate document embedded --&gt;</span>
+    &lt;iframe id=<span class="string">"payment-frame"</span> src=<span class="string">"payment.html"</span>&gt;
+      <span class="comment">&lt;!-- This is a SEPARATE document --&gt;</span>
+      &lt;html&gt;
+        &lt;body&gt;
+          &lt;input id=<span class="string">"card-number"</span>&gt;
+          &lt;button&gt;Pay Now&lt;/button&gt;
+        &lt;/body&gt;
+      &lt;/html&gt;
+    &lt;/iframe&gt;
+
+  &lt;/body&gt;
+&lt;/html&gt;</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ Elements inside iframe are in a SEPARATE document - you cannot access them directly!</p>
+            </div>
+        </div>
+
+        <!-- PART 1: BASIC IFRAME ACCESS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Basic iframe Access</h2>
+            <p>Using frame_locator()</p>
+        </div>
+
+        <!-- frame_locator() -->
+        <div class="slide">
+            <h2>The frame_locator() Method</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+
+    <span class="comment"># Access iframe by ID</span>
+    frame = page.<span class="function">frame_locator</span>(<span class="string">"#my-iframe"</span>)
+
+    <span class="comment"># Now interact with elements INSIDE the iframe</span>
+    frame.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+    frame.<span class="function">locator</span>(<span class="string">"input"</span>).<span class="function">fill</span>(<span class="string">"Hello"</span>)</div>
+            <div class="success-box" style="margin-top: 20px;">
+                <p>✅ frame_locator() returns a FrameLocator - you can chain .locator() to find elements inside!</p>
+            </div>
+        </div>
+
+        <!-- iframe Locator Strategies -->
+        <div class="slide">
+            <h2>iframe Locator Strategies</h2>
+            <div class="code-block">
+<span class="comment"># By ID</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#iframe-id"</span>)
+
+<span class="comment"># By name attribute</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[name='editor']"</span>)
+
+<span class="comment"># By source URL (exact)</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[src='https://example.com/embed']"</span>)
+
+<span class="comment"># By source URL (partial match)</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[src*='youtube']"</span>)
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[src*='payment']"</span>)
+
+<span class="comment"># By title</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[title='Video Player']"</span>)
+
+<span class="comment"># By index (first, last, nth)</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe"</span>).first
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe"</span>).last
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe"</span>).<span class="function">nth</span>(<span class="number">2</span>)</div>
+        </div>
+
+        <!-- Basic Operations -->
+        <div class="slide">
+            <h2>Basic iframe Operations</h2>
+            <div class="code-block">
+<span class="comment"># Get the frame locator</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#my-iframe"</span>)
+
+<span class="comment"># Click a button inside iframe</span>
+frame.<span class="function">locator</span>(<span class="string">"button.submit"</span>).<span class="function">click</span>()
+
+<span class="comment"># Fill an input inside iframe</span>
+frame.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"john_doe"</span>)
+
+<span class="comment"># Get text from element inside iframe</span>
+text = frame.<span class="function">locator</span>(<span class="string">"h1"</span>).<span class="function">text_content</span>()
+<span class="function">print</span>(text)
+
+<span class="comment"># Check element visibility inside iframe</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> expect
+<span class="function">expect</span>(frame.<span class="function">locator</span>(<span class="string">".success"</span>)).<span class="function">to_be_visible</span>()</div>
+        </div>
+
+        <!-- Key Concept -->
+        <div class="slide">
+            <h2>Key Concept: No "Switching" Needed</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="warning-box">
+                    <h4>❌ Selenium Approach</h4>
+                    <div class="code-block" style="font-size: 0.8em; margin-top: 10px;">
+<span class="comment"># Switch to iframe</span>
+driver.<span class="function">switch_to</span>.<span class="function">frame</span>(<span class="string">"iframe-id"</span>)
+driver.<span class="function">find_element</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+
+<span class="comment"># Switch back to main</span>
+driver.<span class="function">switch_to</span>.<span class="function">default_content</span>()
+
+<span class="comment"># Now work on main page</span>
+driver.<span class="function">find_element</span>(<span class="string">"#main-btn"</span>).<span class="function">click</span>()</div>
+                </div>
+                <div class="success-box">
+                    <h4>✅ Playwright Approach</h4>
+                    <div class="code-block" style="font-size: 0.8em; margin-top: 10px;">
+<span class="comment"># Work in iframe</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#iframe-id"</span>)
+frame.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+
+<span class="comment"># Work on main page - no switching!</span>
+page.<span class="function">locator</span>(<span class="string">"#main-btn"</span>).<span class="function">click</span>()
+
+<span class="comment"># Back to iframe - just use frame</span>
+frame.<span class="function">locator</span>(<span class="string">"input"</span>).<span class="function">fill</span>(<span class="string">"text"</span>)</div>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 20px;">
+                <p>In Playwright, you don't need to "switch" contexts - just use the frame_locator directly!</p>
+            </div>
+        </div>
+
+        <!-- PART 2: NESTED IFRAMES -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Nested iframes</h2>
+            <p>iframes within iframes</p>
+        </div>
+
+        <!-- Nested iframe Structure -->
+        <div class="slide">
+            <h2>Nested iframe Structure</h2>
+            <div class="code-block">
+<span class="comment">&lt;!-- Main page --&gt;</span>
+&lt;iframe id=<span class="string">"outer-frame"</span>&gt;
+  <span class="comment">&lt;!-- First level iframe --&gt;</span>
+  &lt;div&gt;Outer Frame Content&lt;/div&gt;
+
+  &lt;iframe id=<span class="string">"inner-frame"</span>&gt;
+    <span class="comment">&lt;!-- Second level iframe --&gt;</span>
+    &lt;button&gt;Deep Button&lt;/button&gt;
+  &lt;/iframe&gt;
+
+&lt;/iframe&gt;</div>
+            <div class="info-box" style="margin-top: 20px;">
+                <p>Nested iframes are common in complex widgets, payment flows, and legacy applications.</p>
+            </div>
+        </div>
+
+        <!-- Accessing Nested iframes -->
+        <div class="slide">
+            <h2>Accessing Nested iframes</h2>
+            <div class="code-block">
+<span class="comment"># Chain frame_locator() calls for nested iframes</span>
+
+<span class="comment"># Access outer iframe</span>
+outer = page.<span class="function">frame_locator</span>(<span class="string">"#outer-frame"</span>)
+
+<span class="comment"># Access inner iframe (inside outer)</span>
+inner = outer.<span class="function">frame_locator</span>(<span class="string">"#inner-frame"</span>)
+
+<span class="comment"># Now interact with elements in inner iframe</span>
+inner.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+
+<span class="comment"># One-liner for deeply nested iframes</span>
+page.<span class="function">frame_locator</span>(<span class="string">"#level1"</span>).<span class="function">frame_locator</span>(<span class="string">"#level2"</span>).<span class="function">frame_locator</span>(<span class="string">"#level3"</span>).<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
+            <div class="success-box" style="margin-top: 20px;">
+                <p>✅ Just chain frame_locator() calls - each returns a FrameLocator that can access its nested iframes!</p>
+            </div>
+        </div>
+
+        <!-- PART 3: MULTIPLE IFRAMES -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Multiple iframes</h2>
+            <p>Working with many iframes on one page</p>
+        </div>
+
+        <!-- Multiple iframes -->
+        <div class="slide">
+            <h2>Working with Multiple iframes</h2>
+            <div class="code-block">
+<span class="comment"># Count iframes on page</span>
+iframe_count = page.<span class="function">locator</span>(<span class="string">"iframe"</span>).<span class="function">count</span>()
+<span class="function">print</span>(f<span class="string">"Found {iframe_count} iframes"</span>)
+
+<span class="comment"># Access specific iframe by index</span>
+first_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe"</span>).first
+second_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe"</span>).<span class="function">nth</span>(<span class="number">1</span>)
+last_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe"</span>).last
+
+<span class="comment"># Access by specific attribute</span>
+payment_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[src*='payment']"</span>)
+ad_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[src*='ads']"</span>)
+editor_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[name='editor']"</span>)</div>
+        </div>
+
+        <!-- Iterating iframes -->
+        <div class="slide">
+            <h2>Iterating Through iframes</h2>
+            <div class="code-block">
+<span class="comment"># Get all iframe elements (not frame_locators)</span>
+iframes = page.<span class="function">locator</span>(<span class="string">"iframe"</span>).<span class="function">all</span>()
+
+<span class="keyword">for</span> i, iframe <span class="keyword">in</span> <span class="function">enumerate</span>(iframes):
+    <span class="comment"># Get iframe attributes</span>
+    src = iframe.<span class="function">get_attribute</span>(<span class="string">"src"</span>)
+    name = iframe.<span class="function">get_attribute</span>(<span class="string">"name"</span>)
+    <span class="function">print</span>(f<span class="string">"iframe {i}: src={src}, name={name}"</span>)
+
+    <span class="comment"># Access as frame_locator</span>
+    frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe"</span>).<span class="function">nth</span>(i)
+
+    <span class="comment"># Check if it has specific content</span>
+    <span class="keyword">if</span> frame.<span class="function">locator</span>(<span class="string">"#target-element"</span>).<span class="function">count</span>() > <span class="number">0</span>:
+        <span class="function">print</span>(<span class="string">"Found target in this iframe!"</span>)
+        frame.<span class="function">locator</span>(<span class="string">"#target-element"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- PART 4: WAITING FOR IFRAMES -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Waiting for iframes</h2>
+            <p>Handle dynamic iframe loading</p>
+        </div>
+
+        <!-- Waiting for iframe -->
+        <div class="slide">
+            <h2>Waiting for iframe to Load</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> expect
+
+<span class="comment"># Wait for iframe element to be attached to DOM</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#my-iframe"</span>)).<span class="function">to_be_attached</span>()
+
+<span class="comment"># Wait for iframe element to be visible</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#my-iframe"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Now access the iframe</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#my-iframe"</span>)
+
+<span class="comment"># Wait for specific content INSIDE iframe to load</span>
+<span class="function">expect</span>(frame.<span class="function">locator</span>(<span class="string">".content"</span>)).<span class="function">to_be_visible</span>()
+<span class="function">expect</span>(frame.<span class="function">locator</span>(<span class="string">"h1"</span>)).<span class="function">to_have_text</span>(<span class="string">"Welcome"</span>)
+
+<span class="comment"># Now safe to interact</span>
+frame.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Dynamic iframes -->
+        <div class="slide">
+            <h2>Dynamic iframes</h2>
+            <div class="code-block">
+<span class="comment"># iframe that appears after user action</span>
+page.<span class="function">locator</span>(<span class="string">"#show-payment-form"</span>).<span class="function">click</span>()
+
+<span class="comment"># Wait for iframe to appear</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#payment-iframe"</span>)).<span class="function">to_be_attached</span>()
+
+<span class="comment"># Access and wait for content</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#payment-iframe"</span>)
+<span class="function">expect</span>(frame.<span class="function">locator</span>(<span class="string">"#card-number"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Now fill the form</span>
+frame.<span class="function">locator</span>(<span class="string">"#card-number"</span>).<span class="function">fill</span>(<span class="string">"4111111111111111"</span>)</div>
+            <div class="info-box" style="margin-top: 20px;">
+                <p>Always wait for iframe content to be ready before interacting with it!</p>
+            </div>
+        </div>
+
+        <!-- PART 5: REAL-WORLD SCENARIOS -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Real-World Scenarios</h2>
+            <p>Payment forms, editors, ads</p>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="slide">
+            <h2>Scenario 1: Payment Form (Stripe-like)</h2>
+            <div class="code-block">
+<span class="comment"># Payment forms are often in iframes for security (PCI compliance)</span>
+
+<span class="comment"># Wait for payment iframe</span>
+payment = page.<span class="function">frame_locator</span>(<span class="string">"iframe[name='payment']"</span>)
+<span class="function">expect</span>(payment.<span class="function">locator</span>(<span class="string">"#card-number"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Fill card details</span>
+payment.<span class="function">locator</span>(<span class="string">"#card-number"</span>).<span class="function">fill</span>(<span class="string">"4111111111111111"</span>)
+payment.<span class="function">locator</span>(<span class="string">"#expiry"</span>).<span class="function">fill</span>(<span class="string">"12/25"</span>)
+payment.<span class="function">locator</span>(<span class="string">"#cvv"</span>).<span class="function">fill</span>(<span class="string">"123"</span>)
+payment.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify success (back in main page)</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".payment-success"</span>)).<span class="function">to_be_visible</span>()</div>
+        </div>
+
+        <!-- Rich Text Editor -->
+        <div class="slide">
+            <h2>Scenario 2: Rich Text Editor (TinyMCE)</h2>
+            <div class="code-block">
+<span class="comment"># TinyMCE and similar editors use iframe for the editing area</span>
+
+<span class="comment"># The iframe usually has _ifr suffix</span>
+editor = page.<span class="function">frame_locator</span>(<span class="string">"#tinymce_ifr"</span>)
+
+<span class="comment"># The editable area is the body element inside</span>
+editor_body = editor.<span class="function">locator</span>(<span class="string">"body"</span>)
+
+<span class="comment"># Clear and type new content</span>
+editor_body.<span class="function">clear</span>()
+editor_body.<span class="function">fill</span>(<span class="string">"Hello, this is my content!"</span>)
+
+<span class="comment"># Or use keyboard for special formatting</span>
+editor_body.<span class="function">press_sequentially</span>(<span class="string">"Bold text"</span>)
+editor_body.<span class="function">press</span>(<span class="string">"Control+a"</span>)  <span class="comment"># Select all</span>
+
+<span class="comment"># Toolbar buttons are usually in main page</span>
+page.<span class="function">locator</span>(<span class="string">"button[title='Bold']"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Handling Ads -->
+        <div class="slide">
+            <h2>Scenario 3: Handling Advertisements</h2>
+            <div class="code-block">
+<span class="comment"># Ad iframes often need to be dismissed or ignored</span>
+
+<span class="comment"># Check if ad iframe exists</span>
+ad_locator = page.<span class="function">locator</span>(<span class="string">"iframe[id*='google_ads']"</span>)
+
+<span class="keyword">if</span> ad_locator.<span class="function">count</span>() > <span class="number">0</span>:
+    <span class="function">print</span>(<span class="string">"Ad iframe detected"</span>)
+
+    <span class="comment"># Try to close the ad if there's a close button</span>
+    ad_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[id*='google_ads']"</span>)
+
+    <span class="keyword">try</span>:
+        close_btn = ad_frame.<span class="function">locator</span>(<span class="string">".close-btn"</span>)
+        <span class="keyword">if</span> close_btn.<span class="function">is_visible</span>():
+            close_btn.<span class="function">click</span>()
+    <span class="keyword">except</span>:
+        <span class="function">print</span>(<span class="string">"No close button found"</span>)
+        <span class="keyword">pass</span>  <span class="comment"># Continue with test</span></div>
+        </div>
+
+        <!-- CAPTCHA -->
+        <div class="slide">
+            <h2>Scenario 4: CAPTCHA (reCAPTCHA)</h2>
+            <div class="code-block">
+<span class="comment"># reCAPTCHA uses iframes - usually not automatable in production</span>
+<span class="comment"># But for testing environments, you might have test keys</span>
+
+<span class="comment"># Find the reCAPTCHA iframe</span>
+captcha_frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe[title*='reCAPTCHA']"</span>)
+
+<span class="comment"># Click the checkbox (works with test keys)</span>
+captcha_frame.<span class="function">locator</span>(<span class="string">".recaptcha-checkbox"</span>).<span class="function">click</span>()
+
+<span class="comment"># Wait for verification</span>
+<span class="function">expect</span>(captcha_frame.<span class="function">locator</span>(<span class="string">".recaptcha-checkbox"</span>)).<span class="function">to_be_checked</span>()</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ Real CAPTCHAs cannot be automated. Use test keys or bypass mechanisms in test environments.</p>
+            </div>
+        </div>
+
+        <!-- frame() API -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Alternative: frame() API</h2>
+            <p>Direct frame access</p>
+        </div>
+
+        <!-- frame() vs frame_locator() -->
+        <div class="slide">
+            <h2>frame() vs frame_locator()</h2>
+            <div class="code-block">
+<span class="comment"># frame_locator() - Modern, chainable (RECOMMENDED)</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#my-iframe"</span>)
+frame.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+
+<span class="comment"># frame() - Direct frame access (legacy)</span>
+frame = page.<span class="function">frame</span>(<span class="string">"frame-name"</span>)  <span class="comment"># By name attribute</span>
+frame.<span class="function">click</span>(<span class="string">"button"</span>)  <span class="comment"># Different syntax</span>
+
+<span class="comment"># frame() by URL pattern</span>
+frame = page.<span class="function">frame</span>(url=<span class="keyword">lambda</span> url: <span class="string">"payment"</span> <span class="keyword">in</span> url)
+
+<span class="comment"># Get all frames</span>
+all_frames = page.frames
+<span class="function">print</span>(f<span class="string">"Page has {len(all_frames)} frames"</span>)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>Use <strong>frame_locator()</strong> for most cases - it's chainable and has auto-waiting!</p>
+            </div>
+        </div>
+
+        <!-- Frame Properties -->
+        <div class="slide">
+            <h2>Frame Properties</h2>
+            <div class="code-block">
+<span class="comment"># Get frame using frame() API</span>
+frame = page.<span class="function">frame</span>(<span class="string">"my-frame"</span>)
+
+<span class="comment"># Frame URL</span>
+<span class="function">print</span>(frame.url)
+
+<span class="comment"># Frame name</span>
+<span class="function">print</span>(frame.name)
+
+<span class="comment"># Parent frame (None if main frame)</span>
+parent = frame.parent_frame
+
+<span class="comment"># Check if it's the main frame</span>
+is_main = frame == page.main_frame
+
+<span class="comment"># Get child frames</span>
+children = frame.child_frames
+
+<span class="comment"># All frames on page</span>
+<span class="keyword">for</span> f <span class="keyword">in</span> page.frames:
+    <span class="function">print</span>(f<span class="string">"Frame: {f.name}, URL: {f.url}"</span>)</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use frame_locator() for chainable syntax</li>
+                        <li>Wait for iframe to be attached first</li>
+                        <li>Use specific selectors (id, name, src)</li>
+                        <li>Wait for content inside iframe</li>
+                        <li>Re-query after page navigation</li>
+                        <li>Handle missing iframes gracefully</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Assume iframe is immediately available</li>
+                        <li>Use generic "iframe" when many exist</li>
+                        <li>Forget iframe is a separate document</li>
+                        <li>Access elements without frame_locator</li>
+                        <li>Hardcode iframe indices</li>
+                        <li>Ignore cross-origin restrictions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Pitfalls -->
+        <div class="slide">
+            <h2>Common Pitfalls</h2>
+            <div class="code-block">
+<span class="comment"># ❌ WRONG - trying to access iframe content directly</span>
+page.<span class="function">locator</span>(<span class="string">"#button-inside-iframe"</span>).<span class="function">click</span>()  <span class="comment"># Won't work!</span>
+
+<span class="comment"># ✅ CORRECT - use frame_locator first</span>
+page.<span class="function">frame_locator</span>(<span class="string">"#iframe"</span>).<span class="function">locator</span>(<span class="string">"#button-inside-iframe"</span>).<span class="function">click</span>()
+
+
+<span class="comment"># ❌ WRONG - not waiting for iframe</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#dynamic-iframe"</span>)
+frame.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()  <span class="comment"># May fail!</span>
+
+<span class="comment"># ✅ CORRECT - wait first</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#dynamic-iframe"</span>)).<span class="function">to_be_attached</span>()
+frame = page.<span class="function">frame_locator</span>(<span class="string">"#dynamic-iframe"</span>)
+<span class="function">expect</span>(frame.<span class="function">locator</span>(<span class="string">"button"</span>)).<span class="function">to_be_visible</span>()
+frame.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>frame_locator()</strong> - Modern way to access iframes, chainable with .locator()</p>
+                <p><strong>Selectors:</strong> #id, [name='...'], [src*='...'], .first, .nth()</p>
+                <p><strong>Nested:</strong> Chain frame_locator() calls</p>
+                <p><strong>Waiting:</strong> Wait for iframe and its content before interacting</p>
+                <p><strong>No switching:</strong> Unlike Selenium, no need to switch context</p>
+                <p><strong>Real-world:</strong> Payment forms, editors, ads, CAPTCHAs</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Multiple Pages & Windows (popups, tabs)</li>
+                    <li>Screenshots & Videos</li>
+                    <li>Authentication & Storage State</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises</li>
+                <li>Try the examples with real websites</li>
+                <li>Experiment with nested iframes</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Frames & iframes!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can automate any embedded content</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
