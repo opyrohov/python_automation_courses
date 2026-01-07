@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 25: Authentication</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 25</h1>
+            <div class="subtitle">Authentication</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Handle HTTP Basic Authentication</li>
+                <li>✓ Automate form-based login</li>
+                <li>✓ Save authentication state with storage_state()</li>
+                <li>✓ Reuse auth across multiple tests</li>
+                <li>✓ Manage sessions and contexts</li>
+                <li>✓ Apply security best practices</li>
+            </ul>
+        </div>
+
+        <!-- Why Authentication Matters -->
+        <div class="slide">
+            <h2>Why Authentication Matters</h2>
+            <div class="highlight-box">
+                <p>Most web apps require login. We want to login once and reuse the session across all tests for efficiency.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Key Goals:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🚀 **Speed** - Login once, not before every test</li>
+                <li>🔒 **Security** - Never commit credentials to git</li>
+                <li>👥 **Multi-user** - Test different user roles</li>
+                <li>🔄 **Reusability** - Share auth state across tests</li>
+            </ul>
+        </div>
+
+        <!-- Types of Auth -->
+        <div class="slide">
+            <h2>Types of Authentication</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="info-box">
+                    <h4>🔐 HTTP Basic Auth</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Browser dialog popup</li>
+                        <li>Credentials in headers</li>
+                        <li>Simple but limited</li>
+                    </ul>
+                </div>
+                <div class="success-box">
+                    <h4>📝 Form-Based Auth</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Login form on page</li>
+                        <li>Session cookies</li>
+                        <li>Most common approach</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: HTTP BASIC -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>HTTP Basic Authentication</h2>
+            <p>http_credentials option</p>
+        </div>
+
+        <!-- HTTP Basic - URL -->
+        <div class="slide">
+            <h2>HTTP Basic Auth - URL Method</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    page = browser.<span class="function">new_page</span>()
+
+    <span class="comment"># Credentials in URL</span>
+    page.<span class="function">goto</span>(<span class="string">"https://admin:admin@the-internet.herokuapp.com/basic_auth"</span>)
+
+    <span class="comment"># Page loads authenticated</span>
+    <span class="function">print</span>(page.<span class="function">locator</span>(<span class="string">"p"</span>).<span class="function">text_content</span>())
+
+    browser.<span class="function">close</span>()</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p><strong>Warning:</strong> Credentials visible in logs - use for testing only!</p>
+            </div>
+        </div>
+
+        <!-- HTTP Basic - Context -->
+        <div class="slide">
+            <h2>HTTP Basic Auth - Context Option</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+
+    <span class="comment"># Set credentials at context level</span>
+    context = browser.<span class="function">new_context</span>(
+        http_credentials={
+            <span class="string">"username"</span>: <span class="string">"admin"</span>,
+            <span class="string">"password"</span>: <span class="string">"admin"</span>
+        }
+    )
+    page = context.<span class="function">new_page</span>()
+
+    <span class="comment"># All requests in this context are authenticated</span>
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/basic_auth"</span>)
+
+    browser.<span class="function">close</span>()</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Recommended: Cleaner and more secure</p>
+            </div>
+        </div>
+
+        <!-- PART 2: FORM LOGIN -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Form-Based Login</h2>
+            <p>Automating login forms</p>
+        </div>
+
+        <!-- Form Login -->
+        <div class="slide">
+            <h2>Form-Based Login</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright, expect
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+    page = browser.<span class="function">new_page</span>()
+
+    <span class="comment"># Navigate to login page</span>
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+
+    <span class="comment"># Fill login form</span>
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SuperSecretPassword!"</span>)
+
+    <span class="comment"># Submit</span>
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+
+    <span class="comment"># Verify login success</span>
+    <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".flash.success"</span>)).<span class="function">to_be_visible</span>()
+
+    browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Login Best Practices -->
+        <div class="slide">
+            <h2>Login Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Wait for URL change or success element</li>
+                        <li>Use environment variables</li>
+                        <li>Use dedicated test accounts</li>
+                        <li>Handle login errors</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Hardcode passwords in code</li>
+                        <li>Use real user accounts</li>
+                        <li>Commit credentials to git</li>
+                        <li>Skip waiting for login completion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Problem -->
+        <div class="slide">
+            <h2>The Problem: Slow Logins</h2>
+            <div class="code-block">
+<span class="comment"># Every test does this - SLOW!</span>
+<span class="keyword">def</span> <span class="function">test_feature_1</span>():
+    <span class="function">login</span>()  <span class="comment"># 3 seconds</span>
+    <span class="comment"># test code...</span>
+
+<span class="keyword">def</span> <span class="function">test_feature_2</span>():
+    <span class="function">login</span>()  <span class="comment"># 3 seconds again</span>
+    <span class="comment"># test code...</span>
+
+<span class="keyword">def</span> <span class="function">test_feature_3</span>():
+    <span class="function">login</span>()  <span class="comment"># 3 seconds again!</span>
+    <span class="comment"># test code...</span>
+
+<span class="comment"># 10 tests = 30 seconds just for login!</span></div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p><strong>Solution:</strong> Save and reuse authentication state!</p>
+            </div>
+        </div>
+
+        <!-- PART 3: STORAGE STATE -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Saving Auth State</h2>
+            <p>storage_state() magic</p>
+        </div>
+
+        <!-- Saving State -->
+        <div class="slide">
+            <h2>Saving Authentication State</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    context = browser.<span class="function">new_context</span>()
+    page = context.<span class="function">new_page</span>()
+
+    <span class="comment"># Perform login</span>
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SuperSecretPassword!"</span>)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+    page.<span class="function">wait_for_url</span>(<span class="string">"**/secure"</span>)
+
+    <span class="comment"># Save authentication state to file</span>
+    context.<span class="function">storage_state</span>(path=<span class="string">"auth_state.json"</span>)
+    <span class="function">print</span>(<span class="string">"Authentication state saved!"</span>)
+
+    browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- What's in State -->
+        <div class="slide">
+            <h2>What's in the State File?</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+{
+  <span class="string">"cookies"</span>: [
+    {
+      <span class="string">"name"</span>: <span class="string">"rack.session"</span>,
+      <span class="string">"value"</span>: <span class="string">"abc123..."</span>,
+      <span class="string">"domain"</span>: <span class="string">"the-internet.herokuapp.com"</span>,
+      <span class="string">"path"</span>: <span class="string">"/"</span>,
+      <span class="string">"expires"</span>: <span class="number">1735689600</span>,
+      <span class="string">"httpOnly"</span>: <span class="keyword">true</span>,
+      <span class="string">"secure"</span>: <span class="keyword">true</span>
+    }
+  ],
+  <span class="string">"origins"</span>: [
+    {
+      <span class="string">"origin"</span>: <span class="string">"https://the-internet.herokuapp.com"</span>,
+      <span class="string">"localStorage"</span>: []
+    }
+  ]
+}</div>
+            <div class="info-box" style="margin-top: 10px;">
+                <p>Contains cookies + localStorage = complete session</p>
+            </div>
+        </div>
+
+        <!-- Reusing State -->
+        <div class="slide">
+            <h2>Reusing Authentication State</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright, expect
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+
+    <span class="comment"># Create context with saved state</span>
+    context = browser.<span class="function">new_context</span>(
+        storage_state=<span class="string">"auth_state.json"</span>
+    )
+    page = context.<span class="function">new_page</span>()
+
+    <span class="comment"># Already logged in - go directly to protected page!</span>
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/secure"</span>)
+
+    <span class="comment"># Verify we're logged in</span>
+    <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".flash.success"</span>)).<span class="function">to_be_visible</span>()
+
+    browser.<span class="function">close</span>()</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ No login needed - session restored instantly!</p>
+            </div>
+        </div>
+
+        <!-- Workflow -->
+        <div class="slide">
+            <h2>Authentication Workflow</h2>
+            <ol style="font-size: 1.2em; line-height: 1.8;">
+                <li><strong>Setup (once):</strong> Login and save state</li>
+                <li><strong>Tests (many):</strong> Load state and test</li>
+                <li><strong>Refresh:</strong> When state expires, re-save</li>
+            </ol>
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># setup_auth.py - Run once before tests</span>
+context.<span class="function">storage_state</span>(path=<span class="string">"auth_state.json"</span>)
+
+<span class="comment"># test_*.py - All tests load saved state</span>
+context = browser.<span class="function">new_context</span>(storage_state=<span class="string">"auth_state.json"</span>)</div>
+        </div>
+
+        <!-- PART 4: MULTI-USER -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Multi-User Testing</h2>
+            <p>Session isolation</p>
+        </div>
+
+        <!-- Multiple Users -->
+        <div class="slide">
+            <h2>Multiple User Sessions</h2>
+            <div class="code-block">
+<span class="comment"># Save different user states</span>
+
+<span class="comment"># Admin setup</span>
+<span class="function">login_as</span>(<span class="string">"admin"</span>, <span class="string">"admin_pass"</span>)
+context.<span class="function">storage_state</span>(path=<span class="string">"admin_state.json"</span>)
+
+<span class="comment"># User setup</span>
+<span class="function">login_as</span>(<span class="string">"regular_user"</span>, <span class="string">"user_pass"</span>)
+context.<span class="function">storage_state</span>(path=<span class="string">"user_state.json"</span>)
+
+<span class="comment"># In tests - use different states</span>
+admin_ctx = browser.<span class="function">new_context</span>(storage_state=<span class="string">"admin_state.json"</span>)
+user_ctx = browser.<span class="function">new_context</span>(storage_state=<span class="string">"user_state.json"</span>)
+
+admin_page = admin_ctx.<span class="function">new_page</span>()
+user_page = user_ctx.<span class="function">new_page</span>()</div>
+        </div>
+
+        <!-- Session Isolation -->
+        <div class="slide">
+            <h2>Session Isolation</h2>
+            <div class="code-block">
+<span class="comment"># Each context has its own session</span>
+admin_ctx = browser.<span class="function">new_context</span>(storage_state=<span class="string">"admin.json"</span>)
+user_ctx = browser.<span class="function">new_context</span>(storage_state=<span class="string">"user.json"</span>)
+guest_ctx = browser.<span class="function">new_context</span>()  <span class="comment"># No auth - guest</span>
+
+admin_page = admin_ctx.<span class="function">new_page</span>()
+user_page = user_ctx.<span class="function">new_page</span>()
+guest_page = guest_ctx.<span class="function">new_page</span>()
+
+<span class="comment"># All three can work simultaneously</span>
+<span class="comment"># with different permissions!</span></div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>Contexts are completely isolated - perfect for multi-user testing!</p>
+            </div>
+        </div>
+
+        <!-- PART 5: SECURITY -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Security Best Practices</h2>
+            <p>Keeping credentials safe</p>
+        </div>
+
+        <!-- Environment Variables -->
+        <div class="slide">
+            <h2>Using Environment Variables</h2>
+            <div class="code-block">
+<span class="keyword">import</span> os
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="comment"># Get credentials from environment</span>
+USERNAME = os.environ.<span class="function">get</span>(<span class="string">"TEST_USER"</span>, <span class="string">"default"</span>)
+PASSWORD = os.environ.<span class="function">get</span>(<span class="string">"TEST_PASS"</span>, <span class="string">"default"</span>)
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    page = browser.<span class="function">new_page</span>()
+
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(USERNAME)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(PASSWORD)
+
+    browser.<span class="function">close</span>()</div>
+            <p style="margin-top: 15px;">Run: <code>TEST_USER=admin TEST_PASS=secret python test.py</code></p>
+        </div>
+
+        <!-- Security Rules -->
+        <div class="slide">
+            <h2>Security Rules</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="warning-box">
+                    <h4>🔒 NEVER</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Commit credentials to git</li>
+                        <li>Hardcode passwords</li>
+                        <li>Use real user accounts</li>
+                        <li>Share auth files publicly</li>
+                    </ul>
+                </div>
+                <div class="success-box">
+                    <h4>✅ ALWAYS</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use environment variables</li>
+                        <li>Add auth files to .gitignore</li>
+                        <li>Use dedicated test accounts</li>
+                        <li>Rotate credentials regularly</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="code-block" style="margin-top: 20px; font-size: 0.9em;">
+<span class="comment"># .gitignore</span>
+auth_state.json
+*_auth.json
+.env</div>
+        </div>
+
+        <!-- Complete Example -->
+        <div class="slide">
+            <h2>Complete Auth Setup Script</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="string">"""auth_setup.py - Run once to create auth state"""</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+<span class="keyword">import</span> os
+
+AUTH_FILE = <span class="string">"auth_state.json"</span>
+
+<span class="keyword">def</span> <span class="function">setup_auth</span>():
+    <span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+        browser = p.chromium.<span class="function">launch</span>()
+        context = browser.<span class="function">new_context</span>()
+        page = context.<span class="function">new_page</span>()
+
+        page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+        page.<span class="function">fill</span>(<span class="string">"#username"</span>, os.environ[<span class="string">"TEST_USER"</span>])
+        page.<span class="function">fill</span>(<span class="string">"#password"</span>, os.environ[<span class="string">"TEST_PASS"</span>])
+        page.<span class="function">click</span>(<span class="string">"button[type='submit']"</span>)
+        page.<span class="function">wait_for_url</span>(<span class="string">"**/secure"</span>)
+
+        context.<span class="function">storage_state</span>(path=AUTH_FILE)
+        <span class="function">print</span>(f<span class="string">"Auth saved to {AUTH_FILE}"</span>)
+        browser.<span class="function">close</span>()
+
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    <span class="function">setup_auth</span>()</div>
+        </div>
+
+        <!-- Using in Tests -->
+        <div class="slide">
+            <h2>Using Auth in Tests</h2>
+            <div class="code-block">
+<span class="string">"""test_secure_pages.py"""</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright, expect
+
+AUTH_FILE = <span class="string">"auth_state.json"</span>
+
+<span class="keyword">def</span> <span class="function">test_secure_page</span>():
+    <span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+        browser = p.chromium.<span class="function">launch</span>()
+        <span class="comment"># Load saved authentication</span>
+        context = browser.<span class="function">new_context</span>(storage_state=AUTH_FILE)
+        page = context.<span class="function">new_page</span>()
+
+        <span class="comment"># Go directly to protected page</span>
+        page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/secure"</span>)
+
+        <span class="comment"># Test the protected functionality</span>
+        <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"h2"</span>)).<span class="function">to_have_text</span>(<span class="string">"Secure Area"</span>)
+
+        browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Common Issues -->
+        <div class="slide">
+            <h2>Common Issues</h2>
+            <div class="info-box">
+                <table style="width: 100%; font-size: 1em;">
+                    <tr>
+                        <th>Issue</th>
+                        <th>Solution</th>
+                    </tr>
+                    <tr>
+                        <td>State not loading</td>
+                        <td>Check file path is correct</td>
+                    </tr>
+                    <tr>
+                        <td>Session expired</td>
+                        <td>Re-run auth setup script</td>
+                    </tr>
+                    <tr>
+                        <td>Wrong user logged in</td>
+                        <td>Verify correct state file</td>
+                    </tr>
+                    <tr>
+                        <td>HTTP auth fails</td>
+                        <td>Use http_credentials option</td>
+                    </tr>
+                    <tr>
+                        <td>Cookies not saved</td>
+                        <td>Wait for login to complete first</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>http_credentials</strong> - for HTTP Basic Auth</p>
+                <p><strong>storage_state(path=...)</strong> - save session to file</p>
+                <p><strong>storage_state="file.json"</strong> - load session from file</p>
+                <p><strong>Save once, reuse everywhere</strong> - efficient testing</p>
+                <p><strong>Separate contexts</strong> - isolated user sessions</p>
+                <p><strong>Environment variables</strong> - secure credentials</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Cookies & Local Storage</li>
+                    <li>Network Interception</li>
+                    <li>API Testing with Playwright</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises</li>
+                <li>Create auth setup script</li>
+                <li>Test with saved state</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Authentication!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can efficiently handle login in your tests</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

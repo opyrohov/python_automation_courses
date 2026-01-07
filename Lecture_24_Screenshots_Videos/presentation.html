@@ -7,457 +7,433 @@
     <link rel="stylesheet" href="../assets/presentation/css/styles.css">
 </head>
 <body>
-    <div class="reveal">
-        <div class="slides">
-            <!-- Slide 1: Title -->
-            <section>
-                <h1>Screenshots & Videos</h1>
-                <h3>Lecture 24</h3>
-                <p>Capturing visual artifacts in Playwright</p>
-            </section>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
 
-            <!-- Slide 2: Agenda -->
-            <section>
-                <h2>Agenda</h2>
-                <ul>
-                    <li>Taking screenshots</li>
-                    <li>Full page vs element screenshots</li>
-                    <li>Video recording</li>
-                    <li>Screenshot options</li>
-                    <li>Artifacts management</li>
-                    <li>Best practices</li>
-                </ul>
-            </section>
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 24</h1>
+            <div class="subtitle">Screenshots & Videos</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
 
-            <!-- Slide 3: Why Screenshots and Videos? -->
-            <section>
-                <h2>Why Screenshots and Videos?</h2>
-                <div class="two-columns">
-                    <div>
-                        <h4>Debugging</h4>
-                        <ul>
-                            <li>See what happened during failure</li>
-                            <li>Visual proof of bugs</li>
-                            <li>Compare expected vs actual</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Documentation</h4>
-                        <ul>
-                            <li>Test execution evidence</li>
-                            <li>Visual regression testing</li>
-                            <li>CI/CD artifacts</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Take screenshots with page.screenshot()</li>
+                <li>✓ Capture full page vs element screenshots</li>
+                <li>✓ Record videos of test execution</li>
+                <li>✓ Configure screenshot options and formats</li>
+                <li>✓ Manage test artifacts effectively</li>
+                <li>✓ Implement screenshot best practices</li>
+            </ul>
+        </div>
 
-            <!-- Slide 4: Basic Screenshot -->
-            <section>
-                <h2>Basic Screenshot</h2>
-                <pre><code class="language-python">from playwright.sync_api import sync_playwright
+        <!-- Why Screenshots and Videos -->
+        <div class="slide">
+            <h2>Why Screenshots & Videos?</h2>
+            <div class="highlight-box">
+                <p>Visual artifacts help debug failures, document test runs, and create evidence for CI/CD pipelines.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Common Use Cases:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🐛 **Debugging** - See exactly what happened during failure</li>
+                <li>📋 **Documentation** - Visual proof of test execution</li>
+                <li>🔍 **Visual Testing** - Compare screenshots for regressions</li>
+                <li>📊 **Reports** - Attach artifacts to test reports</li>
+                <li>🎥 **Video Evidence** - Record entire test flow</li>
+            </ul>
+        </div>
 
-with sync_playwright() as p:
-    browser = p.chromium.launch()
-    page = browser.new_page()
+        <!-- PART 1: SCREENSHOTS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Taking Screenshots</h2>
+            <p>page.screenshot() basics</p>
+        </div>
 
-    page.goto("https://example.com")
+        <!-- Basic Screenshot -->
+        <div class="slide">
+            <h2>Basic Screenshot</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
 
-    # Take screenshot and save to file
-    page.screenshot(path="screenshot.png")
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    page = browser.<span class="function">new_page</span>()
 
-    browser.close()</code></pre>
-                <p class="highlight">Simple one-liner to capture the visible viewport</p>
-            </section>
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
 
-            <!-- Slide 5: Screenshot as Bytes -->
-            <section>
-                <h2>Screenshot as Bytes</h2>
-                <pre><code class="language-python"># Get screenshot as bytes (no file saved)
-screenshot_bytes = page.screenshot()
+    <span class="comment"># Take screenshot and save to file</span>
+    page.<span class="function">screenshot</span>(path=<span class="string">"screenshot.png"</span>)
 
-# Use bytes for comparison, upload, etc.
-print(f"Screenshot size: {len(screenshot_bytes)} bytes")
+    browser.<span class="function">close</span>()</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Simple one-liner to capture the visible viewport!</p>
+            </div>
+        </div>
 
-# Save bytes manually
-with open("manual_save.png", "wb") as f:
-    f.write(screenshot_bytes)</code></pre>
-                <p>Useful for in-memory processing or custom storage</p>
-            </section>
+        <!-- Screenshot as Bytes -->
+        <div class="slide">
+            <h2>Screenshot as Bytes</h2>
+            <div class="code-block">
+<span class="comment"># Get screenshot as bytes (no file saved)</span>
+screenshot_bytes = page.<span class="function">screenshot</span>()
 
-            <!-- Slide 6: Full Page Screenshot -->
-            <section>
-                <h2>Full Page Screenshot</h2>
-                <pre><code class="language-python"># Capture entire scrollable page
-page.screenshot(
-    path="full_page.png",
-    full_page=True
-)
+<span class="comment"># Use bytes for comparison, upload, etc.</span>
+<span class="function">print</span>(f<span class="string">"Screenshot size: {len(screenshot_bytes)} bytes"</span>)
 
-# Without full_page - only viewport is captured
-page.screenshot(path="viewport_only.png")</code></pre>
+<span class="comment"># Save bytes manually</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"manual_save.png"</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> f:
+    f.<span class="function">write</span>(screenshot_bytes)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>Useful for in-memory processing, comparisons, or custom storage</p>
+            </div>
+        </div>
+
+        <!-- Full Page Screenshot -->
+        <div class="slide">
+            <h2>Full Page vs Viewport</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="info-box">
-                    <strong>Note:</strong> Full page screenshots scroll the page automatically
+                    <h4>Viewport Only (default)</h4>
+                    <div class="code-block" style="font-size: 0.85em;">
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"viewport.png"</span>
+)</div>
+                    <p style="margin-top: 10px;">Only visible area</p>
                 </div>
-            </section>
-
-            <!-- Slide 7: Full Page Visualization -->
-            <section>
-                <h2>Viewport vs Full Page</h2>
-                <div class="two-columns">
-                    <div>
-                        <h4>Viewport Only</h4>
-                        <pre><code>page.screenshot(
-    path="viewport.png"
-)</code></pre>
-                        <p>Only visible area</p>
-                    </div>
-                    <div>
-                        <h4>Full Page</h4>
-                        <pre><code>page.screenshot(
-    path="full.png",
-    full_page=True
-)</code></pre>
-                        <p>Entire scrollable content</p>
-                    </div>
+                <div class="success-box">
+                    <h4>Full Page</h4>
+                    <div class="code-block" style="font-size: 0.85em;">
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"full.png"</span>,
+    full_page=<span class="keyword">True</span>
+)</div>
+                    <p style="margin-top: 10px;">Entire scrollable content</p>
                 </div>
-            </section>
+            </div>
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Note:</strong> Full page screenshots scroll the page automatically</p>
+            </div>
+        </div>
 
-            <!-- Slide 8: Element Screenshot -->
-            <section>
-                <h2>Element Screenshot</h2>
-                <pre><code class="language-python"># Screenshot of specific element
-header = page.locator("header")
-header.screenshot(path="header.png")
+        <!-- Element Screenshot -->
+        <div class="slide">
+            <h2>Element Screenshot</h2>
+            <div class="code-block">
+<span class="comment"># Screenshot of specific element</span>
+header = page.<span class="function">locator</span>(<span class="string">"header"</span>)
+header.<span class="function">screenshot</span>(path=<span class="string">"header.png"</span>)
 
-# Any locator works
-button = page.locator("#submit-btn")
-button.screenshot(path="button.png")
+<span class="comment"># Any locator works</span>
+button = page.<span class="function">locator</span>(<span class="string">"#submit-btn"</span>)
+button.<span class="function">screenshot</span>(path=<span class="string">"button.png"</span>)
 
-# Complex selectors
-form = page.locator("form.login-form")
-form.screenshot(path="login_form.png")</code></pre>
-            </section>
+<span class="comment"># Complex selectors</span>
+form = page.<span class="function">locator</span>(<span class="string">"form.login-form"</span>)
+form.<span class="function">screenshot</span>(path=<span class="string">"login_form.png"</span>)
 
-            <!-- Slide 9: Element Screenshot Requirements -->
-            <section>
-                <h2>Element Screenshot Requirements</h2>
-                <ul>
-                    <li>Element must be <strong>visible</strong></li>
-                    <li>Element must be <strong>in viewport</strong> (or will scroll)</li>
-                    <li>Element must have <strong>non-zero size</strong></li>
-                </ul>
-                <pre><code class="language-python"># Ensure element is visible first
-element = page.locator("#my-element")
-element.wait_for(state="visible")
-element.screenshot(path="element.png")</code></pre>
-            </section>
+<span class="comment"># Table screenshot</span>
+table = page.<span class="function">locator</span>(<span class="string">"#data-table"</span>)
+table.<span class="function">screenshot</span>(path=<span class="string">"table.png"</span>)</div>
+        </div>
 
-            <!-- Slide 10: Clipping Region -->
-            <section>
-                <h2>Clipping Specific Region</h2>
-                <pre><code class="language-python"># Capture custom rectangular region
-page.screenshot(
-    path="clipped.png",
+        <!-- Element Requirements -->
+        <div class="slide">
+            <h2>Element Screenshot Requirements</h2>
+            <ul style="font-size: 1.2em; margin-bottom: 20px;">
+                <li>Element must be <strong>visible</strong></li>
+                <li>Element must be <strong>in viewport</strong> (or will scroll)</li>
+                <li>Element must have <strong>non-zero size</strong></li>
+            </ul>
+            <div class="code-block">
+<span class="comment"># Ensure element is visible first</span>
+element = page.<span class="function">locator</span>(<span class="string">"#my-element"</span>)
+element.<span class="function">wait_for</span>(state=<span class="string">"visible"</span>)
+element.<span class="function">screenshot</span>(path=<span class="string">"element.png"</span>)</div>
+        </div>
+
+        <!-- Clipping Region -->
+        <div class="slide">
+            <h2>Clipping Specific Region</h2>
+            <div class="code-block">
+<span class="comment"># Capture custom rectangular region</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"clipped.png"</span>,
     clip={
-        "x": 100,      # Left offset
-        "y": 50,       # Top offset
-        "width": 400,  # Width of region
-        "height": 300  # Height of region
+        <span class="string">"x"</span>: <span class="number">100</span>,      <span class="comment"># Left offset</span>
+        <span class="string">"y"</span>: <span class="number">50</span>,       <span class="comment"># Top offset</span>
+        <span class="string">"width"</span>: <span class="number">400</span>,  <span class="comment"># Width of region</span>
+        <span class="string">"height"</span>: <span class="number">300</span> <span class="comment"># Height of region</span>
     }
-)</code></pre>
+)</div>
+            <div class="info-box" style="margin-top: 15px;">
                 <p>Useful for capturing specific areas without element selection</p>
-            </section>
+            </div>
+        </div>
 
-            <!-- Slide 11: Screenshot Format Options -->
-            <section>
-                <h2>Screenshot Format</h2>
-                <pre><code class="language-python"># PNG format (default) - lossless
-page.screenshot(path="image.png", type="png")
+        <!-- PART 2: OPTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Screenshot Options</h2>
+            <p>Format, quality, animations</p>
+        </div>
 
-# JPEG format - smaller file size
-page.screenshot(
-    path="image.jpg",
-    type="jpeg",
-    quality=80  # 0-100, only for JPEG
-)</code></pre>
-                <div class="comparison">
-                    <span class="good">PNG: Better quality, larger files</span>
-                    <span class="bad">JPEG: Smaller files, lossy compression</span>
+        <!-- Screenshot Format -->
+        <div class="slide">
+            <h2>Screenshot Format</h2>
+            <div class="code-block">
+<span class="comment"># PNG format (default) - lossless</span>
+page.<span class="function">screenshot</span>(path=<span class="string">"image.png"</span>, type=<span class="string">"png"</span>)
+
+<span class="comment"># JPEG format - smaller file size</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"image.jpg"</span>,
+    type=<span class="string">"jpeg"</span>,
+    quality=<span class="number">80</span>  <span class="comment"># 0-100, only for JPEG</span>
+)</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="success-box">
+                    <p><strong>PNG:</strong> Better quality, larger files, lossless</p>
                 </div>
-            </section>
-
-            <!-- Slide 12: Transparency Option -->
-            <section>
-                <h2>Transparent Background</h2>
-                <pre><code class="language-python"># Remove white background (PNG only)
-page.screenshot(
-    path="transparent.png",
-    omit_background=True
-)</code></pre>
-                <div class="info-box">
-                    <strong>Use case:</strong> Capturing elements for overlay or composition
+                <div class="warning-box">
+                    <p><strong>JPEG:</strong> Smaller files, lossy compression</p>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Slide 13: Animations Control -->
-            <section>
-                <h2>Handling Animations</h2>
-                <pre><code class="language-python"># Disable CSS animations for consistent screenshots
-page.screenshot(
-    path="stable.png",
-    animations="disabled"
+        <!-- Animations -->
+        <div class="slide">
+            <h2>Handling Animations</h2>
+            <div class="code-block">
+<span class="comment"># Disable CSS animations for consistent screenshots</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"stable.png"</span>,
+    animations=<span class="string">"disabled"</span>
 )
 
-# Allow animations (default)
-page.screenshot(
-    path="with_animations.png",
-    animations="allow"
-)</code></pre>
-                <p class="highlight">Disable animations for reliable visual testing</p>
-            </section>
+<span class="comment"># Allow animations (default)</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"with_animations.png"</span>,
+    animations=<span class="string">"allow"</span>
+)</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p><strong>Best Practice:</strong> Disable animations for reliable visual testing!</p>
+            </div>
+        </div>
 
-            <!-- Slide 14: Scale Options -->
-            <section>
-                <h2>Screenshot Scale</h2>
-                <pre><code class="language-python"># CSS pixels (default)
-page.screenshot(path="css_scale.png", scale="css")
+        <!-- More Options -->
+        <div class="slide">
+            <h2>More Screenshot Options</h2>
+            <div class="code-block">
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"screenshot.png"</span>,
+    full_page=<span class="keyword">True</span>,              <span class="comment"># Capture full scrollable page</span>
+    type=<span class="string">"png"</span>,                   <span class="comment"># "png" or "jpeg"</span>
+    omit_background=<span class="keyword">True</span>,        <span class="comment"># Transparent background</span>
+    timeout=<span class="number">30000</span>,               <span class="comment"># Timeout in ms</span>
+    animations=<span class="string">"disabled"</span>,       <span class="comment"># Disable CSS animations</span>
+    scale=<span class="string">"css"</span>                  <span class="comment"># "css" or "device"</span>
+)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <table style="width: 100%; font-size: 0.9em;">
+                    <tr><th>Option</th><th>Description</th></tr>
+                    <tr><td>omit_background</td><td>Transparent background (PNG only)</td></tr>
+                    <tr><td>scale</td><td>"device" for higher resolution on HiDPI</td></tr>
+                </table>
+            </div>
+        </div>
 
-# Device pixels (higher resolution on HiDPI)
-page.screenshot(path="device_scale.png", scale="device")</code></pre>
-                <ul>
-                    <li><strong>css:</strong> 1:1 with CSS pixels</li>
-                    <li><strong>device:</strong> Higher resolution on Retina/HiDPI displays</li>
-                </ul>
-            </section>
+        <!-- PART 3: VIDEO -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Video Recording</h2>
+            <p>Recording test execution</p>
+        </div>
 
-            <!-- Slide 15: Video Recording Introduction -->
-            <section>
-                <h2>Video Recording</h2>
-                <p>Record entire test execution as video</p>
-                <pre><code class="language-python"># Enable video when creating context
-context = browser.new_context(
-    record_video_dir="videos/"
+        <!-- Video Recording Intro -->
+        <div class="slide">
+            <h2>Enabling Video Recording</h2>
+            <div class="code-block">
+<span class="comment"># Enable video when creating context</span>
+context = browser.<span class="function">new_context</span>(
+    record_video_dir=<span class="string">"videos/"</span>
 )
 
-page = context.new_page()
-# ... perform actions ...
+page = context.<span class="function">new_page</span>()
 
-# IMPORTANT: Close context to save video
-context.close()</code></pre>
-            </section>
+<span class="comment"># ... perform test actions ...</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page.<span class="function">click</span>(<span class="string">"#button"</span>)
 
-            <!-- Slide 16: Video Configuration -->
-            <section>
-                <h2>Video Configuration</h2>
-                <pre><code class="language-python">context = browser.new_context(
-    record_video_dir="videos/",
+<span class="comment"># IMPORTANT: Close context to save video</span>
+context.<span class="function">close</span>()</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p><strong>Important:</strong> Video is saved only when context closes!</p>
+            </div>
+        </div>
+
+        <!-- Video Configuration -->
+        <div class="slide">
+            <h2>Video Configuration</h2>
+            <div class="code-block">
+context = browser.<span class="function">new_context</span>(
+    record_video_dir=<span class="string">"videos/"</span>,
     record_video_size={
-        "width": 1280,
-        "height": 720
+        <span class="string">"width"</span>: <span class="number">1280</span>,
+        <span class="string">"height"</span>: <span class="number">720</span>
     }
 )
 
-page = context.new_page()
-page.goto("https://example.com")
+page = context.<span class="function">new_page</span>()
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
 
-# Perform test actions
-page.click("#button")
-page.fill("#input", "text")
+<span class="comment"># Perform test actions</span>
+page.<span class="function">locator</span>(<span class="string">"#login"</span>).<span class="function">click</span>()
+page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"user"</span>)
 
-# Close to save video
-context.close()</code></pre>
-            </section>
+<span class="comment"># Close to save video</span>
+context.<span class="function">close</span>()</div>
+        </div>
 
-            <!-- Slide 17: Getting Video Path -->
-            <section>
-                <h2>Getting Video Path</h2>
-                <pre><code class="language-python">context = browser.new_context(
-    record_video_dir="videos/"
+        <!-- Getting Video Path -->
+        <div class="slide">
+            <h2>Saving Video with Custom Name</h2>
+            <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+context = browser.<span class="function">new_context</span>(
+    record_video_dir=<span class="string">"videos/"</span>
 )
-page = context.new_page()
+page = context.<span class="function">new_page</span>()
 
-page.goto("https://example.com")
-# ... actions ...
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+<span class="comment"># ... actions ...</span>
 
-# Get video path (available after page is used)
-video_path = page.video.path()
-print(f"Video saved to: {video_path}")
+<span class="comment"># Get video path</span>
+video_path = page.video.<span class="function">path</span>()
+<span class="function">print</span>(f<span class="string">"Video at: {video_path}"</span>)
 
-context.close()</code></pre>
-                <div class="warning-box">
-                    <strong>Note:</strong> Video path may be temporary until context closes
+<span class="comment"># Save with custom name</span>
+timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d_%H%M%S"</span>)
+page.video.<span class="function">save_as</span>(f<span class="string">"videos/test_{timestamp}.webm"</span>)
+
+context.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- PART 4: ARTIFACTS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Artifacts Management</h2>
+            <p>Organizing and saving</p>
+        </div>
+
+        <!-- Organizing Artifacts -->
+        <div class="slide">
+            <h2>Organizing Artifacts</h2>
+            <div class="code-block">
+<span class="keyword">import</span> os
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">def</span> <span class="function">create_artifact_dirs</span>():
+    timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d_%H%M%S"</span>)
+    base_dir = f<span class="string">"artifacts/{timestamp}"</span>
+
+    os.<span class="function">makedirs</span>(f<span class="string">"{base_dir}/screenshots"</span>, exist_ok=<span class="keyword">True</span>)
+    os.<span class="function">makedirs</span>(f<span class="string">"{base_dir}/videos"</span>, exist_ok=<span class="keyword">True</span>)
+
+    <span class="keyword">return</span> base_dir
+
+artifact_dir = <span class="function">create_artifact_dirs</span>()
+page.<span class="function">screenshot</span>(path=f<span class="string">"{artifact_dir}/screenshots/step1.png"</span>)</div>
+        </div>
+
+        <!-- Screenshot on Failure -->
+        <div class="slide">
+            <h2>Screenshot on Failure</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">run_test</span>():
+    <span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+        browser = p.chromium.<span class="function">launch</span>()
+        page = browser.<span class="function">new_page</span>()
+
+        <span class="keyword">try</span>:
+            page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+            page.<span class="function">locator</span>(<span class="string">"#missing"</span>).<span class="function">click</span>(timeout=<span class="number">5000</span>)
+        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+            <span class="comment"># Capture screenshot on failure</span>
+            page.<span class="function">screenshot</span>(path=<span class="string">"failure.png"</span>)
+            <span class="function">print</span>(f<span class="string">"Test failed: {e}"</span>)
+            <span class="keyword">raise</span>
+        <span class="keyword">finally</span>:
+            browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Capture Flow -->
+        <div class="slide">
+            <h2>Capturing Test Flow</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">capture_login_flow</span>(page, output_dir):
+    <span class="comment"># Step 1: Login page</span>
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+    page.<span class="function">screenshot</span>(path=f<span class="string">"{output_dir}/01_login_page.png"</span>)
+
+    <span class="comment"># Step 2: Fill form</span>
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"user"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"pass"</span>)
+    page.<span class="function">screenshot</span>(path=f<span class="string">"{output_dir}/02_form_filled.png"</span>)
+
+    <span class="comment"># Step 3: Submit</span>
+    page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+    page.<span class="function">wait_for_load_state</span>()
+    page.<span class="function">screenshot</span>(path=f<span class="string">"{output_dir}/03_after_login.png"</span>)</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>📸 Screenshots</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Capture on test failure</li>
+                        <li>Use meaningful file names</li>
+                        <li>Disable animations</li>
+                        <li>Set consistent viewport size</li>
+                        <li>Wait for page to load first</li>
+                    </ul>
                 </div>
-            </section>
-
-            <!-- Slide 18: Saving Video with Custom Name -->
-            <section>
-                <h2>Custom Video Name</h2>
-                <pre><code class="language-python">import shutil
-
-context = browser.new_context(
-    record_video_dir="videos/"
-)
-page = context.new_page()
-
-page.goto("https://example.com")
-# ... actions ...
-
-# Save video to custom path
-page.video.save_as("videos/my_test_video.webm")
-
-context.close()</code></pre>
-            </section>
-
-            <!-- Slide 19: Complete Video Example -->
-            <section>
-                <h2>Complete Video Example</h2>
-                <pre><code class="language-python">from playwright.sync_api import sync_playwright
-from datetime import datetime
-
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
-
-    context = browser.new_context(
-        record_video_dir="videos/",
-        record_video_size={"width": 1280, "height": 720}
-    )
-    page = context.new_page()
-
-    # Test scenario
-    page.goto("https://the-internet.herokuapp.com/login")
-    page.fill("#username", "tomsmith")
-    page.fill("#password", "SuperSecretPassword!")
-    page.click("button[type='submit']")
-
-    # Save with timestamp
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    page.video.save_as(f"videos/login_test_{timestamp}.webm")
-
-    context.close()
-    browser.close()</code></pre>
-            </section>
-
-            <!-- Slide 20: Artifacts Directory Structure -->
-            <section>
-                <h2>Organizing Artifacts</h2>
-                <pre><code class="language-python">import os
-from datetime import datetime
-
-# Create structured directories
-def create_artifact_dirs():
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    base_dir = f"artifacts/{timestamp}"
-
-    os.makedirs(f"{base_dir}/screenshots", exist_ok=True)
-    os.makedirs(f"{base_dir}/videos", exist_ok=True)
-
-    return base_dir
-
-artifact_dir = create_artifact_dirs()
-page.screenshot(path=f"{artifact_dir}/screenshots/step1.png")</code></pre>
-            </section>
-
-            <!-- Slide 21: Screenshot on Failure -->
-            <section>
-                <h2>Screenshot on Failure</h2>
-                <pre><code class="language-python">from playwright.sync_api import sync_playwright
-
-def run_test():
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
-
-        try:
-            page.goto("https://example.com")
-            # Test that might fail
-            page.locator("#non-existent").click(timeout=5000)
-        except Exception as e:
-            # Capture screenshot on failure
-            page.screenshot(path="failure_screenshot.png")
-            print(f"Test failed: {e}")
-            raise
-        finally:
-            browser.close()
-
-run_test()</code></pre>
-            </section>
-
-            <!-- Slide 22: Multiple Screenshots in Flow -->
-            <section>
-                <h2>Capture Test Flow</h2>
-                <pre><code class="language-python">def capture_login_flow(page, output_dir):
-    # Step 1: Login page
-    page.goto("https://example.com/login")
-    page.screenshot(path=f"{output_dir}/01_login_page.png")
-
-    # Step 2: Fill form
-    page.fill("#username", "user")
-    page.fill("#password", "pass")
-    page.screenshot(path=f"{output_dir}/02_form_filled.png")
-
-    # Step 3: Submit
-    page.click("#submit")
-    page.wait_for_load_state()
-    page.screenshot(path=f"{output_dir}/03_after_login.png")</code></pre>
-            </section>
-
-            <!-- Slide 23: Screenshot Comparison Concept -->
-            <section>
-                <h2>Screenshot Comparison</h2>
-                <pre><code class="language-python"># Basic comparison concept
-baseline = page.screenshot()
-# ... make changes ...
-current = page.screenshot()
-
-# Compare bytes (simple but limited)
-if baseline == current:
-    print("Screenshots match exactly")
-else:
-    print("Screenshots differ")
-
-# For real visual testing, use libraries like:
-# - pixelmatch
-# - pytest-playwright (built-in)
-# - Applitools</code></pre>
-            </section>
-
-            <!-- Slide 24: Best Practices -->
-            <section>
-                <h2>Best Practices</h2>
-                <div class="two-columns">
-                    <div>
-                        <h4>Screenshots</h4>
-                        <ul>
-                            <li>Capture on test failure</li>
-                            <li>Use meaningful names</li>
-                            <li>Disable animations</li>
-                            <li>Set consistent viewport</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Videos</h4>
-                        <ul>
-                            <li>Enable only when needed</li>
-                            <li>Configure reasonable size</li>
-                            <li>Clean up after success</li>
-                            <li>Save failed test videos</li>
-                        </ul>
-                    </div>
+                <div class="info-box">
+                    <h4>🎥 Videos</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Enable only when debugging</li>
+                        <li>Configure reasonable size</li>
+                        <li>Clean up after successful tests</li>
+                        <li>Save failed test videos</li>
+                        <li>Always close context!</li>
+                    </ul>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Slide 25: Common Issues -->
-            <section>
-                <h2>Common Issues</h2>
-                <table>
+        <!-- Common Issues -->
+        <div class="slide">
+            <h2>Common Issues</h2>
+            <div class="info-box">
+                <table style="width: 100%; font-size: 1em;">
                     <tr>
                         <th>Issue</th>
                         <th>Solution</th>
                     </tr>
                     <tr>
                         <td>Blank screenshot</td>
-                        <td>Wait for page load</td>
+                        <td>Wait for page to load first</td>
                     </tr>
                     <tr>
                         <td>Video not saved</td>
@@ -465,46 +441,67 @@ else:
                     </tr>
                     <tr>
                         <td>Flaky visual tests</td>
-                        <td>Disable animations</td>
+                        <td>Use animations="disabled"</td>
                     </tr>
                     <tr>
-                        <td>Large files</td>
+                        <td>Large file sizes</td>
                         <td>Use JPEG or clip region</td>
                     </tr>
+                    <tr>
+                        <td>Element not captured</td>
+                        <td>Wait for element visibility</td>
+                    </tr>
                 </table>
-            </section>
+            </div>
+        </div>
 
-            <!-- Slide 26: Summary -->
-            <section>
-                <h2>Summary</h2>
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>page.screenshot()</strong> - capture page or viewport</p>
+                <p><strong>locator.screenshot()</strong> - capture specific element</p>
+                <p><strong>full_page=True</strong> - entire scrollable page</p>
+                <p><strong>record_video_dir</strong> - enable video recording</p>
+                <p><strong>animations="disabled"</strong> - consistent captures</p>
+                <p><strong>context.close()</strong> - required to save video!</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
                 <ul>
-                    <li><code>page.screenshot()</code> - capture page or viewport</li>
-                    <li><code>locator.screenshot()</code> - capture element</li>
-                    <li><code>full_page=True</code> - entire scrollable page</li>
-                    <li><code>record_video_dir</code> - enable video recording</li>
-                    <li><code>animations="disabled"</code> - consistent captures</li>
-                    <li>Always close context to save videos</li>
+                    <li>Authentication & Storage State</li>
+                    <li>Cookies & Local Storage</li>
+                    <li>Network Interception</li>
                 </ul>
-            </section>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises</li>
+                <li>Capture screenshots during login flow</li>
+                <li>Record a test video</li>
+            </ul>
+        </div>
 
-            <!-- Slide 27: Exercises -->
-            <section>
-                <h2>Exercises</h2>
-                <ol>
-                    <li><strong>Capture Flow:</strong> Take screenshots at each step of a login process</li>
-                    <li><strong>Video Test:</strong> Record a complete test scenario with video</li>
-                </ol>
-                <p>Check the <code>exercises/</code> folder for starter files!</p>
-            </section>
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Screenshots & Videos!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can capture visual evidence of your tests</p>
+        </div>
 
-            <!-- Slide 28: Q&A -->
-            <section>
-                <h1>Questions?</h1>
-                <p>Let's discuss screenshots and video recording!</p>
-            </section>
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
         </div>
     </div>
-    <script src="../assets/presentation/js/reveal.js"></script>
     <script src="../assets/presentation/js/presentation.js"></script>
 </body>
 </html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 26: Cookies & Local Storage</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 26</h1>
+            <div class="subtitle">Cookies & Local Storage</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Working with cookies (get, add, delete)</li>
+                <li>✓ Local storage manipulation</li>
+                <li>✓ Session storage basics</li>
+                <li>✓ Storage state save and load</li>
+                <li>✓ Clearing browser data</li>
+                <li>✓ Practical use cases for testing</li>
+            </ul>
+        </div>
+
+        <!-- Why Storage Matters -->
+        <div class="slide">
+            <h2>Why Browser Storage Matters</h2>
+            <div class="highlight-box">
+                <p>Modern web apps store data in browsers to maintain state, preferences, and authentication.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Common Scenarios:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🔐 **Authentication tokens** - Keep users logged in</li>
+                <li>🎨 **User preferences** - Theme, language, settings</li>
+                <li>🛒 **Shopping carts** - Items before checkout</li>
+                <li>📊 **Analytics tracking** - User behavior data</li>
+                <li>✅ **Cookie consent** - GDPR compliance</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: COOKIES -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Working with Cookies</h2>
+            <p>The classic web storage</p>
+        </div>
+
+        <!-- Getting Cookies -->
+        <div class="slide">
+            <h2>Getting Cookies</h2>
+            <div class="code-block">
+<span class="comment"># Get all cookies in context</span>
+cookies = context.<span class="function">cookies</span>()
+
+<span class="keyword">for</span> cookie <span class="keyword">in</span> cookies:
+    <span class="function">print</span>(f<span class="string">"{cookie['name']}: {cookie['value']}"</span>)
+
+<span class="comment"># Get cookies for specific URL</span>
+url_cookies = context.<span class="function">cookies</span>([<span class="string">"https://example.com"</span>])
+
+<span class="comment"># Check cookie count</span>
+<span class="function">print</span>(f<span class="string">"Total cookies: {len(cookies)}"</span>)</div>
+            <div class="info-box" style="margin-top: 20px;">
+                <p>Cookies are stored at the <strong>context</strong> level, not page level!</p>
+            </div>
+        </div>
+
+        <!-- Adding Cookies -->
+        <div class="slide">
+            <h2>Adding Cookies</h2>
+            <div class="code-block">
+<span class="comment"># Add a simple cookie</span>
+context.<span class="function">add_cookies</span>([{
+    <span class="string">"name"</span>: <span class="string">"user_id"</span>,
+    <span class="string">"value"</span>: <span class="string">"12345"</span>,
+    <span class="string">"domain"</span>: <span class="string">"example.com"</span>,
+    <span class="string">"path"</span>: <span class="string">"/"</span>
+}])
+
+<span class="comment"># Add multiple cookies at once</span>
+context.<span class="function">add_cookies</span>([
+    {<span class="string">"name"</span>: <span class="string">"theme"</span>, <span class="string">"value"</span>: <span class="string">"dark"</span>, <span class="string">"domain"</span>: <span class="string">"example.com"</span>, <span class="string">"path"</span>: <span class="string">"/"</span>},
+    {<span class="string">"name"</span>: <span class="string">"lang"</span>, <span class="string">"value"</span>: <span class="string">"en"</span>, <span class="string">"domain"</span>: <span class="string">"example.com"</span>, <span class="string">"path"</span>: <span class="string">"/"</span>}
+])</div>
+        </div>
+
+        <!-- Cookie Properties -->
+        <div class="slide">
+            <h2>Cookie Properties</h2>
+            <div class="code-block">
+cookie = {
+    <span class="string">"name"</span>: <span class="string">"session"</span>,        <span class="comment"># Required</span>
+    <span class="string">"value"</span>: <span class="string">"abc123"</span>,       <span class="comment"># Required</span>
+    <span class="string">"domain"</span>: <span class="string">".example.com"</span>, <span class="comment"># Required</span>
+    <span class="string">"path"</span>: <span class="string">"/"</span>,             <span class="comment"># Default: "/"</span>
+    <span class="string">"expires"</span>: <span class="number">1735689600</span>,   <span class="comment"># Unix timestamp</span>
+    <span class="string">"httpOnly"</span>: <span class="keyword">True</span>,        <span class="comment"># JS can't access</span>
+    <span class="string">"secure"</span>: <span class="keyword">True</span>,          <span class="comment"># HTTPS only</span>
+    <span class="string">"sameSite"</span>: <span class="string">"Strict"</span>     <span class="comment"># Strict/Lax/None</span>
+}</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ Domain must match the site you're testing!</p>
+            </div>
+        </div>
+
+        <!-- Removing Cookies -->
+        <div class="slide">
+            <h2>Removing Cookies</h2>
+            <div class="code-block">
+<span class="comment"># Clear ALL cookies</span>
+context.<span class="function">clear_cookies</span>()
+
+<span class="comment"># Remove specific cookie (filter approach)</span>
+all_cookies = context.<span class="function">cookies</span>()
+keep = [c <span class="keyword">for</span> c <span class="keyword">in</span> all_cookies <span class="keyword">if</span> c[<span class="string">"name"</span>] != <span class="string">"unwanted"</span>]
+context.<span class="function">clear_cookies</span>()
+context.<span class="function">add_cookies</span>(keep)
+
+<span class="comment"># Remove by domain</span>
+keep = [c <span class="keyword">for</span> c <span class="keyword">in</span> all_cookies <span class="keyword">if</span> c[<span class="string">"domain"</span>] != <span class="string">"ads.com"</span>]
+context.<span class="function">clear_cookies</span>()
+context.<span class="function">add_cookies</span>(keep)</div>
+        </div>
+
+        <!-- PART 2: LOCAL STORAGE -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Local Storage</h2>
+            <p>Persistent key-value storage</p>
+        </div>
+
+        <!-- localStorage Basics -->
+        <div class="slide">
+            <h2>localStorage Basics</h2>
+            <div class="code-block">
+<span class="comment"># Set item</span>
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.setItem('theme', 'dark')"</span>)
+
+<span class="comment"># Get item</span>
+theme = page.<span class="function">evaluate</span>(<span class="string">"localStorage.getItem('theme')"</span>)
+<span class="function">print</span>(f<span class="string">"Theme: {theme}"</span>)
+
+<span class="comment"># Remove item</span>
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.removeItem('theme')"</span>)
+
+<span class="comment"># Clear all</span>
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.clear()"</span>)</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ localStorage persists until explicitly cleared (even after browser restart)</p>
+            </div>
+        </div>
+
+        <!-- Storing Complex Data -->
+        <div class="slide">
+            <h2>Storing Complex Data</h2>
+            <div class="code-block">
+<span class="keyword">import</span> json
+
+<span class="comment"># Store object as JSON string</span>
+user_data = {<span class="string">"name"</span>: <span class="string">"John"</span>, <span class="string">"level"</span>: <span class="number">5</span>}
+page.<span class="function">evaluate</span>(f<span class="string">"localStorage.setItem('user', '{json.dumps(user_data)}')"</span>)
+
+<span class="comment"># Retrieve and parse</span>
+stored = page.<span class="function">evaluate</span>(<span class="string">"localStorage.getItem('user')"</span>)
+user = json.<span class="function">loads</span>(stored)
+<span class="function">print</span>(f<span class="string">"Welcome, {user['name']}!"</span>)
+
+<span class="comment"># Or use JavaScript JSON methods</span>
+page.<span class="function">evaluate</span>(<span class="string">"""
+    localStorage.setItem('cart', JSON.stringify([
+        {id: 1, name: 'Product A'},
+        {id: 2, name: 'Product B'}
+    ]));
+"""</span>)</div>
+        </div>
+
+        <!-- Get All localStorage -->
+        <div class="slide">
+            <h2>Get All localStorage Items</h2>
+            <div class="code-block">
+<span class="comment"># Get all items as dictionary</span>
+all_data = page.<span class="function">evaluate</span>(<span class="string">"""() => {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        data[key] = localStorage.getItem(key);
+    }
+    return data;
+}"""</span>)
+
+<span class="function">print</span>(<span class="string">"All localStorage items:"</span>)
+<span class="keyword">for</span> key, value <span class="keyword">in</span> all_data.<span class="function">items</span>():
+    <span class="function">print</span>(f<span class="string">"  {key}: {value}"</span>)
+
+<span class="comment"># Get count</span>
+count = page.<span class="function">evaluate</span>(<span class="string">"localStorage.length"</span>)</div>
+        </div>
+
+        <!-- PART 3: SESSION STORAGE -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Session Storage</h2>
+            <p>Tab-specific temporary storage</p>
+        </div>
+
+        <!-- sessionStorage Basics -->
+        <div class="slide">
+            <h2>sessionStorage Basics</h2>
+            <div class="code-block">
+<span class="comment"># Same API as localStorage</span>
+page.<span class="function">evaluate</span>(<span class="string">"sessionStorage.setItem('step', '3')"</span>)
+step = page.<span class="function">evaluate</span>(<span class="string">"sessionStorage.getItem('step')"</span>)
+page.<span class="function">evaluate</span>(<span class="string">"sessionStorage.removeItem('step')"</span>)
+page.<span class="function">evaluate</span>(<span class="string">"sessionStorage.clear()"</span>)</div>
+            <div class="info-box" style="margin-top: 20px;">
+                <table style="width: 100%; font-size: 0.9em;">
+                    <tr><th>Feature</th><th>localStorage</th><th>sessionStorage</th></tr>
+                    <tr><td>Persistence</td><td>Permanent</td><td>Until tab closes</td></tr>
+                    <tr><td>Scope</td><td>All tabs (same origin)</td><td>Single tab only</td></tr>
+                    <tr><td>Size</td><td>~5-10MB</td><td>~5-10MB</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab Isolation -->
+        <div class="slide">
+            <h2>Session Storage Tab Isolation</h2>
+            <div class="code-block">
+<span class="comment"># Tab 1</span>
+page1 = context.<span class="function">new_page</span>()
+page1.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page1.<span class="function">evaluate</span>(<span class="string">"sessionStorage.setItem('user', 'Alice')"</span>)
+
+<span class="comment"># Tab 2 (separate sessionStorage!)</span>
+page2 = context.<span class="function">new_page</span>()
+page2.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page2.<span class="function">evaluate</span>(<span class="string">"sessionStorage.setItem('user', 'Bob')"</span>)
+
+<span class="comment"># Each tab has its own storage</span>
+alice = page1.<span class="function">evaluate</span>(<span class="string">"sessionStorage.getItem('user')"</span>)  <span class="comment"># "Alice"</span>
+bob = page2.<span class="function">evaluate</span>(<span class="string">"sessionStorage.getItem('user')"</span>)    <span class="comment"># "Bob"</span></div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ sessionStorage is NOT shared between tabs!</p>
+            </div>
+        </div>
+
+        <!-- PART 4: STORAGE STATE -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Storage State</h2>
+            <p>Save & restore complete state</p>
+        </div>
+
+        <!-- Save Storage State -->
+        <div class="slide">
+            <h2>Saving Storage State</h2>
+            <div class="code-block">
+<span class="comment"># Login first</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+page.<span class="function">fill</span>(<span class="string">"#username"</span>, <span class="string">"user"</span>)
+page.<span class="function">fill</span>(<span class="string">"#password"</span>, <span class="string">"pass"</span>)
+page.<span class="function">click</span>(<span class="string">"#submit"</span>)
+page.<span class="function">wait_for_url</span>(<span class="string">"**/dashboard"</span>)
+
+<span class="comment"># Save complete state (cookies + localStorage)</span>
+context.<span class="function">storage_state</span>(path=<span class="string">"auth_state.json"</span>)
+<span class="function">print</span>(<span class="string">"State saved!"</span>)</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ storage_state() captures both cookies AND localStorage!</p>
+            </div>
+        </div>
+
+        <!-- Load Storage State -->
+        <div class="slide">
+            <h2>Loading Storage State</h2>
+            <div class="code-block">
+<span class="comment"># Create context with saved state</span>
+context = browser.<span class="function">new_context</span>(storage_state=<span class="string">"auth_state.json"</span>)
+page = context.<span class="function">new_page</span>()
+
+<span class="comment"># Go directly to protected page - no login needed!</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com/dashboard"</span>)
+
+<span class="comment"># Verify authentication</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".welcome"</span>)).<span class="function">to_be_visible</span>()
+<span class="function">print</span>(<span class="string">"Already logged in!"</span>)</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>💡 This is the recommended way to skip login in tests!</p>
+            </div>
+        </div>
+
+        <!-- State File Structure -->
+        <div class="slide">
+            <h2>Storage State File Structure</h2>
+            <div class="code-block">
+{
+    <span class="string">"cookies"</span>: [
+        {
+            <span class="string">"name"</span>: <span class="string">"session_id"</span>,
+            <span class="string">"value"</span>: <span class="string">"abc123"</span>,
+            <span class="string">"domain"</span>: <span class="string">"example.com"</span>,
+            <span class="string">"path"</span>: <span class="string">"/"</span>
+        }
+    ],
+    <span class="string">"origins"</span>: [
+        {
+            <span class="string">"origin"</span>: <span class="string">"https://example.com"</span>,
+            <span class="string">"localStorage"</span>: [
+                {<span class="string">"name"</span>: <span class="string">"theme"</span>, <span class="string">"value"</span>: <span class="string">"dark"</span>},
+                {<span class="string">"name"</span>: <span class="string">"user"</span>, <span class="string">"value"</span>: <span class="string">"{...}"</span>}
+            ]
+        }
+    ]
+}</div>
+        </div>
+
+        <!-- PART 5: CLEARING DATA -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Clearing Browser Data</h2>
+            <p>Clean state for testing</p>
+        </div>
+
+        <!-- Clearing Methods -->
+        <div class="slide">
+            <h2>Methods to Clear Data</h2>
+            <div class="code-block">
+<span class="comment"># Clear cookies only</span>
+context.<span class="function">clear_cookies</span>()
+
+<span class="comment"># Clear localStorage only</span>
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.clear()"</span>)
+
+<span class="comment"># Clear sessionStorage only</span>
+page.<span class="function">evaluate</span>(<span class="string">"sessionStorage.clear()"</span>)
+
+<span class="comment"># Clear ALL storage at once</span>
+context.<span class="function">clear_cookies</span>()
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.clear(); sessionStorage.clear();"</span>)
+
+<span class="comment"># Best: Fresh context (completely clean)</span>
+fresh_context = browser.<span class="function">new_context</span>()</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use storage_state for auth</li>
+                        <li>Clear data between tests</li>
+                        <li>Match cookie domains exactly</li>
+                        <li>Use fresh contexts for isolation</li>
+                        <li>JSON.stringify for objects</li>
+                        <li>Navigate before evaluate()</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Hardcode session tokens</li>
+                        <li>Share state between unrelated tests</li>
+                        <li>Forget httpOnly for sensitive cookies</li>
+                        <li>Rely on sessionStorage for persistence</li>
+                        <li>Ignore cookie expiration</li>
+                        <li>Store sensitive data in localStorage</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Pitfalls -->
+        <div class="slide">
+            <h2>Common Pitfalls</h2>
+            <div class="code-block">
+<span class="comment"># ❌ WRONG - Wrong domain</span>
+context.<span class="function">add_cookies</span>([{<span class="string">"name"</span>: <span class="string">"x"</span>, <span class="string">"value"</span>: <span class="string">"1"</span>, <span class="string">"domain"</span>: <span class="string">"wrong.com"</span>}])
+page.<span class="function">goto</span>(<span class="string">"https://correct.com"</span>)  <span class="comment"># Cookie not sent!</span>
+
+<span class="comment"># ❌ WRONG - No page loaded</span>
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.setItem('x', '1')"</span>)  <span class="comment"># Error!</span>
+
+<span class="comment"># ✅ CORRECT - Navigate first</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.setItem('x', '1')"</span>)
+
+<span class="comment"># ❌ WRONG - Storing object directly</span>
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.setItem('user', {name: 'John'})"</span>)  <span class="comment"># [object Object]</span>
+
+<span class="comment"># ✅ CORRECT - JSON stringify</span>
+page.<span class="function">evaluate</span>(<span class="string">"localStorage.setItem('user', JSON.stringify({name: 'John'}))"</span>)</div>
+        </div>
+
+        <!-- Use Case: Skip Cookie Banner -->
+        <div class="slide">
+            <h2>Use Case: Skip Cookie Banner</h2>
+            <div class="code-block">
+<span class="comment"># Pre-set cookie consent before navigation</span>
+context.<span class="function">add_cookies</span>([{
+    <span class="string">"name"</span>: <span class="string">"cookie_consent"</span>,
+    <span class="string">"value"</span>: <span class="string">"accepted"</span>,
+    <span class="string">"domain"</span>: <span class="string">"example.com"</span>,
+    <span class="string">"path"</span>: <span class="string">"/"</span>
+}])
+
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+<span class="comment"># Cookie banner won't appear!</span></div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>💡 Check your app's cookie name in DevTools → Application → Cookies</p>
+            </div>
+        </div>
+
+        <!-- Use Case: Pre-populate Settings -->
+        <div class="slide">
+            <h2>Use Case: Pre-populate Settings</h2>
+            <div class="code-block">
+<span class="comment"># Set localStorage BEFORE page loads</span>
+page.<span class="function">add_init_script</span>(<span class="string">"""
+    localStorage.setItem('theme', 'dark');
+    localStorage.setItem('language', 'en');
+    localStorage.setItem('onboarding_complete', 'true');
+"""</span>)
+
+<span class="comment"># Now navigate - settings already applied!</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+<span class="comment"># App loads with dark theme, no onboarding popup</span></div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ add_init_script() runs before any page JavaScript!</p>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>Cookies:</strong> context.cookies(), add_cookies(), clear_cookies()</p>
+                <p><strong>localStorage:</strong> page.evaluate("localStorage.setItem/getItem/clear")</p>
+                <p><strong>sessionStorage:</strong> Same API, but per-tab and temporary</p>
+                <p><strong>Storage State:</strong> context.storage_state() saves cookies + localStorage</p>
+                <p><strong>Best for Auth:</strong> Login once, save state, reuse in all tests</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Network Interception</li>
+                    <li>API Testing with Playwright</li>
+                    <li>Page Object Model</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises</li>
+                <li>Create auth state for your test app</li>
+                <li>Experiment with pre-populating storage</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Cookies & Local Storage!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can manage browser storage like a pro</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
