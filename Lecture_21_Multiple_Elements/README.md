@@ -342,12 +342,27 @@ if page.locator(".item").count() > 10:
     print("Many items")
 ```
 
-## Examples Included
-1. `01_finding_elements.py` - all(), count(), nth(), first, last
-2. `02_iterating_elements.py` - Different iteration patterns
-3. `03_table_handling.py` - Working with table data
-4. `04_dynamic_lists.py` - Dynamic content handling
-5. `05_filtering_finding.py` - Filter and find specific elements
+## Examples
+
+| File | Description |
+|------|-------------|
+| `01_finding_elements.py` | all(), count(), nth(), first, last |
+| `02_iterating_elements.py` | Different iteration patterns |
+| `03_table_handling.py` | Working with table data |
+| `04_dynamic_lists.py` | Dynamic content handling |
+| `05_filtering_finding.py` | Filter and find specific elements |
+
+## Exercises
+
+| Exercise | Topic | Difficulty |
+|----------|-------|------------|
+| `exercise_01_list_operations.py` | all(), count(), first, iteration | Easy |
+| `exercise_02_table_data.py` | Table extraction, headers, cells | Easy |
+| `exercise_03_dynamic_elements.py` | Add/remove elements, verification | Medium |
+| `exercise_04_filtering_search.py` | filter(), text search, navigation | Medium |
+| `exercise_05_table_advanced.py` | Complex table operations, sorting | Hard |
+
+Solutions are available in `exercises/SOLUTIONS.md`.
 
 ## Resources
 - [Locator.all() API](https://playwright.dev/python/docs/api/class-locator#locator-all)
