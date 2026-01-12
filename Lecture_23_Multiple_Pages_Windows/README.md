@@ -83,18 +83,35 @@ context = browser.new_context()
 page = context.new_page()
 ```
 
-### expect_popup() vs expect_page()
+### expect_popup() vs context.expect_page()
 
 ```python
-# expect_popup() - for window.open() popups
+# expect_popup() - for window.open() popups (page-specific)
 with page.expect_popup() as popup_info:
     page.locator("#popup-btn").click()
 popup = popup_info.value
 
-# For programmatic page creation, use context.pages
-initial_pages = len(context.pages)
-page.locator("#create-tab").click()
-# New page appears in context.pages
+# context.expect_page() - captures ANY new page in context
+with context.expect_page() as new_page_info:
+    page.locator("#open-new").click()
+new_page = new_page_info.value
+```
+
+### Using Timeout with expect_popup()
+
+```python
+# Set custom timeout (5 seconds) for slow popups
+try:
+    with page.expect_popup(timeout=5000) as popup_info:
+        page.locator("#slow-popup-btn").click()
+    popup = popup_info.value
+    popup.wait_for_load_state()
+except Exception as e:
+    print(f"Popup did not open within 5 seconds: {e}")
+
+# Same for context.expect_page()
+with context.expect_page(timeout=3000) as page_info:
+    page.locator("#create-tab").click()
 ```
 
 ## Common Patterns
@@ -311,8 +328,51 @@ page2 = context2.new_page()
 1. `01_new_pages_tabs.py` - Opening and managing multiple pages
 2. `02_popup_handling.py` - Handling popups and new windows
 3. `03_multiple_contexts.py` - Isolated browser contexts
-4. `04_page_events.py` - Page event listeners
+4. `04_page_events.py` - Page event listeners (+ expect_page, timeout)
 5. `05_real_world_scenarios.py` - OAuth, multi-user testing
+6. `06_async_pages.py` - **Async API** for parallel operations
+
+## Exercises
+1. `exercise_01_popup_handling.py` - Basic popup handling
+2. `exercise_02_multi_user.py` - Context isolation testing
+3. `exercise_03_realtime_collaboration.py` - **Advanced** multi-user scenario
+
+
+## Async API
+
+For better performance with parallel operations, use the async API:
+
+```python
+import asyncio
+from playwright.async_api import async_playwright, expect
+
+async def main():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        
+        # Create contexts in parallel
+        ctx1, ctx2 = await asyncio.gather(
+            browser.new_context(),
+            browser.new_context()
+        )
+        
+        user1, user2 = await asyncio.gather(
+            ctx1.new_page(),
+            ctx2.new_page()
+        )
+        
+        # Navigate pages in parallel (faster!)
+        await asyncio.gather(
+            user1.goto("https://example.com"),
+            user2.goto("https://example.com")
+        )
+        
+        await browser.close()
+
+asyncio.run(main())
+```
+
+See `06_async_pages.py` for more async examples.
 
 ## Resources
 - [Multiple Pages Documentation](https://playwright.dev/python/docs/pages)

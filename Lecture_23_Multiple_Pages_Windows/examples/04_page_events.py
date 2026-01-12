@@ -22,7 +22,7 @@ with sync_playwright() as p:
     page2 = context.new_page()
     page2.goto("https://the-internet.herokuapp.com/")
 
-    print("   ✓ Event listener captured page creations")
+    print("   Event listener captured page creations")
 
     # Example 2: Listen for page close
     print("\n2. Listening for page close...")
@@ -37,7 +37,7 @@ with sync_playwright() as p:
     page2.on("close", on_page_close)
     page2.close()
 
-    print("   ✓ Close event captured")
+    print("   Close event captured")
 
     # Example 3: Console message listener
     print("\n3. Listening for console messages...")
@@ -59,7 +59,7 @@ with sync_playwright() as p:
     page.evaluate("console.log('Hello from Playwright!')")
     page.evaluate("console.warn('This is a warning')")
 
-    print(f"   ✓ Captured {len(console_messages)} console messages")
+    print(f"   Captured {len(console_messages)} console messages")
 
     # Example 4: Dialog (alert/confirm/prompt) handling
     print("\n4. Handling JavaScript dialogs...")
@@ -73,12 +73,12 @@ with sync_playwright() as p:
     # Trigger an alert
     page.locator("button[onclick='jsAlert()']").click()
     page.wait_for_timeout(500)
-    print("   ✓ Alert handled")
+    print("   Alert handled")
 
     # Trigger a confirm
     page.locator("button[onclick='jsConfirm()']").click()
     page.wait_for_timeout(500)
-    print("   ✓ Confirm handled")
+    print("   Confirm handled")
 
     # Example 5: Wait for popup event
     print("\n5. Waiting for popup with expect_popup()...")
@@ -90,8 +90,51 @@ with sync_playwright() as p:
 
     popup = popup_info.value
     popup.wait_for_load_state()
-    print(f"   ✓ Popup captured: {popup.url}")
+    print(f"   Popup captured: {popup.url}")
     popup.close()
+
+    # Example 5b: expect_popup with custom timeout
+    print("\n5b. Popup with custom timeout (5 seconds)...")
+
+    # Set custom timeout - useful for slow popups or to fail fast
+    try:
+        with page.expect_popup(timeout=5000) as popup_info:
+            page.locator("a[href='/windows/new']").click()
+
+        popup = popup_info.value
+        popup.wait_for_load_state()
+        print(f"   Popup captured within timeout: {popup.url}")
+        popup.close()
+    except Exception as e:
+        print(f"   Timeout error: {e}")
+
+    # Example 5c: context.expect_page() - captures ANY new page in context
+    print("\n5c. Using context.expect_page()...")
+
+    # expect_page() is more general than expect_popup()
+    # It captures pages from any source (popups, window.open, etc.)
+    with context.expect_page() as new_page_info:
+        page.locator("a[href='/windows/new']").click()
+
+    new_page = new_page_info.value
+    new_page.wait_for_load_state()
+    print(f"   New page via expect_page(): {new_page.url}")
+    print(f"   Total pages in context: {len(context.pages)}")
+    new_page.close()
+
+    # Example 5d: expect_page with timeout
+    print("\n5d. context.expect_page() with timeout...")
+
+    try:
+        with context.expect_page(timeout=3000) as page_info:
+            page.locator("a[href='/windows/new']").click()
+
+        captured_page = page_info.value
+        captured_page.wait_for_load_state()
+        print(f"   Page captured: {captured_page.url}")
+        captured_page.close()
+    except Exception as e:
+        print(f"   Timeout: {e}")
 
     # Example 6: Request/Response events
     print("\n6. Listening for network events...")
@@ -105,7 +148,7 @@ with sync_playwright() as p:
     page.on("request", on_request)
 
     page.goto("https://example.com")
-    print(f"   ✓ Captured {request_count} network requests")
+    print(f"   Captured {request_count} network requests")
 
     print("\n=== Demo Complete ===")
     browser.close()
