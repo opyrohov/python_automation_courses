@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 35: Debugging Techniques</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🔍</div>
+            <h1>Lecture 35</h1>
+            <div class="subtitle">Debugging Techniques</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Playwright Inspector & page.pause()</li>
+                <li>✓ Console logging & event listeners</li>
+                <li>✓ Tracing for post-mortem debugging</li>
+                <li>✓ Common errors and how to fix them</li>
+                <li>✓ Complete debugging strategies</li>
+            </ul>
+        </div>
+
+        <!-- Why Debugging Matters -->
+        <div class="slide">
+            <h2>Why Debugging Matters</h2>
+            <div class="info-box">
+                <p>Tests will fail. The question is: <strong>how fast can you find the bug?</strong></p>
+            </div>
+            <div style="display: flex; gap: 20px; margin-top: 20px;">
+                <div class="info-box" style="flex: 1; background: #ffebee;">
+                    <p style="color: #c62828;"><strong>Without debugging skills:</strong></p>
+                    <ul style="font-size: 0.85em;">
+                        <li>Stare at code for hours</li>
+                        <li>Add random print() everywhere</li>
+                        <li>Trial and error changes</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="flex: 1; background: #e8f5e9;">
+                    <p style="color: #2e7d32;"><strong>With debugging skills:</strong></p>
+                    <ul style="font-size: 0.85em;">
+                        <li>Systematic approach</li>
+                        <li>Use the right tool</li>
+                        <li>Fix in minutes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: PLAYWRIGHT INSPECTOR -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Playwright Inspector</h2>
+            <p>Visual debugging with PWDEBUG</p>
+        </div>
+
+        <!-- PWDEBUG -->
+        <div class="slide">
+            <h2>Playwright Inspector</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Launch with Playwright Inspector</span>
+<span class="comment"># Windows CMD:</span>
+<span class="keyword">set</span> PWDEBUG=1 && pytest test_file.py --headed
+
+<span class="comment"># Windows PowerShell:</span>
+$env:PWDEBUG=<span class="string">"1"</span>; pytest test_file.py --headed
+
+<span class="comment"># Linux/Mac:</span>
+PWDEBUG=1 pytest test_file.py --headed</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>Inspector opens automatically. You can:</p>
+                <ul style="font-size: 0.9em;">
+                    <li><strong>Step through</strong> each Playwright action</li>
+                    <li><strong>Pick locators</strong> by clicking elements</li>
+                    <li><strong>Test selectors</strong> in the console</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- page.pause() -->
+        <div class="slide">
+            <h2>page.pause() - Breakpoint</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_login</span>(page: Page):
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+
+    <span class="comment"># PAUSE HERE - Inspector opens!</span>
+    page.<span class="function">pause</span>()
+
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SuperSecret!"</span>)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>Must run with <code>--headed</code>! Won't work in headless mode.</p>
+            </div>
+        </div>
+
+        <!-- Conditional pause -->
+        <div class="slide">
+            <h2>Conditional Pause</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_with_conditional_pause</span>(page: Page):
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"wrong_user"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"wrong_pass"</span>)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+
+    <span class="comment"># Only pause when something unexpected happens</span>
+    <span class="keyword">if</span> <span class="string">"/secure"</span> <span class="keyword">in</span> page.url:
+        <span class="builtin">print</span>(<span class="string">"Unexpected: login succeeded!"</span>)
+        page.<span class="function">pause</span>()  <span class="comment"># Inspect the state</span></div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>Pause only when you need to investigate unexpected state.</p>
+            </div>
+        </div>
+
+        <!-- Slow motion -->
+        <div class="slide">
+            <h2>Slow Motion Execution</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># conftest.py</span>
+<span class="keyword">import</span> pytest
+
+<span class="decorator">@pytest.fixture</span>(scope=<span class="string">"session"</span>)
+<span class="keyword">def</span> <span class="function">browser_type_launch_args</span>(browser_type_launch_args):
+    <span class="keyword">return</span> {
+        **browser_type_launch_args,
+        <span class="string">"slow_mo"</span>: 1000,  <span class="comment"># 1 second between actions</span>
+    }</div>
+            <div class="code-block" style="margin-top: 10px; font-size: 0.8em; background: #1e1e1e;">
+<span class="comment"># Or via CLI:</span>
+pytest --headed --slowmo 1000</div>
+            <div class="info-box" style="margin-top: 10px;">
+                <p>Slow motion lets you visually follow each action step by step.</p>
+            </div>
+        </div>
+
+        <!-- PART 2: CONSOLE & EVENTS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Console & Event Logging</h2>
+            <p>Capturing browser events in Python</p>
+        </div>
+
+        <!-- Console messages -->
+        <div class="slide">
+            <h2>Console Messages</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_console_logging</span>(page: Page):
+    <span class="comment"># Listen to ALL console messages</span>
+    page.<span class="function">on</span>(<span class="string">"console"</span>, <span class="keyword">lambda</span> msg:
+        <span class="builtin">print</span>(<span class="string">f"  [{msg.type}] {msg.text}"</span>))
+
+    <span class="comment"># Listen to JavaScript errors</span>
+    page.<span class="function">on</span>(<span class="string">"pageerror"</span>, <span class="keyword">lambda</span> err:
+        <span class="builtin">print</span>(<span class="string">f"  [JS ERROR] {err}"</span>))
+
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/javascript_error"</span>)</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>Console types: <code>log</code>, <code>warning</code>, <code>error</code>, <code>info</code>, <code>debug</code></p>
+            </div>
+        </div>
+
+        <!-- Network logging -->
+        <div class="slide">
+            <h2>Network Request Logging</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_network_logging</span>(page: Page):
+    <span class="comment"># Log all requests</span>
+    page.<span class="function">on</span>(<span class="string">"request"</span>, <span class="keyword">lambda</span> req:
+        <span class="builtin">print</span>(<span class="string">f"  → {req.method} {req.url[:60]}"</span>))
+
+    <span class="comment"># Log failed responses (status >= 400)</span>
+    page.<span class="function">on</span>(<span class="string">"response"</span>, <span class="keyword">lambda</span> resp:
+        <span class="builtin">print</span>(<span class="string">f"  ← {resp.status} {resp.url[:60]}"</span>)
+        <span class="keyword">if</span> resp.status >= 400 <span class="keyword">else</span> <span class="keyword">None</span>)
+
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/login"</span>)</div>
+            <div class="info-box" style="margin-top: 10px;">
+                <p>Great for catching 404s, failed API calls, or slow requests.</p>
+            </div>
+        </div>
+
+        <!-- Python logging -->
+        <div class="slide">
+            <h2>Python Logging Module</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">import</span> logging
+
+logging.<span class="function">basicConfig</span>(
+    level=logging.INFO,
+    format=<span class="string">"%(asctime)s [%(levelname)s] %(message)s"</span>
+)
+logger = logging.<span class="function">getLogger</span>(__name__)
+
+<span class="keyword">def</span> <span class="function">test_with_logging</span>(page: Page):
+    logger.<span class="function">info</span>(<span class="string">"Starting login test"</span>)
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/login"</span>)
+    logger.<span class="function">info</span>(<span class="string">f"Page loaded: {page.url}"</span>)
+
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+    logger.<span class="function">info</span>(<span class="string">"Username filled"</span>)</div>
+            <div class="success-box" style="margin-top: 10px;">
+                <p>Run with <code>pytest -s</code> to see print/log output!</p>
+            </div>
+        </div>
+
+        <!-- PART 3: TRACING -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Tracing</h2>
+            <p>Record and replay test execution</p>
+        </div>
+
+        <!-- What is tracing -->
+        <div class="slide">
+            <h2>What is Tracing?</h2>
+            <div class="info-box">
+                <p>A trace records <strong>everything</strong> during test execution:</p>
+                <ul style="font-size: 0.9em; margin-top: 10px;">
+                    <li>Screenshots at each step</li>
+                    <li>DOM snapshots</li>
+                    <li>Network requests</li>
+                    <li>Console logs</li>
+                    <li>Action timeline</li>
+                </ul>
+            </div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>Like a "flight recorder" for your test - review after failure!</p>
+            </div>
+        </div>
+
+        <!-- Manual tracing -->
+        <div class="slide">
+            <h2>Manual Tracing in Code</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_with_trace</span>(context: BrowserContext):
+    <span class="comment"># Start recording</span>
+    context.tracing.<span class="function">start</span>(
+        screenshots=<span class="keyword">True</span>,
+        snapshots=<span class="keyword">True</span>,
+    )
+
+    page = context.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+
+    <span class="comment"># Stop and save</span>
+    context.tracing.<span class="function">stop</span>(path=<span class="string">"trace.zip"</span>)</div>
+            <div class="code-block" style="margin-top: 10px; font-size: 0.8em; background: #1e1e1e;">
+<span class="comment"># View the trace:</span>
+playwright show-trace trace.zip</div>
+        </div>
+
+        <!-- CLI tracing -->
+        <div class="slide">
+            <h2>CLI Tracing Flags</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Save trace only on failure</span>
+pytest --tracing retain-on-failure --output results
+
+<span class="comment"># Save screenshot only on failure</span>
+pytest --screenshot only-on-failure --output results
+
+<span class="comment"># Record video</span>
+pytest --video retain-on-failure --output results
+
+<span class="comment"># All artifacts on failure</span>
+pytest --tracing retain-on-failure \
+       --screenshot only-on-failure \
+       --video retain-on-failure \
+       --output results</div>
+            <div class="success-box" style="margin-top: 10px;">
+                <p><code>retain-on-failure</code> = only save when test fails (saves disk space)</p>
+            </div>
+        </div>
+
+        <!-- Trace Viewer -->
+        <div class="slide">
+            <h2>Trace Viewer</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Open trace viewer</span>
+playwright show-trace results/trace.zip
+
+<span class="comment"># Or use online viewer:</span>
+<span class="comment"># https://trace.playwright.dev</span></div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p><strong>Trace Viewer shows:</strong></p>
+                <ul style="font-size: 0.9em;">
+                    <li>Timeline of all actions</li>
+                    <li>Before/after screenshots for each step</li>
+                    <li>DOM snapshot (inspect elements!)</li>
+                    <li>Network log with request/response details</li>
+                    <li>Console output</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PART 4: COMMON ERRORS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Common Errors</h2>
+            <p>Recognize and fix fast</p>
+        </div>
+
+        <!-- TimeoutError -->
+        <div class="slide">
+            <h2>TimeoutError</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># WRONG: selector doesn't match anything</span>
+page.<span class="function">locator</span>(<span class="string">"#wrong-id"</span>).<span class="function">click</span>()  <span class="comment"># TimeoutError!</span>
+
+<span class="comment"># WRONG: element hasn't loaded yet</span>
+page.<span class="function">locator</span>(<span class="string">"#finish h4"</span>).<span class="function">text_content</span>()  <span class="comment"># TimeoutError!</span></div>
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <div class="info-box" style="flex: 1; background: #fff3e0;">
+                    <p><strong>Causes:</strong></p>
+                    <ul style="font-size: 0.85em;">
+                        <li>Typo in selector</li>
+                        <li>Element not loaded</li>
+                        <li>Element in iframe</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="flex: 1; background: #e8f5e9;">
+                    <p><strong>Fixes:</strong></p>
+                    <ul style="font-size: 0.85em;">
+                        <li>Check in DevTools</li>
+                        <li>Add <code>wait_for()</code></li>
+                        <li>Use <code>frame_locator()</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strict Mode -->
+        <div class="slide">
+            <h2>Strict Mode Violation</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># WRONG: matches 2 checkboxes</span>
+page.<span class="function">locator</span>(<span class="string">"input"</span>).<span class="function">check</span>()  <span class="comment"># Error: strict mode violation!</span>
+
+<span class="comment"># FIX 1: Use .first</span>
+page.<span class="function">locator</span>(<span class="string">"input"</span>).first.<span class="function">check</span>()
+
+<span class="comment"># FIX 2: Use .nth()</span>
+page.<span class="function">locator</span>(<span class="string">"input"</span>).<span class="function">nth</span>(0).<span class="function">check</span>()
+
+<span class="comment"># FIX 3: More specific selector</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='checkbox']:first-child"</span>).<span class="function">check</span>()</div>
+            <div class="warning-box" style="margin-top: 10px;">
+                <p>Check <code>locator.count()</code> to see how many elements match!</p>
+            </div>
+        </div>
+
+        <!-- iframe & detached -->
+        <div class="slide">
+            <h2>iframe & Detached Elements</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># PROBLEM: Element is inside an iframe</span>
+page.<span class="function">locator</span>(<span class="string">"#tinymce"</span>)  <span class="comment"># Not found!</span>
+
+<span class="comment"># FIX: Access the frame first</span>
+frame = page.<span class="function">frame_locator</span>(<span class="string">"iframe#mce_0_ifr"</span>)
+frame.<span class="function">locator</span>(<span class="string">"#tinymce"</span>).<span class="function">click</span>()</div>
+            <div class="code-block" style="margin-top: 10px; font-size: 0.8em;">
+<span class="comment"># PROBLEM: Element removed from DOM</span>
+btn = page.<span class="function">locator</span>(<span class="string">".delete"</span>).first
+btn.<span class="function">click</span>()  <span class="comment"># Removes itself</span>
+btn.<span class="function">click</span>()  <span class="comment"># Error: element detached!</span>
+
+<span class="comment"># FIX: Re-query after DOM changes</span>
+remaining = page.<span class="function">locator</span>(<span class="string">".delete"</span>)
+<span class="keyword">assert</span> remaining.<span class="function">count</span>() == 0</div>
+        </div>
+
+        <!-- assert vs expect -->
+        <div class="slide">
+            <h2>assert vs expect()</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># WRONG: assert checks instantly - no waiting!</span>
+<span class="keyword">assert</span> page.<span class="function">locator</span>(<span class="string">"#result"</span>).<span class="function">is_visible</span>()  <span class="comment"># May be False!</span>
+
+<span class="comment"># RIGHT: expect() auto-waits up to timeout</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#result"</span>)).<span class="function">to_be_visible</span>(timeout=10000)</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <table style="width: 100%; font-size: 0.85em;">
+                    <tr>
+                        <th></th>
+                        <th><code>assert</code></th>
+                        <th><code>expect()</code></th>
+                    </tr>
+                    <tr>
+                        <td>Waits?</td>
+                        <td style="color: #c62828;">No</td>
+                        <td style="color: #2e7d32;">Yes (auto-retry)</td>
+                    </tr>
+                    <tr>
+                        <td>For timing?</td>
+                        <td style="color: #c62828;">Bad</td>
+                        <td style="color: #2e7d32;">Perfect</td>
+                    </tr>
+                    <tr>
+                        <td>For values?</td>
+                        <td style="color: #2e7d32;">Fine</td>
+                        <td style="color: #2e7d32;">Fine</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PART 5: DEBUG STRATEGIES -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Debug Strategies</h2>
+            <p>Complete debugging workflow</p>
+        </div>
+
+        <!-- Debug fixture -->
+        <div class="slide">
+            <h2>All-in-One Debug Fixture</h2>
+            <div class="code-block" style="font-size: 0.75em;">
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">debug_page</span>(context: BrowserContext, request):
+    context.tracing.<span class="function">start</span>(screenshots=<span class="keyword">True</span>, snapshots=<span class="keyword">True</span>)
+    page = context.<span class="function">new_page</span>()
+
+    page.<span class="function">on</span>(<span class="string">"console"</span>, <span class="keyword">lambda</span> m: <span class="builtin">print</span>(<span class="string">f"[{m.type}] {m.text}"</span>))
+    page.<span class="function">on</span>(<span class="string">"pageerror"</span>, <span class="keyword">lambda</span> e: <span class="builtin">print</span>(<span class="string">f"[JS ERROR] {e}"</span>))
+
+    <span class="keyword">yield</span> page
+
+    name = request.node.name
+    <span class="keyword">if</span> <span class="builtin">hasattr</span>(request.node, <span class="string">"rep_call"</span>) <span class="keyword">and</span> request.node.rep_call.failed:
+        page.<span class="function">screenshot</span>(path=<span class="string">f"debug/FAIL_{name}.png"</span>)
+        context.tracing.<span class="function">stop</span>(path=<span class="string">f"debug/FAIL_{name}.zip"</span>)
+    <span class="keyword">else</span>:
+        context.tracing.<span class="function">stop</span>()</div>
+            <div class="success-box" style="margin-top: 10px;">
+                <p>Tracing + console + screenshot on failure = one fixture</p>
+            </div>
+        </div>
+
+        <!-- Hook for test result -->
+        <div class="slide">
+            <h2>Hook for Test Result</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># conftest.py - Required for debug fixture</span>
+<span class="decorator">@pytest.hookimpl</span>(tryfirst=<span class="keyword">True</span>, hookwrapper=<span class="keyword">True</span>)
+<span class="keyword">def</span> <span class="function">pytest_runtest_makereport</span>(item, call):
+    outcome = <span class="keyword">yield</span>
+    rep = outcome.<span class="function">get_result</span>()
+    <span class="builtin">setattr</span>(item, <span class="string">f"rep_{rep.when}"</span>, rep)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>This hook stores the test result on the item, so the fixture can check <code>request.node.rep_call.failed</code> after the test runs.</p>
+            </div>
+        </div>
+
+        <!-- Page state dump -->
+        <div class="slide">
+            <h2>Page State Dump</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">def</span> <span class="function">dump_page_state</span>(page: Page, label: <span class="builtin">str</span> = <span class="string">""</span>):
+    <span class="builtin">print</span>(<span class="string">f"\n  === PAGE STATE {label} ==="</span>)
+    <span class="builtin">print</span>(<span class="string">f"  URL:   {page.url}"</span>)
+    <span class="builtin">print</span>(<span class="string">f"  Title: {page.title()}"</span>)
+    <span class="builtin">print</span>(<span class="string">f"  Forms: {page.locator('form').count()}"</span>)
+    <span class="builtin">print</span>(<span class="string">f"  Inputs: {page.locator('input').count()}"</span>)
+
+<span class="keyword">def</span> <span class="function">test_with_dump</span>(page: Page):
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/login"</span>)
+    <span class="function">dump_page_state</span>(page, <span class="string">"AFTER LOAD"</span>)
+    <span class="comment"># ... actions ...</span>
+    <span class="function">dump_page_state</span>(page, <span class="string">"AFTER LOGIN"</span>)</div>
+            <div class="info-box" style="margin-top: 10px;">
+                <p>Quick overview of page state at any point during the test.</p>
+            </div>
+        </div>
+
+        <!-- Debug element helper -->
+        <div class="slide">
+            <h2>Debug Element Helper</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">def</span> <span class="function">debug_element</span>(page: Page, selector: <span class="builtin">str</span>):
+    locator = page.<span class="function">locator</span>(selector)
+    count = locator.<span class="function">count</span>()
+    <span class="builtin">print</span>(<span class="string">f"\n  Selector: '{selector}'"</span>)
+    <span class="builtin">print</span>(<span class="string">f"  Matches: {count}"</span>)
+    <span class="keyword">if</span> count > 0:
+        <span class="builtin">print</span>(<span class="string">f"  Visible: {locator.first.is_visible()}"</span>)
+        <span class="builtin">print</span>(<span class="string">f"  Enabled: {locator.first.is_enabled()}"</span>)
+        <span class="builtin">print</span>(<span class="string">f"  Text: '{locator.first.text_content()[:50]}'"</span>)
+    <span class="keyword">else</span>:
+        <span class="builtin">print</span>(<span class="string">"  NOT FOUND!"</span>)</div>
+            <div class="highlight-box" style="margin-top: 10px;">
+                <p>Use this when a selector isn't working as expected.</p>
+            </div>
+        </div>
+
+        <!-- VS Code debugging -->
+        <div class="slide">
+            <h2>VS Code Debugging</h2>
+            <div class="code-block" style="font-size: 0.75em;">
+<span class="comment">// .vscode/launch.json</span>
+{
+    <span class="string">"version"</span>: <span class="string">"0.2.0"</span>,
+    <span class="string">"configurations"</span>: [{
+        <span class="string">"name"</span>: <span class="string">"Pytest: Current File"</span>,
+        <span class="string">"type"</span>: <span class="string">"debugpy"</span>,
+        <span class="string">"request"</span>: <span class="string">"launch"</span>,
+        <span class="string">"module"</span>: <span class="string">"pytest"</span>,
+        <span class="string">"args"</span>: [<span class="string">"${file}"</span>, <span class="string">"-v"</span>, <span class="string">"--headed"</span>, <span class="string">"-s"</span>],
+        <span class="string">"console"</span>: <span class="string">"integratedTerminal"</span>
+    }]
+}</div>
+            <div class="info-box" style="margin-top: 10px;">
+                <ul style="font-size: 0.9em;">
+                    <li><strong>F5</strong> - Start debugging</li>
+                    <li><strong>F9</strong> - Toggle breakpoint</li>
+                    <li><strong>F10</strong> - Step Over</li>
+                    <li><strong>F11</strong> - Step Into</li>
+                    <li>Watch variables in Debug panel</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Debugging Checklist -->
+        <div class="slide">
+            <h2>Debugging Checklist</h2>
+            <div class="info-box" style="font-size: 0.85em;">
+                <table style="width: 100%;">
+                    <tr>
+                        <th style="width: 30%;">Check</th>
+                        <th>Tool / Fix</th>
+                    </tr>
+                    <tr>
+                        <td>1. Selector correct?</td>
+                        <td>DevTools, <code>page.pause()</code>, <code>debug_element()</code></td>
+                    </tr>
+                    <tr>
+                        <td>2. Timing issue?</td>
+                        <td><code>wait_for()</code>, <code>expect()</code></td>
+                    </tr>
+                    <tr>
+                        <td>3. In iframe?</td>
+                        <td><code>frame_locator()</code></td>
+                    </tr>
+                    <tr>
+                        <td>4. Multiple matches?</td>
+                        <td><code>.first</code>, <code>.nth()</code>, <code>.count()</code></td>
+                    </tr>
+                    <tr>
+                        <td>5. Element detached?</td>
+                        <td>Re-query the locator</td>
+                    </tr>
+                    <tr>
+                        <td>6. Network issue?</td>
+                        <td>Request/response logging</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div class="slide">
+            <h2>Quick Reference</h2>
+            <div style="display: flex; gap: 15px;">
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>Visual</strong></p>
+                    <div class="code-block" style="font-size: 0.75em;">
+pytest --headed --slowmo 1000
+PWDEBUG=1 pytest --headed
+page.pause()</div>
+                </div>
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>Artifacts</strong></p>
+                    <div class="code-block" style="font-size: 0.75em;">
+--screenshot only-on-failure
+--tracing retain-on-failure
+--video retain-on-failure</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>Logging</strong></p>
+                    <div class="code-block" style="font-size: 0.75em;">
+page.on("console", ...)
+page.on("pageerror", ...)
+pytest -s</div>
+                </div>
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>Common Fixes</strong></p>
+                    <div class="code-block" style="font-size: 0.75em;">
+TimeoutError → fix selector
+Strict mode  → .first/.nth()
+In iframe    → frame_locator()
+Timing       → expect() not assert</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Technique</th>
+                    <th>Use When</th>
+                </tr>
+                <tr>
+                    <td>Playwright Inspector</td>
+                    <td>Explore selectors interactively</td>
+                </tr>
+                <tr>
+                    <td><code>page.pause()</code></td>
+                    <td>Stop at specific point</td>
+                </tr>
+                <tr>
+                    <td>Console logging</td>
+                    <td>Track browser events</td>
+                </tr>
+                <tr>
+                    <td>Tracing</td>
+                    <td>Post-mortem analysis</td>
+                </tr>
+                <tr>
+                    <td>Debug fixture</td>
+                    <td>All-in-one debug support</td>
+                </tr>
+                <tr>
+                    <td>VS Code debugger</td>
+                    <td>Step through Python code</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Homework -->
+        <div class="slide">
+            <h2>Homework</h2>
+            <div class="info-box">
+                <h3>Tasks:</h3>
+                <ol style="font-size: 1em;">
+                    <li>Debug failing tests:
+                        <ul>
+                            <li>Fix 6 intentionally buggy tests</li>
+                            <li>Use Inspector, DevTools, page.pause()</li>
+                        </ul>
+                    </li>
+                    <li>Build debug toolkit:
+                        <ul>
+                            <li>Create debug fixture with tracing</li>
+                            <li>Build page state and locator helpers</li>
+                            <li>Save screenshots on failure</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Next Lecture -->
+        <div class="slide">
+            <h2>Next Lecture</h2>
+            <h3 style="color: #4CAF50;">Lecture 36: Best Practices & Final Project</h3>
+            <ul style="font-size: 1.1em; margin-top: 30px;">
+                <li>Test architecture patterns</li>
+                <li>Page Object Model</li>
+                <li>CI/CD integration</li>
+                <li>Course review</li>
+                <li>Final project assignment</li>
+            </ul>
+            <div class="success-box" style="margin-top: 30px;">
+                <p>Practice: Debug and fix all exercise bugs using today's techniques</p>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🔍</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Debugging Techniques!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Inspector, logging, tracing, common errors, strategies</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
