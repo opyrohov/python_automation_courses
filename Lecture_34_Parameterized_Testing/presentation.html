@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 34: Parameterized Testing</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🔄</div>
+            <h1>Lecture 34</h1>
+            <div class="subtitle">Parameterized Testing</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Advanced parametrize patterns</li>
+                <li>✓ Stacking decorators (cartesian product)</li>
+                <li>✓ Indirect parametrization of fixtures</li>
+                <li>✓ Dynamic test generation</li>
+                <li>✓ Best practices for data-driven tests</li>
+            </ul>
+        </div>
+
+        <!-- Recap -->
+        <div class="slide">
+            <h2>Recap: Basic Parametrize</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"username,password"</span>, [
+    (<span class="string">"tomsmith"</span>, <span class="string">"SuperSecretPassword!"</span>),
+    (<span class="string">"wrong"</span>, <span class="string">"wrong"</span>),
+])
+<span class="keyword">def</span> <span class="function">test_login</span>(page, username, password):
+    <span class="comment"># Runs twice: once per parameter set</span>
+    ...</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>Today we go deeper!</p>
+            </div>
+        </div>
+
+        <!-- PART 1: ADVANCED BASICS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Advanced Parametrize</h2>
+            <p>IDs, dicts, pytest.param</p>
+        </div>
+
+        <!-- Custom IDs -->
+        <div class="slide">
+            <h2>Custom Test IDs</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"user,pwd,url"</span>, [
+    (<span class="string">"tomsmith"</span>, <span class="string">"SuperSecret!"</span>, <span class="string">"/secure"</span>),
+    (<span class="string">"wrong"</span>, <span class="string">"wrong"</span>, <span class="string">"/login"</span>),
+], ids=[<span class="string">"valid_login"</span>, <span class="string">"invalid_login"</span>])
+<span class="keyword">def</span> <span class="function">test_login</span>(page, user, pwd, url): ...</div>
+            <div class="code-block" style="margin-top: 10px; font-size: 0.8em; background: #1e1e1e;">
+test_login[valid_login] <span style="color: #4CAF50;">PASSED</span>
+test_login[invalid_login] <span style="color: #4CAF50;">PASSED</span></div>
+            <div class="success-box" style="margin-top: 10px;">
+                <p>✅ Much more readable than <code>test_login[tomsmith-SuperSecret!-/secure]</code></p>
+            </div>
+        </div>
+
+        <!-- pytest.param -->
+        <div class="slide">
+            <h2>pytest.param - Marks per Case</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"path,heading"</span>, [
+    pytest.<span class="function">param</span>(<span class="string">"/login"</span>, <span class="string">"Login Page"</span>, id=<span class="string">"login"</span>),
+    pytest.<span class="function">param</span>(<span class="string">"/checkboxes"</span>, <span class="string">"Checkboxes"</span>, id=<span class="string">"cb"</span>),
+    pytest.<span class="function">param</span>(
+        <span class="string">"/broken"</span>, <span class="string">"404"</span>,
+        id=<span class="string">"broken"</span>,
+        marks=pytest.mark.<span class="function">xfail</span>(reason=<span class="string">"Known bug"</span>),
+    ),
+])</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p><code>pytest.param()</code> = value + id + marks in one place</p>
+            </div>
+        </div>
+
+        <!-- Dict Parameters -->
+        <div class="slide">
+            <h2>Dict Parameters</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+CASES = [
+    {<span class="string">"id"</span>: <span class="string">"valid"</span>, <span class="string">"user"</span>: <span class="string">"tom"</span>, <span class="string">"pass"</span>: <span class="string">"Secret!"</span>, <span class="string">"ok"</span>: <span class="keyword">True</span>},
+    {<span class="string">"id"</span>: <span class="string">"invalid"</span>, <span class="string">"user"</span>: <span class="string">"wrong"</span>, <span class="string">"pass"</span>: <span class="string">"wrong"</span>, <span class="string">"ok"</span>: <span class="keyword">False</span>},
+]
+
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"case"</span>, CASES, ids=<span class="keyword">lambda</span> c: c[<span class="string">"id"</span>])
+<span class="keyword">def</span> <span class="function">test_login</span>(page, case):
+    page.<span class="function">locator</span>(<span class="string">"#user"</span>).<span class="function">fill</span>(case[<span class="string">"user"</span>])
+    page.<span class="function">locator</span>(<span class="string">"#pass"</span>).<span class="function">fill</span>(case[<span class="string">"pass"</span>])
+    ...</div>
+            <div class="info-box" style="margin-top: 10px;">
+                <p>Dicts are great for complex test data with many fields.</p>
+            </div>
+        </div>
+
+        <!-- PART 2: STACKING -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Stacking Parametrize</h2>
+            <p>Cartesian product of parameters</p>
+        </div>
+
+        <!-- Stacking Concept -->
+        <div class="slide">
+            <h2>Stacking = All Combinations</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"password"</span>, [<span class="string">"correct"</span>, <span class="string">"wrong"</span>])
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"username"</span>, [<span class="string">"tom"</span>, <span class="string">"bad"</span>])
+<span class="keyword">def</span> <span class="function">test_login</span>(page, username, password):
+    ...</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p style="font-size: 1.1em;">
+                    2 usernames × 2 passwords = <strong>4 tests</strong>
+                </p>
+                <ul style="font-size: 0.9em; margin-top: 10px;">
+                    <li>tom + correct</li>
+                    <li>tom + wrong</li>
+                    <li>bad + correct</li>
+                    <li>bad + wrong</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Matrix Testing -->
+        <div class="slide">
+            <h2>Matrix Testing</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"page_path"</span>, [<span class="string">"/login"</span>, <span class="string">"/checkbox"</span>, <span class="string">"/dropdown"</span>])
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"width,height"</span>, [
+    (1920, 1080),
+    (375, 812),
+], ids=[<span class="string">"desktop"</span>, <span class="string">"mobile"</span>])
+<span class="keyword">def</span> <span class="function">test_responsive</span>(page, width, height, page_path):
+    page.<span class="function">set_viewport_size</span>({<span class="string">"width"</span>: width, <span class="string">"height"</span>: height})
+    page.<span class="function">goto</span>(page_path)</div>
+            <div class="warning-box" style="margin-top: 10px;">
+                <p>⚠️ 3 pages × 2 viewports = 6 tests. Be careful: 10 × 10 = 100!</p>
+            </div>
+        </div>
+
+        <!-- PART 3: INDIRECT -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Indirect Parametrization</h2>
+            <p>Parametrizing fixtures</p>
+        </div>
+
+        <!-- Indirect Concept -->
+        <div class="slide">
+            <h2>Direct vs Indirect</h2>
+            <div class="info-box" style="background: #e3f2fd;">
+                <p><strong>Direct:</strong> Parameter goes to <em>test function</em></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"path"</span>, [<span class="string">"/login"</span>, <span class="string">"/home"</span>])
+<span class="keyword">def</span> <span class="function">test_page</span>(page, path):  <span class="comment"># path goes here</span>
+    page.<span class="function">goto</span>(path)</div>
+            </div>
+            <div class="info-box" style="background: #fff3e0; margin-top: 10px;">
+                <p><strong>Indirect:</strong> Parameter goes to <em>fixture</em></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">nav_page</span>(request, page):
+    page.<span class="function">goto</span>(request.param)  <span class="comment"># param goes here!</span>
+    <span class="keyword">return</span> page
+
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"nav_page"</span>, [<span class="string">"/login"</span>], indirect=<span class="keyword">True</span>)
+<span class="keyword">def</span> <span class="function">test_page</span>(nav_page): ...</div>
+            </div>
+        </div>
+
+        <!-- Indirect Example -->
+        <div class="slide">
+            <h2>Indirect in Practice</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">viewport_page</span>(request, page):
+    <span class="string">"""Set viewport from parameter."""</span>
+    page.<span class="function">set_viewport_size</span>(request.param)
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+    <span class="keyword">return</span> page
+
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"viewport_page"</span>, [
+    {<span class="string">"width"</span>: 1920, <span class="string">"height"</span>: 1080},
+    {<span class="string">"width"</span>: 375, <span class="string">"height"</span>: 812},
+], indirect=<span class="keyword">True</span>, ids=[<span class="string">"desktop"</span>, <span class="string">"mobile"</span>])
+<span class="keyword">def</span> <span class="function">test_heading</span>(viewport_page):
+    <span class="keyword">assert</span> viewport_page.<span class="function">locator</span>(<span class="string">"h1"</span>).<span class="function">is_visible</span>()</div>
+        </div>
+
+        <!-- Fixture params -->
+        <div class="slide">
+            <h2>Alternative: Fixture params</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.fixture</span>(params=[<span class="string">"/login"</span>, <span class="string">"/checkboxes"</span>],
+               ids=[<span class="string">"login"</span>, <span class="string">"checkboxes"</span>])
+<span class="keyword">def</span> <span class="function">target_page</span>(request, page):
+    page.<span class="function">goto</span>(<span class="string">f"https://example.com{request.param}"</span>)
+    <span class="keyword">return</span> page
+
+<span class="keyword">def</span> <span class="function">test_title</span>(target_page):
+    <span class="keyword">assert</span> target_page.<span class="function">title</span>()
+<span class="comment"># Runs 2 times automatically!</span></div>
+            <div class="info-box" style="margin-top: 10px;">
+                <p>Every test using this fixture runs for each param.</p>
+            </div>
+        </div>
+
+        <!-- PART 4: DYNAMIC GENERATION -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Dynamic Generation</h2>
+            <p>Generating tests programmatically</p>
+        </div>
+
+        <!-- pytest_generate_tests -->
+        <div class="slide">
+            <h2>pytest_generate_tests Hook</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># conftest.py</span>
+<span class="keyword">import</span> json
+
+<span class="keyword">def</span> <span class="function">pytest_generate_tests</span>(metafunc):
+    <span class="keyword">if</span> <span class="string">"page_data"</span> <span class="keyword">in</span> metafunc.fixturenames:
+        data = json.<span class="function">load</span>(<span class="builtin">open</span>(<span class="string">"pages.json"</span>))
+        metafunc.<span class="function">parametrize</span>(<span class="string">"page_data"</span>, data)
+
+<span class="comment"># test_pages.py</span>
+<span class="keyword">def</span> <span class="function">test_heading</span>(page, page_data):
+    <span class="comment"># Automatically parametrized from JSON!</span>
+    page.<span class="function">goto</span>(page_data[<span class="string">"url"</span>])
+    ...</div>
+            <div class="highlight-box" style="margin-top: 10px;">
+                <p>Tests are generated at collection time from any data source.</p>
+            </div>
+        </div>
+
+        <!-- Generator Functions -->
+        <div class="slide">
+            <h2>Generator Functions</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">generate_cases</span>():
+    <span class="string">"""Build test cases programmatically."""</span>
+    cases = []
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(1, 6):
+        cases.<span class="function">append</span>(pytest.<span class="function">param</span>(
+            <span class="builtin">str</span>(i * 10),
+            id=<span class="string">f"number_{i*10}"</span>,
+        ))
+    <span class="keyword">return</span> cases
+
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"number"</span>, <span class="function">generate_cases</span>())
+<span class="keyword">def</span> <span class="function">test_input</span>(page, number):
+    page.<span class="function">locator</span>(<span class="string">"input"</span>).<span class="function">fill</span>(number)</div>
+        </div>
+
+        <!-- PART 5: BEST PRACTICES -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Best Practices</h2>
+            <p>Clean data-driven tests</p>
+        </div>
+
+        <!-- Table Pattern -->
+        <div class="slide">
+            <h2>Table Pattern</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Clean, readable table format</span>
+TEST_TABLE = [
+    <span class="comment"># username     password       success  error</span>
+    (<span class="string">"tomsmith"</span>,   <span class="string">"SuperSecret!"</span>, <span class="keyword">True</span>,    <span class="keyword">None</span>),
+    (<span class="string">"wrong"</span>,      <span class="string">"wrong"</span>,        <span class="keyword">False</span>,   <span class="string">"username is invalid"</span>),
+    (<span class="string">"tomsmith"</span>,   <span class="string">"bad"</span>,          <span class="keyword">False</span>,   <span class="string">"password is invalid"</span>),
+]
+
+<span class="decorator">@pytest.mark.parametrize</span>(
+    <span class="string">"username,password,success,error"</span>,
+    TEST_TABLE,
+    ids=[<span class="string">"valid"</span>, <span class="string">"bad_user"</span>, <span class="string">"bad_pass"</span>],
+)</div>
+            <div class="success-box" style="margin-top: 10px;">
+                <p>✅ Easy to scan and add new cases!</p>
+            </div>
+        </div>
+
+        <!-- DOs and DONTs -->
+        <div class="slide">
+            <h2>Do's and Don'ts</h2>
+            <div class="info-box" style="background: #e8f5e9;">
+                <p style="color: #2e7d32;"><strong>✅ Do:</strong></p>
+                <ul style="font-size: 0.9em;">
+                    <li>Use readable IDs</li>
+                    <li>Keep test logic simple</li>
+                    <li>Separate data from logic</li>
+                    <li>Use dicts for 4+ fields</li>
+                </ul>
+            </div>
+            <div class="info-box" style="background: #ffebee; margin-top: 10px;">
+                <p style="color: #c62828;"><strong>❌ Don't:</strong></p>
+                <ul style="font-size: 0.9em;">
+                    <li>Stack too many decorators (exponential!)</li>
+                    <li>Put complex logic in parametrize values</li>
+                    <li>Use default IDs for complex objects</li>
+                    <li>Mix unrelated parameters in one decorator</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Pattern</th>
+                    <th>Use When</th>
+                </tr>
+                <tr>
+                    <td><code>ids=[]</code></td>
+                    <td>Readable test names</td>
+                </tr>
+                <tr>
+                    <td><code>pytest.param(marks=)</code></td>
+                    <td>xfail/skip per case</td>
+                </tr>
+                <tr>
+                    <td>Stacking decorators</td>
+                    <td>All combinations needed</td>
+                </tr>
+                <tr>
+                    <td><code>indirect=True</code></td>
+                    <td>Parametrize fixture setup</td>
+                </tr>
+                <tr>
+                    <td><code>pytest_generate_tests</code></td>
+                    <td>Dynamic data sources</td>
+                </tr>
+                <tr>
+                    <td>Table pattern</td>
+                    <td>Many similar test cases</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Homework -->
+        <div class="slide">
+            <h2>Homework</h2>
+            <div class="info-box">
+                <h3>Tasks:</h3>
+                <ol style="font-size: 1em;">
+                    <li>Comprehensive login tests:
+                        <ul>
+                            <li>Valid + multiple invalid cases</li>
+                            <li>Custom IDs and xfail marks</li>
+                        </ul>
+                    </li>
+                    <li>Matrix testing:
+                        <ul>
+                            <li>Stack viewport × page parameters</li>
+                            <li>Use indirect for viewport fixture</li>
+                        </ul>
+                    </li>
+                    <li>Dynamic generation:
+                        <ul>
+                            <li>Load data from JSON file</li>
+                            <li>Use <code>pytest_generate_tests</code></li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Next Lecture -->
+        <div class="slide">
+            <h2>Next Lecture</h2>
+            <h3 style="color: #4CAF50;">Lecture 35: Debugging Techniques</h3>
+            <ul style="font-size: 1.1em; margin-top: 30px;">
+                <li>Playwright Inspector</li>
+                <li>Debug mode (PWDEBUG=1)</li>
+                <li>Slow motion execution</li>
+                <li>Console logs and tracing</li>
+                <li>VS Code debugging</li>
+            </ul>
+            <div class="success-box" style="margin-top: 30px;">
+                <p>Practice: Write 10+ parametrized test cases for a page</p>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🔄</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Parameterized Testing!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">IDs, stacking, indirect, dynamic generation, best practices</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
