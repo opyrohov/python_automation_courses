@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 33: Test Data Management</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">📊</div>
+            <h1>Lecture 33</h1>
+            <div class="subtitle">Test Data Management</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Read test data from JSON files</li>
+                <li>✓ Read test data from CSV files</li>
+                <li>✓ Use environment variables for secrets</li>
+                <li>✓ Generate dynamic data with Faker</li>
+                <li>✓ Create reusable data fixtures</li>
+            </ul>
+        </div>
+
+        <!-- Why Data Management -->
+        <div class="slide">
+            <h2>Why Manage Test Data?</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Hard-coded data:</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+page.<span class="function">locator</span>(<span class="string">"#user"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)       <span class="comment"># Hard-coded!</span>
+page.<span class="function">locator</span>(<span class="string">"#pass"</span>).<span class="function">fill</span>(<span class="string">"SuperSecret!"</span>)  <span class="comment"># In every test!</span></div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 10px;">
+                <p style="color: #2e7d32;"><strong>✅ External data:</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+user = test_data[<span class="string">"valid_user"</span>]                <span class="comment"># From file</span>
+page.<span class="function">locator</span>(<span class="string">"#user"</span>).<span class="function">fill</span>(user[<span class="string">"username"</span>])
+page.<span class="function">locator</span>(<span class="string">"#pass"</span>).<span class="function">fill</span>(user[<span class="string">"password"</span>])</div>
+            </div>
+        </div>
+
+        <!-- PART 1: JSON -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>JSON Test Data</h2>
+            <p>Structured data from files</p>
+        </div>
+
+        <!-- JSON File Structure -->
+        <div class="slide">
+            <h2>JSON Data File</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment">// test_data/login_data.json</span>
+{
+  <span class="string">"valid_user"</span>: {
+    <span class="string">"username"</span>: <span class="string">"tomsmith"</span>,
+    <span class="string">"password"</span>: <span class="string">"SuperSecretPassword!"</span>
+  },
+  <span class="string">"invalid_users"</span>: [
+    {<span class="string">"username"</span>: <span class="string">"wrong"</span>, <span class="string">"password"</span>: <span class="string">"wrong"</span>},
+    {<span class="string">"username"</span>: <span class="string">""</span>, <span class="string">"password"</span>: <span class="string">""</span>}
+  ]
+}</div>
+        </div>
+
+        <!-- Loading JSON -->
+        <div class="slide">
+            <h2>Loading JSON in Python</h2>
+            <div class="code-block">
+<span class="keyword">import</span> json
+
+<span class="keyword">def</span> <span class="function">load_json</span>(file_path):
+    <span class="keyword">with</span> <span class="builtin">open</span>(file_path, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+        <span class="keyword">return</span> json.<span class="function">load</span>(f)
+
+data = <span class="function">load_json</span>(<span class="string">"test_data/login_data.json"</span>)
+user = data[<span class="string">"valid_user"</span>]
+<span class="builtin">print</span>(user[<span class="string">"username"</span>])  <span class="comment"># tomsmith</span></div>
+        </div>
+
+        <!-- JSON with Parametrize -->
+        <div class="slide">
+            <h2>JSON + Parametrize</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+data = <span class="function">load_json</span>(<span class="string">"test_data/login_data.json"</span>)
+
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"user"</span>, data[<span class="string">"invalid_users"</span>])
+<span class="keyword">def</span> <span class="function">test_invalid_login</span>(page, user):
+    page.<span class="function">goto</span>(<span class="string">"/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(user[<span class="string">"username"</span>])
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(user[<span class="string">"password"</span>])
+    page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+    <span class="keyword">assert</span> <span class="string">"/login"</span> <span class="keyword">in</span> page.url</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Each item in the array = separate test case!</p>
+            </div>
+        </div>
+
+        <!-- PART 2: CSV -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>CSV Test Data</h2>
+            <p>Tabular data from spreadsheets</p>
+        </div>
+
+        <!-- CSV File -->
+        <div class="slide">
+            <h2>CSV Data File</h2>
+            <div class="code-block" style="font-size: 0.9em;">
+<span class="comment"># test_data/login_data.csv</span>
+username,password,should_succeed
+tomsmith,SuperSecretPassword!,true
+wrong,wrong,false
+tomsmith,bad_password,false</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>CSV is easy to edit in Excel or Google Sheets!</p>
+            </div>
+        </div>
+
+        <!-- Loading CSV -->
+        <div class="slide">
+            <h2>Loading CSV in Python</h2>
+            <div class="code-block">
+<span class="keyword">import</span> csv
+
+<span class="keyword">def</span> <span class="function">load_csv</span>(file_path):
+    <span class="keyword">with</span> <span class="builtin">open</span>(file_path, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+        reader = csv.<span class="function">DictReader</span>(f)
+        <span class="keyword">return</span> <span class="builtin">list</span>(reader)
+
+rows = <span class="function">load_csv</span>(<span class="string">"test_data/login_data.csv"</span>)
+<span class="comment"># [{"username": "tomsmith", "password": "...", ...}]</span></div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ CSV values are always <strong>strings</strong>! Convert manually: <code>"true" → True</code></p>
+            </div>
+        </div>
+
+        <!-- CSV vs JSON -->
+        <div class="slide">
+            <h2>CSV vs JSON</h2>
+            <table style="width: 100%; font-size: 0.9em;">
+                <tr>
+                    <th></th>
+                    <th>CSV</th>
+                    <th>JSON</th>
+                </tr>
+                <tr>
+                    <td><strong>Edit in Excel</strong></td>
+                    <td>✅ Easy</td>
+                    <td>❌ Hard</td>
+                </tr>
+                <tr>
+                    <td><strong>Data types</strong></td>
+                    <td>❌ Strings only</td>
+                    <td>✅ int, bool, null</td>
+                </tr>
+                <tr>
+                    <td><strong>Nested data</strong></td>
+                    <td>❌ No</td>
+                    <td>✅ Yes</td>
+                </tr>
+                <tr>
+                    <td><strong>Large datasets</strong></td>
+                    <td>✅ Efficient</td>
+                    <td>❌ Verbose</td>
+                </tr>
+                <tr>
+                    <td><strong>Best for</strong></td>
+                    <td>Simple tables</td>
+                    <td>Complex data</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- PART 3: ENV VARIABLES -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Environment Variables</h2>
+            <p>Protecting sensitive data</p>
+        </div>
+
+        <!-- Why Env Vars -->
+        <div class="slide">
+            <h2>Why Environment Variables?</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ NEVER commit secrets:</strong></p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># DON'T DO THIS!</span>
+PASSWORD = <span class="string">"SuperSecretPassword!"</span>  <span class="comment"># In code!</span>
+API_KEY = <span class="string">"sk-abc123..."</span>           <span class="comment"># In git!</span></div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 10px;">
+                <p style="color: #2e7d32;"><strong>✅ Use environment variables:</strong></p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">import</span> os
+PASSWORD = os.environ.<span class="function">get</span>(<span class="string">"TEST_PASSWORD"</span>)
+API_KEY = os.environ.<span class="function">get</span>(<span class="string">"API_KEY"</span>)</div>
+            </div>
+        </div>
+
+        <!-- .env File -->
+        <div class="slide">
+            <h2>.env File + python-dotenv</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># .env (add to .gitignore!)</span>
+BASE_URL=https://the-internet.herokuapp.com
+TEST_USERNAME=tomsmith
+TEST_PASSWORD=SuperSecretPassword!
+HEADLESS=true</div>
+            <div class="code-block" style="margin-top: 15px; font-size: 0.85em;">
+<span class="comment"># conftest.py</span>
+<span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv
+<span class="function">load_dotenv</span>()  <span class="comment"># Loads .env into os.environ</span>
+
+BASE_URL = os.environ.<span class="function">get</span>(<span class="string">"BASE_URL"</span>)</div>
+            <div class="code-block" style="margin-top: 10px; font-size: 0.85em;">
+pip install python-dotenv</div>
+        </div>
+
+        <!-- Config Class -->
+        <div class="slide">
+            <h2>Config Class Pattern</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">class</span> <span class="class-name">Config</span>:
+    <span class="string">"""All settings in one place."""</span>
+    BASE_URL = os.environ.<span class="function">get</span>(<span class="string">"BASE_URL"</span>, <span class="string">"https://default.com"</span>)
+    USERNAME = os.environ.<span class="function">get</span>(<span class="string">"TEST_USERNAME"</span>, <span class="string">"user"</span>)
+    PASSWORD = os.environ.<span class="function">get</span>(<span class="string">"TEST_PASSWORD"</span>, <span class="string">"pass"</span>)
+    HEADLESS = os.environ.<span class="function">get</span>(<span class="string">"HEADLESS"</span>, <span class="string">"true"</span>) == <span class="string">"true"</span>
+
+<span class="comment"># Use in tests:</span>
+<span class="keyword">def</span> <span class="function">test_login</span>(page, config):
+    page.<span class="function">goto</span>(config.BASE_URL)
+    page.<span class="function">locator</span>(<span class="string">"#user"</span>).<span class="function">fill</span>(config.USERNAME)</div>
+        </div>
+
+        <!-- PART 4: FAKER -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Faker Library</h2>
+            <p>Dynamic test data generation</p>
+        </div>
+
+        <!-- What is Faker -->
+        <div class="slide">
+            <h2>What is Faker?</h2>
+            <div class="code-block">
+pip install faker</div>
+            <div class="code-block" style="margin-top: 15px;">
+<span class="keyword">from</span> faker <span class="keyword">import</span> Faker
+
+fake = <span class="class-name">Faker</span>()
+<span class="builtin">print</span>(fake.<span class="function">name</span>())       <span class="comment"># John Smith</span>
+<span class="builtin">print</span>(fake.<span class="function">email</span>())      <span class="comment"># john@example.com</span>
+<span class="builtin">print</span>(fake.<span class="function">address</span>())    <span class="comment"># 123 Main St...</span>
+<span class="builtin">print</span>(fake.<span class="function">phone_number</span>()) <span class="comment"># +1-555-0123</span></div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Generates realistic data every time!</p>
+            </div>
+        </div>
+
+        <!-- Faker Ukrainian -->
+        <div class="slide">
+            <h2>Faker: Ukrainian Locale</h2>
+            <div class="code-block">
+<span class="keyword">from</span> faker <span class="keyword">import</span> Faker
+
+fake_ua = <span class="class-name">Faker</span>(<span class="string">"uk_UA"</span>)
+
+<span class="builtin">print</span>(fake_ua.<span class="function">name</span>())
+<span class="comment"># Олександр Петренко</span>
+
+<span class="builtin">print</span>(fake_ua.<span class="function">address</span>())
+<span class="comment"># вул. Хрещатик, 1, Київ</span>
+
+<span class="builtin">print</span>(fake_ua.<span class="function">phone_number</span>())
+<span class="comment"># +380 44 123 4567</span></div>
+        </div>
+
+        <!-- Faker Common Methods -->
+        <div class="slide">
+            <h2>Common Faker Methods</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Method</th>
+                    <th>Example Output</th>
+                </tr>
+                <tr>
+                    <td><code>fake.name()</code></td>
+                    <td>John Smith</td>
+                </tr>
+                <tr>
+                    <td><code>fake.email()</code></td>
+                    <td>john@example.com</td>
+                </tr>
+                <tr>
+                    <td><code>fake.user_name()</code></td>
+                    <td>jsmith42</td>
+                </tr>
+                <tr>
+                    <td><code>fake.password()</code></td>
+                    <td>xK9#mP2!qR</td>
+                </tr>
+                <tr>
+                    <td><code>fake.address()</code></td>
+                    <td>123 Main St, NY</td>
+                </tr>
+                <tr>
+                    <td><code>fake.phone_number()</code></td>
+                    <td>+1-555-0123</td>
+                </tr>
+                <tr>
+                    <td><code>fake.random_int(1, 100)</code></td>
+                    <td>42</td>
+                </tr>
+                <tr>
+                    <td><code>fake.sentence()</code></td>
+                    <td>The quick brown fox...</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Faker Seed -->
+        <div class="slide">
+            <h2>Reproducible Data with Seeds</h2>
+            <div class="code-block">
+<span class="keyword">from</span> faker <span class="keyword">import</span> Faker
+
+<span class="comment"># Set seed for reproducible data</span>
+<span class="class-name">Faker</span>.<span class="function">seed</span>(12345)
+fake = <span class="class-name">Faker</span>()
+
+<span class="builtin">print</span>(fake.<span class="function">name</span>())   <span class="comment"># Always the same name!</span>
+<span class="builtin">print</span>(fake.<span class="function">email</span>())  <span class="comment"># Always the same email!</span></div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>Use seeds in CI/CD for <strong>consistent</strong> test data across runs.</p>
+            </div>
+        </div>
+
+        <!-- Faker in Tests -->
+        <div class="slide">
+            <h2>Faker in Playwright Tests</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">fake</span>():
+    <span class="keyword">return</span> <span class="class-name">Faker</span>()
+
+<span class="keyword">def</span> <span class="function">test_invalid_login</span>(page, fake):
+    <span class="string">"""Random credentials should always fail."""</span>
+    page.<span class="function">goto</span>(<span class="string">"/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(fake.<span class="function">user_name</span>())
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(fake.<span class="function">password</span>())
+    page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+    <span class="keyword">assert</span> <span class="string">"/login"</span> <span class="keyword">in</span> page.url</div>
+        </div>
+
+        <!-- PART 5: DATA FIXTURES -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Data Fixtures</h2>
+            <p>Combining everything together</p>
+        </div>
+
+        <!-- Data Fixture Pattern -->
+        <div class="slide">
+            <h2>Data Fixture Pattern</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># conftest.py</span>
+<span class="keyword">import</span> json, pytest
+
+<span class="decorator">@pytest.fixture</span>(scope=<span class="string">"session"</span>)
+<span class="keyword">def</span> <span class="function">test_data</span>():
+    <span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"test_data/users.json"</span>) <span class="keyword">as</span> f:
+        <span class="keyword">return</span> json.<span class="function">load</span>(f)
+
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">valid_user</span>(test_data):
+    <span class="keyword">return</span> test_data[<span class="string">"valid_user"</span>]
+
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">logged_in_page</span>(page, valid_user):
+    page.<span class="function">goto</span>(<span class="string">"/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#user"</span>).<span class="function">fill</span>(valid_user[<span class="string">"username"</span>])
+    page.<span class="function">locator</span>(<span class="string">"#pass"</span>).<span class="function">fill</span>(valid_user[<span class="string">"password"</span>])
+    page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+    <span class="keyword">return</span> page</div>
+        </div>
+
+        <!-- Factory Fixture -->
+        <div class="slide">
+            <h2>Factory Fixture</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">user_factory</span>():
+    <span class="string">"""Generate user data on demand."""</span>
+    fake = <span class="class-name">Faker</span>()
+
+    <span class="keyword">def</span> <span class="function">create_user</span>():
+        <span class="keyword">return</span> {
+            <span class="string">"name"</span>: fake.<span class="function">name</span>(),
+            <span class="string">"email"</span>: fake.<span class="function">email</span>(),
+            <span class="string">"password"</span>: fake.<span class="function">password</span>(),
+        }
+
+    <span class="keyword">return</span> create_user
+
+<span class="keyword">def</span> <span class="function">test_registration</span>(page, user_factory):
+    user = <span class="function">user_factory</span>()  <span class="comment"># New user each call</span>
+    <span class="builtin">print</span>(user[<span class="string">"name"</span>])</div>
+        </div>
+
+        <!-- Project Structure -->
+        <div class="slide">
+            <h2>Recommended Structure</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+project/
+├── .env                 <span class="comment"># Secrets (gitignored!)</span>
+├── .env.example         <span class="comment"># Template</span>
+├── .gitignore           <span class="comment"># .env, screenshots/</span>
+├── pytest.ini
+├── conftest.py          <span class="comment"># Fixtures</span>
+├── test_data/
+│   ├── users.json       <span class="comment"># User test data</span>
+│   ├── pages.csv        <span class="comment"># Page test data</span>
+│   └── products.json
+├── pages/               <span class="comment"># Page objects</span>
+├── utils/
+│   └── data_loader.py   <span class="comment"># TestData class</span>
+└── tests/</div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Source</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td><code>JSON</code></td>
+                    <td>Complex, nested test data</td>
+                </tr>
+                <tr>
+                    <td><code>CSV</code></td>
+                    <td>Simple tabular data, Excel-editable</td>
+                </tr>
+                <tr>
+                    <td><code>.env</code></td>
+                    <td>Secrets, URLs, config per environment</td>
+                </tr>
+                <tr>
+                    <td><code>Faker</code></td>
+                    <td>Dynamic, random, realistic data</td>
+                </tr>
+                <tr>
+                    <td><code>Fixtures</code></td>
+                    <td>Combining sources, reusable setup</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Homework -->
+        <div class="slide">
+            <h2>Homework</h2>
+            <div class="info-box">
+                <h3>Tasks:</h3>
+                <ol style="font-size: 1em;">
+                    <li>Create JSON test data:
+                        <ul>
+                            <li>Login credentials (valid + invalid)</li>
+                            <li>Use with <code>parametrize</code></li>
+                        </ul>
+                    </li>
+                    <li>Create .env file:
+                        <ul>
+                            <li>BASE_URL, credentials</li>
+                            <li>Load with <code>python-dotenv</code></li>
+                        </ul>
+                    </li>
+                    <li>Use Faker:
+                        <ul>
+                            <li>Generate random test data</li>
+                            <li>Create a factory fixture</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Next Lecture -->
+        <div class="slide">
+            <h2>Next Lecture</h2>
+            <h3 style="color: #4CAF50;">Lecture 34: Parameterized Testing</h3>
+            <ul style="font-size: 1.1em; margin-top: 30px;">
+                <li>@pytest.mark.parametrize in depth</li>
+                <li>Data-driven test cases</li>
+                <li>Excel/CSV integration</li>
+                <li>Dynamic test generation</li>
+                <li>Best practices</li>
+            </ul>
+            <div class="success-box" style="margin-top: 30px;">
+                <p>Practice: <code>pip install faker python-dotenv</code></p>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">📊</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Test Data Management!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">JSON, CSV, .env, Faker, data fixtures</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
