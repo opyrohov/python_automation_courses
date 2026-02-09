@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 36: Best Practices & Final Project</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🏆</div>
+            <h1>Lecture 36</h1>
+            <div class="subtitle">Best Practices & Final Project</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Test architecture best practices</li>
+                <li>✓ Fixture patterns and anti-patterns</li>
+                <li>✓ Locator strategies that don't break</li>
+                <li>✓ CI/CD integration</li>
+                <li>✓ Reporting and monitoring</li>
+                <li>✓ Course review & final project</li>
+            </ul>
+        </div>
+
+        <!-- Course Journey -->
+        <div class="slide">
+            <h2>Our Course Journey</h2>
+            <div style="display: flex; gap: 15px;">
+                <div class="info-box" style="flex: 1; background: #e3f2fd;">
+                    <p><strong>Python (1-12)</strong></p>
+                    <ul style="font-size: 0.8em;">
+                        <li>Basics, strings, loops</li>
+                        <li>Functions, classes</li>
+                        <li>Files, errors, modules</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="flex: 1; background: #e8f5e9;">
+                    <p><strong>Playwright (13-30)</strong></p>
+                    <ul style="font-size: 0.8em;">
+                        <li>Locators, actions, waits</li>
+                        <li>Frames, windows, network</li>
+                        <li>Page Object Model</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="flex: 1; background: #fff3e0;">
+                    <p><strong>Pytest (31-36)</strong></p>
+                    <ul style="font-size: 0.8em;">
+                        <li>Integration, config</li>
+                        <li>Data, parametrize</li>
+                        <li>Debug, best practices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: TEST ARCHITECTURE -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Test Architecture</h2>
+            <p>Building scalable test suites</p>
+        </div>
+
+        <!-- Project Structure -->
+        <div class="slide">
+            <h2>Recommended Project Structure</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+my_project/
+├── tests/
+│   ├── conftest.py          <span class="comment"># Shared fixtures & hooks</span>
+│   ├── test_login.py        <span class="comment"># Login feature tests</span>
+│   ├── test_checkout.py     <span class="comment"># Checkout feature tests</span>
+│   └── test_search.py       <span class="comment"># Search feature tests</span>
+├── pages/
+│   ├── base_page.py         <span class="comment"># Base page object</span>
+│   ├── login_page.py        <span class="comment"># Login page object</span>
+│   └── checkout_page.py     <span class="comment"># Checkout page object</span>
+├── fixtures/
+│   └── data_fixtures.py     <span class="comment"># Test data generators</span>
+├── test_data/
+│   └── users.json           <span class="comment"># Static test data</span>
+├── pytest.ini
+└── requirements.txt</div>
+        </div>
+
+        <!-- Core Principles -->
+        <div class="slide">
+            <h2>Core Test Principles</h2>
+            <div style="display: flex; gap: 15px;">
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>1. One Test = One Thing</strong></p>
+                    <p style="font-size: 0.85em;">Each test verifies exactly one behavior</p>
+                </div>
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>2. Independent</strong></p>
+                    <p style="font-size: 0.85em;">No test depends on another test's result</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 10px;">
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>3. Arrange-Act-Assert</strong></p>
+                    <p style="font-size: 0.85em;">Setup → Action → Verify</p>
+                </div>
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>4. Descriptive Names</strong></p>
+                    <p style="font-size: 0.85em;"><code>test_login_with_valid_credentials_redirects</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- AAA Pattern -->
+        <div class="slide">
+            <h2>Arrange - Act - Assert</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_successful_login</span>(page: Page):
+    <span class="comment"># ARRANGE: Set up preconditions</span>
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/login"</span>)
+    username = <span class="string">"tomsmith"</span>
+    password = <span class="string">"SuperSecretPassword!"</span>
+
+    <span class="comment"># ACT: Perform the action</span>
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(username)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(password)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+
+    <span class="comment"># ASSERT: Verify the outcome</span>
+    <span class="keyword">assert</span> <span class="string">"/secure"</span> <span class="keyword">in</span> page.url</div>
+            <div class="success-box" style="margin-top: 10px;">
+                <p>Clear structure makes tests easy to read and maintain.</p>
+            </div>
+        </div>
+
+        <!-- Naming -->
+        <div class="slide">
+            <h2>Test Naming</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>Bad names:</strong></p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_1</span>(page): ...
+<span class="keyword">def</span> <span class="function">test_login</span>(page): ...
+<span class="keyword">def</span> <span class="function">test_it_works</span>(page): ...</div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 10px;">
+                <p style="color: #2e7d32;"><strong>Good names (what + expected):</strong></p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">def</span> <span class="function">test_login_with_valid_credentials_redirects_to_secure</span>(page): ...
+<span class="keyword">def</span> <span class="function">test_login_with_invalid_username_shows_error</span>(page): ...
+<span class="keyword">def</span> <span class="function">test_checkbox_can_be_checked</span>(page): ...</div>
+            </div>
+        </div>
+
+        <!-- PART 2: FIXTURE BEST PRACTICES -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Fixture Best Practices</h2>
+            <p>Clean setup and teardown</p>
+        </div>
+
+        <!-- Scope Selection -->
+        <div class="slide">
+            <h2>Fixture Scope</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Scope</th>
+                    <th>Created</th>
+                    <th>Use For</th>
+                </tr>
+                <tr>
+                    <td><code>function</code></td>
+                    <td>Each test</td>
+                    <td>Page state, test data</td>
+                </tr>
+                <tr>
+                    <td><code>class</code></td>
+                    <td>Each test class</td>
+                    <td>Shared class setup</td>
+                </tr>
+                <tr>
+                    <td><code>module</code></td>
+                    <td>Each file</td>
+                    <td>Database connections</td>
+                </tr>
+                <tr>
+                    <td><code>session</code></td>
+                    <td>Once</td>
+                    <td>Constants, config, base URL</td>
+                </tr>
+            </table>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>Rule of thumb: use the <strong>narrowest scope</strong> possible. <code>function</code> is safest.</p>
+            </div>
+        </div>
+
+        <!-- Yield Fixtures -->
+        <div class="slide">
+            <h2>Yield Fixtures (Setup + Cleanup)</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">authenticated_page</span>(page: Page):
+    <span class="comment"># SETUP: Login</span>
+    page.<span class="function">goto</span>(<span class="string">f"{BASE_URL}/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SuperSecretPassword!"</span>)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+
+    <span class="keyword">yield</span> page  <span class="comment"># ← Test runs here</span>
+
+    <span class="comment"># CLEANUP: Logout (runs even if test fails!)</span>
+    logout = page.<span class="function">locator</span>(<span class="string">'a[href="/logout"]'</span>)
+    <span class="keyword">if</span> logout.<span class="function">is_visible</span>():
+        logout.<span class="function">click</span>()</div>
+            <div class="highlight-box" style="margin-top: 10px;">
+                <p>Everything after <code>yield</code> = guaranteed cleanup.</p>
+            </div>
+        </div>
+
+        <!-- Fixture Anti-patterns -->
+        <div class="slide">
+            <h2>Fixture Anti-patterns</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>Avoid:</strong></p>
+                <ul style="font-size: 0.9em;">
+                    <li>Too many fixtures per test (max 3)</li>
+                    <li>Session-scoped page fixtures (breaks isolation)</li>
+                    <li>Side effects without cleanup</li>
+                    <li>Importing conftest.py (it's auto-discovered)</li>
+                    <li>Putting tests in conftest.py</li>
+                </ul>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 10px;">
+                <p style="color: #2e7d32;"><strong>Do:</strong></p>
+                <ul style="font-size: 0.9em;">
+                    <li>Use yield for setup + cleanup</li>
+                    <li>Compose fixtures (fixtures using fixtures)</li>
+                    <li>Use factory fixtures for on-demand creation</li>
+                    <li>Nest conftest.py for directory-specific fixtures</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PART 3: LOCATOR BEST PRACTICES -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Locator Best Practices</h2>
+            <p>Selectors that don't break</p>
+        </div>
+
+        <!-- Locator Priority -->
+        <div class="slide">
+            <h2>Locator Priority</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>#</th>
+                    <th>Strategy</th>
+                    <th>Example</th>
+                    <th>Stability</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><code>get_by_role()</code></td>
+                    <td><code>get_by_role("button", name="Login")</code></td>
+                    <td style="color: #2e7d32;">Best</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><code>get_by_text()</code></td>
+                    <td><code>get_by_text("Submit")</code></td>
+                    <td style="color: #2e7d32;">Great</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><code>get_by_label()</code></td>
+                    <td><code>get_by_label("Username")</code></td>
+                    <td style="color: #2e7d32;">Great</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><code>get_by_test_id()</code></td>
+                    <td><code>get_by_test_id("submit-btn")</code></td>
+                    <td style="color: #4CAF50;">Good</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><code>locator("#id")</code></td>
+                    <td><code>locator("#username")</code></td>
+                    <td style="color: #4CAF50;">Good</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>CSS / XPath</td>
+                    <td><code>locator("div.form input")</code></td>
+                    <td style="color: #c62828;">Fragile</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Good vs Bad Selectors -->
+        <div class="slide">
+            <h2>Selectors: Good vs Bad</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>Brittle (avoid):</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Position-dependent</span>
+page.<span class="function">locator</span>(<span class="string">"div:nth-child(2) > form > input:first-child"</span>)
+<span class="comment"># Deep XPath</span>
+page.<span class="function">locator</span>(<span class="string">"//html/body/div[2]/div/form/input[1]"</span>)</div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 10px;">
+                <p style="color: #2e7d32;"><strong>Robust (prefer):</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># Semantic</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Login"</span>)
+page.<span class="function">get_by_label</span>(<span class="string">"Username"</span>)
+<span class="comment"># Stable attribute</span>
+page.<span class="function">locator</span>(<span class="string">"#username"</span>)</div>
+            </div>
+        </div>
+
+        <!-- Locators in Page Objects -->
+        <div class="slide">
+            <h2>Centralize Locators in Page Objects</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">class</span> <span class="class-name">LoginPage</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, page: Page):
+        self.page = page
+        <span class="comment"># Locators defined ONCE</span>
+        self.username = page.<span class="function">locator</span>(<span class="string">"#username"</span>)
+        self.password = page.<span class="function">locator</span>(<span class="string">"#password"</span>)
+        self.submit = page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Login"</span>)
+
+    <span class="keyword">def</span> <span class="function">login</span>(self, user: <span class="builtin">str</span>, pwd: <span class="builtin">str</span>):
+        self.username.<span class="function">fill</span>(user)
+        self.password.<span class="function">fill</span>(pwd)
+        self.submit.<span class="function">click</span>()</div>
+            <div class="success-box" style="margin-top: 10px;">
+                <p>If a selector changes, update it in ONE place.</p>
+            </div>
+        </div>
+
+        <!-- PART 4: CI/CD -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>CI/CD Integration</h2>
+            <p>Automated test execution</p>
+        </div>
+
+        <!-- GitHub Actions -->
+        <div class="slide">
+            <h2>GitHub Actions Workflow</h2>
+            <div class="code-block" style="font-size: 0.7em;">
+<span class="comment"># .github/workflows/tests.yml</span>
+<span class="variable">name</span>: Playwright Tests
+<span class="variable">on</span>: [push, pull_request]
+
+<span class="variable">jobs</span>:
+  <span class="variable">test</span>:
+    <span class="variable">runs-on</span>: ubuntu-latest
+    <span class="variable">steps</span>:
+      - <span class="variable">uses</span>: actions/checkout@v4
+      - <span class="variable">uses</span>: actions/setup-python@v5
+        <span class="variable">with</span>:
+          <span class="variable">python-version</span>: <span class="string">"3.12"</span>
+      - <span class="variable">run</span>: pip install -r requirements.txt
+      - <span class="variable">run</span>: playwright install --with-deps chromium
+      - <span class="variable">run</span>: pytest --tracing retain-on-failure -v
+      - <span class="variable">uses</span>: actions/upload-artifact@v4
+        <span class="variable">if</span>: failure()
+        <span class="variable">with</span>:
+          <span class="variable">name</span>: test-results
+          <span class="variable">path</span>: test-results/</div>
+        </div>
+
+        <!-- Docker -->
+        <div class="slide">
+            <h2>Docker Setup</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Dockerfile</span>
+<span class="keyword">FROM</span> mcr.microsoft.com/playwright/python:v1.50.0-noble
+
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> requirements.txt .
+<span class="keyword">RUN</span> pip install -r requirements.txt
+
+<span class="keyword">COPY</span> . .
+
+<span class="keyword">CMD</span> [<span class="string">"pytest"</span>, <span class="string">"--tracing"</span>, <span class="string">"retain-on-failure"</span>, <span class="string">"-v"</span>]</div>
+            <div class="code-block" style="margin-top: 10px; font-size: 0.85em; background: #1e1e1e;">
+<span class="comment"># Run tests in Docker</span>
+docker build -t my-tests .
+docker run --rm -v ./results:/app/test-results my-tests</div>
+        </div>
+
+        <!-- Parallel Execution -->
+        <div class="slide">
+            <h2>Parallel Execution</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Install pytest-xdist</span>
+pip install pytest-xdist
+
+<span class="comment"># Run with auto-detected workers</span>
+pytest -n auto
+
+<span class="comment"># Run with 4 workers</span>
+pytest -n 4
+
+<span class="comment"># Combine with other flags</span>
+pytest -n auto --tracing retain-on-failure -v</div>
+            <div class="warning-box" style="margin-top: 10px;">
+                <p>Tests MUST be independent for parallel execution!</p>
+            </div>
+        </div>
+
+        <!-- CI Artifacts -->
+        <div class="slide">
+            <h2>CI Artifact Strategy</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Save everything on failure, nothing on success</span>
+pytest --tracing retain-on-failure \
+       --screenshot only-on-failure \
+       --video retain-on-failure \
+       --output test-results/</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <table style="width: 100%; font-size: 0.85em;">
+                    <tr>
+                        <th>Artifact</th>
+                        <th>Flag</th>
+                        <th>Size</th>
+                    </tr>
+                    <tr>
+                        <td>Trace</td>
+                        <td><code>--tracing retain-on-failure</code></td>
+                        <td>~2 MB</td>
+                    </tr>
+                    <tr>
+                        <td>Screenshot</td>
+                        <td><code>--screenshot only-on-failure</code></td>
+                        <td>~200 KB</td>
+                    </tr>
+                    <tr>
+                        <td>Video</td>
+                        <td><code>--video retain-on-failure</code></td>
+                        <td>~5 MB</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PART 5: REPORTING -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Reporting & Monitoring</h2>
+            <p>Track and visualize results</p>
+        </div>
+
+        <!-- Reporting Tools -->
+        <div class="slide">
+            <h2>Reporting Tools</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># HTML Report</span>
+pip install pytest-html
+pytest --html=reports/report.html --self-contained-html
+
+<span class="comment"># JUnit XML (for CI dashboards)</span>
+pytest --junitxml=reports/junit.xml
+
+<span class="comment"># Allure Report (rich interactive)</span>
+pip install allure-pytest
+pytest --alluredir=allure-results
+allure serve allure-results</div>
+        </div>
+
+        <!-- Flaky Tests -->
+        <div class="slide">
+            <h2>Handling Flaky Tests</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Install retry plugin</span>
+pip install pytest-rerunfailures
+
+<span class="comment"># Retry failed tests 2 times</span>
+pytest --reruns 2 --reruns-delay 5
+
+<span class="comment"># Mark specific flaky test</span>
+<span class="decorator">@pytest.mark.flaky</span>(reruns=3, reruns_delay=2)
+<span class="keyword">def</span> <span class="function">test_sometimes_fails</span>(page): ...</div>
+            <div class="highlight-box" style="margin-top: 10px;">
+                <p><strong>Better approach:</strong> Find and fix the root cause! Retries are a temporary solution.</p>
+            </div>
+        </div>
+
+        <!-- PART 6: COURSE REVIEW -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Course Review</h2>
+            <p>Everything we learned</p>
+        </div>
+
+        <!-- Python Recap -->
+        <div class="slide">
+            <h2>Python Fundamentals (1-12)</h2>
+            <table style="width: 100%; font-size: 0.8em;">
+                <tr>
+                    <th>Topic</th>
+                    <th>Key Concepts</th>
+                </tr>
+                <tr>
+                    <td>Basics (1-3)</td>
+                    <td>Variables, types, strings, loops, control flow</td>
+                </tr>
+                <tr>
+                    <td>Data (4)</td>
+                    <td>Lists, dictionaries, tuples, sets</td>
+                </tr>
+                <tr>
+                    <td>Functions (5-6)</td>
+                    <td>Functions, args/kwargs, modules, imports</td>
+                </tr>
+                <tr>
+                    <td>Files (7)</td>
+                    <td>File I/O, JSON reading/writing</td>
+                </tr>
+                <tr>
+                    <td>Errors (8)</td>
+                    <td>try/except, custom exceptions, debugging</td>
+                </tr>
+                <tr>
+                    <td>OOP (9-11)</td>
+                    <td>Classes, inheritance, polymorphism, decorators</td>
+                </tr>
+                <tr>
+                    <td>Review (12)</td>
+                    <td>Project setup, virtual environments, git</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Playwright Recap -->
+        <div class="slide">
+            <h2>Playwright Skills (13-30)</h2>
+            <table style="width: 100%; font-size: 0.8em;">
+                <tr>
+                    <th>Topic</th>
+                    <th>Key Concepts</th>
+                </tr>
+                <tr>
+                    <td>Setup (13-14)</td>
+                    <td>Installation, navigation, interactions</td>
+                </tr>
+                <tr>
+                    <td>Locators (15-16)</td>
+                    <td>CSS, text, role, XPath, chaining</td>
+                </tr>
+                <tr>
+                    <td>Forms (17-18)</td>
+                    <td>Fill, select, checkbox, mouse, keyboard</td>
+                </tr>
+                <tr>
+                    <td>Advanced (19-23)</td>
+                    <td>Waits, assertions, elements, frames, windows</td>
+                </tr>
+                <tr>
+                    <td>Media (24-26)</td>
+                    <td>Screenshots, video, auth, cookies, storage</td>
+                </tr>
+                <tr>
+                    <td>Network (27-28)</td>
+                    <td>Interception, mocking, API testing</td>
+                </tr>
+                <tr>
+                    <td>POM (29-30)</td>
+                    <td>Page Object Model, component objects</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Pytest Recap -->
+        <div class="slide">
+            <h2>Pytest Mastery (31-36)</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Lecture</th>
+                    <th>Key Concepts</th>
+                </tr>
+                <tr>
+                    <td>31: Integration</td>
+                    <td>Test functions, fixtures, markers, CLI</td>
+                </tr>
+                <tr>
+                    <td>32: Configuration</td>
+                    <td>pytest.ini, conftest.py, browser options</td>
+                </tr>
+                <tr>
+                    <td>33: Test Data</td>
+                    <td>JSON/CSV, .env, Faker, factory pattern</td>
+                </tr>
+                <tr>
+                    <td>34: Parametrize</td>
+                    <td>IDs, stacking, indirect, dynamic</td>
+                </tr>
+                <tr>
+                    <td>35: Debugging</td>
+                    <td>Inspector, tracing, common errors</td>
+                </tr>
+                <tr>
+                    <td>36: Best Practices</td>
+                    <td>Architecture, CI/CD, final project</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- What You Can Do Now -->
+        <div class="slide">
+            <h2>What You Can Do Now</h2>
+            <div class="success-box">
+                <ul style="font-size: 0.95em;">
+                    <li>Write Python scripts and use modules/packages</li>
+                    <li>Automate any web application with Playwright</li>
+                    <li>Find elements with robust locator strategies</li>
+                    <li>Handle frames, windows, alerts, file uploads</li>
+                    <li>Intercept network requests and mock APIs</li>
+                    <li>Structure tests with Page Object Model</li>
+                    <li>Configure pytest with fixtures and markers</li>
+                    <li>Debug failing tests with Inspector and tracing</li>
+                    <li>Run tests in CI/CD pipelines</li>
+                    <li>Generate reports and track results</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What to Learn Next</h2>
+            <div style="display: flex; gap: 15px;">
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>Advanced Topics</strong></p>
+                    <ul style="font-size: 0.8em;">
+                        <li>Visual regression testing</li>
+                        <li>Performance testing</li>
+                        <li>Accessibility testing</li>
+                        <li>Mobile web testing</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="flex: 1;">
+                    <p><strong>Tools & Frameworks</strong></p>
+                    <ul style="font-size: 0.8em;">
+                        <li>Allure reporting</li>
+                        <li>Docker for tests</li>
+                        <li>BDD with pytest-bdd</li>
+                        <li>API testing (requests)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Project -->
+        <div class="slide">
+            <h2>Final Project</h2>
+            <div class="info-box">
+                <h3>Build a Complete Test Suite</h3>
+                <p style="font-size: 0.95em;">Create a full test suite for <code>the-internet.herokuapp.com</code>:</p>
+                <ol style="font-size: 0.9em;">
+                    <li>Test at least <strong>5 pages/features</strong></li>
+                    <li>Use <strong>Page Object Model</strong> (2+ pages)</li>
+                    <li>Use <strong>fixtures</strong> in conftest.py</li>
+                    <li>Use <strong>parametrize</strong> for data-driven tests</li>
+                    <li>Add <strong>markers</strong> (smoke, regression)</li>
+                    <li>Add <strong>tracing/screenshots</strong> on failure</li>
+                    <li>Follow <strong>all best practices</strong></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Grading -->
+        <div class="slide">
+            <h2>Final Project Grading</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Criteria</th>
+                    <th>Weight</th>
+                </tr>
+                <tr>
+                    <td>Project structure (conftest, pages, constants)</td>
+                    <td>20%</td>
+                </tr>
+                <tr>
+                    <td>Page Object Model (2+ page objects)</td>
+                    <td>20%</td>
+                </tr>
+                <tr>
+                    <td>Fixtures (scope, cleanup, composition)</td>
+                    <td>15%</td>
+                </tr>
+                <tr>
+                    <td>Parametrized tests (2+ functions)</td>
+                    <td>15%</td>
+                </tr>
+                <tr>
+                    <td>Markers (smoke, regression)</td>
+                    <td>10%</td>
+                </tr>
+                <tr>
+                    <td>Error handling (tracing, screenshots)</td>
+                    <td>10%</td>
+                </tr>
+                <tr>
+                    <td>Code quality (naming, AAA, independence)</td>
+                    <td>10%</td>
+                </tr>
+            </table>
+            <div class="highlight-box" style="margin-top: 10px;">
+                <p><strong>Bonus:</strong> CI/CD config, Allure reports, parallel execution</p>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Best Practice</th>
+                    <th>Rule</th>
+                </tr>
+                <tr>
+                    <td>Architecture</td>
+                    <td>Separate tests, pages, fixtures, data</td>
+                </tr>
+                <tr>
+                    <td>Tests</td>
+                    <td>One thing, AAA, descriptive names</td>
+                </tr>
+                <tr>
+                    <td>Fixtures</td>
+                    <td>Narrowest scope, yield cleanup</td>
+                </tr>
+                <tr>
+                    <td>Locators</td>
+                    <td>Role > text > label > ID > CSS</td>
+                </tr>
+                <tr>
+                    <td>CI/CD</td>
+                    <td>GitHub Actions, artifacts on failure</td>
+                </tr>
+                <tr>
+                    <td>Reporting</td>
+                    <td>HTML/Allure reports, JUnit XML</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🏆</div>
+            <h1>Congratulations!</h1>
+            <div class="subtitle">You've completed the course!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Python + Playwright + Pytest — 36 lectures of automation mastery</p>
+            <p style="font-size: 1em; margin-top: 20px; color: #4CAF50;">Now go build amazing test suites!</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
