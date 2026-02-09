@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 31: Pytest Integration</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🧪</div>
+            <h1>Lecture 31</h1>
+            <div class="subtitle">Pytest Integration</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Write pytest test functions with Playwright</li>
+                <li>✓ Use built-in fixtures (page, context, browser)</li>
+                <li>✓ Create parameterized tests</li>
+                <li>✓ Organize tests with markers</li>
+                <li>✓ Run tests from the command line</li>
+            </ul>
+        </div>
+
+        <!-- Recap -->
+        <div class="slide">
+            <h2>Recap: What We've Done So Far</h2>
+            <div class="info-box">
+                <p>Until now, we ran Playwright scripts manually:</p>
+            </div>
+            <div class="code-block">
+<span class="comment"># Old approach - running scripts</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+    <span class="comment"># manual checks with print...</span>
+    browser.<span class="function">close</span>()</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ No automatic pass/fail, no reports, no parallel execution!</p>
+            </div>
+        </div>
+
+        <!-- PART 1: WHY PYTEST -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Why Pytest?</h2>
+            <p>From scripts to real tests</p>
+        </div>
+
+        <!-- Problems with Scripts -->
+        <div class="slide">
+            <h2>Problems with Scripts</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>Manual scripts:</strong></p>
+                <ul style="font-size: 0.95em;">
+                    <li>No automatic PASS / FAIL reporting</li>
+                    <li>Must open/close browser manually</li>
+                    <li>No test isolation</li>
+                    <li>Can't run specific tests</li>
+                    <li>No parallel execution</li>
+                    <li>No retry on failure</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Pytest Benefits -->
+        <div class="slide">
+            <h2>Pytest Gives You</h2>
+            <div class="info-box" style="background: #e8f5e9;">
+                <p style="color: #2e7d32;"><strong>With pytest:</strong></p>
+                <ul style="font-size: 0.95em;">
+                    <li>✅ Automatic PASS / FAIL</li>
+                    <li>✅ Browser managed automatically (fixtures)</li>
+                    <li>✅ Each test is isolated</li>
+                    <li>✅ Run tests by name, marker, file</li>
+                    <li>✅ Parallel execution</li>
+                    <li>✅ Retry, reports, plugins</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Installation -->
+        <div class="slide">
+            <h2>Installation</h2>
+            <div class="code-block">
+<span class="comment"># Install pytest and Playwright plugin</span>
+pip install pytest pytest-playwright
+
+<span class="comment"># Install browsers (if not done)</span>
+playwright install</div>
+            <div class="success-box" style="margin-top: 20px;">
+                <p>✅ <code>pytest-playwright</code> gives you <code>page</code>, <code>context</code>, <code>browser</code> fixtures automatically!</p>
+            </div>
+        </div>
+
+        <!-- PART 2: BASIC TEST FUNCTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Basic Test Functions</h2>
+            <p>Writing your first pytest tests</p>
+        </div>
+
+        <!-- First Test -->
+        <div class="slide">
+            <h2>Your First Pytest Test</h2>
+            <div class="code-block">
+<span class="comment"># test_example.py</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page
+
+<span class="keyword">def</span> <span class="function">test_page_title</span>(page: <span class="class-name">Page</span>):
+    <span class="string">"""Test that page has correct title."""</span>
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com"</span>)
+    <span class="keyword">assert</span> page.<span class="function">title</span>() == <span class="string">"The Internet"</span></div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p><strong>Key rules:</strong></p>
+                <ul>
+                    <li>File starts with <code>test_</code></li>
+                    <li>Function starts with <code>test_</code></li>
+                    <li><code>page</code> parameter = automatic fixture</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Script vs Pytest Comparison -->
+        <div class="slide">
+            <h2>Before vs After</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Before (manual script):</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+    <span class="builtin">print</span>(page.<span class="function">title</span>())  <span class="comment"># Manual check</span>
+    browser.<span class="function">close</span>()</div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 10px;">
+                <p style="color: #2e7d32;"><strong>✅ After (pytest):</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">def</span> <span class="function">test_title</span>(page):
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+    <span class="keyword">assert</span> page.<span class="function">title</span>() == <span class="string">"Example Domain"</span></div>
+            </div>
+        </div>
+
+        <!-- Multiple Tests -->
+        <div class="slide">
+            <h2>Multiple Tests in One File</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># test_login.py</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page
+
+<span class="keyword">def</span> <span class="function">test_login_page_loads</span>(page: <span class="class-name">Page</span>):
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    <span class="keyword">assert</span> page.<span class="function">locator</span>(<span class="string">"h2"</span>).<span class="function">text_content</span>() == <span class="string">"Login Page"</span>
+
+<span class="keyword">def</span> <span class="function">test_successful_login</span>(page: <span class="class-name">Page</span>):
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SuperSecretPassword!"</span>)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+    <span class="keyword">assert</span> <span class="string">"/secure"</span> <span class="keyword">in</span> page.url
+
+<span class="keyword">def</span> <span class="function">test_failed_login</span>(page: <span class="class-name">Page</span>):
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"wrong"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"wrong"</span>)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+    <span class="keyword">assert</span> <span class="string">"Your username is invalid!"</span> <span class="keyword">in</span> page.<span class="function">locator</span>(<span class="string">"#flash"</span>).<span class="function">text_content</span>()</div>
+        </div>
+
+        <!-- Test Discovery -->
+        <div class="slide">
+            <h2>Test Discovery Rules</h2>
+            <div class="highlight-box">
+                <p>Pytest automatically finds tests that match these rules:</p>
+            </div>
+            <table style="width: 100%; font-size: 0.95em; margin-top: 20px;">
+                <tr>
+                    <th>Rule</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>File starts with <code>test_</code></td>
+                    <td><code>test_login.py</code> ✅</td>
+                </tr>
+                <tr>
+                    <td>Function starts with <code>test_</code></td>
+                    <td><code>def test_title():</code> ✅</td>
+                </tr>
+                <tr>
+                    <td>Class starts with <code>Test</code></td>
+                    <td><code>class TestLogin:</code> ✅</td>
+                </tr>
+                <tr>
+                    <td>Method starts with <code>test_</code></td>
+                    <td><code>def test_valid():</code> ✅</td>
+                </tr>
+            </table>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p>⚠️ <code>login_test.py</code> or <code>def check_login()</code> will NOT be found!</p>
+            </div>
+        </div>
+
+        <!-- PART 3: FIXTURES -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Playwright Fixtures</h2>
+            <p>Automatic browser management</p>
+        </div>
+
+        <!-- Built-in Fixtures -->
+        <div class="slide">
+            <h2>Built-in Playwright Fixtures</h2>
+            <table style="width: 100%; font-size: 0.95em;">
+                <tr>
+                    <th>Fixture</th>
+                    <th>What It Provides</th>
+                    <th>Scope</th>
+                </tr>
+                <tr>
+                    <td><code>page</code></td>
+                    <td>New page (tab) for each test</td>
+                    <td>per test</td>
+                </tr>
+                <tr>
+                    <td><code>context</code></td>
+                    <td>Browser context (like incognito)</td>
+                    <td>per test</td>
+                </tr>
+                <tr>
+                    <td><code>browser</code></td>
+                    <td>Browser instance</td>
+                    <td>per session</td>
+                </tr>
+            </table>
+            <div class="success-box" style="margin-top: 20px;">
+                <p>✅ Each test gets a <strong>fresh page</strong> - complete isolation!</p>
+            </div>
+        </div>
+
+        <!-- Page Fixture -->
+        <div class="slide">
+            <h2>The <code>page</code> Fixture</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">test_navigation</span>(page):
+    <span class="string">"""page = fresh browser tab, auto-created."""</span>
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+    <span class="keyword">assert</span> page.<span class="function">title</span>() == <span class="string">"Example Domain"</span>
+    <span class="comment"># page is automatically closed after test!</span>
+
+<span class="keyword">def</span> <span class="function">test_another</span>(page):
+    <span class="string">"""This gets a DIFFERENT page - fresh state!"""</span>
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+    <span class="comment"># No cookies/data from previous test</span></div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p><strong>No need to</strong> create browser, create page, or close browser. Pytest does it all!</p>
+            </div>
+        </div>
+
+        <!-- Custom Fixtures -->
+        <div class="slide">
+            <h2>Custom Fixtures (conftest.py)</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># conftest.py</span>
+<span class="keyword">import</span> pytest
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page
+
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">login_page</span>(page: <span class="class-name">Page</span>):
+    <span class="string">"""Navigate to login page before test."""</span>
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    <span class="keyword">return</span> page
+
+<span class="decorator">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="function">logged_in_page</span>(page: <span class="class-name">Page</span>):
+    <span class="string">"""Login and return authenticated page."""</span>
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"tomsmith"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SuperSecretPassword!"</span>)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+    <span class="keyword">return</span> page</div>
+        </div>
+
+        <!-- Using Custom Fixtures -->
+        <div class="slide">
+            <h2>Using Custom Fixtures</h2>
+            <div class="code-block">
+<span class="comment"># test_secure.py</span>
+
+<span class="keyword">def</span> <span class="function">test_login_page_has_form</span>(login_page):
+    <span class="string">"""login_page fixture navigates for us."""</span>
+    <span class="keyword">assert</span> login_page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">is_visible</span>()
+    <span class="keyword">assert</span> login_page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">is_visible</span>()
+
+<span class="keyword">def</span> <span class="function">test_secure_area</span>(logged_in_page):
+    <span class="string">"""logged_in_page fixture logs in for us."""</span>
+    <span class="keyword">assert</span> <span class="string">"/secure"</span> <span class="keyword">in</span> logged_in_page.url
+    heading = logged_in_page.<span class="function">locator</span>(<span class="string">"h2"</span>)
+    <span class="keyword">assert</span> heading.<span class="function">text_content</span>() == <span class="string">" Secure Area"</span></div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Fixtures eliminate duplicate setup code!</p>
+            </div>
+        </div>
+
+        <!-- PART 4: PARAMETERIZED TESTS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Parameterized Tests</h2>
+            <p>Test multiple inputs with one function</p>
+        </div>
+
+        <!-- Why Parametrize -->
+        <div class="slide">
+            <h2>Problem: Duplicate Tests</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Without parametrize:</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="keyword">def</span> <span class="function">test_checkbox_1</span>(page):
+    page.<span class="function">goto</span>(URL)
+    page.<span class="function">locator</span>(<span class="string">"#checkbox1"</span>).<span class="function">check</span>()
+    <span class="keyword">assert</span> page.<span class="function">locator</span>(<span class="string">"#checkbox1"</span>).<span class="function">is_checked</span>()
+
+<span class="keyword">def</span> <span class="function">test_checkbox_2</span>(page):  <span class="comment"># Same logic!</span>
+    page.<span class="function">goto</span>(URL)
+    page.<span class="function">locator</span>(<span class="string">"#checkbox2"</span>).<span class="function">check</span>()
+    <span class="keyword">assert</span> page.<span class="function">locator</span>(<span class="string">"#checkbox2"</span>).<span class="function">is_checked</span>()</div>
+            </div>
+        </div>
+
+        <!-- Parametrize Solution -->
+        <div class="slide">
+            <h2>Solution: @pytest.mark.parametrize</h2>
+            <div class="code-block">
+<span class="keyword">import</span> pytest
+
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"username,password,expected"</span>, [
+    (<span class="string">"tomsmith"</span>, <span class="string">"SuperSecretPassword!"</span>, <span class="string">"/secure"</span>),
+    (<span class="string">"wrong"</span>, <span class="string">"wrong"</span>, <span class="string">"/login"</span>),
+])
+<span class="keyword">def</span> <span class="function">test_login</span>(page, username, password, expected):
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(username)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(password)
+    page.<span class="function">locator</span>(<span class="string">"button[type='submit']"</span>).<span class="function">click</span>()
+    <span class="keyword">assert</span> expected <span class="keyword">in</span> page.url</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ One function, multiple test cases! Pytest runs each as a separate test.</p>
+            </div>
+        </div>
+
+        <!-- Parametrize Syntax -->
+        <div class="slide">
+            <h2>Parametrize Syntax</h2>
+            <div class="code-block">
+<span class="comment"># Single parameter</span>
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"url"</span>, [
+    <span class="string">"https://example.com"</span>,
+    <span class="string">"https://playwright.dev"</span>,
+])
+<span class="keyword">def</span> <span class="function">test_page_loads</span>(page, url):
+    page.<span class="function">goto</span>(url)
+    <span class="keyword">assert</span> page.<span class="function">title</span>()
+
+<span class="comment"># Multiple parameters</span>
+<span class="decorator">@pytest.mark.parametrize</span>(<span class="string">"width,height"</span>, [
+    (1920, 1080),
+    (1366, 768),
+    (375, 812),
+])
+<span class="keyword">def</span> <span class="function">test_responsive</span>(page, width, height):
+    page.<span class="function">set_viewport_size</span>({<span class="string">"width"</span>: width, <span class="string">"height"</span>: height})
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)</div>
+        </div>
+
+        <!-- PART 5: MARKERS -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Markers & Grouping</h2>
+            <p>Organizing and filtering tests</p>
+        </div>
+
+        <!-- Built-in Markers -->
+        <div class="slide">
+            <h2>Built-in Markers</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="keyword">import</span> pytest
+
+<span class="decorator">@pytest.mark.skip</span>(reason=<span class="string">"Not implemented yet"</span>)
+<span class="keyword">def</span> <span class="function">test_future_feature</span>(page):
+    <span class="keyword">pass</span>
+
+<span class="decorator">@pytest.mark.xfail</span>(reason=<span class="string">"Known bug #123"</span>)
+<span class="keyword">def</span> <span class="function">test_known_bug</span>(page):
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/broken"</span>)
+    <span class="keyword">assert</span> page.<span class="function">locator</span>(<span class="string">"#fixed"</span>).<span class="function">is_visible</span>()</div>
+            <table style="width: 100%; font-size: 0.9em; margin-top: 15px;">
+                <tr>
+                    <th>Marker</th>
+                    <th>Meaning</th>
+                </tr>
+                <tr>
+                    <td><code>@pytest.mark.skip</code></td>
+                    <td>Always skip this test</td>
+                </tr>
+                <tr>
+                    <td><code>@pytest.mark.xfail</code></td>
+                    <td>Expected to fail (known bug)</td>
+                </tr>
+                <tr>
+                    <td><code>@pytest.mark.skipif</code></td>
+                    <td>Skip if condition is true</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Custom Markers -->
+        <div class="slide">
+            <h2>Custom Markers</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># pytest.ini</span>
+[pytest]
+markers =
+    smoke: Quick smoke tests
+    regression: Full regression suite
+    slow: Tests that take a long time</div>
+            <div class="code-block" style="margin-top: 15px; font-size: 0.85em;">
+<span class="comment"># test_login.py</span>
+<span class="keyword">import</span> pytest
+
+<span class="decorator">@pytest.mark.smoke</span>
+<span class="keyword">def</span> <span class="function">test_login_page_loads</span>(page):
+    page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+    <span class="keyword">assert</span> page.<span class="function">locator</span>(<span class="string">"h2"</span>).<span class="function">is_visible</span>()
+
+<span class="decorator">@pytest.mark.smoke</span>
+<span class="decorator">@pytest.mark.regression</span>
+<span class="keyword">def</span> <span class="function">test_successful_login</span>(page):
+    <span class="comment"># ... login test</span>
+    <span class="keyword">pass</span>
+
+<span class="decorator">@pytest.mark.regression</span>
+<span class="keyword">def</span> <span class="function">test_login_error_messages</span>(page):
+    <span class="comment"># ... detailed test</span>
+    <span class="keyword">pass</span></div>
+        </div>
+
+        <!-- Running by Marker -->
+        <div class="slide">
+            <h2>Running Tests by Marker</h2>
+            <div class="code-block">
+<span class="comment"># Run only smoke tests</span>
+pytest -m smoke
+
+<span class="comment"># Run only regression tests</span>
+pytest -m regression
+
+<span class="comment"># Run smoke OR regression</span>
+pytest -m "smoke or regression"
+
+<span class="comment"># Run smoke but NOT slow</span>
+pytest -m "smoke and not slow"</div>
+        </div>
+
+        <!-- PART 6: RUNNING TESTS -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>Running Tests</h2>
+            <p>Command line options</p>
+        </div>
+
+        <!-- Basic Commands -->
+        <div class="slide">
+            <h2>Basic Pytest Commands</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Run all tests in current directory</span>
+pytest
+
+<span class="comment"># Run specific file</span>
+pytest test_login.py
+
+<span class="comment"># Run specific test function</span>
+pytest test_login.py::test_successful_login
+
+<span class="comment"># Run tests matching keyword</span>
+pytest -k "login"
+
+<span class="comment"># Run tests matching keyword expression</span>
+pytest -k "login and not error"</div>
+        </div>
+
+        <!-- Useful Flags -->
+        <div class="slide">
+            <h2>Useful Flags</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Flag</th>
+                    <th>What It Does</th>
+                </tr>
+                <tr>
+                    <td><code>-v</code></td>
+                    <td>Verbose output (show test names)</td>
+                </tr>
+                <tr>
+                    <td><code>-s</code></td>
+                    <td>Show print() output</td>
+                </tr>
+                <tr>
+                    <td><code>--headed</code></td>
+                    <td>Show browser window</td>
+                </tr>
+                <tr>
+                    <td><code>--slowmo 500</code></td>
+                    <td>Slow down actions (ms)</td>
+                </tr>
+                <tr>
+                    <td><code>--browser chromium</code></td>
+                    <td>Choose browser</td>
+                </tr>
+                <tr>
+                    <td><code>--browser-channel chrome</code></td>
+                    <td>Use installed Chrome</td>
+                </tr>
+                <tr>
+                    <td><code>-x</code></td>
+                    <td>Stop on first failure</td>
+                </tr>
+                <tr>
+                    <td><code>--lf</code></td>
+                    <td>Run only last failed tests</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Playwright-specific Flags -->
+        <div class="slide">
+            <h2>Playwright-specific Flags</h2>
+            <div class="code-block">
+<span class="comment"># Run with visible browser</span>
+pytest --headed
+
+<span class="comment"># Slow down for debugging</span>
+pytest --headed --slowmo 1000
+
+<span class="comment"># Use Firefox instead of Chromium</span>
+pytest --browser firefox
+
+<span class="comment"># Use WebKit (Safari engine)</span>
+pytest --browser webkit
+
+<span class="comment"># Run on multiple browsers</span>
+pytest --browser chromium --browser firefox</div>
+        </div>
+
+        <!-- Example Output -->
+        <div class="slide">
+            <h2>Pytest Output</h2>
+            <div class="code-block" style="font-size: 0.8em; background: #1e1e1e;">
+$ pytest test_login.py -v
+
+======================== test session starts ========================
+collected 3 items
+
+test_login.py::test_login_page_loads <span style="color: #4CAF50;">PASSED</span>      [33%]
+test_login.py::test_successful_login <span style="color: #4CAF50;">PASSED</span>      [66%]
+test_login.py::test_failed_login <span style="color: #4CAF50;">PASSED</span>          [100%]
+
+======================== <span style="color: #4CAF50;">3 passed</span> in 5.42s ========================</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Clear PASS/FAIL for each test with timing!</p>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <table style="width: 100%; font-size: 0.9em;">
+                <tr>
+                    <th>Concept</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td><code>def test_*(page)</code></td>
+                    <td>Test function with auto page</td>
+                </tr>
+                <tr>
+                    <td><code>@pytest.fixture</code></td>
+                    <td>Reusable test setup</td>
+                </tr>
+                <tr>
+                    <td><code>@pytest.mark.parametrize</code></td>
+                    <td>Multiple test data sets</td>
+                </tr>
+                <tr>
+                    <td><code>@pytest.mark.smoke</code></td>
+                    <td>Group and filter tests</td>
+                </tr>
+                <tr>
+                    <td><code>pytest -v --headed</code></td>
+                    <td>Run tests with options</td>
+                </tr>
+                <tr>
+                    <td><code>conftest.py</code></td>
+                    <td>Shared fixtures</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Homework -->
+        <div class="slide">
+            <h2>Homework</h2>
+            <div class="info-box">
+                <h3>Tasks:</h3>
+                <ol style="font-size: 1em;">
+                    <li>Create <code>test_checkboxes.py</code>:
+                        <ul>
+                            <li>Test checking / unchecking</li>
+                            <li>Use parametrize for both checkboxes</li>
+                        </ul>
+                    </li>
+                    <li>Create <code>conftest.py</code>:
+                        <ul>
+                            <li>Fixture that navigates to a page</li>
+                            <li>Fixture that logs in</li>
+                        </ul>
+                    </li>
+                    <li>Add markers:
+                        <ul>
+                            <li>Mark tests as <code>smoke</code> or <code>regression</code></li>
+                            <li>Run only <code>smoke</code> tests</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Next Lecture -->
+        <div class="slide">
+            <h2>Next Lecture</h2>
+            <h3 style="color: #4CAF50;">Lecture 32: Test Configuration & Setup</h3>
+            <ul style="font-size: 1.1em; margin-top: 30px;">
+                <li>pytest.ini configuration</li>
+                <li>conftest.py in depth</li>
+                <li>Browser options & timeouts</li>
+                <li>Screenshots & traces on failure</li>
+                <li>Multi-browser testing</li>
+            </ul>
+            <div class="success-box" style="margin-top: 30px;">
+                <p>Practice: Run all examples with <code>pytest -v --headed</code></p>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🧪</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Pytest basics!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Test functions, fixtures, parametrize, markers, CLI</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>

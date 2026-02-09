@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 32: Test Configuration & Setup</title>
+    <link rel="stylesheet" href="../assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">32</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">⚙️</div>
+            <h1>Lecture 32</h1>
+            <div class="subtitle">Test Configuration & Setup</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Configure pytest with pytest.ini</li>
+                <li>✓ Set up browser options in conftest.py</li>
+                <li>✓ Use base URL and timeout settings</li>
+                <li>✓ Capture screenshots and traces on failure</li>
+                <li>✓ Run tests on multiple browsers</li>
+            </ul>
+        </div>
+
+        <!-- Recap -->
+        <div class="slide">
+            <h2>Recap: Pytest Basics</h2>
+            <div class="info-box">
+                <p>In Lecture 31 we learned:</p>
+            </div>
+            <ul style="font-size: 1.1em; margin-top: 20px;">
+                <li>Test functions with <code>page</code> fixture</li>
+                <li>Custom fixtures in conftest.py</li>
+                <li><code>@pytest.mark.parametrize</code></li>
+                <li>Markers and grouping</li>
+                <li>Running tests from CLI</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: PYTEST.INI -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>pytest.ini Configuration</h2>
+            <p>Project-level settings</p>
+        </div>
+
+        <!-- What is pytest.ini -->
+        <div class="slide">
+            <h2>Why Configure?</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>Without config:</strong></p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Must type all flags every time!</span>
+pytest tests/ -v --headed --slowmo 500 -m smoke</div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 15px;">
+                <p style="color: #2e7d32;"><strong>With pytest.ini:</strong></p>
+                <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Just run:</span>
+pytest</div>
+            </div>
+        </div>
+
+        <!-- pytest.ini Example -->
+        <div class="slide">
+            <h2>pytest.ini</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># pytest.ini (in project root)</span>
+[pytest]
+
+<span class="comment"># Default CLI options</span>
+addopts = -v --tb=short
+
+<span class="comment"># Where to find tests</span>
+testpaths = tests
+
+<span class="comment"># Base URL for Playwright</span>
+base_url = https://the-internet.herokuapp.com
+
+<span class="comment"># Register custom markers</span>
+markers =
+    smoke: Quick smoke tests
+    regression: Full regression suite
+    slow: Tests that take a long time</div>
+        </div>
+
+        <!-- pyproject.toml -->
+        <div class="slide">
+            <h2>Alternative: pyproject.toml</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># pyproject.toml (modern Python projects)</span>
+[tool.pytest.ini_options]
+addopts = <span class="string">"-v --tb=short"</span>
+testpaths = [<span class="string">"tests"</span>]
+base_url = <span class="string">"https://the-internet.herokuapp.com"</span>
+markers = [
+    <span class="string">"smoke: Quick smoke tests"</span>,
+    <span class="string">"regression: Full regression suite"</span>,
+]</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p>Choose ONE config file. <code>pyproject.toml</code> is the modern way.</p>
+            </div>
+        </div>
+
+        <!-- addopts Explained -->
+        <div class="slide">
+            <h2>Useful addopts Options</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>Option</th>
+                    <th>What It Does</th>
+                </tr>
+                <tr>
+                    <td><code>-v</code></td>
+                    <td>Verbose output (show test names)</td>
+                </tr>
+                <tr>
+                    <td><code>--tb=short</code></td>
+                    <td>Short tracebacks on failure</td>
+                </tr>
+                <tr>
+                    <td><code>--strict-markers</code></td>
+                    <td>Error on unregistered markers</td>
+                </tr>
+                <tr>
+                    <td><code>--headed</code></td>
+                    <td>Show browser (Playwright)</td>
+                </tr>
+                <tr>
+                    <td><code>--slowmo 500</code></td>
+                    <td>Slow down actions (Playwright)</td>
+                </tr>
+                <tr>
+                    <td><code>-x</code></td>
+                    <td>Stop on first failure</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- PART 2: CONFTEST.PY -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>conftest.py in Depth</h2>
+            <p>Browser and context configuration</p>
+        </div>
+
+        <!-- Special Fixtures -->
+        <div class="slide">
+            <h2>Playwright Special Fixtures</h2>
+            <div class="highlight-box">
+                <p>pytest-playwright recognizes these fixture names:</p>
+            </div>
+            <table style="width: 100%; font-size: 0.9em; margin-top: 15px;">
+                <tr>
+                    <th>Fixture Name</th>
+                    <th>Controls</th>
+                </tr>
+                <tr>
+                    <td><code>browser_type_launch_args</code></td>
+                    <td>How browser launches (headless, slow_mo)</td>
+                </tr>
+                <tr>
+                    <td><code>browser_context_args</code></td>
+                    <td>Context settings (viewport, locale)</td>
+                </tr>
+                <tr>
+                    <td><code>base_url</code></td>
+                    <td>Default base URL</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Browser Launch Args -->
+        <div class="slide">
+            <h2>Browser Launch Options</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># conftest.py</span>
+<span class="keyword">import</span> pytest
+
+<span class="decorator">@pytest.fixture</span>(scope=<span class="string">"session"</span>)
+<span class="keyword">def</span> <span class="function">browser_type_launch_args</span>():
+    <span class="keyword">return</span> {
+        <span class="string">"headless"</span>: <span class="keyword">False</span>,      <span class="comment"># Show browser</span>
+        <span class="string">"slow_mo"</span>: 500,           <span class="comment"># 500ms delay</span>
+        <span class="comment"># "channel": "chrome",  # Use Chrome</span>
+    }</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p><code>scope="session"</code> = runs ONCE for all tests</p>
+            </div>
+        </div>
+
+        <!-- Context Args -->
+        <div class="slide">
+            <h2>Browser Context Options</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="decorator">@pytest.fixture</span>(scope=<span class="string">"session"</span>)
+<span class="keyword">def</span> <span class="function">browser_context_args</span>():
+    <span class="keyword">return</span> {
+        <span class="string">"viewport"</span>: {<span class="string">"width"</span>: 1280, <span class="string">"height"</span>: 720},
+        <span class="string">"ignore_https_errors"</span>: <span class="keyword">True</span>,
+        <span class="comment"># "locale": "uk-UA",</span>
+        <span class="comment"># "timezone_id": "Europe/Kyiv",</span>
+        <span class="comment"># "color_scheme": "dark",</span>
+    }</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ All tests get the same viewport and locale automatically!</p>
+            </div>
+        </div>
+
+        <!-- Fixture Scopes -->
+        <div class="slide">
+            <h2>Fixture Scopes</h2>
+            <table style="width: 100%; font-size: 0.9em;">
+                <tr>
+                    <th>Scope</th>
+                    <th>Runs</th>
+                    <th>Use For</th>
+                </tr>
+                <tr>
+                    <td><code>"function"</code></td>
+                    <td>Each test</td>
+                    <td>Page setup, test data</td>
+                </tr>
+                <tr>
+                    <td><code>"class"</code></td>
+                    <td>Each test class</td>
+                    <td>Shared class state</td>
+                </tr>
+                <tr>
+                    <td><code>"module"</code></td>
+                    <td>Each file</td>
+                    <td>File-level setup</td>
+                </tr>
+                <tr>
+                    <td><code>"session"</code></td>
+                    <td>Once for all tests</td>
+                    <td>Browser config, DB</td>
+                </tr>
+            </table>
+            <div class="code-block" style="margin-top: 15px; font-size: 0.85em;">
+<span class="decorator">@pytest.fixture</span>(scope=<span class="string">"function"</span>)  <span class="comment"># Default</span>
+<span class="keyword">def</span> <span class="function">login_page</span>(page):
+    page.<span class="function">goto</span>(<span class="string">"/login"</span>)
+    <span class="keyword">return</span> page</div>
+        </div>
+
+        <!-- PART 3: BASE URL & TIMEOUTS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Base URL & Timeouts</h2>
+            <p>Avoiding repetition and controlling waits</p>
+        </div>
+
+        <!-- Base URL -->
+        <div class="slide">
+            <h2>Base URL Configuration</h2>
+            <div class="info-box" style="background: #ffebee;">
+                <p style="color: #c62828;"><strong>❌ Without base URL:</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/login"</span>)
+page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/checkboxes"</span>)
+page.<span class="function">goto</span>(<span class="string">"https://the-internet.herokuapp.com/dropdown"</span>)</div>
+            </div>
+            <div class="info-box" style="background: #e8f5e9; margin-top: 10px;">
+                <p style="color: #2e7d32;"><strong>✅ With base URL:</strong></p>
+                <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># pytest.ini: base_url = https://the-internet.herokuapp.com</span>
+page.<span class="function">goto</span>(<span class="string">"/login"</span>)
+page.<span class="function">goto</span>(<span class="string">"/checkboxes"</span>)
+page.<span class="function">goto</span>(<span class="string">"/dropdown"</span>)</div>
+            </div>
+            <div class="code-block" style="margin-top: 10px; font-size: 0.8em;">
+<span class="comment"># Set via CLI:</span>
+pytest --base-url https://the-internet.herokuapp.com</div>
+        </div>
+
+        <!-- Timeout Settings -->
+        <div class="slide">
+            <h2>Timeout Configuration</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># conftest.py</span>
+<span class="decorator">@pytest.fixture</span>(autouse=<span class="keyword">True</span>)
+<span class="keyword">def</span> <span class="function">setup_timeouts</span>(page):
+    <span class="comment"># Timeout for ALL actions (click, fill, etc.)</span>
+    page.<span class="function">set_default_timeout</span>(10000)  <span class="comment"># 10 sec</span>
+
+    <span class="comment"># Timeout for navigation (goto, reload)</span>
+    page.<span class="function">set_default_navigation_timeout</span>(15000)  <span class="comment"># 15 sec</span>
+
+    <span class="keyword">yield</span> page</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p><code>autouse=True</code> = applies to ALL tests automatically!</p>
+            </div>
+        </div>
+
+        <!-- Per-Action Timeout -->
+        <div class="slide">
+            <h2>Per-Action Timeout</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">test_with_custom_timeouts</span>(page):
+    <span class="comment"># Navigation timeout</span>
+    page.<span class="function">goto</span>(<span class="string">"/login"</span>, timeout=20000)
+
+    <span class="comment"># Click timeout</span>
+    page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>(timeout=5000)
+
+    <span class="comment"># Wait for element</span>
+    page.<span class="function">locator</span>(<span class="string">"#result"</span>).<span class="function">wait_for</span>(
+        state=<span class="string">"visible"</span>,
+        timeout=10000
+    )</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p><strong>Priority:</strong> per-action > page default > global default (30s)</p>
+            </div>
+        </div>
+
+        <!-- PART 4: SCREENSHOTS & TRACES -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Screenshots & Traces</h2>
+            <p>Debugging test failures</p>
+        </div>
+
+        <!-- Screenshot on Failure -->
+        <div class="slide">
+            <h2>Automatic Screenshots</h2>
+            <div class="code-block">
+<span class="comment"># Run with automatic screenshots:</span>
+pytest --screenshot only-on-failure
+
+<span class="comment"># Screenshot for every test:</span>
+pytest --screenshot on
+
+<span class="comment"># No screenshots (default):</span>
+pytest --screenshot off
+
+<span class="comment"># Set output directory:</span>
+pytest --screenshot only-on-failure --output results</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ No code changes needed! Just add CLI flags.</p>
+            </div>
+        </div>
+
+        <!-- Traces -->
+        <div class="slide">
+            <h2>Trace Recording</h2>
+            <div class="code-block">
+<span class="comment"># Record traces on failure:</span>
+pytest --tracing retain-on-failure
+
+<span class="comment"># Trace for every test:</span>
+pytest --tracing on
+
+<span class="comment"># View trace in browser:</span>
+playwright show-trace test-results/trace.zip</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p><strong>Trace contains:</strong> screenshots, DOM snapshots, network log, console log</p>
+            </div>
+        </div>
+
+        <!-- Trace Viewer -->
+        <div class="slide">
+            <h2>Trace Viewer</h2>
+            <div class="info-box">
+                <p style="font-size: 1.1em;">The trace viewer shows:</p>
+                <ul style="margin-top: 10px;">
+                    <li>📸 Screenshot at each action</li>
+                    <li>🌐 Network requests and responses</li>
+                    <li>📋 Console messages</li>
+                    <li>🔍 DOM snapshot at each step</li>
+                    <li>⏱️ Timeline of all actions</li>
+                </ul>
+            </div>
+            <div class="code-block" style="margin-top: 15px;">
+<span class="comment"># Open trace viewer</span>
+playwright show-trace test-results/trace.zip</div>
+        </div>
+
+        <!-- Video -->
+        <div class="slide">
+            <h2>Video Recording</h2>
+            <div class="code-block">
+<span class="comment"># Record video on failure:</span>
+pytest --video retain-on-failure
+
+<span class="comment"># Record all videos:</span>
+pytest --video on
+
+<span class="comment"># Combine all artifact options:</span>
+pytest --screenshot only-on-failure \
+       --tracing retain-on-failure \
+       --video retain-on-failure \
+       --output test-results</div>
+        </div>
+
+        <!-- Custom Screenshot Fixture -->
+        <div class="slide">
+            <h2>Custom Screenshot Fixture</h2>
+            <div class="code-block" style="font-size: 0.8em;">
+<span class="comment"># conftest.py</span>
+<span class="keyword">import</span> os, pytest
+
+<span class="decorator">@pytest.fixture</span>(autouse=<span class="keyword">True</span>)
+<span class="keyword">def</span> <span class="function">screenshot_on_failure</span>(page, request):
+    <span class="keyword">yield</span>
+    <span class="comment"># After test: check if failed</span>
+    <span class="keyword">if</span> request.node.rep_call <span class="keyword">and</span> request.node.rep_call.failed:
+        os.<span class="function">makedirs</span>(<span class="string">"screenshots"</span>, exist_ok=<span class="keyword">True</span>)
+        page.<span class="function">screenshot</span>(
+            path=<span class="string">f"screenshots/{request.node.name}.png"</span>,
+            full_page=<span class="keyword">True</span>
+        )</div>
+            <div class="info-box" style="margin-top: 10px;">
+                <p>Use this when you need more control than built-in flags provide.</p>
+            </div>
+        </div>
+
+        <!-- PART 5: MULTIPLE BROWSERS -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Multiple Browsers</h2>
+            <p>Cross-browser testing</p>
+        </div>
+
+        <!-- Browser Options -->
+        <div class="slide">
+            <h2>Running on Different Browsers</h2>
+            <div class="code-block">
+<span class="comment"># Chromium (default)</span>
+pytest
+
+<span class="comment"># Firefox</span>
+pytest --browser firefox
+
+<span class="comment"># WebKit (Safari engine)</span>
+pytest --browser webkit
+
+<span class="comment"># Multiple browsers at once!</span>
+pytest --browser chromium --browser firefox
+
+<span class="comment"># All three browsers</span>
+pytest --browser chromium --browser firefox --browser webkit</div>
+        </div>
+
+        <!-- Browser Channels -->
+        <div class="slide">
+            <h2>Browser Channels</h2>
+            <div class="code-block" style="font-size: 0.85em;">
+<span class="comment"># Use installed Google Chrome</span>
+pytest --browser-channel chrome
+
+<span class="comment"># Use installed Microsoft Edge</span>
+pytest --browser-channel msedge</div>
+            <table style="width: 100%; font-size: 0.9em; margin-top: 20px;">
+                <tr>
+                    <th>Channel</th>
+                    <th>Browser</th>
+                </tr>
+                <tr>
+                    <td><code>chrome</code></td>
+                    <td>Google Chrome</td>
+                </tr>
+                <tr>
+                    <td><code>msedge</code></td>
+                    <td>Microsoft Edge</td>
+                </tr>
+                <tr>
+                    <td>(none)</td>
+                    <td>Bundled Chromium</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Complete Config -->
+        <div class="slide">
+            <h2>Complete Project Configuration</h2>
+            <div class="code-block" style="font-size: 0.75em;">
+project/
+├── conftest.py          <span class="comment"># Fixtures & browser config</span>
+├── pytest.ini           <span class="comment"># pytest settings</span>
+├── pages/               <span class="comment"># Page objects</span>
+│   ├── base_page.py
+│   └── login_page.py
+├── tests/               <span class="comment"># Test files</span>
+│   ├── test_login.py
+│   └── test_checkout.py
+├── screenshots/         <span class="comment"># Auto-generated</span>
+└── test-results/        <span class="comment"># Traces & videos</span></div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <table style="width: 100%; font-size: 0.85em;">
+                <tr>
+                    <th>What</th>
+                    <th>Where</th>
+                </tr>
+                <tr>
+                    <td>CLI defaults, markers</td>
+                    <td><code>pytest.ini</code></td>
+                </tr>
+                <tr>
+                    <td>Browser/context options</td>
+                    <td><code>conftest.py</code> fixtures</td>
+                </tr>
+                <tr>
+                    <td>Base URL</td>
+                    <td><code>pytest.ini</code> or <code>--base-url</code></td>
+                </tr>
+                <tr>
+                    <td>Timeouts</td>
+                    <td><code>conftest.py</code> or per-action</td>
+                </tr>
+                <tr>
+                    <td>Screenshots</td>
+                    <td><code>--screenshot only-on-failure</code></td>
+                </tr>
+                <tr>
+                    <td>Traces</td>
+                    <td><code>--tracing retain-on-failure</code></td>
+                </tr>
+                <tr>
+                    <td>Multi-browser</td>
+                    <td><code>--browser firefox</code></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Homework -->
+        <div class="slide">
+            <h2>Homework</h2>
+            <div class="info-box">
+                <h3>Tasks:</h3>
+                <ol style="font-size: 1em;">
+                    <li>Create project config:
+                        <ul>
+                            <li><code>pytest.ini</code> with addopts, markers, base_url</li>
+                            <li><code>conftest.py</code> with browser options</li>
+                        </ul>
+                    </li>
+                    <li>Configure failure handling:
+                        <ul>
+                            <li>Auto screenshot on failure</li>
+                            <li>Trace recording on failure</li>
+                        </ul>
+                    </li>
+                    <li>Run tests on 2+ browsers:
+                        <ul>
+                            <li>Use <code>--browser</code> flag</li>
+                            <li>Verify tests pass on both</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Next Lecture -->
+        <div class="slide">
+            <h2>Next Lecture</h2>
+            <h3 style="color: #4CAF50;">Lecture 33: Test Data Management</h3>
+            <ul style="font-size: 1.1em; margin-top: 30px;">
+                <li>JSON/CSV test data</li>
+                <li>Environment variables</li>
+                <li>Config files (YAML, .env)</li>
+                <li>Data generators (Faker)</li>
+                <li>Data fixtures</li>
+            </ul>
+            <div class="success-box" style="margin-top: 30px;">
+                <p>Practice: Set up a complete project with <code>pytest.ini</code> + <code>conftest.py</code></p>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">⚙️</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Test Configuration!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">pytest.ini, conftest.py, timeouts, screenshots, traces, multi-browser</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+        </div>
+    </div>
+    <script src="../assets/presentation/js/presentation.js"></script>
+</body>
+</html>
