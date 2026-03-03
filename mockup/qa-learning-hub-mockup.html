@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Learning Hub - Mockup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vp-c-bg: #ffffff;
+            --vp-c-bg-soft: #f6f6f7;
+            --vp-c-bg-alt: #f6f6f7;
+            --vp-c-text-1: #213547;
+            --vp-c-text-2: #476582;
+            --vp-c-text-3: #90a4ae;
+            --vp-c-divider: #e2e2e3;
+            --vp-c-brand: #5d6eff;
+            --vp-c-brand-light: #747bff;
+            --vp-c-brand-dark: #535bf2;
+            --vp-sidebar-bg: #f6f6f7;
+            --vp-code-bg: #292d3e;
+            --vp-c-green: #42b883;
+            --vp-c-yellow: #f0b429;
+            --vp-c-red: #f66;
+            --vp-c-purple: #a855f7;
+            --vp-c-cyan: #06b6d4;
+        }
+
+        [data-theme="dark"] {
+            --vp-c-bg: #1a1a1a;
+            --vp-c-bg-soft: #242424;
+            --vp-c-bg-alt: #2f2f2f;
+            --vp-c-text-1: #ffffff;
+            --vp-c-text-2: #a8b1c2;
+            --vp-c-text-3: #6b7280;
+            --vp-c-divider: #3a3a3a;
+            --vp-sidebar-bg: #1e1e1e;
+            --vp-code-bg: #0d1117;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--vp-c-bg);
+            color: var(--vp-c-text-1);
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: var(--vp-c-bg);
+            border-bottom: 1px solid var(--vp-c-divider);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--vp-c-text-1);
+            text-decoration: none;
+        }
+
+        .navbar-brand .logo {
+            font-size: 1.5rem;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .navbar-links a {
+            color: var(--vp-c-text-2);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .navbar-links a:hover,
+        .navbar-links a.active {
+            color: var(--vp-c-brand);
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--vp-c-bg-soft);
+            border: 1px solid var(--vp-c-divider);
+            border-radius: 8px;
+            color: var(--vp-c-text-3);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:hover {
+            border-color: var(--vp-c-brand);
+        }
+
+        .search-box kbd {
+            background: var(--vp-c-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid var(--vp-c-divider);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--vp-c-bg-soft);
+        }
+
+        .github-link {
+            color: var(--vp-c-text-2);
+            font-size: 1.4rem;
+            transition: color 0.2s;
+        }
+
+        .github-link:hover {
+            color: var(--vp-c-text-1);
+        }
+
+        /* ===== LAYOUT ===== */
+        .layout {
+            display: flex;
+            margin-top: 64px;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 64px);
+            background: var(--vp-sidebar-bg);
+            border-right: 1px solid var(--vp-c-divider);
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+
+        .sidebar-group {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-group-title {
+            padding: 8px 24px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--vp-c-text-3);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 24px;
+            color: var(--vp-c-text-2);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            color: var(--vp-c-text-1);
+            background: var(--vp-c-bg-soft);
+        }
+
+        .sidebar-item.active {
+            color: var(--vp-c-brand);
+            border-left-color: var(--vp-c-brand);
+            background: var(--vp-c-bg-soft);
+        }
+
+        .sidebar-item .icon {
+            font-size: 1.1rem;
+        }
+
+        .sidebar-nested {
+            margin-left: 20px;
+        }
+
+        .sidebar-nested .sidebar-item {
+            padding: 6px 24px;
+            font-size: 0.85rem;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            padding: 80px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--vp-c-bg) 0%, var(--vp-c-bg-soft) 100%);
+            border-bottom: 1px solid var(--vp-c-divider);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--vp-c-brand);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--vp-c-brand) 0%, var(--vp-c-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--vp-c-text-2);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .hero-tag {
+            padding: 8px 16px;
+            background: var(--vp-c-bg-alt);
+            border: 1px solid var(--vp-c-divider);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--vp-c-text-2);
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--vp-c-brand);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--vp-c-brand-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(93, 110, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--vp-c-bg);
+            color: var(--vp-c-text-1);
+            border: 1px solid var(--vp-c-divider);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--vp-c-brand);
+            color: var(--vp-c-brand);
+        }
+
+        /* ===== FEATURES GRID ===== */
+        .features {
+            padding: 60px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--vp-c-bg-soft);
+            border: 1px solid var(--vp-c-divider);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--vp-c-brand);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--vp-c-text-1);
+        }
+
+        .feature-desc {
+            color: var(--vp-c-text-2);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 4px 12px;
+            background: var(--vp-c-bg);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--vp-c-text-3);
+        }
+
+        /* ===== COURSES SECTION ===== */
+        .courses {
+            padding: 60px;
+            background: var(--vp-c-bg-soft);
+        }
+
+        .course-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .course-card {
+            background: var(--vp-c-bg);
+            border: 1px solid var(--vp-c-divider);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-header {
+            padding: 24px;
+            background: linear-gradient(135deg, var(--vp-c-brand) 0%, var(--vp-c-purple) 100%);
+            color: white;
+        }
+
+        .course-header.python {
+            background: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
+        }
+
+        .course-header.typescript {
+            background: linear-gradient(135deg, #3178c6 0%, #235a97 100%);
+        }
+
+        .course-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .course-subtitle {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .course-body {
+            padding: 24px;
+        }
+
+        .course-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .course-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--vp-c-text-2);
+            font-size: 0.9rem;
+        }
+
+        .course-modules {
+            list-style: none;
+        }
+
+        .course-modules li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--vp-c-divider);
+            color: var(--vp-c-text-2);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-modules li:last-child {
+            border-bottom: none;
+        }
+
+        .module-check {
+            color: var(--vp-c-green);
+        }
+
+        /* ===== CHEATSHEETS SECTION ===== */
+        .cheatsheets {
+            padding: 60px;
+        }
+
+        .cheatsheet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cheatsheet-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--vp-c-bg-soft);
+            border: 1px solid var(--vp-c-divider);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cheatsheet-card:hover {
+            border-color: var(--vp-c-brand);
+            background: var(--vp-c-bg-alt);
+        }
+
+        .cheatsheet-icon {
+            font-size: 2rem;
+        }
+
+        .cheatsheet-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .cheatsheet-info p {
+            font-size: 0.8rem;
+            color: var(--vp-c-text-3);
+        }
+
+        /* ===== DOC PAGE PREVIEW ===== */
+        .doc-preview {
+            padding: 60px;
+            background: var(--vp-c-bg-soft);
+        }
+
+        .doc-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--vp-c-bg);
+            border: 1px solid var(--vp-c-divider);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .doc-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--vp-c-divider);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .doc-breadcrumb {
+            color: var(--vp-c-text-3);
+            font-size: 0.85rem;
+        }
+
+        .doc-breadcrumb span {
+            color: var(--vp-c-brand);
+        }
+
+        .doc-body {
+            padding: 40px;
+        }
+
+        .doc-body h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .doc-body p {
+            color: var(--vp-c-text-2);
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: var(--vp-code-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            color: #e6e6e6;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block .keyword { color: #c792ea; }
+        .code-block .function { color: #82aaff; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .comment { color: #676e95; }
+        .code-block .decorator { color: #f0b429; }
+
+        .tip-box {
+            background: rgba(66, 184, 131, 0.1);
+            border-left: 4px solid var(--vp-c-green);
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 24px 0;
+        }
+
+        .tip-box strong {
+            color: var(--vp-c-green);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 40px 60px;
+            border-top: 1px solid var(--vp-c-divider);
+            text-align: center;
+            color: var(--vp-c-text-3);
+            font-size: 0.9rem;
+        }
+
+        /* ===== PAGE INDICATOR ===== */
+        .page-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--vp-c-brand);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(93, 110, 255, 0.4);
+            z-index: 1000;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 960px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .features, .courses, .cheatsheets, .doc-preview {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">
+            <span class="logo">🎓</span>
+            <span>QA Learning Hub</span>
+        </a>
+
+        <div class="navbar-links">
+            <a href="#" class="active">Головна</a>
+            <a href="#">Документація</a>
+            <a href="#">Курси</a>
+            <a href="#">Cheatsheets</a>
+        </div>
+
+        <div class="navbar-right">
+            <div class="search-box">
+                <span>🔍</span>
+                <span>Пошук...</span>
+                <kbd>Ctrl K</kbd>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            <a href="#" class="github-link">⬡</a>
+        </div>
+    </nav>
+
+    <!-- LAYOUT -->
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-group-title">Документація</div>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">🐍</span> Python
+                </a>
+                <div class="sidebar-nested">
+                    <a href="#" class="sidebar-item">Основи</a>
+                    <a href="#" class="sidebar-item active">Типи даних</a>
+                    <a href="#" class="sidebar-item">Функції</a>
+                    <a href="#" class="sidebar-item">ООП</a>
+                </div>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">🎭</span> Playwright
+                </a>
+                <div class="sidebar-nested">
+                    <a href="#" class="sidebar-item">Налаштування</a>
+                    <a href="#" class="sidebar-item">Locators</a>
+                    <a href="#" class="sidebar-item">Actions</a>
+                    <a href="#" class="sidebar-item">Page Object</a>
+                </div>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">📝</span> Pytest
+                </a>
+                <div class="sidebar-nested">
+                    <a href="#" class="sidebar-item">Fixtures</a>
+                    <a href="#" class="sidebar-item">Markers</a>
+                    <a href="#" class="sidebar-item">Параметризація</a>
+                </div>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">📘</span> TypeScript
+                </a>
+            </div>
+
+            <div class="sidebar-group">
+                <div class="sidebar-group-title">Курси</div>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">🎯</span> Python Automation
+                </a>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">📚</span> TypeScript Course
+                </a>
+            </div>
+
+            <div class="sidebar-group">
+                <div class="sidebar-group-title">Швидкий доступ</div>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">📋</span> Cheatsheets
+                </a>
+                <a href="#" class="sidebar-item">
+                    <span class="icon">💡</span> Приклади
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- HERO -->
+            <section class="hero">
+                <span class="hero-badge">✨ Нова версія 2.0</span>
+                <h1>QA Learning Hub</h1>
+                <p class="hero-subtitle">
+                    Документація та курси для QA-автоматизації.
+                    Все що потрібно для старту кар'єри в автоматизованому тестуванні.
+                </p>
+                <div class="hero-tags">
+                    <span class="hero-tag">🐍 Python</span>
+                    <span class="hero-tag">🎭 Playwright</span>
+                    <span class="hero-tag">📝 Pytest</span>
+                    <span class="hero-tag">📘 TypeScript</span>
+                </div>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">
+                        📚 Почати навчання
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        📖 Документація
+                    </a>
+                </div>
+            </section>
+
+            <!-- FEATURES -->
+            <section class="features">
+                <h2 class="section-title">Документація</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🐍</div>
+                        <h3 class="feature-title">Python</h3>
+                        <p class="feature-desc">
+                            Основи мови Python для автоматизації. Змінні, типи даних, функції, класи та модулі.
+                        </p>
+                        <span class="feature-tag">12 розділів</span>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎭</div>
+                        <h3 class="feature-title">Playwright</h3>
+                        <p class="feature-desc">
+                            E2E тестування веб-застосунків. Locators, actions, assertions, Page Object Model.
+                        </p>
+                        <span class="feature-tag">15 розділів</span>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3 class="feature-title">Pytest</h3>
+                        <p class="feature-desc">
+                            Тестовий фреймворк для Python. Fixtures, markers, параметризація, плагіни.
+                        </p>
+                        <span class="feature-tag">10 розділів</span>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📘</div>
+                        <h3 class="feature-title">TypeScript</h3>
+                        <p class="feature-desc">
+                            Типізований JavaScript. Базові типи, інтерфейси, generics, декоратори.
+                        </p>
+                        <span class="feature-tag">10 розділів</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COURSES -->
+            <section class="courses">
+                <h2 class="section-title">Курси</h2>
+                <div class="course-cards">
+                    <div class="course-card">
+                        <div class="course-header python">
+                            <h3 class="course-title">🐍 Python Automation</h3>
+                            <p class="course-subtitle">Від основ до Playwright + Pytest</p>
+                        </div>
+                        <div class="course-body">
+                            <div class="course-stats">
+                                <span class="course-stat">📚 36 лекцій</span>
+                                <span class="course-stat">⏱️ 20+ годин</span>
+                                <span class="course-stat">💻 100+ прикладів</span>
+                            </div>
+                            <ul class="course-modules">
+                                <li><span class="module-check">✓</span> Phase 1: Python Basics (12 лекцій)</li>
+                                <li><span class="module-check">✓</span> Phase 2: Playwright (9 лекцій)</li>
+                                <li><span class="module-check">✓</span> Phase 3: Advanced (9 лекцій)</li>
+                                <li><span class="module-check">✓</span> Phase 4: Pytest & Best Practices (6 лекцій)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-header typescript">
+                            <h3 class="course-title">📘 TypeScript Course</h3>
+                            <p class="course-subtitle">Повний курс TypeScript</p>
+                        </div>
+                        <div class="course-body">
+                            <div class="course-stats">
+                                <span class="course-stat">📚 10 розділів</span>
+                                <span class="course-stat">🧪 Квізи</span>
+                                <span class="course-stat">🚀 Практика</span>
+                            </div>
+                            <ul class="course-modules">
+                                <li><span class="module-check">✓</span> Базові типи та синтаксис</li>
+                                <li><span class="module-check">✓</span> Функції та інтерфейси</li>
+                                <li><span class="module-check">✓</span> Класи та Generics</li>
+                                <li><span class="module-check">✓</span> Декоратори та практика</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHEATSHEETS -->
+            <section class="cheatsheets">
+                <h2 class="section-title">Cheatsheets</h2>
+                <div class="cheatsheet-grid">
+                    <div class="cheatsheet-card">
+                        <span class="cheatsheet-icon">🐍</span>
+                        <div class="cheatsheet-info">
+                            <h4>Python Quick Reference</h4>
+                            <p>Синтаксис, типи, функції</p>
+                        </div>
+                    </div>
+                    <div class="cheatsheet-card">
+                        <span class="cheatsheet-icon">📝</span>
+                        <div class="cheatsheet-info">
+                            <h4>Pytest Commands</h4>
+                            <p>Команди, fixtures, markers</p>
+                        </div>
+                    </div>
+                    <div class="cheatsheet-card">
+                        <span class="cheatsheet-icon">🎭</span>
+                        <div class="cheatsheet-info">
+                            <h4>Playwright Selectors</h4>
+                            <p>Locators, actions, waits</p>
+                        </div>
+                    </div>
+                    <div class="cheatsheet-card">
+                        <span class="cheatsheet-icon">⚡</span>
+                        <div class="cheatsheet-info">
+                            <h4>Git Commands</h4>
+                            <p>Основні команди Git</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DOC PAGE PREVIEW -->
+            <section class="doc-preview">
+                <h2 class="section-title">Приклад сторінки документації</h2>
+                <div class="doc-container">
+                    <div class="doc-header">
+                        <span class="doc-breadcrumb">Playwright / <span>Locators</span></span>
+                    </div>
+                    <div class="doc-body">
+                        <h1>Locator Strategies</h1>
+                        <p>
+                            Playwright надає потужні методи для пошуку елементів на сторінці.
+                            Рекомендовано використовувати user-facing атрибути для стабільних тестів.
+                        </p>
+
+                        <div class="code-block">
+<pre><span class="comment"># Рекомендовані локатори</span>
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> Page
+
+<span class="keyword">def</span> <span class="function">test_login</span>(page: Page):
+    <span class="comment"># По тексту</span>
+    page.get_by_text(<span class="string">"Sign In"</span>).click()
+
+    <span class="comment"># По ролі</span>
+    page.get_by_role(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).click()
+
+    <span class="comment"># По placeholder</span>
+    page.get_by_placeholder(<span class="string">"Email"</span>).fill(<span class="string">"user@test.com"</span>)
+
+    <span class="comment"># По test-id (найстабільніший)</span>
+    page.get_by_test_id(<span class="string">"login-button"</span>).click()</pre>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Порада:</strong> Використовуйте <code>get_by_test_id()</code> для критичних елементів —
+                            це найстабільніший локатор, який не залежить від тексту чи стилів.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <p>QA Learning Hub © 2024 • Built with VitePress</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- PAGE INDICATOR -->
+    <div class="page-indicator">
+        📐 Mockup Preview
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+
+            const toggle = document.querySelector('.theme-toggle');
+            toggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        }
+    </script>
+</body>
+</html>
