@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-<a href="/presentations/Lecture_28_API_Testing/presentation.html" target="_blank">🎬 Презентація</a> |
+<a href="/python_automation_courses/presentations/Lecture_28_API_Testing/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_28_API_Testing/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_28_API_Testing/exercises)
 

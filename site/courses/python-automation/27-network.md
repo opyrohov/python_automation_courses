@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-<a href="/presentations/Lecture_27_Network_Interception/presentation.html" target="_blank">🎬 Презентація</a> |
+<a href="/python_automation_courses/presentations/Lecture_27_Network_Interception/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_27_Network_Interception/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_27_Network_Interception/exercises)
 

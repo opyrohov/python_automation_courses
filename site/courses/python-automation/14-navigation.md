@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-<a href="/presentations/Lecture_14_Basic_Navigation_Interactions/presentation.html" target="_blank">🎬 Презентація</a> |
+<a href="/python_automation_courses/presentations/Lecture_14_Basic_Navigation_Interactions/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/exercises)
 

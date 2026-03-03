@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-<a href="/presentations/Lecture_2_Strings_Control_Flow/presentation.html" target="_blank">🎬 Презентація</a> |
+<a href="/python_automation_courses/presentations/Lecture_2_Strings_Control_Flow/presentation.html" target="_blank">🎬 Презентація</a> |
 [📺 Відео](https://www.loom.com/share/...) |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/exercises)

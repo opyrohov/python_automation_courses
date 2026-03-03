@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-<a href="/presentations/Lecture_11_Advanced_Python_Concepts/presentation.html" target="_blank">🎬 Презентація</a> |
+<a href="/python_automation_courses/presentations/Lecture_11_Advanced_Python_Concepts/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_11_Advanced_Python_Concepts/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_11_Advanced_Python_Concepts/exercises)
 
