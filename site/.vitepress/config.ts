@@ -4,6 +4,7 @@ export default defineConfig({
   title: 'QA Learning Hub',
   description: 'Документація та курси для QA-автоматизації',
   lang: 'uk-UA',
+  base: '/python_automation_courses/',
 
   ignoreDeadLinks: true,
 
