@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_14_Basic_Navigation_Interactions/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_14_Basic_Navigation_Interactions/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_14_Basic_Navigation_Interactions/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/exercises)
 
 </div>
 
@@ -151,4 +151,4 @@ page.wait_for_function("() => document.title === 'Ready'")
 Створіть скрипт для навігації по меню з підменю.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_14_Basic_Navigation_Interactions/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/examples)

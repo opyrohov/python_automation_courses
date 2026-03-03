@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_4_Lists_Dictionaries/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_4_Lists_Dictionaries/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_4_Lists_Dictionaries/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_4_Lists_Dictionaries/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_4_Lists_Dictionaries/exercises)
 
 </div>
 
@@ -161,4 +161,4 @@ a ^ b  # symmetric difference: {1, 4}
 Напишіть функцію для підрахунку частоти слів у тексті.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_4_Lists_Dictionaries/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_4_Lists_Dictionaries/examples)

@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_5_Functions/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_5_Functions/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_5_Functions/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_5_Functions/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_5_Functions/exercises)
 
 </div>
 
@@ -171,4 +171,4 @@ def calculate_area(length: float, width: float) -> float:
 Створіть функцію-калькулятор, що приймає два числа та операцію.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_5_Functions/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_5_Functions/examples)

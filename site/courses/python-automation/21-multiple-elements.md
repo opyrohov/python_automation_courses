@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_21_Multiple_Elements/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_21_Multiple_Elements/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_21_Multiple_Elements/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_21_Multiple_Elements/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_21_Multiple_Elements/exercises)
 
 </div>
 

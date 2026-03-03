@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_29_Page_Object_Model_Part1/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_29_Page_Object_Model_Part1/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_29_Page_Object_Model_Part1/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/exercises)
 
 </div>
 
@@ -177,4 +177,4 @@ dashboard = (
 Реалізуйте BasePage з загальними методами.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_29_Page_Object_Model_Part1/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/examples)

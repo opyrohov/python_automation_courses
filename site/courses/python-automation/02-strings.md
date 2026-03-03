@@ -6,8 +6,8 @@
 
 [🎬 Презентація](/presentations/Lecture_2_Strings_Control_Flow/presentation.html) |
 [📺 Відео](https://www.loom.com/share/...) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_2_Strings_Control_Flow/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_2_Strings_Control_Flow/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/exercises)
 
 </div>
 
@@ -121,4 +121,4 @@ status = "adult" if age >= 18 else "minor"
 Створіть програму для визначення найбільшого з трьох чисел.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_2_Strings_Control_Flow/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/examples)

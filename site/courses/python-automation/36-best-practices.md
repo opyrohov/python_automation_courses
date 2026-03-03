@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_36_Best_Practices_Final_Project/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_36_Best_Practices_Final_Project/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_36_Best_Practices_Final_Project/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/exercises)
 
 </div>
 
@@ -242,4 +242,4 @@ jobs:
 - [ ] README.md
 - [ ] GitHub Actions workflow
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_36_Best_Practices_Final_Project/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/examples)

@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_15_Locator_Strategies_Part1/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_15_Locator_Strategies_Part1/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_15_Locator_Strategies_Part1/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_15_Locator_Strategies_Part1/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_15_Locator_Strategies_Part1/exercises)
 
 </div>
 
@@ -163,4 +163,4 @@ page.get_by_role("list").get_by_role("listitem").first
 Напишіть тест, що заповнює форму використовуючи тільки рекомендовані локатори.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_15_Locator_Strategies_Part1/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_15_Locator_Strategies_Part1/examples)

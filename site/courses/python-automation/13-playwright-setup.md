@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_13_Introduction_Playwright_Setup/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_13_Introduction_Playwright_Setup/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_13_Introduction_Playwright_Setup/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_13_Introduction_Playwright_Setup/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_13_Introduction_Playwright_Setup/exercises)
 
 </div>
 
@@ -136,4 +136,4 @@ asyncio.run(main())
 Створіть скрипт для відкриття сайту в трьох різних браузерах одночасно.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_13_Introduction_Playwright_Setup/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_13_Introduction_Playwright_Setup/examples)

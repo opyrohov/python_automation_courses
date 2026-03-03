@@ -5,8 +5,8 @@
 <div class="lecture-resources">
 
 [🎬 Презентація](/presentations/Lecture_1_Python_Basics_Setup/presentation.html) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_1_Python_Basics_Setup/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_1_Python_Basics_Setup/exercises)
+[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_1_Python_Basics_Setup/examples) |
+[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_1_Python_Basics_Setup/exercises)
 
 </div>
 
@@ -58,4 +58,4 @@ print(f"Welcome to {name} {version}!")
 Створіть змінні для свого імені, віку та улюбленої мови програмування. Виведіть їх на екран.
 :::
 
-[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/Lecture_1_Python_Basics_Setup/examples)
+[Приклади коду на GitHub](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_1_Python_Basics_Setup/examples)
