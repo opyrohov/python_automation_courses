@@ -1,13 +1,11 @@
-# Lecture 12: Python Review & Project Setup
+# Лекція 12: Повторення та налаштування проєкту
 
 Підсумок Python та налаштування проекту.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_12_Python_Review_Project_Setup/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_12_Python_Review_Project_Setup/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_12_Python_Review_Project_Setup/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_12_Python_Review_Project_Setup/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_12_Python_Review_Project_Setup/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_12_Python_Review_Project_Setup/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

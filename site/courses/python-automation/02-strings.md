@@ -1,14 +1,11 @@
-# Lecture 2: Strings & Control Flow
+# Лекція 2: Рядки та керування потоком
 
 Робота з рядками та керування потоком виконання.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_2_Strings_Control_Flow/presentation.html" target="_blank">🎬 Презентація</a> |
-[📺 Відео](https://www.loom.com/share/...) |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_2_Strings_Control_Flow/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_2_Strings_Control_Flow/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

@@ -1,13 +1,11 @@
-# Lecture 33: Test Data Management
+# Лекція 33: Управління тестовими даними
 
 Управління тестовими даними.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_33_Test_Data_Management/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_33_Test_Data_Management/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_33_Test_Data_Management/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_33_Test_Data_Management/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_33_Test_Data_Management/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_33_Test_Data_Management/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## JSON файли

@@ -1,13 +1,11 @@
-# Lecture 11: Advanced Python Concepts
+# Лекція 11: Просунутий Python
 
 Розширені концепції Python.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_11_Advanced_Python_Concepts/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_11_Advanced_Python_Concepts/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_11_Advanced_Python_Concepts/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_11_Advanced_Python_Concepts/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_11_Advanced_Python_Concepts/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_11_Advanced_Python_Concepts/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

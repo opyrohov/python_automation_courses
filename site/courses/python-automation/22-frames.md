@@ -1,13 +1,11 @@
-# Lecture 22: Frames & iframes
+# Лекція 22: Frames та iframes
 
 Робота з фреймами та iframe.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_22_Frames_iframes/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_22_Frames_iframes/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_22_Frames_iframes/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_22_Frames_iframes/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_22_Frames_iframes/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_22_Frames_iframes/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

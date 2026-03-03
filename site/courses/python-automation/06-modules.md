@@ -1,13 +1,11 @@
-# Lecture 6: Modules & Imports
+# Лекція 6: Модулі та імпорти
 
 Модулі та імпорти в Python.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_6_Modules_Imports/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_6_Modules_Imports/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_6_Modules_Imports/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_6_Modules_Imports/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_6_Modules_Imports/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_6_Modules_Imports/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

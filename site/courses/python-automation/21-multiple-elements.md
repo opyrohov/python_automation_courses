@@ -1,13 +1,11 @@
-# Lecture 21: Multiple Elements
+# Лекція 21: Робота з кількома елементами
 
 Робота з множиною елементів.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_21_Multiple_Elements/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_21_Multiple_Elements/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_21_Multiple_Elements/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_21_Multiple_Elements/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_21_Multiple_Elements/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_21_Multiple_Elements/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Базові операції

@@ -1,13 +1,11 @@
-# Lecture 34: Parameterized Testing
+# Лекція 34: Параметризоване тестування
 
 Параметризовані тести.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_34_Parameterized_Testing/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_34_Parameterized_Testing/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_34_Parameterized_Testing/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_34_Parameterized_Testing/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_34_Parameterized_Testing/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_34_Parameterized_Testing/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Базова параметризація

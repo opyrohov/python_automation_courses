@@ -1,13 +1,11 @@
-# Lecture 35: Debugging Techniques
+# Лекція 35: Техніки дебагу
 
 Техніки налагодження.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_35_Debugging_Techniques/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_35_Debugging_Techniques/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_35_Debugging_Techniques/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_35_Debugging_Techniques/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_35_Debugging_Techniques/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_35_Debugging_Techniques/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Playwright Inspector

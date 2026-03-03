@@ -1,13 +1,11 @@
-# Lecture 23: Multiple Pages & Windows
+# Лекція 23: Кілька сторінок та вікон
 
 Робота з кількома сторінками та вікнами.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_23_Multiple_Pages_Windows/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_23_Multiple_Pages_Windows/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_23_Multiple_Pages_Windows/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_23_Multiple_Pages_Windows/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_23_Multiple_Pages_Windows/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_23_Multiple_Pages_Windows/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Нове вікно/вкладка

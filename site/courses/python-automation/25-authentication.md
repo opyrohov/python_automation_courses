@@ -1,13 +1,11 @@
-# Lecture 25: Authentication
+# Лекція 25: Автентифікація
 
 Аутентифікація в тестах.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_25_Authentication/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_25_Authentication/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_25_Authentication/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_25_Authentication/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_25_Authentication/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_25_Authentication/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Логін через UI

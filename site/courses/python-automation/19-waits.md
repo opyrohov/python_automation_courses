@@ -1,13 +1,11 @@
-# Lecture 19: Wait Strategies
+# Лекція 19: Стратегії очікування
 
 Стратегії очікування.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_19_Wait_Strategies/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_19_Wait_Strategies/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_19_Wait_Strategies/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_19_Wait_Strategies/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_19_Wait_Strategies/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_19_Wait_Strategies/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Auto-waiting

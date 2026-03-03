@@ -1,13 +1,11 @@
-# Lecture 3: Loops
+# Лекція 3: Цикли
 
 Цикли в Python — for та while.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_3_Loops/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_3_Loops/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_3_Loops/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_3_Loops/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_3_Loops/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_3_Loops/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

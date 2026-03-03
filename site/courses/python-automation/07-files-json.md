@@ -1,13 +1,11 @@
-# Lecture 7: File Handling & JSON
+# Лекція 7: Робота з файлами та JSON
 
 Робота з файлами та JSON в Python.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_7_File_Handling_JSON/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_7_File_Handling_JSON/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_7_File_Handling_JSON/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_7_File_Handling_JSON/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_7_File_Handling_JSON/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_7_File_Handling_JSON/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

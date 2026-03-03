@@ -1,13 +1,11 @@
-# Lecture 5: Functions
+# Лекція 5: Функції
 
 Функції в Python.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_5_Functions/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_5_Functions/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_5_Functions/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_5_Functions/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_5_Functions/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_5_Functions/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

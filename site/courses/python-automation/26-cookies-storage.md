@@ -1,13 +1,11 @@
-# Lecture 26: Cookies & Local Storage
+# Лекція 26: Cookies та Local Storage
 
 Cookies та локальне сховище.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_26_Cookies_Local_Storage/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_26_Cookies_Local_Storage/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_26_Cookies_Local_Storage/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_26_Cookies_Local_Storage/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_26_Cookies_Local_Storage/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_26_Cookies_Local_Storage/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Cookies

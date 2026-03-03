@@ -1,13 +1,11 @@
-# Lecture 27: Network Interception
+# Лекція 27: Перехоплення мережевих запитів
 
 Перехоплення мережевих запитів.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_27_Network_Interception/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_27_Network_Interception/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_27_Network_Interception/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_27_Network_Interception/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_27_Network_Interception/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_27_Network_Interception/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Моніторинг запитів

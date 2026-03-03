@@ -1,13 +1,11 @@
-# Lecture 18: Mouse & Keyboard Actions
+# Лекція 18: Дії миші та клавіатури
 
 Дії миші та клавіатури.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_18_Mouse_Keyboard_Actions/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_18_Mouse_Keyboard_Actions/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_18_Mouse_Keyboard_Actions/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_18_Mouse_Keyboard_Actions/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_18_Mouse_Keyboard_Actions/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_18_Mouse_Keyboard_Actions/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Клік

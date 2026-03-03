@@ -1,13 +1,11 @@
-# Lecture 15: Locator Strategies Part 1
+# Лекція 15: Стратегії пошуку елементів. Частина 1
 
 Стратегії пошуку елементів — рекомендовані локатори.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_15_Locator_Strategies_Part1/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_15_Locator_Strategies_Part1/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_15_Locator_Strategies_Part1/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_15_Locator_Strategies_Part1/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_15_Locator_Strategies_Part1/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_15_Locator_Strategies_Part1/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

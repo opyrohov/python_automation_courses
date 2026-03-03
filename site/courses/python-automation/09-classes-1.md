@@ -1,13 +1,11 @@
-# Lecture 9: Classes & Objects Part 1
+# Лекція 9: Класи та об'єкти. Частина 1
 
 Основи об'єктно-орієнтованого програмування.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_9_Classes_Objects_Part1/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_9_Classes_Objects_Part1/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_9_Classes_Objects_Part1/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_9_Classes_Objects_Part1/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_9_Classes_Objects_Part1/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_9_Classes_Objects_Part1/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

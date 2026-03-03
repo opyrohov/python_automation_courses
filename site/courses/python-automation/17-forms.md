@@ -1,13 +1,11 @@
-# Lecture 17: Form Handling
+# Лекція 17: Робота з формами
 
 Робота з формами.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_17_Form_Handling/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_17_Form_Handling/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_17_Form_Handling/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_17_Form_Handling/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_17_Form_Handling/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_17_Form_Handling/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Input поля

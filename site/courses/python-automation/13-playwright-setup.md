@@ -1,13 +1,11 @@
-# Lecture 13: Playwright Setup
+# Лекція 13: Встановлення Playwright
 
 Вступ до Playwright та налаштування середовища.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_13_Introduction_Playwright_Setup/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_13_Introduction_Playwright_Setup/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_13_Introduction_Playwright_Setup/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_13_Introduction_Playwright_Setup/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_13_Introduction_Playwright_Setup/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_13_Introduction_Playwright_Setup/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

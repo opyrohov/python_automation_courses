@@ -1,13 +1,11 @@
-# Lecture 36: Best Practices & Final Project
+# Лекція 36: Best Practices та фінальний проєкт
 
 Найкращі практики та фінальний проект.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_36_Best_Practices_Final_Project/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_36_Best_Practices_Final_Project/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

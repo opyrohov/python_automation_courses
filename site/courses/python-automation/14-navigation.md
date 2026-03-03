@@ -1,13 +1,11 @@
-# Lecture 14: Navigation & Interactions
+# Лекція 14: Навігація та взаємодія
 
 Базова навігація та взаємодія з елементами.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_14_Basic_Navigation_Interactions/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_14_Basic_Navigation_Interactions/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_14_Basic_Navigation_Interactions/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

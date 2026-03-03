@@ -1,13 +1,11 @@
-# Lecture 31: Pytest Integration
+# Лекція 31: Інтеграція з Pytest
 
 Інтеграція Playwright з pytest.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_31_Pytest_Integration/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_31_Pytest_Integration/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_31_Pytest_Integration/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_31_Pytest_Integration/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_31_Pytest_Integration/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_31_Pytest_Integration/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

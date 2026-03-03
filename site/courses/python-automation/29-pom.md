@@ -1,13 +1,11 @@
-# Lecture 29: Page Object Model Part 1
+# Лекція 29: Page Object Model. Частина 1
 
 Патерн Page Object Model для організації тестів.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_29_Page_Object_Model_Part1/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_29_Page_Object_Model_Part1/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

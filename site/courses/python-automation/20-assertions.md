@@ -1,13 +1,11 @@
-# Lecture 20: Assertions
+# Лекція 20: Assertions
 
 Перевірки та assertions.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_20_Assertions/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_20_Assertions/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_20_Assertions/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_20_Assertions/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_20_Assertions/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_20_Assertions/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Playwright Assertions

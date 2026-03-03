@@ -1,13 +1,11 @@
-# Lecture 10: Classes & Objects Part 2
+# Лекція 10: Класи та об'єкти. Частина 2
 
 Продовження ООП — наслідування та інкапсуляція.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_10_Classes_Objects_Part2/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_10_Classes_Objects_Part2/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_10_Classes_Objects_Part2/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_10_Classes_Objects_Part2/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_10_Classes_Objects_Part2/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_10_Classes_Objects_Part2/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції

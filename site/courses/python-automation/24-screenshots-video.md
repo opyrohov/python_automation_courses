@@ -1,13 +1,11 @@
-# Lecture 24: Screenshots & Videos
+# Лекція 24: Скріншоти та відео
 
 Скріншоти та відео запис.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_24_Screenshots_Videos/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_24_Screenshots_Videos/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_24_Screenshots_Videos/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_24_Screenshots_Videos/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_24_Screenshots_Videos/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_24_Screenshots_Videos/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Screenshots

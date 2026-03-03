@@ -1,24 +1,33 @@
 /* Lecture Resources Block */
 .lecture-resources {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 16px 20px;
-  margin: 16px 0 24px 0;
-  background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-  border: 1px solid var(--vp-c-divider);
-  font-size: 0.95rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 20px 0 32px 0;
 }
 
 .lecture-resources a {
-  color: var(--vp-c-brand-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  color: var(--vp-c-text-1);
   text-decoration: none;
-  transition: color 0.2s;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
 .lecture-resources a:hover {
-  color: var(--vp-c-brand-2);
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-bg-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(93, 110, 255, 0.15);
 }
 
 /* Hero gradient */

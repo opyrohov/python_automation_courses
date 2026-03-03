@@ -1,13 +1,11 @@
-# Lecture 28: API Testing
+# Лекція 28: API тестування
 
 Тестування API з Playwright.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_28_API_Testing/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_28_API_Testing/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_28_API_Testing/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_28_API_Testing/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_28_API_Testing/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_28_API_Testing/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## APIRequestContext

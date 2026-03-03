@@ -1,13 +1,11 @@
-# Lecture 4: Lists & Dictionaries
+# Лекція 4: Списки та словники
 
 Колекції даних в Python.
 
 <div class="lecture-resources">
-
-<a href="/python_automation_courses/presentations/Lecture_4_Lists_Dictionaries/presentation.html" target="_blank">🎬 Презентація</a> |
-[💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_4_Lists_Dictionaries/examples) |
-[📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_4_Lists_Dictionaries/exercises)
-
+  <a href="/python_automation_courses/presentations/Lecture_4_Lists_Dictionaries/presentation.html" target="_blank">🎬 Презентація</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_4_Lists_Dictionaries/examples" target="_blank">💻 Приклади</a>
+  <a href="https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_4_Lists_Dictionaries/exercises" target="_blank">📝 Вправи</a>
 </div>
 
 ## Теми лекції
