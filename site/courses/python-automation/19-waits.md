@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_19_Wait_Strategies/presentation.html) |
+<a href="/presentations/Lecture_19_Wait_Strategies/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_19_Wait_Strategies/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_19_Wait_Strategies/exercises)
 

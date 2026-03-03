@@ -4,7 +4,7 @@ Cookies та локальне сховище.
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_26_Cookies_Local_Storage/presentation.html) |
+<a href="/presentations/Lecture_26_Cookies_Local_Storage/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_26_Cookies_Local_Storage/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_26_Cookies_Local_Storage/exercises)
 

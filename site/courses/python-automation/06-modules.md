@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_6_Modules_Imports/presentation.html) |
+<a href="/presentations/Lecture_6_Modules_Imports/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_6_Modules_Imports/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_6_Modules_Imports/exercises)
 

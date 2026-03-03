@@ -4,7 +4,7 @@ CSS та XPath селектори.
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_16_Locator_Strategies_Part2/presentation.html) |
+<a href="/presentations/Lecture_16_Locator_Strategies_Part2/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_16_Locator_Strategies_Part2/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_16_Locator_Strategies_Part2/exercises)
 

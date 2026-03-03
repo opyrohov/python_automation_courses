@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_3_Loops/presentation.html) |
+<a href="/presentations/Lecture_3_Loops/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_3_Loops/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_3_Loops/exercises)
 

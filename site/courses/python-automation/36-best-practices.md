@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_36_Best_Practices_Final_Project/presentation.html) |
+<a href="/presentations/Lecture_36_Best_Practices_Final_Project/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_36_Best_Practices_Final_Project/exercises)
 

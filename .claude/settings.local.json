@@ -61,7 +61,10 @@
       "Bash(git mv:*)",
       "Bash(git rm:*)",
       "Bash(xcopy:*)",
-      "Bash(del:*)"
+      "Bash(del:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(node fix_links.js:*)"
     ],
     "deny": [],
     "ask": []

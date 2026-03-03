@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_8_Error_Handling_Debugging/presentation.html) |
+<a href="/presentations/Lecture_8_Error_Handling_Debugging/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_8_Error_Handling_Debugging/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_8_Error_Handling_Debugging/exercises)
 

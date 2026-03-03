@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_1_Python_Basics_Setup/presentation.html) |
+<a href="/presentations/Lecture_1_Python_Basics_Setup/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_1_Python_Basics_Setup/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_1_Python_Basics_Setup/exercises)
 

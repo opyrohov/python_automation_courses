@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_18_Mouse_Keyboard_Actions/presentation.html) |
+<a href="/presentations/Lecture_18_Mouse_Keyboard_Actions/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_18_Mouse_Keyboard_Actions/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_18_Mouse_Keyboard_Actions/exercises)
 

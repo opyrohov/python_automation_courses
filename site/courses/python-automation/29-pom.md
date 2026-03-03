@@ -4,7 +4,7 @@
 
 <div class="lecture-resources">
 
-[🎬 Презентація](/presentations/Lecture_29_Page_Object_Model_Part1/presentation.html) |
+<a href="/presentations/Lecture_29_Page_Object_Model_Part1/presentation.html" target="_blank">🎬 Презентація</a> |
 [💻 Приклади](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/examples) |
 [📝 Вправи](https://github.com/opyrohov/python_automation_courses/tree/main/courses/python-automation/Lecture_29_Page_Object_Model_Part1/exercises)
 
