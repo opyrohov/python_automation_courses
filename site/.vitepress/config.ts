@@ -18,7 +18,7 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/python_automation_courses/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#5d6eff' }],
   ],
 
