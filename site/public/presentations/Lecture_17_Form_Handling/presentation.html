@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 17: Form Handling</title>
+    <link rel="stylesheet" href="/presentations/assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 17</h1>
+            <div class="subtitle">Form Handling</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Fill input fields (fill vs type)</li>
+                <li>✓ Work with checkboxes and radio buttons</li>
+                <li>✓ Handle dropdown selections</li>
+                <li>✓ Upload files programmatically</li>
+                <li>✓ Submit forms and validate results</li>
+                <li>✓ Handle complex form scenarios</li>
+                <li>✓ Apply best practices for form testing</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Why Form Handling Matters -->
+        <div class="slide">
+            <h2>Why Form Handling is Critical</h2>
+            <div class="highlight-box">
+                <p>Forms are everywhere! Login, registration, checkout, search, settings - mastering form automation is essential.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Common Form Elements:</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="info-box">
+                    <h4>Text Inputs</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Text fields</li>
+                        <li>Email, password</li>
+                        <li>Numbers, dates</li>
+                        <li>Textareas</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>Selection</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Checkboxes</li>
+                        <li>Radio buttons</li>
+                        <li>Dropdowns</li>
+                        <li>Multi-select</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>Actions</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Submit buttons</li>
+                        <li>Reset buttons</li>
+                        <li>Cancel/Close</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>Special</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>File uploads</li>
+                        <li>Color pickers</li>
+                        <li>Range sliders</li>
+                        <li>Date pickers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: TEXT INPUTS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Text Input Fields</h2>
+            <p>fill() vs type()</p>
+        </div>
+
+        <!-- Slide 4: fill() Method -->
+        <div class="slide">
+            <h2>fill() - Fast Text Input</h2>
+            <div class="highlight-box">
+                <p><strong>fill()</strong> sets the input value instantly - the recommended way for most scenarios.</p>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Basic usage</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"SecurePass123"</span>)
+
+<span class="comment"># Clears existing value first</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">fill</span>(<span class="string">"new search term"</span>)
+
+<span class="comment"># Works with get_by_* locators</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Username"</span>).<span class="function">fill</span>(<span class="string">"john_doe"</span>)</div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>✅ Use fill() when:</strong> You want fast, reliable input (99% of cases)</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: type() Method -->
+        <div class="slide">
+            <h2>type() - Character-by-Character Input</h2>
+            <div class="highlight-box">
+                <p><strong>type()</strong> simulates typing each character one by one - use for special cases.</p>
+            </div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Types character by character</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">type</span>(<span class="string">"Python automation"</span>)
+
+<span class="comment"># With delay between keystrokes (in milliseconds)</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">type</span>(<span class="string">"slow typing"</span>, delay=<span class="number">100</span>)
+
+<span class="comment"># Useful for testing autocomplete</span>
+page.<span class="function">locator</span>(<span class="string">"#autocomplete"</span>).<span class="function">type</span>(<span class="string">"Pla"</span>)
+<span class="comment"># Wait for suggestions to appear</span>
+page.<span class="function">get_by_text</span>(<span class="string">"Playwright"</span>).<span class="function">click</span>()</div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>⚠️ Use type() when:</strong> Testing autocomplete, keystroke events, or rate-limited inputs</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: fill() vs type() Comparison -->
+        <div class="slide">
+            <h2>fill() vs type() - When to Use Which?</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="success-box">
+                    <h4>✅ fill() - Recommended</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li><strong>Fast</strong> - Instant value set</li>
+                        <li><strong>Reliable</strong> - Works consistently</li>
+                        <li><strong>Clears first</strong> - Replaces existing value</li>
+                        <li><strong>Use for:</strong> Login forms, registration, data entry</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 10px;">
+page.<span class="function">locator</span>(<span class="string">"#email"</span>)
+    .<span class="function">fill</span>(<span class="string">"user@example.com"</span>)</div>
+                </div>
+                <div class="info-box">
+                    <h4>⚠️ type() - Special Cases</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li><strong>Slow</strong> - Types each character</li>
+                        <li><strong>Real simulation</strong> - Triggers keystroke events</li>
+                        <li><strong>Customizable</strong> - Can add delays</li>
+                        <li><strong>Use for:</strong> Autocomplete, character validation</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 10px;">
+page.<span class="function">locator</span>(<span class="string">"#search"</span>)
+    .<span class="function">type</span>(<span class="string">"query"</span>, delay=<span class="number">50</span>)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Input Field Best Practices -->
+        <div class="slide">
+            <h2>Text Input Best Practices</h2>
+            <div class="code-block">
+<span class="comment"># ✅ GOOD: Clear and fill</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+
+<span class="comment"># ✅ GOOD: Use labels when available</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email Address"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+
+<span class="comment"># ✅ GOOD: Use placeholders</span>
+page.<span class="function">get_by_placeholder</span>(<span class="string">"Enter your email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+
+<span class="comment"># ❌ BAD: Don't use complex selectors</span>
+page.<span class="function">locator</span>(<span class="string">"div > div > input:nth-child(3)"</span>).<span class="function">fill</span>(<span class="string">"text"</span>)
+
+<span class="comment"># ✅ GOOD: Verify the value was set</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+assert page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">input_value</span>() == <span class="string">"user@example.com"</span></div>
+        </div>
+
+        <!-- PART 2: CHECKBOXES & RADIO BUTTONS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Checkboxes & Radio Buttons</h2>
+            <p>check(), uncheck(), set_checked()</p>
+        </div>
+
+        <!-- Slide 8: Checkboxes -->
+        <div class="slide">
+            <h2>Working with Checkboxes</h2>
+            <p>Three methods for checkbox interaction</p>
+
+            <div class="code-block">
+<span class="comment"># Method 1: check() - Check a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"#terms"</span>).<span class="function">check</span>()
+page.<span class="function">get_by_label</span>(<span class="string">"I accept the terms"</span>).<span class="function">check</span>()
+
+<span class="comment"># Method 2: uncheck() - Uncheck a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"#newsletter"</span>).<span class="function">uncheck</span>()
+
+<span class="comment"># Method 3: set_checked(boolean) - Set to specific state</span>
+page.<span class="function">locator</span>(<span class="string">"#remember-me"</span>).<span class="function">set_checked</span>(<span class="keyword">True</span>)
+page.<span class="function">locator</span>(<span class="string">"#remember-me"</span>).<span class="function">set_checked</span>(<span class="keyword">False</span>)
+
+<span class="comment"># Check current state</span>
+is_checked = page.<span class="function">locator</span>(<span class="string">"#terms"</span>).<span class="function">is_checked</span>()
+<span class="function">print</span>(f<span class="string">"Terms accepted: {is_checked}"</span>)</div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Tip:</strong> check() and uncheck() are idempotent - safe to call even if already in that state!</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Radio Buttons -->
+        <div class="slide">
+            <h2>Working with Radio Buttons</h2>
+            <p>Select options from a radio group</p>
+
+            <div class="code-block">
+<span class="comment"># Select by value</span>
+page.<span class="function">locator</span>(<span class="string">"input[name='</span>payment<span class="string">'][value='</span>credit-card<span class="string">']"</span>).<span class="function">check</span>()
+
+<span class="comment"># Select by label</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Credit Card"</span>).<span class="function">check</span>()
+
+<span class="comment"># Select by role</span>
+page.<span class="function">get_by_role</span>(<span class="string">"radio"</span>, name=<span class="string">"PayPal"</span>).<span class="function">check</span>()
+
+<span class="comment"># Verify selection</span>
+selected = page.<span class="function">locator</span>(<span class="string">"input[name='</span>payment<span class="string">']:checked"</span>).<span class="function">input_value</span>()
+<span class="function">print</span>(f<span class="string">"Selected payment method: {selected}"</span>)</div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>Best Practice:</strong> Use get_by_label() or get_by_role() for better accessibility!</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Checkbox & Radio Examples -->
+        <div class="slide">
+            <h2>Real-World Example</h2>
+            <h3>HTML:</h3>
+            <div class="code-block">
+&lt;input type="checkbox" id="newsletter" /&gt;
+&lt;label for="newsletter"&gt;Subscribe to newsletter&lt;/label&gt;
+
+&lt;input type="radio" name="gender" value="male" id="male" /&gt;
+&lt;label for="male"&gt;Male&lt;/label&gt;
+&lt;input type="radio" name="gender" value="female" id="female" /&gt;
+&lt;label for="female"&gt;Female&lt;/label&gt;</div>
+
+            <h3>Playwright Code:</h3>
+            <div class="code-block">
+<span class="comment"># Checkbox</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Subscribe to newsletter"</span>).<span class="function">check</span>()
+
+<span class="comment"># Radio button</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Female"</span>).<span class="function">check</span>()
+
+<span class="comment"># Verify</span>
+assert page.<span class="function">locator</span>(<span class="string">"#newsletter"</span>).<span class="function">is_checked</span>()
+assert page.<span class="function">locator</span>(<span class="string">"#female"</span>).<span class="function">is_checked</span>()</div>
+        </div>
+
+        <!-- PART 3: DROPDOWNS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Dropdown Selections</h2>
+            <p>select_option() for &lt;select&gt; elements</p>
+        </div>
+
+        <!-- Slide 11: select_option() Basics -->
+        <div class="slide">
+            <h2>select_option() - Dropdown Selection</h2>
+            <p>Multiple ways to select dropdown options</p>
+
+            <div class="code-block">
+<span class="comment"># Select by value</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(<span class="string">"us"</span>)
+
+<span class="comment"># Select by label (visible text)</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(label=<span class="string">"United States"</span>)
+
+<span class="comment"># Select by index (0-based)</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(index=<span class="number">2</span>)
+
+<span class="comment"># Select multiple options (for multi-select)</span>
+page.<span class="function">locator</span>(<span class="string">"#interests"</span>).<span class="function">select_option</span>([<span class="string">"sports"</span>, <span class="string">"music"</span>, <span class="string">"travel"</span>])</div>
+
+            <div class="highlight-box" style="margin-top: 20px;">
+                <p><strong>Recommended:</strong> Use label (visible text) for better readability and maintainability!</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Dropdown Examples -->
+        <div class="slide">
+            <h2>Dropdown Selection Examples</h2>
+            <div class="code-block">
+<span class="comment"># Example 1: Single select</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(label=<span class="string">"Canada"</span>)
+
+<span class="comment"># Example 2: Multiple select</span>
+page.<span class="function">locator</span>(<span class="string">"#skills"</span>).<span class="function">select_option</span>([
+    label=<span class="string">"Python"</span>,
+    label=<span class="string">"JavaScript"</span>,
+    label=<span class="string">"Playwright"</span>
+])
+
+<span class="comment"># Example 3: Dynamic option</span>
+<span class="comment"># Get all options first</span>
+options = page.<span class="function">locator</span>(<span class="string">"#country option"</span>).<span class="function">all_text_contents</span>()
+<span class="comment"># Select the second one</span>
+page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(index=<span class="number">1</span>)
+
+<span class="comment"># Example 4: Verify selection</span>
+selected = page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">input_value</span>()
+assert selected == <span class="string">"ca"</span>, f<span class="string">"Expected '</span>ca<span class="string">', got '</span>{selected}<span class="string">'"</span></div>
+        </div>
+
+        <!-- Slide 13: Alternative to Dropdowns -->
+        <div class="slide">
+            <h2>Custom Dropdowns (Non-Select)</h2>
+            <p>Many modern sites use div-based dropdowns instead of &lt;select&gt;</p>
+
+            <div class="code-block">
+<span class="comment"># For custom dropdowns built with divs/buttons</span>
+<span class="comment"># Step 1: Click to open dropdown</span>
+page.<span class="function">locator</span>(<span class="string">".dropdown-trigger"</span>).<span class="function">click</span>()
+
+<span class="comment"># Step 2: Click the desired option</span>
+page.<span class="function">get_by_text</span>(<span class="string">"Option 2"</span>).<span class="function">click</span>()
+
+<span class="comment"># Or with roles</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Select Country"</span>).<span class="function">click</span>()
+page.<span class="function">get_by_role</span>(<span class="string">"option"</span>, name=<span class="string">"United States"</span>).<span class="function">click</span>()</div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Note:</strong> select_option() only works with native &lt;select&gt; elements!</p>
+            </div>
+        </div>
+
+        <!-- PART 4: FILE UPLOADS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>File Uploads</h2>
+            <p>set_input_files() for file selection</p>
+        </div>
+
+        <!-- Slide 14: File Upload Basics -->
+        <div class="slide">
+            <h2>set_input_files() - Upload Files</h2>
+            <p>Programmatically select files for upload</p>
+
+            <div class="code-block">
+<span class="comment"># Upload single file</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>(<span class="string">"document.pdf"</span>)
+
+<span class="comment"># Upload multiple files</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>([
+    <span class="string">"file1.jpg"</span>,
+    <span class="string">"file2.png"</span>,
+    <span class="string">"file3.pdf"</span>
+])
+
+<span class="comment"># Upload with absolute path</span>
+<span class="keyword">import</span> os
+file_path = os.path.<span class="function">abspath</span>(<span class="string">"files/upload.pdf"</span>)
+page.<span class="function">locator</span>(<span class="string">"#file-upload"</span>).<span class="function">set_input_files</span>(file_path)
+
+<span class="comment"># Clear file selection</span>
+page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>([])</div>
+        </div>
+
+        <!-- Slide 15: File Upload with Waiting -->
+        <div class="slide">
+            <h2>File Upload Best Practices</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+<span class="keyword">import</span> os
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/upload"</span>)
+
+<span class="comment">    # Upload file</span>
+    file_path = os.path.<span class="function">abspath</span>(<span class="string">"document.pdf"</span>)
+    page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>(file_path)
+
+<span class="comment">    # Click upload button</span>
+    page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Upload"</span>).<span class="function">click</span>()
+
+<span class="comment">    # Wait for success message</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">".upload-success"</span>)
+
+<span class="comment">    # Verify</span>
+    success_msg = page.<span class="function">locator</span>(<span class="string">".upload-success"</span>).<span class="function">text_content</span>()
+    assert <span class="string">"uploaded successfully"</span> <span class="keyword">in</span> success_msg.<span class="function">lower</span>()
+
+    browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- PART 5: FORM SUBMISSION -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Form Submission & Validation</h2>
+            <p>Submit forms and verify results</p>
+        </div>
+
+        <!-- Slide 16: Submitting Forms -->
+        <div class="slide">
+            <h2>Form Submission Methods</h2>
+            <div class="code-block">
+<span class="comment"># Method 1: Click submit button (recommended)</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
+
+<span class="comment"># Method 2: Press Enter in input field</span>
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">locator</span>(<span class="string">"#email"</span>).<span class="function">press</span>(<span class="string">"Enter"</span>)
+
+<span class="comment"># Method 3: Call form.submit() (JavaScript)</span>
+page.<span class="function">locator</span>(<span class="string">"form#login"</span>).<span class="function">evaluate</span>(<span class="string">"form => form.submit()"</span>)
+
+<span class="comment"># Method 4: Use keyboard shortcut</span>
+page.keyboard.<span class="function">press</span>(<span class="string">"Enter"</span>)</div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>Best Practice:</strong> Click the submit button - it's most realistic and tests button functionality!</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Form Validation -->
+        <div class="slide">
+            <h2>Validating Form Submission</h2>
+            <div class="code-block">
+<span class="comment"># Fill form</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>).<span class="function">fill</span>(<span class="string">"user@example.com"</span>)
+page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"SecurePass123"</span>)
+
+<span class="comment"># Submit</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Login"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify success (multiple ways)</span>
+
+<span class="comment"># 1. Check URL changed</span>
+page.<span class="function">wait_for_url</span>(<span class="string">"**/dashboard"</span>)
+assert <span class="string">"/dashboard"</span> <span class="keyword">in</span> page.url
+
+<span class="comment"># 2. Check for success element</span>
+success_banner = page.<span class="function">locator</span>(<span class="string">".success-message"</span>)
+assert success_banner.<span class="function">is_visible</span>()
+
+<span class="comment"># 3. Check text content</span>
+welcome_msg = page.<span class="function">locator</span>(<span class="string">"h1"</span>).<span class="function">text_content</span>()
+assert <span class="string">"Welcome"</span> <span class="keyword">in</span> welcome_msg
+
+<span class="comment"># 4. Verify error is NOT present</span>
+assert <span class="keyword">not</span> page.<span class="function">locator</span>(<span class="string">".error-message"</span>).<span class="function">is_visible</span>()</div>
+        </div>
+
+        <!-- Slide 18: Complete Form Example -->
+        <div class="slide">
+            <h2>Complete Registration Form Example</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/register"</span>)
+
+<span class="comment">    # Text inputs</span>
+    page.<span class="function">get_by_label</span>(<span class="string">"Full Name"</span>).<span class="function">fill</span>(<span class="string">"John Doe"</span>)
+    page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>).<span class="function">fill</span>(<span class="string">"john@example.com"</span>)
+    page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"SecurePass123"</span>)
+
+<span class="comment">    # Checkbox</span>
+    page.<span class="function">get_by_label</span>(<span class="string">"I accept the terms"</span>).<span class="function">check</span>()
+
+<span class="comment">    # Radio button</span>
+    page.<span class="function">get_by_label</span>(<span class="string">"Male"</span>).<span class="function">check</span>()
+
+<span class="comment">    # Dropdown</span>
+    page.<span class="function">locator</span>(<span class="string">"#country"</span>).<span class="function">select_option</span>(label=<span class="string">"United States"</span>)
+
+<span class="comment">    # File upload</span>
+    page.<span class="function">locator</span>(<span class="string">"input[type='</span>file<span class="string">']"</span>).<span class="function">set_input_files</span>(<span class="string">"avatar.jpg"</span>)
+
+<span class="comment">    # Submit</span>
+    page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Register"</span>).<span class="function">click</span>()
+
+<span class="comment">    # Validate</span>
+    page.<span class="function">wait_for_selector</span>(<span class="string">".registration-success"</span>)
+    assert page.<span class="function">locator</span>(<span class="string">".registration-success"</span>).<span class="function">is_visible</span>()
+
+    browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Slide 19: Error Handling -->
+        <div class="slide">
+            <h2>Testing Form Validation Errors</h2>
+            <div class="code-block">
+<span class="comment"># Test 1: Submit empty form</span>
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify validation errors appear</span>
+email_error = page.<span class="function">locator</span>(<span class="string">".error-email"</span>)
+assert email_error.<span class="function">is_visible</span>()
+assert <span class="string">"required"</span> <span class="keyword">in</span> email_error.<span class="function">text_content</span>().<span class="function">lower</span>()
+
+<span class="comment"># Test 2: Invalid email format</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Email"</span>).<span class="function">fill</span>(<span class="string">"not-an-email"</span>)
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify email validation error</span>
+assert <span class="string">"invalid email"</span> <span class="keyword">in</span> page.<span class="function">locator</span>(<span class="string">".error-email"</span>).<span class="function">text_content</span>().<span class="function">lower</span>()
+
+<span class="comment"># Test 3: Password too short</span>
+page.<span class="function">get_by_label</span>(<span class="string">"Password"</span>).<span class="function">fill</span>(<span class="string">"123"</span>)
+page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Submit"</span>).<span class="function">click</span>()
+
+<span class="comment"># Verify password error</span>
+assert <span class="string">"at least 8 characters"</span> <span class="keyword">in</span> page.<span class="function">locator</span>(<span class="string">".error-password"</span>).<span class="function">text_content</span>().<span class="function">lower</span>()</div>
+        </div>
+
+        <!-- Slide 20: Best Practices -->
+        <div class="slide">
+            <h2>Form Handling Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use fill() for speed</li>
+                        <li>Use get_by_label() when possible</li>
+                        <li>Verify form submission</li>
+                        <li>Test both success and error cases</li>
+                        <li>Wait for elements to be ready</li>
+                        <li>Clear forms between tests</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use type() unless necessary</li>
+                        <li>Rely on brittle selectors</li>
+                        <li>Skip validation checks</li>
+                        <li>Forget to wait for responses</li>
+                        <li>Test only happy path</li>
+                        <li>Hardcode file paths</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div class="highlight-box">
+                <h3>Key Takeaways:</h3>
+            </div>
+            <ul style="margin-top: 20px; font-size: 1.05em; line-height: 1.8;">
+                <li>✅ Use <strong>fill()</strong> for fast text input (most cases)</li>
+                <li>✅ Use <strong>type()</strong> only for autocomplete or special cases</li>
+                <li>✅ Use <strong>check()/uncheck()</strong> for checkboxes</li>
+                <li>✅ Use <strong>select_option()</strong> for dropdowns</li>
+                <li>✅ Use <strong>set_input_files()</strong> for file uploads</li>
+                <li>✅ Always <strong>validate</strong> form submission results</li>
+                <li>✅ Test both <strong>success and error</strong> scenarios</li>
+                <li>✅ Use modern locators (<strong>get_by_label</strong>, <strong>get_by_role</strong>)</li>
+            </ul>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Advanced Interactions (Hover, Drag & Drop)</li>
+                    <li>Waiting Strategies & Timeouts</li>
+                    <li>Assertions & Expectations</li>
+                    <li>Screenshots & Videos</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises in the <code>exercises/</code> folder</li>
+                <li>Review the examples in the <code>examples/</code> folder</li>
+                <li>Read the detailed README.md</li>
+                <li>Practice on real registration/login forms</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Great Work!</h1>
+            <div class="subtitle">You've mastered form handling!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Practice with different forms to build confidence</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script src="/presentations/assets/presentation/js/presentation.js"></script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 24: Screenshots & Videos</title>
+    <link rel="stylesheet" href="/presentations/assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">24</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 24</h1>
+            <div class="subtitle">Screenshots & Videos</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Take screenshots with page.screenshot()</li>
+                <li>✓ Capture full page vs element screenshots</li>
+                <li>✓ Record videos of test execution</li>
+                <li>✓ Configure screenshot options and formats</li>
+                <li>✓ Manage test artifacts effectively</li>
+                <li>✓ Implement screenshot best practices</li>
+            </ul>
+        </div>
+
+        <!-- Why Screenshots and Videos -->
+        <div class="slide">
+            <h2>Why Screenshots & Videos?</h2>
+            <div class="highlight-box">
+                <p>Visual artifacts help debug failures, document test runs, and create evidence for CI/CD pipelines.</p>
+            </div>
+            <h3 style="margin-top: 30px;">Common Use Cases:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🐛 **Debugging** - See exactly what happened during failure</li>
+                <li>📋 **Documentation** - Visual proof of test execution</li>
+                <li>🔍 **Visual Testing** - Compare screenshots for regressions</li>
+                <li>📊 **Reports** - Attach artifacts to test reports</li>
+                <li>🎥 **Video Evidence** - Record entire test flow</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: SCREENSHOTS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Taking Screenshots</h2>
+            <p>page.screenshot() basics</p>
+        </div>
+
+        <!-- Basic Screenshot -->
+        <div class="slide">
+            <h2>Basic Screenshot</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>()
+    page = browser.<span class="function">new_page</span>()
+
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+
+    <span class="comment"># Take screenshot and save to file</span>
+    page.<span class="function">screenshot</span>(path=<span class="string">"screenshot.png"</span>)
+
+    browser.<span class="function">close</span>()</div>
+            <div class="success-box" style="margin-top: 15px;">
+                <p>✅ Simple one-liner to capture the visible viewport!</p>
+            </div>
+        </div>
+
+        <!-- Screenshot as Bytes -->
+        <div class="slide">
+            <h2>Screenshot as Bytes</h2>
+            <div class="code-block">
+<span class="comment"># Get screenshot as bytes (no file saved)</span>
+screenshot_bytes = page.<span class="function">screenshot</span>()
+
+<span class="comment"># Use bytes for comparison, upload, etc.</span>
+<span class="function">print</span>(f<span class="string">"Screenshot size: {len(screenshot_bytes)} bytes"</span>)
+
+<span class="comment"># Save bytes manually</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"manual_save.png"</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> f:
+    f.<span class="function">write</span>(screenshot_bytes)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>Useful for in-memory processing, comparisons, or custom storage</p>
+            </div>
+        </div>
+
+        <!-- Full Page Screenshot -->
+        <div class="slide">
+            <h2>Full Page vs Viewport</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="info-box">
+                    <h4>Viewport Only (default)</h4>
+                    <div class="code-block" style="font-size: 0.85em;">
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"viewport.png"</span>
+)</div>
+                    <p style="margin-top: 10px;">Only visible area</p>
+                </div>
+                <div class="success-box">
+                    <h4>Full Page</h4>
+                    <div class="code-block" style="font-size: 0.85em;">
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"full.png"</span>,
+    full_page=<span class="keyword">True</span>
+)</div>
+                    <p style="margin-top: 10px;">Entire scrollable content</p>
+                </div>
+            </div>
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Note:</strong> Full page screenshots scroll the page automatically</p>
+            </div>
+        </div>
+
+        <!-- Element Screenshot -->
+        <div class="slide">
+            <h2>Element Screenshot</h2>
+            <div class="code-block">
+<span class="comment"># Screenshot of specific element</span>
+header = page.<span class="function">locator</span>(<span class="string">"header"</span>)
+header.<span class="function">screenshot</span>(path=<span class="string">"header.png"</span>)
+
+<span class="comment"># Any locator works</span>
+button = page.<span class="function">locator</span>(<span class="string">"#submit-btn"</span>)
+button.<span class="function">screenshot</span>(path=<span class="string">"button.png"</span>)
+
+<span class="comment"># Complex selectors</span>
+form = page.<span class="function">locator</span>(<span class="string">"form.login-form"</span>)
+form.<span class="function">screenshot</span>(path=<span class="string">"login_form.png"</span>)
+
+<span class="comment"># Table screenshot</span>
+table = page.<span class="function">locator</span>(<span class="string">"#data-table"</span>)
+table.<span class="function">screenshot</span>(path=<span class="string">"table.png"</span>)</div>
+        </div>
+
+        <!-- Element Requirements -->
+        <div class="slide">
+            <h2>Element Screenshot Requirements</h2>
+            <ul style="font-size: 1.2em; margin-bottom: 20px;">
+                <li>Element must be <strong>visible</strong></li>
+                <li>Element must be <strong>in viewport</strong> (or will scroll)</li>
+                <li>Element must have <strong>non-zero size</strong></li>
+            </ul>
+            <div class="code-block">
+<span class="comment"># Ensure element is visible first</span>
+element = page.<span class="function">locator</span>(<span class="string">"#my-element"</span>)
+element.<span class="function">wait_for</span>(state=<span class="string">"visible"</span>)
+element.<span class="function">screenshot</span>(path=<span class="string">"element.png"</span>)</div>
+        </div>
+
+        <!-- Clipping Region -->
+        <div class="slide">
+            <h2>Clipping Specific Region</h2>
+            <div class="code-block">
+<span class="comment"># Capture custom rectangular region</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"clipped.png"</span>,
+    clip={
+        <span class="string">"x"</span>: <span class="number">100</span>,      <span class="comment"># Left offset</span>
+        <span class="string">"y"</span>: <span class="number">50</span>,       <span class="comment"># Top offset</span>
+        <span class="string">"width"</span>: <span class="number">400</span>,  <span class="comment"># Width of region</span>
+        <span class="string">"height"</span>: <span class="number">300</span> <span class="comment"># Height of region</span>
+    }
+)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <p>Useful for capturing specific areas without element selection</p>
+            </div>
+        </div>
+
+        <!-- PART 2: OPTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Screenshot Options</h2>
+            <p>Format, quality, animations</p>
+        </div>
+
+        <!-- Screenshot Format -->
+        <div class="slide">
+            <h2>Screenshot Format</h2>
+            <div class="code-block">
+<span class="comment"># PNG format (default) - lossless</span>
+page.<span class="function">screenshot</span>(path=<span class="string">"image.png"</span>, type=<span class="string">"png"</span>)
+
+<span class="comment"># JPEG format - smaller file size</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"image.jpg"</span>,
+    type=<span class="string">"jpeg"</span>,
+    quality=<span class="number">80</span>  <span class="comment"># 0-100, only for JPEG</span>
+)</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="success-box">
+                    <p><strong>PNG:</strong> Better quality, larger files, lossless</p>
+                </div>
+                <div class="warning-box">
+                    <p><strong>JPEG:</strong> Smaller files, lossy compression</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animations -->
+        <div class="slide">
+            <h2>Handling Animations</h2>
+            <div class="code-block">
+<span class="comment"># Disable CSS animations for consistent screenshots</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"stable.png"</span>,
+    animations=<span class="string">"disabled"</span>
+)
+
+<span class="comment"># Allow animations (default)</span>
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"with_animations.png"</span>,
+    animations=<span class="string">"allow"</span>
+)</div>
+            <div class="highlight-box" style="margin-top: 15px;">
+                <p><strong>Best Practice:</strong> Disable animations for reliable visual testing!</p>
+            </div>
+        </div>
+
+        <!-- More Options -->
+        <div class="slide">
+            <h2>More Screenshot Options</h2>
+            <div class="code-block">
+page.<span class="function">screenshot</span>(
+    path=<span class="string">"screenshot.png"</span>,
+    full_page=<span class="keyword">True</span>,              <span class="comment"># Capture full scrollable page</span>
+    type=<span class="string">"png"</span>,                   <span class="comment"># "png" or "jpeg"</span>
+    omit_background=<span class="keyword">True</span>,        <span class="comment"># Transparent background</span>
+    timeout=<span class="number">30000</span>,               <span class="comment"># Timeout in ms</span>
+    animations=<span class="string">"disabled"</span>,       <span class="comment"># Disable CSS animations</span>
+    scale=<span class="string">"css"</span>                  <span class="comment"># "css" or "device"</span>
+)</div>
+            <div class="info-box" style="margin-top: 15px;">
+                <table style="width: 100%; font-size: 0.9em;">
+                    <tr><th>Option</th><th>Description</th></tr>
+                    <tr><td>omit_background</td><td>Transparent background (PNG only)</td></tr>
+                    <tr><td>scale</td><td>"device" for higher resolution on HiDPI</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- PART 3: VIDEO -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Video Recording</h2>
+            <p>Recording test execution</p>
+        </div>
+
+        <!-- Video Recording Intro -->
+        <div class="slide">
+            <h2>Enabling Video Recording</h2>
+            <div class="code-block">
+<span class="comment"># Enable video when creating context</span>
+context = browser.<span class="function">new_context</span>(
+    record_video_dir=<span class="string">"videos/"</span>
+)
+
+page = context.<span class="function">new_page</span>()
+
+<span class="comment"># ... perform test actions ...</span>
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+page.<span class="function">click</span>(<span class="string">"#button"</span>)
+
+<span class="comment"># IMPORTANT: Close context to save video</span>
+context.<span class="function">close</span>()</div>
+            <div class="warning-box" style="margin-top: 15px;">
+                <p><strong>Important:</strong> Video is saved only when context closes!</p>
+            </div>
+        </div>
+
+        <!-- Video Configuration -->
+        <div class="slide">
+            <h2>Video Configuration</h2>
+            <div class="code-block">
+context = browser.<span class="function">new_context</span>(
+    record_video_dir=<span class="string">"videos/"</span>,
+    record_video_size={
+        <span class="string">"width"</span>: <span class="number">1280</span>,
+        <span class="string">"height"</span>: <span class="number">720</span>
+    }
+)
+
+page = context.<span class="function">new_page</span>()
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+
+<span class="comment"># Perform test actions</span>
+page.<span class="function">locator</span>(<span class="string">"#login"</span>).<span class="function">click</span>()
+page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"user"</span>)
+
+<span class="comment"># Close to save video</span>
+context.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Getting Video Path -->
+        <div class="slide">
+            <h2>Saving Video with Custom Name</h2>
+            <div class="code-block">
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+context = browser.<span class="function">new_context</span>(
+    record_video_dir=<span class="string">"videos/"</span>
+)
+page = context.<span class="function">new_page</span>()
+
+page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+<span class="comment"># ... actions ...</span>
+
+<span class="comment"># Get video path</span>
+video_path = page.video.<span class="function">path</span>()
+<span class="function">print</span>(f<span class="string">"Video at: {video_path}"</span>)
+
+<span class="comment"># Save with custom name</span>
+timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d_%H%M%S"</span>)
+page.video.<span class="function">save_as</span>(f<span class="string">"videos/test_{timestamp}.webm"</span>)
+
+context.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- PART 4: ARTIFACTS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Artifacts Management</h2>
+            <p>Organizing and saving</p>
+        </div>
+
+        <!-- Organizing Artifacts -->
+        <div class="slide">
+            <h2>Organizing Artifacts</h2>
+            <div class="code-block">
+<span class="keyword">import</span> os
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">def</span> <span class="function">create_artifact_dirs</span>():
+    timestamp = datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y%m%d_%H%M%S"</span>)
+    base_dir = f<span class="string">"artifacts/{timestamp}"</span>
+
+    os.<span class="function">makedirs</span>(f<span class="string">"{base_dir}/screenshots"</span>, exist_ok=<span class="keyword">True</span>)
+    os.<span class="function">makedirs</span>(f<span class="string">"{base_dir}/videos"</span>, exist_ok=<span class="keyword">True</span>)
+
+    <span class="keyword">return</span> base_dir
+
+artifact_dir = <span class="function">create_artifact_dirs</span>()
+page.<span class="function">screenshot</span>(path=f<span class="string">"{artifact_dir}/screenshots/step1.png"</span>)</div>
+        </div>
+
+        <!-- Screenshot on Failure -->
+        <div class="slide">
+            <h2>Screenshot on Failure</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">run_test</span>():
+    <span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+        browser = p.chromium.<span class="function">launch</span>()
+        page = browser.<span class="function">new_page</span>()
+
+        <span class="keyword">try</span>:
+            page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+            page.<span class="function">locator</span>(<span class="string">"#missing"</span>).<span class="function">click</span>(timeout=<span class="number">5000</span>)
+        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+            <span class="comment"># Capture screenshot on failure</span>
+            page.<span class="function">screenshot</span>(path=<span class="string">"failure.png"</span>)
+            <span class="function">print</span>(f<span class="string">"Test failed: {e}"</span>)
+            <span class="keyword">raise</span>
+        <span class="keyword">finally</span>:
+            browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Capture Flow -->
+        <div class="slide">
+            <h2>Capturing Test Flow</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">capture_login_flow</span>(page, output_dir):
+    <span class="comment"># Step 1: Login page</span>
+    page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+    page.<span class="function">screenshot</span>(path=f<span class="string">"{output_dir}/01_login_page.png"</span>)
+
+    <span class="comment"># Step 2: Fill form</span>
+    page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"user"</span>)
+    page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"pass"</span>)
+    page.<span class="function">screenshot</span>(path=f<span class="string">"{output_dir}/02_form_filled.png"</span>)
+
+    <span class="comment"># Step 3: Submit</span>
+    page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+    page.<span class="function">wait_for_load_state</span>()
+    page.<span class="function">screenshot</span>(path=f<span class="string">"{output_dir}/03_after_login.png"</span>)</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>📸 Screenshots</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Capture on test failure</li>
+                        <li>Use meaningful file names</li>
+                        <li>Disable animations</li>
+                        <li>Set consistent viewport size</li>
+                        <li>Wait for page to load first</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h4>🎥 Videos</h4>
+                    <ul style="font-size: 0.9em;">
+                        <li>Enable only when debugging</li>
+                        <li>Configure reasonable size</li>
+                        <li>Clean up after successful tests</li>
+                        <li>Save failed test videos</li>
+                        <li>Always close context!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Issues -->
+        <div class="slide">
+            <h2>Common Issues</h2>
+            <div class="info-box">
+                <table style="width: 100%; font-size: 1em;">
+                    <tr>
+                        <th>Issue</th>
+                        <th>Solution</th>
+                    </tr>
+                    <tr>
+                        <td>Blank screenshot</td>
+                        <td>Wait for page to load first</td>
+                    </tr>
+                    <tr>
+                        <td>Video not saved</td>
+                        <td>Call context.close()</td>
+                    </tr>
+                    <tr>
+                        <td>Flaky visual tests</td>
+                        <td>Use animations="disabled"</td>
+                    </tr>
+                    <tr>
+                        <td>Large file sizes</td>
+                        <td>Use JPEG or clip region</td>
+                    </tr>
+                    <tr>
+                        <td>Element not captured</td>
+                        <td>Wait for element visibility</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary</h2>
+            <div style="font-size: 0.95em; line-height: 1.8;">
+                <p><strong>page.screenshot()</strong> - capture page or viewport</p>
+                <p><strong>locator.screenshot()</strong> - capture specific element</p>
+                <p><strong>full_page=True</strong> - entire scrollable page</p>
+                <p><strong>record_video_dir</strong> - enable video recording</p>
+                <p><strong>animations="disabled"</strong> - consistent captures</p>
+                <p><strong>context.close()</strong> - required to save video!</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Authentication & Storage State</li>
+                    <li>Cookies & Local Storage</li>
+                    <li>Network Interception</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises</li>
+                <li>Capture screenshots during login flow</li>
+                <li>Record a test video</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Screenshots & Videos!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Now you can capture visual evidence of your tests</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="/presentations/assets/presentation/js/presentation.js"></script>
+</body>
+</html>

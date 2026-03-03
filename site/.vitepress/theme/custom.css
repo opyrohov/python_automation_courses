@@ -1,0 +1,69 @@
+/* Lecture Resources Block */
+.lecture-resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 20px;
+  margin: 16px 0 24px 0;
+  background: var(--vp-c-bg-soft);
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  font-size: 0.95rem;
+}
+
+.lecture-resources a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.lecture-resources a:hover {
+  color: var(--vp-c-brand-2);
+}
+
+/* Hero gradient */
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #5d6eff 30%, #a855f7);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #5d6eff50 50%, #a855f750 50%);
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+/* Custom brand colors */
+:root {
+  --vp-c-brand-1: #5d6eff;
+  --vp-c-brand-2: #747bff;
+  --vp-c-brand-3: #535bf2;
+}
+
+.dark {
+  --vp-c-brand-1: #747bff;
+  --vp-c-brand-2: #8b92ff;
+  --vp-c-brand-3: #5d6eff;
+}
+
+/* Cheatsheet grid */
+.cheatsheet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.cheatsheet-grid h3 {
+  margin: 0;
+  padding: 16px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider);
+  transition: border-color 0.2s;
+}
+
+.cheatsheet-grid h3:hover {
+  border-color: var(--vp-c-brand-1);
+}
+
+.cheatsheet-grid h3 a {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}

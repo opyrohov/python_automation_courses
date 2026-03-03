@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 20: Assertions in Playwright</title>
+    <link rel="stylesheet" href="/presentations/assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">55</span>
+        </div>
+
+        <!-- Title Slide -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 20</h1>
+            <div class="subtitle">Assertions in Playwright</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Use expect() for powerful assertions</li>
+                <li>✓ Check element visibility states</li>
+                <li>✓ Verify text content accurately</li>
+                <li>✓ Assert element attributes</li>
+                <li>✓ Count elements on the page</li>
+                <li>✓ Validate URLs and page titles</li>
+                <li>✓ Combine multiple assertions</li>
+            </ul>
+        </div>
+
+        <!-- Why Assertions Matter -->
+        <div class="slide">
+            <h2>Why Assertions Matter</h2>
+            <div class="highlight-box">
+                <p>Assertions are the verification layer of your tests - they tell you if your application is working correctly.</p>
+            </div>
+            <h3 style="margin-top: 30px;">What Makes Playwright Assertions Special:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🔄 **Auto-waiting** - Retries until condition is met</li>
+                <li>⏱️ **Built-in timeout** - No manual waits needed</li>
+                <li>📝 **Readable syntax** - Clear and expressive</li>
+                <li>🎯 **Precise errors** - Helpful failure messages</li>
+                <li>✅ **Async support** - Works with async operations</li>
+            </ul>
+        </div>
+
+        <!-- PART 1: INTRODUCTION TO EXPECT -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Introduction to expect()</h2>
+            <p>The foundation of assertions</p>
+        </div>
+
+        <div class="slide">
+            <h2>The expect() Function</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> expect
+
+<span class="comment"># Basic structure</span>
+<span class="function">expect</span>(locator).<span class="function">assertion</span>()
+
+<span class="comment"># Examples</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#button"</span>)).<span class="function">to_be_visible</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#title"</span>)).<span class="function">to_have_text</span>(<span class="string">"Welcome"</span>)
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"https://example.com/dashboard"</span>)</div>
+            <div class="success-box" style="margin-top: 20px;">
+                <p>✅ expect() automatically waits and retries until condition is met or timeout!</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>How expect() Works</h2>
+            <div style="font-size: 0.95em;">
+                <div class="info-box">
+                    <h4>1. Initial Check</h4>
+                    <p>Evaluates the assertion immediately</p>
+                </div>
+                <div class="info-box">
+                    <h4>2. Auto-Retry</h4>
+                    <p>If false, waits and retries automatically</p>
+                </div>
+                <div class="info-box">
+                    <h4>3. Success or Timeout</h4>
+                    <p>Either passes when true or fails after timeout (default: 5 seconds)</p>
+                </div>
+            </div>
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># This will retry for up to 5 seconds</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#message"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Custom timeout</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#slow-element"</span>)).<span class="function">to_be_visible</span>(timeout=<span class="number">10000</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Positive vs Negative Assertions</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>Positive Assertions</h4>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># Element should be visible</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#btn"</span>))
+    .<span class="function">to_be_visible</span>()
+
+<span class="comment"># Should have text</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"h1"</span>))
+    .<span class="function">to_have_text</span>(<span class="string">"Title"</span>)
+
+<span class="comment"># Should be enabled</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#input"</span>))
+    .<span class="function">to_be_enabled</span>()
+                    </div>
+                </div>
+                <div class="info-box">
+                    <h4>Negative Assertions</h4>
+                    <div class="code-block" style="font-size: 0.85em; margin-top: 10px;">
+<span class="comment"># Element should NOT be visible</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#btn"</span>))
+    .<span class="function">not_to_be_visible</span>()
+
+<span class="comment"># Should NOT have text</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"h1"</span>))
+    .<span class="function">not_to_have_text</span>(<span class="string">"Error"</span>)
+
+<span class="comment"># Should be disabled</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#input"</span>))
+    .<span class="function">to_be_disabled</span>()
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2: VISIBILITY ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Visibility Assertions</h2>
+            <p>Check if elements are visible or hidden</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_be_visible() & to_be_hidden()</h2>
+            <div class="code-block">
+<span class="comment"># Check element is visible</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#welcome-message"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Check element is hidden</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#error-message"</span>)).<span class="function">to_be_hidden</span>()
+
+<span class="comment"># With custom timeout</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#loading"</span>)).<span class="function">to_be_hidden</span>(timeout=<span class="number">10000</span>)
+
+<span class="comment"># Negative assertions</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#modal"</span>)).<span class="function">not_to_be_visible</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#success"</span>)).<span class="function">not_to_be_hidden</span>()</div>
+        </div>
+
+        <div class="slide">
+            <h2>More Visibility Assertions</h2>
+            <div class="code-block">
+<span class="comment"># Check element is attached to DOM</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#element"</span>)).<span class="function">to_be_attached</span>()
+
+<span class="comment"># Check element is in viewport (visible in current scroll position)</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#footer"</span>)).<span class="function">to_be_in_viewport</span>()
+
+<span class="comment"># Check element is enabled</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#submit-btn"</span>)).<span class="function">to_be_enabled</span>()
+
+<span class="comment"># Check element is disabled</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#disabled-input"</span>)).<span class="function">to_be_disabled</span>()
+
+<span class="comment"># Check element is editable</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#text-field"</span>)).<span class="function">to_be_editable</span>()
+
+<span class="comment"># Check checkbox is checked</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#terms"</span>)).<span class="function">to_be_checked</span>()</div>
+        </div>
+
+        <!-- PART 3: TEXT ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Text Assertions</h2>
+            <p>Verify element text content</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_text() - Exact Match</h2>
+            <div class="code-block">
+<span class="comment"># Exact text match (including whitespace normalization)</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"h1"</span>)).<span class="function">to_have_text</span>(<span class="string">"Welcome to Dashboard"</span>)
+
+<span class="comment"># Multiple elements with text array</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"li"</span>)).<span class="function">to_have_text</span>([
+    <span class="string">"Item 1"</span>,
+    <span class="string">"Item 2"</span>,
+    <span class="string">"Item 3"</span>
+])
+
+<span class="comment"># Regex pattern</span>
+<span class="keyword">import</span> re
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#price"</span>)).<span class="function">to_have_text</span>(re.<span class="function">compile</span>(r<span class="string">"\$\d+\.\d{2}"</span>))
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#error"</span>)).<span class="function">not_to_have_text</span>(<span class="string">"Failed"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>to_contain_text() - Partial Match</h2>
+            <div class="code-block">
+<span class="comment"># Check if text contains substring</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".message"</span>)).<span class="function">to_contain_text</span>(<span class="string">"Success"</span>)
+
+<span class="comment"># Case-sensitive by default</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"p"</span>)).<span class="function">to_contain_text</span>(<span class="string">"Hello"</span>)
+
+<span class="comment"># Using regex for flexible matching</span>
+<span class="keyword">import</span> re
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".status"</span>)).<span class="function">to_contain_text</span>(re.<span class="function">compile</span>(r<span class="string">"complete"</span>, re.IGNORECASE))
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".notification"</span>)).<span class="function">not_to_contain_text</span>(<span class="string">"Error"</span>)</div>
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Difference:</strong> to_have_text() requires exact match, to_contain_text() allows partial match</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_value() - Input Values</h2>
+            <div class="code-block">
+<span class="comment"># Check input field value</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#username"</span>)).<span class="function">to_have_value</span>(<span class="string">"john.doe"</span>)
+
+<span class="comment"># Check textarea value</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#description"</span>)).<span class="function">to_have_value</span>(<span class="string">"Product description"</span>)
+
+<span class="comment"># Regex pattern</span>
+<span class="keyword">import</span> re
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#email"</span>)).<span class="function">to_have_value</span>(re.<span class="function">compile</span>(r<span class="string">".*@example\.com"</span>))
+
+<span class="comment"># Empty value</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#optional-field"</span>)).<span class="function">to_have_value</span>(<span class="string">""</span>)
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#password"</span>)).<span class="function">not_to_have_value</span>(<span class="string">""</span>)</div>
+        </div>
+
+        <!-- PART 4: ATTRIBUTE ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Attribute Assertions</h2>
+            <p>Verify element attributes</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_attribute() - Check Attributes</h2>
+            <div class="code-block">
+<span class="comment"># Check attribute exists and has specific value</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#link"</span>)).<span class="function">to_have_attribute</span>(<span class="string">"href"</span>, <span class="string">"/dashboard"</span>)
+
+<span class="comment"># Check attribute exists (any value)</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#input"</span>)).<span class="function">to_have_attribute</span>(<span class="string">"required"</span>)
+
+<span class="comment"># Check class attribute</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#button"</span>)).<span class="function">to_have_attribute</span>(<span class="string">"class"</span>, <span class="string">"btn btn-primary"</span>)
+
+<span class="comment"># Using regex</span>
+<span class="keyword">import</span> re
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"img"</span>)).<span class="function">to_have_attribute</span>(
+    <span class="string">"src"</span>,
+    re.<span class="function">compile</span>(r<span class="string">".*\.png$"</span>)
+)
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#link"</span>)).<span class="function">not_to_have_attribute</span>(<span class="string">"target"</span>, <span class="string">"_blank"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_class() - Class Assertions</h2>
+            <div class="code-block">
+<span class="comment"># Check element has specific class</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#alert"</span>)).<span class="function">to_have_class</span>(<span class="string">"alert-success"</span>)
+
+<span class="comment"># Check for class containing pattern</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#button"</span>)).<span class="function">to_have_class</span>(re.<span class="function">compile</span>(r<span class="string">"btn-.*"</span>))
+
+<span class="comment"># Check for multiple classes (array)</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#card"</span>)).<span class="function">to_have_class</span>([<span class="string">"card"</span>, <span class="string">"shadow"</span>, <span class="string">"mb-3"</span>])
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#element"</span>)).<span class="function">not_to_have_class</span>(<span class="string">"hidden"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_id() & to_have_css()</h2>
+            <div class="code-block">
+<span class="comment"># Check element ID</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"div"</span>).first).<span class="function">to_have_id</span>(<span class="string">"main-container"</span>)
+
+<span class="comment"># Check CSS property</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#button"</span>)).<span class="function">to_have_css</span>(<span class="string">"background-color"</span>, <span class="string">"rgb(0, 123, 255)"</span>)
+
+<span class="comment"># Check multiple CSS properties</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"h1"</span>)).<span class="function">to_have_css</span>(<span class="string">"font-size"</span>, <span class="string">"32px"</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"h1"</span>)).<span class="function">to_have_css</span>(<span class="string">"font-weight"</span>, <span class="string">"700"</span>)
+
+<span class="comment"># Color can be in different formats</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#error"</span>)).<span class="function">to_have_css</span>(<span class="string">"color"</span>, <span class="string">"rgb(220, 53, 69)"</span>)</div>
+        </div>
+
+        <!-- PART 5: COUNT ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Count Assertions</h2>
+            <p>Verify number of elements</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_count() - Element Count</h2>
+            <div class="code-block">
+<span class="comment"># Check exact count</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".product-card"</span>)).<span class="function">to_have_count</span>(<span class="number">12</span>)
+
+<span class="comment"># Check no elements</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".error-message"</span>)).<span class="function">to_have_count</span>(<span class="number">0</span>)
+
+<span class="comment"># Check at least one element</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"li"</span>)).<span class="function">to_have_count</span>(<span class="number">5</span>)
+
+<span class="comment"># With custom timeout (waiting for elements to appear)</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".search-result"</span>)).<span class="function">to_have_count</span>(<span class="number">10</span>, timeout=<span class="number">10000</span>)
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".alert"</span>)).<span class="function">not_to_have_count</span>(<span class="number">0</span>)  <span class="comment"># At least one alert exists</span></div>
+        </div>
+
+        <div class="slide">
+            <h2>Practical Count Examples</h2>
+            <div class="code-block">
+<span class="comment"># Shopping cart items</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".cart-item"</span>)).<span class="function">to_have_count</span>(<span class="number">3</span>)
+
+<span class="comment"># Table rows (excluding header)</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"tbody tr"</span>)).<span class="function">to_have_count</span>(<span class="number">20</span>)
+
+<span class="comment"># Navigation menu items</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"nav a"</span>)).<span class="function">to_have_count</span>(<span class="number">5</span>)
+
+<span class="comment"># After filtering</span>
+page.<span class="function">locator</span>(<span class="string">"#search"</span>).<span class="function">fill</span>(<span class="string">"laptop"</span>)
+page.<span class="function">locator</span>(<span class="string">"#filter-btn"</span>).<span class="function">click</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".product"</span>)).<span class="function">to_have_count</span>(<span class="number">15</span>)
+
+<span class="comment"># After deletion</span>
+page.<span class="function">locator</span>(<span class="string">".delete-btn"</span>).first.<span class="function">click</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".item"</span>)).<span class="function">to_have_count</span>(<span class="number">4</span>)  <span class="comment"># Was <span class="number">5</span>, now <span class="number">4</span></span></div>
+        </div>
+
+        <!-- PART 6: URL AND TITLE ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 6</h1>
+            <h2>URL & Title Assertions</h2>
+            <p>Verify page properties</p>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_url() - URL Verification</h2>
+            <div class="code-block">
+<span class="comment"># Exact URL match</span>
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"https://example.com/dashboard"</span>)
+
+<span class="comment"># URL pattern with wildcard</span>
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"**/dashboard"</span>)
+
+<span class="comment"># Regex pattern</span>
+<span class="keyword">import</span> re
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(re.<span class="function">compile</span>(r<span class="string">".*\/user\/\d+"</span>))
+
+<span class="comment"># Check URL contains substring</span>
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(re.<span class="function">compile</span>(r<span class="string">".*dashboard.*"</span>))
+
+<span class="comment"># With custom timeout (waiting for navigation)</span>
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"**/success"</span>, timeout=<span class="number">10000</span>)
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page).<span class="function">not_to_have_url</span>(<span class="string">"**/error"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>to_have_title() - Page Title</h2>
+            <div class="code-block">
+<span class="comment"># Exact title match</span>
+<span class="function">expect</span>(page).<span class="function">to_have_title</span>(<span class="string">"Dashboard - My App"</span>)
+
+<span class="comment"># Regex pattern</span>
+<span class="keyword">import</span> re
+<span class="function">expect</span>(page).<span class="function">to_have_title</span>(re.<span class="function">compile</span>(r<span class="string">"Dashboard.*"</span>))
+
+<span class="comment"># Check title contains text</span>
+<span class="function">expect</span>(page).<span class="function">to_have_title</span>(re.<span class="function">compile</span>(r<span class="string">".*Dashboard.*"</span>))
+
+<span class="comment"># With custom timeout</span>
+<span class="function">expect</span>(page).<span class="function">to_have_title</span>(<span class="string">"Login - My App"</span>, timeout=<span class="number">5000</span>)
+
+<span class="comment"># Negative assertion</span>
+<span class="function">expect</span>(page).<span class="function">not_to_have_title</span>(<span class="string">"Error Page"</span>)</div>
+        </div>
+
+        <!-- PART 7: COMBINING ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 7</h1>
+            <h2>Combining Assertions</h2>
+            <p>Multiple checks for robust tests</p>
+        </div>
+
+        <div class="slide">
+            <h2>Multiple Assertions Pattern</h2>
+            <div class="code-block">
+<span class="comment"># Verify complete element state</span>
+button = page.<span class="function">locator</span>(<span class="string">"#submit-btn"</span>)
+<span class="function">expect</span>(button).<span class="function">to_be_visible</span>()
+<span class="function">expect</span>(button).<span class="function">to_be_enabled</span>()
+<span class="function">expect</span>(button).<span class="function">to_have_text</span>(<span class="string">"Submit"</span>)
+<span class="function">expect</span>(button).<span class="function">to_have_class</span>(<span class="string">"btn-primary"</span>)
+
+<span class="comment"># Verify form submission result</span>
+page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"**/success"</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".alert"</span>)).<span class="function">to_be_visible</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".alert"</span>)).<span class="function">to_have_class</span>(<span class="string">"alert-success"</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".alert"</span>)).<span class="function">to_contain_text</span>(<span class="string">"Success"</span>)</div>
+        </div>
+
+        <div class="slide">
+            <h2>Assertion Helper Functions</h2>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">verify_login_success</span>(page):
+    <span class="string">""</span><span class="string">"Verify successful login"</span><span class="string">""</span>
+    <span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"**/dashboard"</span>)
+    <span class="function">expect</span>(page).<span class="function">to_have_title</span>(re.<span class="function">compile</span>(r<span class="string">".*Dashboard.*"</span>))
+    <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".user-name"</span>)).<span class="function">to_be_visible</span>()
+    <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".logout-btn"</span>)).<span class="function">to_be_enabled</span>()
+
+<span class="keyword">def</span> <span class="function">verify_error_message</span>(page, message):
+    <span class="string">""</span><span class="string">"Verify error appears with specific message"</span><span class="string">""</span>
+    error = page.<span class="function">locator</span>(<span class="string">".error-message"</span>)
+    <span class="function">expect</span>(error).<span class="function">to_be_visible</span>()
+    <span class="function">expect</span>(error).<span class="function">to_have_class</span>(<span class="string">"alert-danger"</span>)
+    <span class="function">expect</span>(error).<span class="function">to_contain_text</span>(message)
+
+<span class="comment"># Usage</span>
+<span class="function">verify_login_success</span>(page)
+<span class="function">verify_error_message</span>(page, <span class="string">"Invalid credentials"</span>)</div>
+        </div>
+
+        <!-- PART 8: ADVANCED ASSERTIONS -->
+        <div class="slide section-slide">
+            <h1>Part 8</h1>
+            <h2>Advanced Assertions</h2>
+            <p>Special use cases</p>
+        </div>
+
+        <div class="slide">
+            <h2>Soft Assertions</h2>
+            <div class="code-block">
+<span class="comment"># Regular assertions stop on first failure</span>
+<span class="comment"># Soft assertions collect all failures and report at end</span>
+
+<span class="comment"># NOT directly supported in Playwright Python</span>
+<span class="comment"># But can be implemented with try/except</span>
+
+errors = []
+
+<span class="keyword">try</span>:
+    <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#element1"</span>)).<span class="function">to_be_visible</span>()
+<span class="keyword">except</span> AssertionError <span class="keyword">as</span> e:
+    errors.<span class="function">append</span>(<span class="function">str</span>(e))
+
+<span class="keyword">try</span>:
+    <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#element2"</span>)).<span class="function">to_have_text</span>(<span class="string">"Expected"</span>)
+<span class="keyword">except</span> AssertionError <span class="keyword">as</span> e:
+    errors.<span class="function">append</span>(<span class="function">str</span>(e))
+
+<span class="keyword">if</span> errors:
+    <span class="keyword">raise</span> <span class="function">AssertionError</span>(f<span class="string">"Multiple failures:\n"</span> + <span class="string">"\n"</span>.<span class="function">join</span>(errors))</div>
+        </div>
+
+        <div class="slide">
+            <h2>Custom Timeout for Assertions</h2>
+            <div class="code-block">
+<span class="comment"># Default timeout is 5 seconds</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#element"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Custom timeout for slow operations</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#slow-element"</span>)).<span class="function">to_be_visible</span>(timeout=<span class="number">15000</span>)
+
+<span class="comment"># Very short timeout for elements that should appear immediately</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#cached-data"</span>)).<span class="function">to_be_visible</span>(timeout=<span class="number">1000</span>)
+
+<span class="comment"># Different timeouts for different assertions</span>
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"**/dashboard"</span>, timeout=<span class="number">10000</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".welcome"</span>)).<span class="function">to_be_visible</span>(timeout=<span class="number">5000</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".data"</span>)).<span class="function">to_have_count</span>(<span class="number">10</span>, timeout=<span class="number">8000</span>)</div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="slide">
+            <h2>Assertion Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use expect() for all assertions</li>
+                        <li>Be specific in assertions</li>
+                        <li>Use meaningful error messages</li>
+                        <li>Assert the right thing at right time</li>
+                        <li>Combine related assertions</li>
+                        <li>Use regex for flexible matching</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Use Python assert for element checks</li>
+                        <li>Over-assert trivial things</li>
+                        <li>Assert implementation details</li>
+                        <li>Use very long timeouts</li>
+                        <li>Skip negative test assertions</li>
+                        <li>Ignore assertion failures</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Common Assertion Patterns</h2>
+            <div class="code-block">
+<span class="comment"># Pattern 1: Verify action result</span>
+page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".success-message"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment"># Pattern 2: Verify navigation</span>
+page.<span class="function">locator</span>(<span class="string">"#dashboard-link"</span>).<span class="function">click</span>()
+<span class="function">expect</span>(page).<span class="function">to_have_url</span>(<span class="string">"**/dashboard"</span>)
+<span class="function">expect</span>(page).<span class="function">to_have_title</span>(re.<span class="function">compile</span>(r<span class="string">".*Dashboard.*"</span>))
+
+<span class="comment"># Pattern 3: Verify element state change</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#button"</span>)).<span class="function">to_be_disabled</span>()
+page.<span class="function">locator</span>(<span class="string">"#enable-checkbox"</span>).<span class="function">check</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#button"</span>)).<span class="function">to_be_enabled</span>()
+
+<span class="comment"># Pattern 4: Verify list/collection</span>
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".item"</span>)).<span class="function">to_have_count</span>(<span class="number">5</span>)
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".item"</span>).first).<span class="function">to_contain_text</span>(<span class="string">"Item 1"</span>)
+
+<span class="comment"># Pattern 5: Verify form validation</span>
+page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".error"</span>)).<span class="function">to_be_visible</span>()
+<span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".error"</span>)).<span class="function">to_contain_text</span>(<span class="string">"Required field"</span>)</div>
+        </div>
+
+        <!-- Complete Example -->
+        <div class="slide">
+            <h2>Complete Test Example</h2>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright, expect
+<span class="keyword">import</span> re
+
+<span class="keyword">def</span> <span class="function">test_login_and_dashboard</span>():
+    <span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+        browser = p.chromium.<span class="function">launch</span>()
+        page = browser.<span class="function">new_page</span>()
+
+<span class="comment">        # Navigate and verify login page</span>
+        page.<span class="function">goto</span>(<span class="string">"https://example.com/login"</span>)
+        <span class="function">expect</span>(page).<span class="function">to_have_title</span>(<span class="string">"Login"</span>)
+        <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">"#login-form"</span>)).<span class="function">to_be_visible</span>()
+
+<span class="comment">        # Fill and submit form</span>
+        page.<span class="function">locator</span>(<span class="string">"#username"</span>).<span class="function">fill</span>(<span class="string">"testuser"</span>)
+        page.<span class="function">locator</span>(<span class="string">"#password"</span>).<span class="function">fill</span>(<span class="string">"password123"</span>)
+        page.<span class="function">locator</span>(<span class="string">"#submit"</span>).<span class="function">click</span>()
+
+<span class="comment">        # Verify successful login</span>
+        <span class="function">expect</span>(page).<span class="function">to_have_url</span>(re.<span class="function">compile</span>(r<span class="string">".*/dashboard"</span>))
+        <span class="function">expect</span>(page).<span class="function">to_have_title</span>(re.<span class="function">compile</span>(r<span class="string">".*Dashboard.*"</span>))
+
+<span class="comment">        # Verify dashboard elements</span>
+        <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".welcome-message"</span>)).<span class="function">to_be_visible</span>()
+        <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".welcome-message"</span>)).<span class="function">to_contain_text</span>(<span class="string">"Welcome"</span>)
+        <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".nav-item"</span>)).<span class="function">to_have_count</span>(<span class="number">5</span>)
+        <span class="function">expect</span>(page.<span class="function">locator</span>(<span class="string">".user-avatar"</span>)).<span class="function">to_be_visible</span>()
+
+        browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide">
+            <h2>Summary - All Assertion Types</h2>
+            <div style="font-size: 0.9em; line-height: 1.6;">
+                <p><strong>Visibility:</strong> to_be_visible(), to_be_hidden(), to_be_attached()</p>
+                <p><strong>State:</strong> to_be_enabled(), to_be_disabled(), to_be_checked(), to_be_editable()</p>
+                <p><strong>Text:</strong> to_have_text(), to_contain_text(), to_have_value()</p>
+                <p><strong>Attributes:</strong> to_have_attribute(), to_have_class(), to_have_id(), to_have_css()</p>
+                <p><strong>Count:</strong> to_have_count()</p>
+                <p><strong>Page:</strong> to_have_url(), to_have_title()</p>
+                <p><strong>Modifiers:</strong> not_to_be_visible(), not_to_have_text(), etc.</p>
+            </div>
+        </div>
+
+        <!-- What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Screenshots & Videos</li>
+                    <li>Network Interception</li>
+                    <li>API Testing</li>
+                    <li>Test Organization & Fixtures</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete exercises</li>
+                <li>Review examples</li>
+                <li>Write comprehensive assertions</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent!</h1>
+            <div class="subtitle">You've mastered Playwright assertions!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Reliable assertions = Reliable tests</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+    <script src="/presentations/assets/presentation/js/presentation.js"></script>
+</body>
+</html>

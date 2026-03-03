@@ -1,0 +1,29 @@
+{
+  "name": "python_automation_courses",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev site",
+    "docs:build": "vitepress build site",
+    "docs:preview": "vitepress preview site"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opyrohov/python_automation_courses.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/opyrohov/python_automation_courses/issues"
+  },
+  "homepage": "https://github.com/opyrohov/python_automation_courses#readme",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

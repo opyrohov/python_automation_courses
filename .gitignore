@@ -152,7 +152,20 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
+# /site
+
+# Node.js
+node_modules/
+package-lock.json
+
+# VitePress
+site/.vitepress/dist/
+site/.vitepress/cache/
+
+# Temp files
+nul
+tmpclaude-*
+*.ps1
 
 # mypy
 .mypy_cache/

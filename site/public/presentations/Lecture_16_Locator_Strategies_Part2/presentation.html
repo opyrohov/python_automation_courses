@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 16: Locator Strategies (Part 2)</title>
+    <!-- Global presentation assets shared across all lectures -->
+    <link rel="stylesheet" href="/presentations/assets/presentation/css/styles.css">
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">55</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Lecture 16</h1>
+            <div class="subtitle">Locator Strategies (Part 2)</div>
+            <p style="font-size: 1.3em; color: #888;">Python + Playwright Automation Course</p>
+            <p style="margin-top: 50px; font-size: 1.1em; color: #999;">Press → to continue</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h2>What You'll Learn Today</h2>
+            <ul class="checklist">
+                <li>✓ Chain locators for precise element targeting</li>
+                <li>✓ Filter locators using has_text, has, and filter()</li>
+                <li>✓ Access specific elements with nth(), first(), last()</li>
+                <li>✓ Debug locators with Playwright Inspector</li>
+                <li>✓ Work with multiple matching elements</li>
+                <li>✓ Use locator assertions effectively</li>
+                <li>✓ Apply advanced techniques to real websites</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Recap from Part 1 -->
+        <div class="slide">
+            <h2>Quick Recap: Locator Strategies Part 1</h2>
+            <div class="highlight-box">
+                <p>In Part 1, we learned the fundamentals of locators</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div class="info-box">
+                    <h3>CSS Selectors</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>ID, class, attributes</li>
+                        <li>Combinators</li>
+                        <li>Pseudo-classes</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>XPath</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>Relative paths</li>
+                        <li>Text matching</li>
+                        <li>Axes navigation</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Modern Locators</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>get_by_role()</li>
+                        <li>get_by_label()</li>
+                        <li>get_by_text()</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>Today's Focus</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li><strong>Chaining</strong></li>
+                        <li><strong>Filtering</strong></li>
+                        <li><strong>Selection</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: CHAINING LOCATORS -->
+        <div class="slide section-slide">
+            <h1>Part 1</h1>
+            <h2>Chaining Locators</h2>
+            <p>Combine locators for precise targeting</p>
+        </div>
+
+        <!-- Slide 4: What is Locator Chaining? -->
+        <div class="slide">
+            <h2>What is Locator Chaining?</h2>
+            <div class="highlight-box">
+                <p><strong>Chaining</strong> means combining multiple locators to narrow down your search from broad to specific.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Think of it like giving directions:</h3>
+            <div style="font-size: 1.1em; line-height: 2;">
+                <p>❌ "Find the button" (too vague)</p>
+                <p>✅ "In the navigation bar, find the login button" (specific!)</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">In Code:</h3>
+            <div class="code-block">
+<span class="comment"># ❌ Vague</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()  <span class="comment"># Which button?</span>
+
+<span class="comment"># ✅ Specific through chaining</span>
+page.<span class="function">locator</span>(<span class="string">".navbar"</span>).<span class="function">locator</span>(<span class="string">"button.login"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Slide 5: Basic Chaining Syntax -->
+        <div class="slide">
+            <h2>Basic Chaining Syntax</h2>
+            <p>Chain locators with multiple .locator() calls</p>
+
+            <div class="code-block">
+<span class="comment"># Start broad, then narrow down</span>
+page.<span class="function">locator</span>(<span class="string">".container"</span>).<span class="function">locator</span>(<span class="string">".form"</span>).<span class="function">locator</span>(<span class="string">"button"</span>)
+
+<span class="comment"># Can also use modern locators in chain</span>
+page.<span class="function">locator</span>(<span class="string">".sidebar"</span>).<span class="function">get_by_role</span>(<span class="string">"link"</span>, name=<span class="string">"Settings"</span>)
+
+<span class="comment"># Mix CSS and modern locators</span>
+page.<span class="function">get_by_role</span>(<span class="string">"navigation"</span>).<span class="function">locator</span>(<span class="string">"a.active"</span>)</div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Key Point:</strong> Each .locator() or modern locator call searches within the previous locator's results!</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Chaining Example -->
+        <div class="slide">
+            <h2>Chaining Example: E-commerce Site</h2>
+            <h3>HTML Structure:</h3>
+            <div class="code-block">
+&lt;div class="product-grid"&gt;
+  &lt;div class="product-card"&gt;
+    &lt;h3&gt;Laptop&lt;/h3&gt;
+    &lt;button class="add-to-cart"&gt;Add to Cart&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="product-card"&gt;
+    &lt;h3&gt;Mouse&lt;/h3&gt;
+    &lt;button class="add-to-cart"&gt;Add to Cart&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+
+            <h3>Without Chaining (Ambiguous):</h3>
+            <div class="code-block">
+<span class="comment"># ❌ Clicks first "Add to Cart" button (might be wrong product!)</span>
+page.<span class="function">locator</span>(<span class="string">".add-to-cart"</span>).<span class="function">click</span>()</div>
+
+            <h3>With Chaining (Precise):</h3>
+            <div class="code-block">
+<span class="comment"># ✅ Click "Add to Cart" for the Laptop specifically</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>).<span class="function">locator</span>(<span class="string">".add-to-cart"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Slide 7: Chaining Best Practices -->
+        <div class="slide">
+            <h2>Chaining Best Practices</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Chain from broad to specific</li>
+                        <li>Keep chains readable (2-3 levels)</li>
+                        <li>Use semantic containers</li>
+                        <li>Mix CSS with modern locators</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Good!</span>
+page.<span class="function">get_by_role</span>(<span class="string">"navigation"</span>)
+    .<span class="function">get_by_role</span>(<span class="string">"link"</span>, name=<span class="string">"Home"</span>)</div>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ DON'T</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Create overly long chains</li>
+                        <li>Chain with brittle selectors</li>
+                        <li>Use position-based chaining</li>
+                        <li>Chain absolute paths</li>
+                    </ul>
+                    <div class="code-block" style="margin-top: 10px;">
+<span class="comment"># Bad!</span>
+page.<span class="function">locator</span>(<span class="string">"div"</span>).<span class="function">locator</span>(<span class="string">"div"</span>)
+    .<span class="function">locator</span>(<span class="string">"div"</span>).<span class="function">locator</span>(<span class="string">"span"</span>)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2: FILTERING LOCATORS -->
+        <div class="slide section-slide">
+            <h1>Part 2</h1>
+            <h2>Filtering Locators</h2>
+            <p>Narrow down multiple matches</p>
+        </div>
+
+        <!-- Slide 8: Why Filter? -->
+        <div class="slide">
+            <h2>Why Do We Need Filtering?</h2>
+            <div class="highlight-box">
+                <p><strong>Problem:</strong> A locator often matches multiple elements. We need to select the right one!</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Example Scenario:</h3>
+            <div class="code-block">
+<span class="comment"># This might match 20 buttons!</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">count</span>()  <span class="comment"># <span class="number">20</span></span>
+
+<span class="comment"># How do we click the RIGHT button?</span></div>
+
+            <h3 style="margin-top: 30px;">Solutions:</h3>
+            <ul style="font-size: 1.1em;">
+                <li><strong>filter(has_text="...")</strong> - Filter by text content</li>
+                <li><strong>filter(has=locator)</strong> - Filter by nested element</li>
+                <li><strong>filter(has_not_text="...")</strong> - Exclude by text</li>
+                <li><strong>filter(has_not=locator)</strong> - Exclude by nested element</li>
+            </ul>
+        </div>
+
+        <!-- Slide 9: filter(has_text) -->
+        <div class="slide">
+            <h2>filter(has_text="...") - Filter by Text</h2>
+            <p>Select elements containing specific text</p>
+
+            <div class="code-block">
+<span class="comment"># Find all product cards, then filter for "Laptop"</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
+
+<span class="comment"># Find list items containing "Active"</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(has_text=<span class="string">"Active"</span>)
+
+<span class="comment"># Can chain after filtering</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>).<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
+
+            <h3 style="margin-top: 20px;">Real Example:</h3>
+            <div class="code-block">
+<span class="comment"># HTML: Multiple todo items</span>
+<span class="comment"># <li>Buy groceries</li></span>
+<span class="comment"># <li>Walk the dog</li></span>
+<span class="comment"># <li>Read a book</li></span>
+
+<span class="comment"># Find the "Walk the dog" todo</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(has_text=<span class="string">"Walk the dog"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Slide 10: filter(has=) -->
+        <div class="slide">
+            <h2>filter(has=locator) - Filter by Nested Element</h2>
+            <p>Select elements that contain a specific nested element</p>
+
+            <div class="code-block">
+<span class="comment"># Find product cards that have a "Sale" badge</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">locator</span>(<span class="string">".badge-sale"</span>)
+)
+
+<span class="comment"># Find list items that contain a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">get_by_role</span>(<span class="string">"checkbox"</span>)
+)
+
+<span class="comment"># Find rows that have a "Delete" button</span>
+page.<span class="function">locator</span>(<span class="string">"tr"</span>).<span class="function">filter</span>(
+    has=page.<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Delete"</span>)
+).<span class="function">click</span>()</div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Use Case:</strong> Great for finding complex parent elements based on what they contain!</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Combining Filters -->
+        <div class="slide">
+            <h2>Combining Multiple Filters</h2>
+            <p>Stack filters for very precise targeting</p>
+
+            <div class="code-block">
+<span class="comment"># Find product cards with text "Laptop" AND a "Sale" badge</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
+    .<span class="function">filter</span>(has=page.<span class="function">locator</span>(<span class="string">".badge-sale"</span>))
+    .<span class="function">click</span>()
+
+<span class="comment"># Find active list items that contain a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Active"</span>)
+    .<span class="function">filter</span>(has=page.<span class="function">get_by_role</span>(<span class="string">"checkbox"</span>))
+    .<span class="function">count</span>()</div>
+
+            <h3 style="margin-top: 20px;">Order Matters!</h3>
+            <div class="warning-box">
+                <p>Each filter narrows down from the previous result. Start with the most selective filter first for better performance.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Excluding with has_not -->
+        <div class="slide">
+            <h2>Excluding Elements: has_not_text & has_not</h2>
+            <p>Filter OUT elements you don't want</p>
+
+            <div class="code-block">
+<span class="comment"># Find all products EXCEPT the ones containing "Sold Out"</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(has_not_text=<span class="string">"Sold Out"</span>)
+
+<span class="comment"># Find list items that DON'T have a checkbox</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">filter</span>(
+    has_not=page.<span class="function">get_by_role</span>(<span class="string">"checkbox"</span>)
+)
+
+<span class="comment"># Find products without a sale badge</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">filter</span>(
+    has_not=page.<span class="function">locator</span>(<span class="string">".badge-sale"</span>)
+)</div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>Pro Tip:</strong> Negative filters are great for excluding disabled, inactive, or unavailable elements!</p>
+            </div>
+        </div>
+
+        <!-- PART 3: SELECTING SPECIFIC ELEMENTS -->
+        <div class="slide section-slide">
+            <h1>Part 3</h1>
+            <h2>Selecting Specific Elements</h2>
+            <p>nth(), first(), last()</p>
+        </div>
+
+        <!-- Slide 13: Working with Multiple Elements -->
+        <div class="slide">
+            <h2>Working with Multiple Elements</h2>
+            <div class="highlight-box">
+                <p>When a locator matches multiple elements, you need to select which one to interact with.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Selection Methods:</h3>
+            <ul style="font-size: 1.1em; line-height: 1.8;">
+                <li><strong>.first</strong> - Get the first matching element</li>
+                <li><strong>.last</strong> - Get the last matching element</li>
+                <li><strong>.nth(index)</strong> - Get element at specific index (0-based)</li>
+                <li><strong>.count()</strong> - Get total count of matching elements</li>
+                <li><strong>.all()</strong> - Get list of all matching elements</li>
+            </ul>
+        </div>
+
+        <!-- Slide 14: .first - First Element -->
+        <div class="slide">
+            <h2>.first - Select First Element</h2>
+            <p>Get the first element from multiple matches</p>
+
+            <div class="code-block">
+<span class="comment"># Click the first button</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).first.<span class="function">click</span>()
+
+<span class="comment"># Get text from first list item</span>
+first_text = page.<span class="function">locator</span>(<span class="string">"li"</span>).first.<span class="function">text_content</span>()
+<span class="function">print</span>(first_text)
+
+<span class="comment"># Chain with other methods</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>).first.<span class="function">get_by_role</span>(<span class="string">"button"</span>).<span class="function">click</span>()</div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Use Case:</strong> When you want the first occurrence, like the first search result or the first item in a list.</p>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Warning:</strong> Relying on position can be brittle if order changes! Prefer filtering by text/content when possible.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: .last - Last Element -->
+        <div class="slide">
+            <h2>.last - Select Last Element</h2>
+            <p>Get the last element from multiple matches</p>
+
+            <div class="code-block">
+<span class="comment"># Click the last button</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).last.<span class="function">click</span>()
+
+<span class="comment"># Get text from last list item</span>
+last_text = page.<span class="function">locator</span>(<span class="string">"li"</span>).last.<span class="function">text_content</span>()
+<span class="function">print</span>(last_text)
+
+<span class="comment"># Get the most recent notification</span>
+recent_notification = page.<span class="function">locator</span>(<span class="string">".notification"</span>).last.<span class="function">text_content</span>()</div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>Use Case:</strong> Great for getting the most recent item, like latest notification or newest comment.</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: .nth(index) - Specific Position -->
+        <div class="slide">
+            <h2>.nth(index) - Select by Index</h2>
+            <p>Get element at a specific position (0-indexed)</p>
+
+            <div class="code-block">
+<span class="comment"># Get first item (index 0)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(<span class="number">0</span>).<span class="function">click</span>()
+
+<span class="comment"># Get second item (index 1)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(<span class="number">1</span>).<span class="function">click</span>()
+
+<span class="comment"># Get third item (index 2)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(<span class="number">2</span>).<span class="function">click</span>()
+
+<span class="comment"># Negative indices work too! (-1 = last)</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>).<span class="function">nth</span>(-<span class="number">1</span>).<span class="function">click</span>()  <span class="comment"># Same <span class="keyword">as</span> .last</span></div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <p><strong>Warning:</strong> Position-based selection is fragile! Only use when:</p>
+                <ul style="font-size: 0.9em;">
+                    <li>Order is guaranteed not to change</li>
+                    <li>You can't identify the element any other way</li>
+                    <li>You're testing pagination or ordered lists</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 17: .count() - Count Elements -->
+        <div class="slide">
+            <h2>.count() - Count Matching Elements</h2>
+            <p>Get the total number of matching elements</p>
+
+            <div class="code-block">
+<span class="comment"># How many buttons on the page?</span>
+button_count = page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">count</span>()
+<span class="function">print</span>(f<span class="string">"Found {button_count} buttons"</span>)
+
+<span class="comment"># Check if element exists</span>
+<span class="keyword">if</span> page.<span class="function">locator</span>(<span class="string">".error-message"</span>).<span class="function">count</span>() > <span class="number">0</span>:
+    <span class="function">print</span>(<span class="string">"Error message is present!"</span>)
+
+<span class="comment"># Verify exact count</span>
+product_count = page.<span class="function">locator</span>(<span class="string">".product-card"</span>).<span class="function">count</span>()
+assert product_count == <span class="number">10</span>, f<span class="string">"Expected 10 products, found {product_count}"</span></div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <p><strong>Pro Tip:</strong> Use .count() > 0 to check if an element exists without throwing an error!</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: .all() - Get All Elements -->
+        <div class="slide">
+            <h2>.all() - Get All Matching Elements</h2>
+            <p>Returns a list of all matching locators</p>
+
+            <div class="code-block">
+<span class="comment"># Get all buttons as a list</span>
+all_buttons = page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">all</span>()
+
+<span class="comment"># Iterate through all elements</span>
+<span class="keyword">for</span> button <span class="keyword">in</span> all_buttons:
+    <span class="function">print</span>(button.<span class="function">text_content</span>())
+
+<span class="comment"># Get all product names</span>
+products = page.<span class="function">locator</span>(<span class="string">".product-name"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> product <span class="keyword">in</span> products:
+    <span class="function">print</span>(f<span class="string">"Product: {product.text_content()}"</span>)</div>
+
+            <div class="code-block" style="margin-top: 20px;">
+<span class="comment"># Practical example: Verify all checkboxes are checked</span>
+checkboxes = page.<span class="function">locator</span>(<span class="string">"input[type='</span>checkbox<span class="string">']"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> checkbox <span class="keyword">in</span> checkboxes:
+    assert checkbox.<span class="function">is_checked</span>(), <span class="string">"All checkboxes should be checked!"</span></div>
+        </div>
+
+        <!-- Slide 19: Combining Selection with Filtering -->
+        <div class="slide">
+            <h2>Combining Selection with Filtering</h2>
+            <p>Use filtering and selection together for maximum precision</p>
+
+            <div class="code-block">
+<span class="comment"># Get the first product that's on sale</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Sale"</span>)
+    .first
+    .<span class="function">click</span>()
+
+<span class="comment"># Get the last active todo item</span>
+page.<span class="function">locator</span>(<span class="string">"li"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Active"</span>)
+    .last
+    .<span class="function">text_content</span>()
+
+<span class="comment"># Get the 3rd product in the "Electronics" category</span>
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Electronics"</span>)
+    .<span class="function">nth</span>(<span class="number">2</span>)
+    .<span class="function">click</span>()</div>
+
+            <div class="highlight-box" style="margin-top: 20px;">
+                <p><strong>Remember:</strong> Filter first to narrow down, then select the specific one you need!</p>
+            </div>
+        </div>
+
+        <!-- PART 4: DEBUGGING WITH PLAYWRIGHT INSPECTOR -->
+        <div class="slide section-slide">
+            <h1>Part 4</h1>
+            <h2>Debugging with Playwright Inspector</h2>
+            <p>Your best friend for troubleshooting locators</p>
+        </div>
+
+        <!-- Slide 20: What is Playwright Inspector? -->
+        <div class="slide">
+            <h2>What is Playwright Inspector?</h2>
+            <div class="highlight-box">
+                <p><strong>Playwright Inspector</strong> is a built-in debugging tool that helps you test and refine locators interactively.</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Features:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>🔍 Test locators in real-time</li>
+                <li>⏸️ Pause test execution</li>
+                <li>👣 Step through test line-by-line</li>
+                <li>📊 View element highlights</li>
+                <li>🎯 Pick elements from page</li>
+                <li>📝 Generate locator suggestions</li>
+            </ul>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <p><strong>Best Part:</strong> It's built into Playwright - no installation needed!</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Launching Playwright Inspector -->
+        <div class="slide">
+            <h2>How to Launch Playwright Inspector</h2>
+            <h3>Method 1: Environment Variable</h3>
+            <div class="code-block">
+<span class="comment"># Windows (CMD)</span>
+set PWDEBUG=<span class="number">1</span>
+python my_test.py
+
+<span class="comment"># Windows (PowerShell)</span>
+$env:PWDEBUG=<span class="number">1</span>
+python my_test.py
+
+<span class="comment"># Mac/Linux</span>
+PWDEBUG=<span class="number">1</span> python my_test.py</div>
+
+            <h3 style="margin-top: 20px;">Method 2: page.pause()</h3>
+            <div class="code-block">
+<span class="keyword">from</span> playwright.sync_api <span class="keyword">import</span> sync_playwright
+
+<span class="keyword">with</span> <span class="function">sync_playwright</span>() <span class="keyword">as</span> p:
+    browser = p.chromium.<span class="function">launch</span>(headless=<span class="keyword">False</span>)
+    page = browser.<span class="function">new_page</span>()
+    page.<span class="function">goto</span>(<span class="string">"https://example.com"</span>)
+
+    page.<span class="function">pause</span>()  <span class="comment"># Pauses here <span class="keyword">and</span> opens Inspector</span>
+
+    page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">click</span>()
+    browser.<span class="function">close</span>()</div>
+        </div>
+
+        <!-- Slide 22: Using the Inspector -->
+        <div class="slide">
+            <h2>Using Playwright Inspector</h2>
+            <h3>Key Features:</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="info-box">
+                    <h4>🎯 Explore</h4>
+                    <p style="font-size: 0.85em;">Click the explore icon to pick elements from the page. Inspector generates locator suggestions!</p>
+                </div>
+                <div class="info-box">
+                    <h4>🔍 Locator Playground</h4>
+                    <p style="font-size: 0.85em;">Test different locators in real-time and see which elements they match.</p>
+                </div>
+                <div class="info-box">
+                    <h4>⏯️ Step Through</h4>
+                    <p style="font-size: 0.85em;">Execute code line-by-line to see exactly what happens at each step.</p>
+                </div>
+                <div class="info-box">
+                    <h4>📊 Element Highlight</h4>
+                    <p style="font-size: 0.85em;">See which elements match your locator with visual highlights.</p>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 30px;">
+                <p><strong>Pro Tip:</strong> Use the Inspector to test your locators BEFORE writing code!</p>
+            </div>
+        </div>
+
+        <!-- Slide 23: Inspector Tips & Tricks -->
+        <div class="slide">
+            <h2>Inspector Tips & Tricks</h2>
+            <div style="font-size: 0.95em;">
+                <h3>1. Test Locator Suggestions</h3>
+                <div class="code-block">
+<span class="comment"># Inspector shows multiple options:</span>
+<span class="comment"># - get_by_role("button", name="Submit")</span>
+<span class="comment"># - get_by_text("Submit")</span>
+<span class="comment"># - #submit-btn</span>
+<span class="comment"># Try each to find the most reliable one!</span></div>
+
+                <h3 style="margin-top: 20px;">2. Check Element Count</h3>
+                <div class="code-block">
+<span class="comment"># Type in locator playground:</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>)
+
+<span class="comment"># Inspector shows: "23 elements matched"</span>
+<span class="comment"># Means you need to be more specific!</span></div>
+
+                <h3 style="margin-top: 20px;">3. Test Filters</h3>
+                <div class="code-block">
+<span class="comment"># Test filtering in real-time:</span>
+page.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">filter</span>(has_text=<span class="string">"Login"</span>)
+
+<span class="comment"># Inspector shows exactly which button matches</span></div>
+            </div>
+        </div>
+
+        <!-- Slide 24: Debugging Workflow -->
+        <div class="slide">
+            <h2>Debugging Workflow</h2>
+            <div class="highlight-box">
+                <p>Follow this workflow when your locator isn't working</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">Step-by-Step:</h3>
+            <ol style="font-size: 1.05em; line-height: 1.8;">
+                <li><strong>Add page.pause()</strong> before the failing locator</li>
+                <li><strong>Run with PWDEBUG=1</strong> or use page.pause()</li>
+                <li><strong>Use Explorer</strong> to pick the element visually</li>
+                <li><strong>Review suggestions</strong> - try each recommended locator</li>
+                <li><strong>Test in playground</strong> - verify it matches the right element</li>
+                <li><strong>Check count</strong> - ensure only one (or expected number) matches</li>
+                <li><strong>Copy working locator</strong> to your code</li>
+                <li><strong>Resume execution</strong> to verify it works</li>
+            </ol>
+        </div>
+
+        <!-- PART 5: PRACTICAL EXERCISES -->
+        <div class="slide section-slide">
+            <h1>Part 5</h1>
+            <h2>Practical Exercises</h2>
+            <p>Apply what you've learned to real websites</p>
+        </div>
+
+        <!-- Slide 25: Exercise 1 - E-commerce Site -->
+        <div class="slide">
+            <h2>Exercise 1: E-commerce Product Selection</h2>
+            <div class="highlight-box">
+                <p><strong>Challenge:</strong> On an e-commerce site, add a specific product to cart using chaining and filtering.</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">Requirements:</h3>
+            <ul>
+                <li>Find the product card for "Laptop"</li>
+                <li>Within that card, click "Add to Cart"</li>
+                <li>Verify the cart count increases</li>
+            </ul>
+
+            <h3 style="margin-top: 20px;">Hints:</h3>
+            <div class="code-block">
+<span class="comment"># Step 1: Find product card by text</span>
+<span class="comment"># Step 2: Within that card, find the button</span>
+<span class="comment"># Step 3: Click the button</span>
+<span class="comment"># Step 4: Verify cart count</span>
+
+page.<span class="function">locator</span>(<span class="string">".product-card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Laptop"</span>)
+    .<span class="function">locator</span>(<span class="string">".add-to-cart"</span>)
+    .<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Slide 26: Exercise 2 - Todo List -->
+        <div class="slide">
+            <h2>Exercise 2: Todo List Management</h2>
+            <div class="highlight-box">
+                <p><strong>Challenge:</strong> Work with a todo list using filtering and selection.</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">Requirements:</h3>
+            <ul>
+                <li>Mark the first todo as complete</li>
+                <li>Delete the last todo</li>
+                <li>Find all active todos</li>
+                <li>Count completed todos</li>
+            </ul>
+
+            <h3 style="margin-top: 20px;">Hints:</h3>
+            <div class="code-block">
+<span class="comment"># Mark first as complete</span>
+page.<span class="function">locator</span>(<span class="string">".todo-item"</span>).first.<span class="function">locator</span>(<span class="string">".checkbox"</span>).<span class="function">check</span>()
+
+<span class="comment"># Delete last todo</span>
+page.<span class="function">locator</span>(<span class="string">".todo-item"</span>).last.<span class="function">locator</span>(<span class="string">".delete-btn"</span>).<span class="function">click</span>()
+
+<span class="comment"># Count active</span>
+active_count = page.<span class="function">locator</span>(<span class="string">".todo-item"</span>).<span class="function">filter</span>(has_text=<span class="string">"Active"</span>).<span class="function">count</span>()</div>
+        </div>
+
+        <!-- Slide 27: Exercise 3 - Data Table -->
+        <div class="slide">
+            <h2>Exercise 3: Table Data Extraction</h2>
+            <div class="highlight-box">
+                <p><strong>Challenge:</strong> Extract and verify data from a table using advanced locators.</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">Requirements:</h3>
+            <ul>
+                <li>Find the row containing "John Doe"</li>
+                <li>Get his email from that row</li>
+                <li>Click "Edit" button for his row</li>
+                <li>Count total rows in table</li>
+            </ul>
+
+            <h3 style="margin-top: 20px;">Hints:</h3>
+            <div class="code-block">
+<span class="comment"># Find row by text</span>
+row = page.<span class="function">locator</span>(<span class="string">"tr"</span>).<span class="function">filter</span>(has_text=<span class="string">"John Doe"</span>)
+
+<span class="comment"># Get email from that row</span>
+email = row.<span class="function">locator</span>(<span class="string">"td"</span>).<span class="function">nth</span>(<span class="number">2</span>).<span class="function">text_content</span>()
+
+<span class="comment"># Click edit in that row</span>
+row.<span class="function">locator</span>(<span class="string">"button"</span>).<span class="function">filter</span>(has_text=<span class="string">"Edit"</span>).<span class="function">click</span>()</div>
+        </div>
+
+        <!-- Slide 28: Common Patterns -->
+        <div class="slide">
+            <h2>Common Real-World Patterns</h2>
+            <h3>Pattern 1: Find Card, Click Button Inside</h3>
+            <div class="code-block">
+page.<span class="function">locator</span>(<span class="string">".card"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Target Card"</span>)
+    .<span class="function">get_by_role</span>(<span class="string">"button"</span>, name=<span class="string">"Action"</span>)
+    .<span class="function">click</span>()</div>
+
+            <h3 style="margin-top: 20px;">Pattern 2: Get nth Item from Filtered List</h3>
+            <div class="code-block">
+page.<span class="function">locator</span>(<span class="string">".item"</span>)
+    .<span class="function">filter</span>(has_text=<span class="string">"Category"</span>)
+    .<span class="function">nth</span>(<span class="number">2</span>)
+    .<span class="function">click</span>()</div>
+
+            <h3 style="margin-top: 20px;">Pattern 3: Verify All Items Meet Condition</h3>
+            <div class="code-block">
+items = page.<span class="function">locator</span>(<span class="string">".item"</span>).<span class="function">filter</span>(has_text=<span class="string">"Active"</span>).<span class="function">all</span>()
+<span class="keyword">for</span> item <span class="keyword">in</span> items:
+    assert <span class="string">"active"</span> <span class="keyword">in</span> item.<span class="function">get_attribute</span>(<span class="string">"class"</span>)</div>
+        </div>
+
+        <!-- Slide 29: Summary -->
+        <div class="slide">
+            <h2>Summary: Advanced Locator Strategies</h2>
+            <div class="highlight-box">
+                <h3>Key Takeaways:</h3>
+            </div>
+            <ul style="margin-top: 20px; font-size: 1.05em; line-height: 1.8;">
+                <li>✅ <strong>Chain locators</strong> to narrow from broad to specific</li>
+                <li>✅ <strong>Filter by text</strong> using filter(has_text="...")</li>
+                <li>✅ <strong>Filter by content</strong> using filter(has=locator)</li>
+                <li>✅ <strong>Select positions</strong> with .first, .last, .nth()</li>
+                <li>✅ <strong>Count elements</strong> with .count()</li>
+                <li>✅ <strong>Iterate all</strong> with .all()</li>
+                <li>✅ <strong>Debug with Inspector</strong> using PWDEBUG=1 or page.pause()</li>
+                <li>✅ <strong>Combine techniques</strong> for maximum precision</li>
+            </ul>
+        </div>
+
+        <!-- Slide 30: Best Practices Recap -->
+        <div class="slide">
+            <h2>Best Practices Recap</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="success-box">
+                    <h4>✅ DO</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Filter by text when possible</li>
+                        <li>Chain from broad to specific</li>
+                        <li>Use .count() to verify matches</li>
+                        <li>Test locators with Inspector</li>
+                        <li>Combine modern locators with filters</li>
+                        <li>Keep chains readable (2-3 levels)</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h4>❌ AVOID</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li>Relying solely on position (.nth)</li>
+                        <li>Long, complex chains</li>
+                        <li>Filtering without verification</li>
+                        <li>Assuming single match</li>
+                        <li>Skipping Inspector debugging</li>
+                        <li>Position-based selection when text works</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <p><strong>Golden Rule:</strong> Make your locators as specific as needed, but as simple as possible!</p>
+            </div>
+        </div>
+
+        <!-- Slide 31: What's Next -->
+        <div class="slide">
+            <h2>What's Next?</h2>
+            <div class="info-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>Advanced Interactions (Hover, Drag & Drop)</li>
+                    <li>Waiting Strategies & Timeouts</li>
+                    <li>Assertions & Expectations</li>
+                    <li>Form Handling</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 40px;">Practice:</h3>
+            <ul>
+                <li>Complete the exercises in the <code>exercises/</code> folder</li>
+                <li>Review the examples in the <code>examples/</code> folder</li>
+                <li>Read the detailed README.md</li>
+                <li>Practice with Playwright Inspector on real websites</li>
+            </ul>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <div class="python-logo">🎭</div>
+            <h1>Excellent Work!</h1>
+            <div class="subtitle">You've mastered advanced locator strategies!</div>
+            <p style="font-size: 1.2em; margin-top: 40px;">Keep practicing to build your locator intuition</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="homeBtn" onclick="window.location.href='../index.html'" style="background: white; color: #667eea; border: 2px solid #667eea;">🏠 Home</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <!-- Global presentation JavaScript shared across all lectures -->
+    <script src="/presentations/assets/presentation/js/presentation.js"></script>
+</body>
+</html>
