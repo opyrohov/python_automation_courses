@@ -49,15 +49,28 @@ export default defineConfig({
         sidebar: {
           '/docs/python/': [
             {
-              text: 'Python',
+              text: 'Основи Python',
               items: [
                 { text: 'Вступ', link: '/docs/python/' },
                 { text: 'Основи', link: '/docs/python/basics' },
                 { text: 'Типи даних', link: '/docs/python/data-types' },
+                { text: 'Рядки', link: '/docs/python/strings' },
+                { text: 'Колекції', link: '/docs/python/collections' },
+                { text: 'Цикли', link: '/docs/python/loops' },
                 { text: 'Функції', link: '/docs/python/functions' },
                 { text: 'ООП', link: '/docs/python/oop' },
+              ]
+            },
+            {
+              text: 'Просунутий Python',
+              items: [
                 { text: 'Модулі', link: '/docs/python/modules' },
+                { text: 'Робота з файлами', link: '/docs/python/file-io' },
+                { text: 'Декоратори', link: '/docs/python/decorators' },
                 { text: 'Обробка помилок', link: '/docs/python/error-handling' },
+                { text: 'Регулярні вирази', link: '/docs/python/regex' },
+                { text: 'Робота з API', link: '/docs/python/api-requests' },
+                { text: 'Віртуальні середовища', link: '/docs/python/virtual-environments' },
                 { text: 'Best Practices', link: '/docs/python/best-practices' },
               ]
             }
@@ -241,15 +254,28 @@ export default defineConfig({
         sidebar: {
           '/en/docs/python/': [
             {
-              text: 'Python',
+              text: 'Python Basics',
               items: [
                 { text: 'Introduction', link: '/en/docs/python/' },
                 { text: 'Basics', link: '/en/docs/python/basics' },
                 { text: 'Data Types', link: '/en/docs/python/data-types' },
+                { text: 'Strings', link: '/en/docs/python/strings' },
+                { text: 'Collections', link: '/en/docs/python/collections' },
+                { text: 'Loops', link: '/en/docs/python/loops' },
                 { text: 'Functions', link: '/en/docs/python/functions' },
                 { text: 'OOP', link: '/en/docs/python/oop' },
+              ]
+            },
+            {
+              text: 'Advanced Python',
+              items: [
                 { text: 'Modules', link: '/en/docs/python/modules' },
+                { text: 'File I/O', link: '/en/docs/python/file-io' },
+                { text: 'Decorators', link: '/en/docs/python/decorators' },
                 { text: 'Error Handling', link: '/en/docs/python/error-handling' },
+                { text: 'Regular Expressions', link: '/en/docs/python/regex' },
+                { text: 'Working with API', link: '/en/docs/python/api-requests' },
+                { text: 'Virtual Environments', link: '/en/docs/python/virtual-environments' },
                 { text: 'Best Practices', link: '/en/docs/python/best-practices' },
               ]
             }
